@@ -1,51 +1,62 @@
 const { admin } = require('../config/firebase');
+const { verifyDemoToken, toDemoUser } = require('../services/demoAuth');
 
 const isFirebaseReady = () => admin.apps && admin.apps.length > 0;
 
+function readBearer(req) {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith('Bearer ')) return null;
+  return header.slice('Bearer '.length).trim();
+}
+
+// Accepts a demo JWT (from POST /api/auth/demo-login) or, when Firebase Admin is
+// configured, a Firebase ID token.
 const authenticateUser = async (req, res, next) => {
+  const token = readBearer(req);
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided. Use POST /api/auth/demo-login to get one.' });
+  }
+
+  const demo = verifyDemoToken(token);
+  if (demo) {
+    req.user = toDemoUser(demo);
+    return next();
+  }
+
   if (!isFirebaseReady()) {
-    // Dev fallback: accept a user ID from header or skip auth
-    const devUser = req.headers['x-user-id'];
-    if (devUser) {
-      req.user = { uid: devUser, email: `${devUser}@dev.local` };
-      return next();
-    }
-    return res.status(503).json({ error: 'Firebase not initialized. Set FIREBASE_SERVICE_ACCOUNT_KEY in .env' });
+    return res.status(401).json({ error: 'Invalid or expired token' });
   }
 
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'No token provided' });
-    }
-
-    const token = authHeader.split('Bearer ')[1];
     const decodedToken = await admin.auth().verifyIdToken(token);
-    req.user = decodedToken;
-    next();
+    req.user = { uid: decodedToken.uid, email: decodedToken.email || '', name: decodedToken.name || '', auth: 'firebase' };
+    return next();
   } catch (error) {
     console.error('Auth error:', error.message);
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
 };
 
+// Like authenticateUser but never rejects: attaches a user when a valid token
+// is present and otherwise proceeds anonymously.
 const optionalAuth = async (req, res, next) => {
-  if (!isFirebaseReady()) {
-    const devUser = req.headers['x-user-id'];
-    if (devUser) {
-      req.user = { uid: devUser, email: `${devUser}@dev.local` };
+  const token = readBearer(req);
+  if (token) {
+    const demo = verifyDemoToken(token);
+    if (demo) {
+      req.user = toDemoUser(demo);
+      return next();
     }
-    return next();
+    if (isFirebaseReady()) {
+      try {
+        req.user = await admin.auth().verifyIdToken(token);
+        return next();
+      } catch {
+        // ignore invalid firebase token — treat as anonymous
+      }
+    }
   }
-
-  try {
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.split('Bearer ')[1];
-      req.user = await admin.auth().verifyIdToken(token);
-    }
-  } catch {}
-  next();
+  return next();
 };
 
 module.exports = { authenticateUser, optionalAuth };

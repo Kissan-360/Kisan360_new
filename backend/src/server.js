@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 // Import routes
+const authRoutes = require('./routes/auth');
 const advisoryRoutes = require('./routes/advisory');
 const diseaseRoutes = require('./routes/disease');
 const weatherRoutes = require('./routes/weather');
@@ -12,6 +13,9 @@ const notificationRoutes = require('./routes/notifications');
 const marketRoutes = require('./routes/market');
 const farmRoutes = require('./routes/farms');
 const detectionRoutes = require('./routes/detections');
+
+// Error handling
+const errorHandler = require('./middleware/errorHandler');
 
 // Initialize Firebase Admin SDK
 const { initializeFirebase } = require('./config/firebase');
@@ -30,7 +34,9 @@ app.use(helmet());
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 300, // generous for live demos (image uploads + repeated refreshes)
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use(limiter);
 
@@ -54,6 +60,7 @@ app.get('/health', (req, res) => {
 });
 
 // API routes
+app.use('/api/auth', authRoutes);
 app.use('/api/advisory', advisoryRoutes);
 app.use('/api/disease', diseaseRoutes);
 app.use('/api/weather', weatherRoutes);
@@ -62,19 +69,13 @@ app.use('/api/market', marketRoutes);
 app.use('/api/farms', farmRoutes);
 app.use('/api/detections', detectionRoutes);
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Something went wrong!',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
-  });
-});
-
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
+
+// Error handling middleware (must be registered after routes)
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`🚀 Kisan360 Backend server is running on port ${PORT}`);

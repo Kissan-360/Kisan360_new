@@ -1,38 +1,32 @@
-const winston = require('winston');
+// Dependency-free logger (winston was imported but never declared in
+// package.json — this keeps logging without the extra dependency).
+const LEVEL_ORDER = { error: 0, warn: 1, info: 2, debug: 3 };
+const configured = (process.env.LOG_LEVEL || 'info').toLowerCase();
+const minLevel = LEVEL_ORDER[configured] !== undefined ? LEVEL_ORDER[configured] : LEVEL_ORDER.info;
 
-// Create logger instance
-const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
-  format: winston.format.combine(
-    winston.format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
-    }),
-    winston.format.errors({ stack: true }),
-    winston.format.json()
-  ),
-  defaultMeta: { service: 'kishan360-backend' },
-  transports: [
-    // Write all logs with importance level of `error` or less to `error.log`
-    new winston.transports.File({ 
-      filename: 'logs/error.log', 
-      level: 'error' 
-    }),
-    // Write all logs with importance level of `info` or less to `combined.log`
-    new winston.transports.File({ 
-      filename: 'logs/combined.log' 
-    })
-  ]
-});
+const timestamp = () => new Date().toISOString();
 
-// If we're not in production, log to the console as well
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple()
-    )
-  }));
+function stringify(arg) {
+  if (typeof arg === 'string') return arg;
+  try {
+    return JSON.stringify(arg);
+  } catch {
+    return String(arg);
+  }
 }
 
-module.exports = logger;
+function emit(levelName, args) {
+  const line = `[${timestamp()}] [${levelName.toUpperCase()}] ${args.map(stringify).join(' ')}`;
+  if (levelName === 'error') console.error(line);
+  else if (levelName === 'warn') console.warn(line);
+  else console.log(line);
+}
 
+const logger = {
+  error: (...args) => { if (LEVEL_ORDER.error >= minLevel) emit('error', args); },
+  warn: (...args) => { if (LEVEL_ORDER.warn >= minLevel) emit('warn', args); },
+  info: (...args) => { if (LEVEL_ORDER.info >= minLevel) emit('info', args); },
+  debug: (...args) => { if (LEVEL_ORDER.debug >= minLevel) emit('debug', args); },
+};
+
+module.exports = logger;
