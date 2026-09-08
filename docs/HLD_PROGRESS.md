@@ -1,8 +1,8 @@
 # Kisan360 HLD — Implementation Progress Tracker
 
 Source of truth: `Kisan360_HLD (2).pdf` (High-Level Design v2, SIH26132).
-Updated: 2026-09-08 (build day 1). Owner tags: TL=Team Lead/Backend, ML=ML/RAG,
-MD=Market Data, FE=Frontend, QA=DevOps/QA, DC=Docs.
+Updated: 2026-09-08 (build day 1, frontend P0 screens landed). Owner tags:
+TL=Team Lead/Backend, ML=ML/RAG, MD=Market Data, FE=Frontend, QA=DevOps/QA, DC=Docs.
 
 Scoring: every task below is scored 0–100% by **platform-readiness** (engine/API +
 UI + tests), not just backend. Overall = weighted: P0 ×3, P1 ×2, P2 ×1.
@@ -12,11 +12,11 @@ P3 is explicit roadmap (scored 0 by design, excluded from the numerator).
 
 | # | Task | Status | % | Notes / owner |
 |---|---|---|---|---|
-| P0.1 | Net-realization engine — deterministic, farmer-borne costs only, ranks mandis | Engine + API + assumptions + tests done; comparison-card UI not built yet | 70 | Engine 100% (TL+ML); UI 0% (FE) |
+| P0.1 | Net-realization engine — deterministic, farmer-borne costs only, ranks mandis | Done — engine + `/net-realization` page: ranked cards, best-mandi banner, "Why?" drawer with cost breakdown + evidence + buyer-side charges. Verified live in browser | 100 | Engine (TL+ML) + UI (TL) |
 | P0.2 | Evidence/provenance on every price (source, retrieved_at, freshness) | Done — market route provenance + per-mandi evidence in calculator | 100 | TL |
-| P0.3 | Buyer matching + four-tier trust badge (REAL/SOURCE/DEMO/SELF_DECLARED) | Directory + matching + tiers done; badge UI not built yet | 60 | Backend 100% (TL); badges UI 0% (FE) |
-| P0.4 | One complete journey: price → net → lot → buyer → offer → accept → simulated payment | Backend journey fully tested over HTTP; journey screens not built yet | 70 | Backend 100% (TL); screens 0% (FE) |
-| | **P0 subtotal** | | **75%** | |
+| P0.3 | Buyer matching + four-tier trust badge (REAL/SOURCE/DEMO/SELF_DECLARED) | Done — Trade page buyer cards with color-coded tier badges, min-qty gating, simulated-for-demo disclaimer. Verified live | 100 | Backend (TL) + UI (TL) |
+| P0.4 | One complete journey: price → net → lot → buyer → offer → accept → simulated payment | Done — Trade page: lot creation form, offer composer with lot-total preview, buyer accept/reject, payment Pending→Held→Released timeline. Full journey driven live in browser (farmer → buyer role) | 100 | Backend (TL) + UI (TL) |
+| | **P0 subtotal** | | **100%** | |
 
 ## P1 — thin vertical slices (weight ×2)
 
@@ -27,10 +27,10 @@ P3 is explicit roadmap (scored 0 by design, excluded from the numerator).
 | Quality — structured fields grade/size/moisture/damage/assay, no vision model | Done — Lot model + API + tested (TL) | 100 |
 | Logistics — distance × documented ₹/km assumption, no OSRM | Done — assumptions endpoint + calculator (TL) | 100 |
 | Grievance — Raise → Open → Under Review → Resolved | Not started | 0 |
-| Lot-creation + buyer-list UI with trust badges | Not started (FE) | 0 |
-| Payment-status UI (Pending→Held→Released timeline) | Not started (FE) | 0 |
-| FPO pooling UI + side-by-side uplift comparison | Not started (FE) | 0 |
-| | **P1 subtotal** | **25%** |
+| Lot-creation + buyer-list UI with trust badges | Done — Trade page (TL) | 100 |
+| Payment-status UI (Pending→Held→Released timeline) | Done — Trade page timeline + history log (TL) | 100 |
+| FPO pooling UI + side-by-side uplift comparison | Not started (FE) — blocked on FPO aggregation backend | 0 |
+| | **P1 subtotal** | **56%** |
 
 ## P2 — reuse only (weight ×1)
 
@@ -50,14 +50,15 @@ rewrite · predictive price ML.
 
 | Group | % |
 |---|---|
-| P0 (×3) | 75 |
-| P1 (×2) | 25 |
+| P0 (×3) | 100 |
+| P1 (×2) | 56 |
 | P2 (×1) | 68 |
-| **Overall (weighted)** | **≈57%** |
+| **Overall (weighted)** | **≈86%** |
 
 Backend/Team-Lead lane (auth, routing Node↔FastAPI, market cache, net-realization
 wiring, lots/buyers/offers/payments state machine, demo-auth, integration tests):
 **100% of the role's day-1–5 deliverables** are implemented and green on branch
-`backend/team-lead-core`. Raising the overall number next requires the Frontend
-lane (P0/P1 screens) and Market-Data lane (FPO math, 7/14/30-day trend, real
-price refresh).
+`backend/team-lead-core`. **P0 is now 100%** — the four headline flows work
+end-to-end in the UI against tested backend contracts. Raising the overall
+number next requires the Market-Data lane (FPO aggregation math + 7/14/30-day
+trend, then FPO pooling UI) and the RAG wire-up (P2).

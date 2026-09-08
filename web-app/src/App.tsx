@@ -9,6 +9,8 @@ import WeatherPage from './pages/WeatherPage';
 import CropAdvisory from './pages/CropAdvisory';
 import FarmManagement from './pages/FarmManagement';
 import MarketPlace from './pages/MarketPlace';
+import NetRealization from './pages/NetRealization';
+import TradePage from './pages/TradePage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
@@ -44,6 +46,8 @@ function App() {
             <Route path="/advisory" element={<CropAdvisory />} />
             <Route path="/farms" element={<FarmManagement />} />
             <Route path="/market" element={<MarketPlace />} />
+            <Route path="/net-realization" element={<NetRealization />} />
+            <Route path="/trade" element={<TradePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>

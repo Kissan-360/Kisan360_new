@@ -90,6 +90,7 @@ For the demo, users sign in as a **demo farmer / demo buyer / FPO** via `POST /a
 | `GET /api/market/net-realization?crop&district&quantity` | Rank mandis by estimated farmer net (Node → FastAPI `:8002`) | ✅ |
 | `GET /api/market/net-realization/assumptions` | Documented cost assumptions (transport ₹/km, storage, etc.) | ✅ |
 | `GET /api/buyers` | Buyer directory with 4-tier trust badges | ✅ |
+| **Web screens** | `/net-realization` comparison cards + "Why?" drawer · `/trade` lots, buyer badges, offers, payment timeline | ✅ |
 | `POST/GET /api/lots` | Farmer lot creation (structured quality fields) | ✅ |
 | `POST /api/offers`, `GET /api/offers` | Offers to matched buyers | ✅ |
 | `POST /api/offers/:id/accept`, `POST /api/payments/:id/release` | Simulated Pending → Held → Released flow | ✅ |

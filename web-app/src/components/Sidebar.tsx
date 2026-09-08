@@ -9,6 +9,8 @@ const navItems = [
   { to: '/weather', label: 'Weather', icon: '🌤️' },
   { to: '/farms', label: 'My Farms', icon: '🏠' },
   { to: '/market', label: 'Market Prices', icon: '💰' },
+  { to: '/net-realization', label: 'Net Realization', icon: '🧮' },
+  { to: '/trade', label: 'Trade', icon: '🤝' },
   { to: '/profile', label: 'Profile', icon: '👤' },
   { to: '/settings', label: 'Settings', icon: '⚙️' },
 ];
