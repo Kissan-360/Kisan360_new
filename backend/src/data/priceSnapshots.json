@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "purpose": "Known-good cached fallback for /api/market/prices and the net-realization calculator.",
+    "note": "SAMPLE DEMO SEED — plausible placeholder values for Maharashtra mandis (₹/quintal). Replace with real Agmarknet pulls once the Market Data engineer can reach the API; provenance fields make it obvious when this served.",
+    "source": "agmarknet_snapshot",
+    "retrievedAt": "2026-09-07T06:30:00.000Z",
+    "states": ["Maharashtra"],
+    "unit": "₹ per quintal"
+  },
+  "rows": [
+    { "crop": "Soybean", "variety": "Soyabeen (Yellow)", "market": "Latur", "district": "Latur", "state": "Maharashtra", "minPrice": 4380, "maxPrice": 4980, "modalPrice": 4700, "arrivalDate": "2026-09-05" },
+    { "crop": "Soybean", "variety": "Soyabeen (Yellow)", "market": "Nagpur", "district": "Nagpur", "state": "Maharashtra", "minPrice": 4250, "maxPrice": 4810, "modalPrice": 4550, "arrivalDate": "2026-09-05" },
+    { "crop": "Soybean", "variety": "Soyabeen (Yellow)", "market": "Akola", "district": "Akola", "state": "Maharashtra", "minPrice": 4300, "maxPrice": 4900, "modalPrice": 4620, "arrivalDate": "2026-09-05" },
+    { "crop": "Soybean", "variety": "Soyabeen (Yellow)", "market": "Amravati", "district": "Amravati", "state": "Maharashtra", "minPrice": 4200, "maxPrice": 4760, "modalPrice": 4500, "arrivalDate": "2026-09-05" },
+    { "crop": "Soybean", "variety": "Soyabeen (Yellow)", "market": "Pune", "district": "Pune", "state": "Maharashtra", "minPrice": 4240, "maxPrice": 4800, "modalPrice": 4520, "arrivalDate": "2026-09-05" },
+    { "crop": "Soybean", "variety": "Soyabeen (Yellow)", "market": "Aurangabad", "district": "Aurangabad", "state": "Maharashtra", "minPrice": 4180, "maxPrice": 4720, "modalPrice": 4480, "arrivalDate": "2026-09-05" },
+
+    { "crop": "Onion", "variety": "Onion (Red Nasik)", "market": "Nashik", "district": "Nashik", "state": "Maharashtra", "minPrice": 1650, "maxPrice": 2050, "modalPrice": 1850, "arrivalDate": "2026-09-06" },
+    { "crop": "Onion", "variety": "Onion (Red Nasik)", "market": "Pune", "district": "Pune", "state": "Maharashtra", "minPrice": 1750, "maxPrice": 2180, "modalPrice": 1950, "arrivalDate": "2026-09-06" },
+    { "crop": "Onion", "variety": "Onion (Red Nasik)", "market": "Solapur", "district": "Solapur", "state": "Maharashtra", "minPrice": 1520, "maxPrice": 1920, "modalPrice": 1720, "arrivalDate": "2026-09-06" },
+    { "crop": "Onion", "variety": "Onion (Red Nasik)", "market": "Ahmednagar", "district": "Ahmednagar", "state": "Maharashtra", "minPrice": 1480, "maxPrice": 1850, "modalPrice": 1650, "arrivalDate": "2026-09-06" },
+    { "crop": "Onion", "variety": "Onion (Red Nasik)", "market": "Kolhapur", "district": "Kolhapur", "state": "Maharashtra", "minPrice": 1600, "maxPrice": 1980, "modalPrice": 1780, "arrivalDate": "2026-09-06" },
+    { "crop": "Onion", "variety": "Onion (Red Nasik)", "market": "Latur", "district": "Latur", "state": "Maharashtra", "minPrice": 1420, "maxPrice": 1780, "modalPrice": 1600, "arrivalDate": "2026-09-06" },
+
+    { "crop": "Tomato", "variety": "Tomato (Deshi)", "market": "Nashik", "district": "Nashik", "state": "Maharashtra", "minPrice": 1250, "maxPrice": 1680, "modalPrice": 1450, "arrivalDate": "2026-09-06" },
+    { "crop": "Tomato", "variety": "Tomato (Deshi)", "market": "Pune", "district": "Pune", "state": "Maharashtra", "minPrice": 1320, "maxPrice": 1740, "modalPrice": 1520, "arrivalDate": "2026-09-06" },
+    { "crop": "Tomato", "variety": "Tomato (Deshi)", "market": "Satara", "district": "Satara", "state": "Maharashtra", "minPrice": 1180, "maxPrice": 1580, "modalPrice": 1380, "arrivalDate": "2026-09-06" },
+    { "crop": "Tomato", "variety": "Tomato (Deshi)", "market": "Nagpur", "district": "Nagpur", "state": "Maharashtra", "minPrice": 1100, "maxPrice": 1480, "modalPrice": 1280, "arrivalDate": "2026-09-06" },
+    { "crop": "Tomato", "variety": "Tomato (Deshi)", "market": "Kolhapur", "district": "Kolhapur", "state": "Maharashtra", "minPrice": 1150, "maxPrice": 1560, "modalPrice": 1350, "arrivalDate": "2026-09-06" },
+    { "crop": "Tomato", "variety": "Tomato (Deshi)", "market": "Jalgaon", "district": "Jalgaon", "state": "Maharashtra", "minPrice": 1050, "maxPrice": 1400, "modalPrice": 1220, "arrivalDate": "2026-09-06" }
+  ]
+}
