@@ -32,6 +32,13 @@ __pycache__/
 # Downloaded test data (reproducible from PlantVillage GitHub)
 ml-service/test_images/plantvillage_color/
 
+# Backend runtime artifacts
+backend/logs/
+backend/.data/
+
+# Local tool state (Freebuff)
+.freebuff/
+
 # IDE specific files
 .idea/
 .vscode/
