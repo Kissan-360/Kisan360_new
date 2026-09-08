@@ -74,7 +74,7 @@ For the demo, users sign in as a **demo farmer / demo buyer / FPO** via `POST /a
 
 ```bash
 cd backend && npm test          # unit tests (auth, payment state machine)
-cd ml-service && python -m pytest test_net_realization.py -q   # calculator tests
+cd ml-service && python -m unittest test_net_realization -v   # calculator tests
 bash backend/scripts/smoke.sh   # boots stack checks: /health + journey smoke
 ```
 
