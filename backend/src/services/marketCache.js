@@ -243,5 +243,6 @@ module.exports = {
   getBestPrices,
   filterRows,
   cropMatches,
+  normalizeRow,
   cacheSummary,
 };

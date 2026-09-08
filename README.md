@@ -44,6 +44,32 @@ npm run dev                     # → http://localhost:3000
 
 > **No internet / no DB?** The price pipeline serves a stamped cache snapshot when the live Agmarknet pull fails, and health checks confirm DB connectivity. `GET /api/market/net-realization` is the primary demo path.
 
+### One-command stack boot
+
+```bash
+bash scripts/dev-up.sh          # backend + calculator + web (+ optional ML services)
+bash scripts/dev-up.sh --core   # skip the optional disease/advisory services
+```
+
+Starts each service that isn't already healthy, waits on `/health`, and stops
+what it started on Ctrl+C. Logs in `/tmp/k360-*.log`.
+
+### Refreshing the real price snapshot (daily)
+
+The offline cache is `backend/src/data/priceSnapshots.json` — machine-generated
+from a live AGMARKNET pull:
+
+```bash
+cd backend
+node scripts/refresh-prices.js            # pull + rewrite the stamped snapshot
+node scripts/refresh-prices.js --dry-run  # preview first
+```
+
+Current snapshot: **85 real rows (soybean/onion/tomato, Maharashtra), fetched 2026-09-08**.
+The ML pipeline snapshot builder is covered by unit tests (`backend/tests/unit/priceSnapshot.test.js`).
+
+HLD-to-implementation status is tracked in `docs/HLD_PROGRESS.md` (updated per build day).
+
 ## Environment variables
 
 See `backend/.env.example` and `web-app/.env.example`. Never commit real `.env` files.
