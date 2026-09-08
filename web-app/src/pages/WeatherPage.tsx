@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { API_URL } from '../config/api';
+import { API_URL, apiFetch } from '../lib/api';
 
 const WeatherPage = () => {
   const [weather, setWeather] = useState<any>(null);
@@ -17,7 +17,7 @@ const WeatherPage = () => {
 
   useEffect(() => {
     if (!coords) return;
-    fetch(`${API_URL}/weather?latitude=${coords.lat}&longitude=${coords.lon}`)
+    apiFetch(`${API_URL}/weather?latitude=${coords.lat}&longitude=${coords.lon}`)
       .then((r) => r.json())
       .then(setWeather)
       .catch(() => setError('Failed to load weather'));

@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useAuth } from '../../hooks/useAuth';
+
+const DEMO_ROLES = [
+  { role: 'farmer', label: 'Farmer', icon: '🧑‍🌾', desc: 'Check prices, list a lot, sell' },
+  { role: 'buyer', label: 'Buyer', icon: '🏭', desc: 'Accept offers, release funds (simulated)' },
+  { role: 'fpo', label: 'FPO', icon: '🤝', desc: 'Aggregate & buy for a producer group' },
+];
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +16,22 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { demoSignIn } = useAuth();
+  const [demoError, setDemoError] = useState('');
+  const [demoLoadingRole, setDemoLoadingRole] = useState<string | null>(null);
+
+  const handleDemoSignIn = async (role: string) => {
+    setDemoError('');
+    setDemoLoadingRole(role);
+    try {
+      await demoSignIn(role);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setDemoError(err.message || 'Demo login failed');
+    } finally {
+      setDemoLoadingRole(null);
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,6 +109,32 @@ const LoginPage = () => {
               )}
             </button>
           </form>
+
+          <div className="mt-6">
+            <div className="flex items-center gap-3">
+              <div className="h-px bg-gray-200 flex-1" />
+              <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">Demo sign-in</span>
+              <div className="h-px bg-gray-200 flex-1" />
+            </div>
+            <p className="text-xs text-gray-400 text-center mt-3">
+              Simulated for the SIH demo — no real credentials. Choose a role.
+            </p>
+            <div className="grid grid-cols-3 gap-2 mt-3">
+              {DEMO_ROLES.map(({ role, label, icon, desc }) => (
+                <button
+                  key={role}
+                  onClick={() => handleDemoSignIn(role)}
+                  disabled={!!demoLoadingRole}
+                  className="border border-gray-200 hover:border-emerald-400 hover:bg-emerald-50/40 rounded-xl p-3 text-center transition-colors disabled:opacity-60"
+                >
+                  <div className="text-2xl">{icon}</div>
+                  <div className="text-sm font-medium text-gray-800 mt-1">{label}</div>
+                  <div className="text-[11px] text-gray-400 leading-tight mt-0.5">{desc}</div>
+                </button>
+              ))}
+            </div>
+            {demoError && <p className="text-xs text-red-600 mt-3 text-center">{demoError}</p>}
+          </div>
 
           <p className="text-center mt-6 text-sm text-gray-500">
             Don't have an account?{' '}

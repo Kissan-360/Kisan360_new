@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { API_URL } from '../config/api';
+import { API_URL, apiFetch } from '../lib/api';
 
 const CROP_OPTIONS = [
   'Apple', 'Bell Pepper', 'Blueberry', 'Cherry', 'Corn (Maize)',
@@ -37,7 +37,7 @@ const DiseaseDetection = () => {
     if (cropType) form.append('cropType', cropType);
 
     try {
-      const resp = await fetch(`${API_URL}/disease/detect`, {
+      const resp = await apiFetch(`${API_URL}/disease/detect`, {
         method: 'POST',
         body: form,
       });
@@ -52,7 +52,7 @@ const DiseaseDetection = () => {
       }
       setResult(data);
       // Save to API, fallback to localStorage
-      fetch(`${API_URL}/detections`, {
+      apiFetch(`${API_URL}/detections`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

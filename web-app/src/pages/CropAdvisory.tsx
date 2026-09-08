@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { API_URL } from '../config/api';
+import { API_URL, apiFetch } from '../lib/api';
 const COMMON_CROPS = [
   'Rice', 'Wheat', 'Maize', 'Sugarcane', 'Cotton',
   'Groundnut', 'Tomato', 'Onion', 'Mango', 'Banana',
@@ -25,7 +25,7 @@ const CropAdvisory = () => {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
-          const resp = await fetch(
+          const resp = await apiFetch(
             `${API_URL}/weather?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}`
           );
           const data = await resp.json();
@@ -50,7 +50,7 @@ const CropAdvisory = () => {
     if (weather?.condition) params.append('condition', weather.condition);
 
     try {
-      const resp = await fetch(`${API_URL}/advisory?${params}`);
+      const resp = await apiFetch(`${API_URL}/advisory?${params}`);
       const data = await resp.json();
       if (!resp.ok) throw new Error(data.error || 'Failed');
       setAdvisory(data);

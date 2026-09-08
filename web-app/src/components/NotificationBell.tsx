@@ -1,16 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../hooks/useAuth';
 
-import { API_URL } from '../config/api';
-
-const getToken = async (user: any): Promise<string | null> => {
-  if (!user) return null;
-  try {
-    return await user.getIdToken();
-  } catch {
-    return null;
-  }
-};
+import { API_URL, apiFetch, getDemoToken } from '../lib/api';
 
 const typeStyles: Record<string, string> = {
   danger: 'bg-red-50 border-red-200 text-red-700',
@@ -42,13 +33,17 @@ const NotificationBell = () => {
   }, []);
 
   const fetchNotifications = async () => {
-    const token = await getToken(user);
-    if (!token) return;
+    // Demo sessions carry the token via apiFetch; a pure-Firebase session sends
+    // its ID token explicitly.
+    const headers: Record<string, string> = {};
+    if (!getDemoToken() && user && typeof (user as any).getIdToken === 'function') {
+      try {
+        headers.Authorization = `Bearer ${await (user as any).getIdToken()}`;
+      } catch {}
+    }
 
     try {
-      const resp = await fetch(`${API_URL}/notifications`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const resp = await apiFetch(`${API_URL}/notifications`, { headers });
       const data = await resp.json();
       if (data.success) {
         setNotifications(data.notifications);

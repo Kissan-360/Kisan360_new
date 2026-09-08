@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { API_URL } from '../config/api';
+import { API_URL, apiFetch } from '../lib/api';
 
 const Dashboard = () => {
   const [weather, setWeather] = useState<any>(null);
@@ -18,14 +18,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!coords) return;
-    fetch(`${API_URL}/weather?latitude=${coords.lat}&longitude=${coords.lon}`)
+    apiFetch(`${API_URL}/weather?latitude=${coords.lat}&longitude=${coords.lon}`)
       .then((r) => r.json())
       .then(setWeather)
       .catch(() => {});
   }, [coords]);
 
   useEffect(() => {
-    fetch(`${API_URL}/detections?limit=3`)
+    apiFetch(`${API_URL}/detections?limit=3`)
       .then(r => r.json())
       .then(data => {
         if (data.success && data.detections) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { API_URL } from '../config/api';
+import { API_URL, apiFetch } from '../lib/api';
 
 interface MarketPrice {
   crop: string;
@@ -43,7 +43,7 @@ const MarketPlace = () => {
       if (stateFilter) params.append('state', stateFilter);
       if (search) params.append('search', search);
 
-      const res = await fetch(`${API_URL}/market/prices?${params}`);
+      const res = await apiFetch(`${API_URL}/market/prices?${params}`);
       const data: ApiResponse = await res.json();
       if (data.success) {
         setPrices(data.prices);

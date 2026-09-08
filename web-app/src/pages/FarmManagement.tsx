@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { API_URL } from '../config/api';
+import { API_URL, apiFetch } from '../lib/api';
 
 interface Farm {
   _id: string;
@@ -34,7 +34,7 @@ const FarmManagement = () => {
   const fetchFarms = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/farms`);
+      const res = await apiFetch(`${API_URL}/farms`);
       const data = await res.json();
       if (data.success && data.farms) {
         setFarms(data.farms);
@@ -57,7 +57,7 @@ const FarmManagement = () => {
     if (!form.name.trim()) return;
     try {
       if (editing) {
-        const res = await fetch(`${API_URL}/farms/${editing}`, {
+        const res = await apiFetch(`${API_URL}/farms/${editing}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(form),
@@ -67,7 +67,7 @@ const FarmManagement = () => {
           setFarms(prev => prev.map(f => f._id === editing ? data.farm : f));
         }
       } else {
-        const res = await fetch(`${API_URL}/farms`, {
+        const res = await apiFetch(`${API_URL}/farms`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(form),
@@ -92,7 +92,7 @@ const FarmManagement = () => {
   const remove = async (id: string) => {
     if (!confirm('Delete this farm?')) return;
     try {
-      await fetch(`${API_URL}/farms/${id}`, { method: 'DELETE' });
+      await apiFetch(`${API_URL}/farms/${id}`, { method: 'DELETE' });
     } catch {}
     setFarms(prev => prev.filter(f => f._id !== id));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(farms.filter(f => f._id !== id)));
