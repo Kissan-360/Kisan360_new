@@ -13,6 +13,10 @@ const notificationRoutes = require('./routes/notifications');
 const marketRoutes = require('./routes/market');
 const farmRoutes = require('./routes/farms');
 const detectionRoutes = require('./routes/detections');
+const lotRoutes = require('./routes/lots');
+const buyerRoutes = require('./routes/buyers');
+const offerRoutes = require('./routes/offers');
+const paymentRoutes = require('./routes/payments');
 
 // Error handling
 const errorHandler = require('./middleware/errorHandler');
@@ -68,6 +72,10 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/market', marketRoutes);
 app.use('/api/farms', farmRoutes);
 app.use('/api/detections', detectionRoutes);
+app.use('/api/lots', lotRoutes);
+app.use('/api/buyers', buyerRoutes);
+app.use('/api/offers', offerRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {

@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "note": "STATIC DEMO BUYER DIRECTORY — entries are illustrative for the SIH demo. Trust badges do not represent real verification; production would verify buyers against FSSAI/GST/public trade registries and move this data to MongoDB.",
+    "trustTiers": {
+      "REAL_VERIFIED": { "label": "Verified buyer", "description": "Credentials checked against public registries (production tier — shown here as an illustration)" },
+      "SOURCE_VERIFIED": { "label": "Source-verified buyer", "description": "Verified via an upstream list/partner reference" },
+      "DEMO_VERIFIED": { "label": "Demo-verified buyer", "description": "Demo directory entry; verification simulated for this build" },
+      "SELF_DECLARED": { "label": "Self-declared buyer", "description": "Profile self-declared; no verification performed yet" }
+    }
+  },
+  "buyers": [
+    { "id": "b1", "name": "Nashik Kisan Producer Co.", "category": "FPO aggregator", "crops": ["Onion", "Tomato"], "districts": ["Nashik"], "trustTier": "SOURCE_VERIFIED", "verificationNote": "Listed under the FPO aggregation partner programme (demo: static)", "minQuantityQuintals": 5, "paymentTermsLabel": "On acceptance (simulated)", "description": "Pools member lots into bulk shipments." },
+    { "id": "b2", "name": "Maharashtra Green Processor Ltd", "category": "Processor", "crops": ["Onion", "Tomato", "Soybean"], "districts": ["Pune"], "trustTier": "REAL_VERIFIED", "verificationNote": "Illustration of the top badge — production requires FSSAI/GST document checks", "minQuantityQuintals": 10, "paymentTermsLabel": "On acceptance (simulated)", "description": "Buyer of graded produce for processing." },
+    { "id": "b3", "name": "Mumbai Fresh Retail Chain", "category": "Retail chain", "crops": ["Onion", "Tomato"], "districts": ["Mumbai", "Pune"], "trustTier": "DEMO_VERIFIED", "verificationNote": "Demo directory entry — verification simulated", "minQuantityQuintals": 5, "paymentTermsLabel": "On acceptance (simulated)", "description": "Institutional retail demand across Maharashtra." },
+    { "id": "b4", "name": "Vidarbha Soy Processors Pvt Ltd", "category": "Processor", "crops": ["Soybean"], "districts": ["Nagpur", "Amravati"], "trustTier": "REAL_VERIFIED", "verificationNote": "Illustration of the top badge — production requires FSSAI/GST document checks", "minQuantityQuintals": 25, "paymentTermsLabel": "On acceptance (simulated)", "description": "Crushing/processing plant buying in bulk." },
+    { "id": "b5", "name": "Latur Oil Mills Cooperative", "category": "Processor", "crops": ["Soybean"], "districts": ["Latur"], "trustTier": "DEMO_VERIFIED", "verificationNote": "Demo directory entry — verification simulated", "minQuantityQuintals": 10, "paymentTermsLabel": "On acceptance (simulated)", "description": "Cooperative oil mill with steady soybean intake." },
+    { "id": "b6", "name": "Pune Wholesale Trader (Bulk)", "category": "Trader", "crops": ["Onion", "Soybean"], "districts": ["Pune"], "trustTier": "SELF_DECLARED", "verificationNote": "Self-declared profile — no verification yet", "minQuantityQuintals": 5, "paymentTermsLabel": "On acceptance (simulated)", "description": "High-volume wholesale buyer." },
+    { "id": "b7", "name": "Dehydrated Onion Exports (Nasik)", "category": "Exporter", "crops": ["Onion"], "districts": ["Nashik"], "trustTier": "SOURCE_VERIFIED", "verificationNote": "Verified via export-partner list (demo: static)", "minQuantityQuintals": 10, "paymentTermsLabel": "On acceptance (simulated)", "description": "Exports dehydrated/processed onion." },
+    { "id": "b8", "name": "Aurangabad Food Park Buyer", "category": "Institutional buyer", "crops": ["Tomato", "Onion"], "districts": ["Aurangabad"], "trustTier": "DEMO_VERIFIED", "verificationNote": "Demo directory entry — verification simulated", "minQuantityQuintals": 5, "paymentTermsLabel": "On acceptance (simulated)", "description": "Institutional kitchen/food-park procurement." },
+    { "id": "b9", "name": "Kolhapur Veg Retail Hub", "category": "Retail chain", "crops": ["Tomato"], "districts": ["Kolhapur"], "trustTier": "SELF_DECLARED", "verificationNote": "Self-declared profile — no verification yet", "minQuantityQuintals": 5, "paymentTermsLabel": "On acceptance (simulated)", "description": "Vegetable retail hub." },
+    { "id": "b10", "name": "Pune Agro Exports Pvt Ltd", "category": "Exporter", "crops": ["Onion", "Tomato", "Soybean"], "districts": ["Pune"], "trustTier": "DEMO_VERIFIED", "verificationNote": "Demo directory entry — verification simulated", "minQuantityQuintals": 20, "paymentTermsLabel": "On acceptance (simulated)", "description": "Export-oriented buyer for graded lots." }
+  ]
+}
