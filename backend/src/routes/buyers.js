@@ -11,6 +11,15 @@ try {
   directory = JSON.parse(fs.readFileSync(BUYERS_FILE, 'utf8'));
 } catch (error) {
   console.error('Failed to load buyer directory:', error.message);
+  // Graceful fallback: serve an empty, honestly-labelled directory instead of
+  // crashing every /api/buyers request.
+  directory = {
+    meta: {
+      note: 'Buyer directory is temporarily unavailable — the static directory file could not be loaded.',
+      trustTiers: {},
+    },
+    buyers: [],
+  };
 }
 
 const TIER_ORDER = { REAL_VERIFIED: 0, SOURCE_VERIFIED: 1, DEMO_VERIFIED: 2, SELF_DECLARED: 3 };

@@ -20,20 +20,27 @@ describe('priceSnapshot', () => {
   });
 
   test('maps, filters, and dedupes records into snapshot rows', () => {
-    const rows = recordsToRows(RECORDS, { state: 'Maharashtra' });
+    const { rows, reconciliation } = recordsToRows(RECORDS, { state: 'Maharashtra' });
     const nashik = rows.filter(r => r.market === 'Nashik');
     // duplicate kept the higher quote
     expect(nashik).toHaveLength(1);
     expect(nashik[0].modalPrice).toBe(1920);
     expect(nashik[0].minPrice).toBe(1600);
-    // wheat (non-target) and Gujarat rows dropped
-    expect(rows.some(r => r.crop === 'Wheat')).toBe(false);
-    expect(rows.length).toBe(3);
-    expect(rows.map(r => r.crop).sort()).toEqual(['Onion', 'Soyabeen', 'Tomato'].sort());
+    // Gujarat rows dropped (state filter), but ALL Maharashtra crops pass through
+    expect(rows.some(r => r.crop === 'Wheat')).toBe(true);
+    expect(rows.length).toBe(4);
+    expect(rows.map(r => r.crop).sort()).toEqual(['Onion', 'Soyabeen', 'Tomato', 'Wheat'].sort());
+    // Reconciliation tracks what happened
+    expect(reconciliation.received).toBe(6);
+    expect(reconciliation.accepted).toBe(4); // Gujarat row filtered by state, not rejected by validation
+    // Provenance fields are present
+    expect(rows[0].observedOn).toBeTruthy();
+    expect(rows[0].fetchedAt).toBeTruthy();
+    expect(rows[0].validatedAt).toBeTruthy();
   });
 
   test('state filter is applied', () => {
-    const rows = recordsToRows(RECORDS, { crop: 'Onion', state: 'Gujarat' });
+    const { rows } = recordsToRows(RECORDS, { crop: 'Onion', state: 'Gujarat' });
     expect(rows).toHaveLength(1);
     expect(rows[0].market).toBe('Nashik');
   });

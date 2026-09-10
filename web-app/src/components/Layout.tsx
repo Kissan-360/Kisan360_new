@@ -25,6 +25,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
 
           <div className="flex items-center gap-2">
+            <span
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-50 border border-amber-200 text-[11px] font-medium text-amber-700 whitespace-nowrap"
+              title="Payments, buyer verification and FPO data are simulated for the Smart India Hackathon demo. No real money moves."
+            >
+              🧪 SIH Prototype · simulated
+            </span>
             <NotificationBell />
             <Link
               to="/profile"

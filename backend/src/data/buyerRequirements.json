@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "note": "STATIC DEMO BUYER REQUIREMENTS — structured buyer intent for the SIH demo. These represent what buyers are looking for, NOT confirmed demand. Production would source this from buyer onboarding flows. Trust badges do not represent real verification.",
+    "purpose": "Enables 'compatible buyer requirement' matching rather than falsely claiming 'buyer demand confirmed'"
+  },
+  "requirements": [
+    {
+      "id": "req1",
+      "buyerId": "b1",
+      "buyerName": "Nashik Kisan Producer Co.",
+      "crop": "Onion",
+      "quantityRange": { "min": 5, "max": 50, "unit": "quintals" },
+      "serviceDistricts": ["Nashik"],
+      "qualityRequirements": {
+        "minGrade": "B",
+        "maxMoisturePct": 12,
+        "maxDamagePct": 5,
+        "sizePreference": "40-60mm"
+      },
+      "preferredDeliveryWindow": "Within 3 days of harvest",
+      "paymentTerms": "On acceptance (simulated)",
+      "label": "DEMO — static requirement, not live demand"
+    },
+    {
+      "id": "req2",
+      "buyerId": "b2",
+      "buyerName": "Maharashtra Green Processor Ltd",
+      "crop": "Onion",
+      "quantityRange": { "min": 10, "max": 100, "unit": "quintals" },
+      "serviceDistricts": ["Pune", "Nashik"],
+      "qualityRequirements": {
+        "minGrade": "A",
+        "maxMoisturePct": 10,
+        "maxDamagePct": 3,
+        "sizePreference": "50-70mm"
+      },
+      "preferredDeliveryWindow": "Within 2 days",
+      "paymentTerms": "On acceptance (simulated)",
+      "label": "DEMO — static requirement, not live demand"
+    },
+    {
+      "id": "req3",
+      "buyerId": "b2",
+      "buyerName": "Maharashtra Green Processor Ltd",
+      "crop": "Soybean",
+      "quantityRange": { "min": 10, "max": 200, "unit": "quintals" },
+      "serviceDistricts": ["Pune"],
+      "qualityRequirements": {
+        "minGrade": "B",
+        "maxMoisturePct": 14,
+        "maxDamagePct": 5,
+        "sizePreference": null
+      },
+      "preferredDeliveryWindow": "Within 5 days",
+      "paymentTerms": "On acceptance (simulated)",
+      "label": "DEMO — static requirement, not live demand"
+    },
+    {
+      "id": "req4",
+      "buyerId": "b3",
+      "buyerName": "Mumbai Fresh Retail Chain",
+      "crop": "Onion",
+      "quantityRange": { "min": 5, "max": 30, "unit": "quintals" },
+      "serviceDistricts": ["Mumbai", "Pune"],
+      "qualityRequirements": {
+        "minGrade": "A",
+        "maxMoisturePct": 8,
+        "maxDamagePct": 2,
+        "sizePreference": "40-60mm"
+      },
+      "preferredDeliveryWindow": "Daily delivery preferred",
+      "paymentTerms": "On acceptance (simulated)",
+      "label": "DEMO — static requirement, not live demand"
+    },
+    {
+      "id": "req5",
+      "buyerId": "b4",
+      "buyerName": "Vidarbha Soy Processors Pvt Ltd",
+      "crop": "Soybean",
+      "quantityRange": { "min": 25, "max": 500, "unit": "quintals" },
+      "serviceDistricts": ["Nagpur", "Amravati"],
+      "qualityRequirements": {
+        "minGrade": "B",
+        "maxMoisturePct": 12,
+        "maxDamagePct": 3,
+        "sizePreference": null
+      },
+      "preferredDeliveryWindow": "Within 7 days",
+      "paymentTerms": "On acceptance (simulated)",
+      "label": "DEMO — static requirement, not live demand"
+    },
+    {
+      "id": "req6",
+      "buyerId": "b5",
+      "buyerName": "Latur Oil Mills Cooperative",
+      "crop": "Soybean",
+      "quantityRange": { "min": 10, "max": 100, "unit": "quintals" },
+      "serviceDistricts": ["Latur"],
+      "qualityRequirements": {
+        "minGrade": "C",
+        "maxMoisturePct": 15,
+        "maxDamagePct": 8,
+        "sizePreference": null
+      },
+      "preferredDeliveryWindow": "Within 5 days",
+      "paymentTerms": "On acceptance (simulated)",
+      "label": "DEMO — static requirement, not live demand"
+    },
+    {
+      "id": "req7",
+      "buyerId": "b7",
+      "buyerName": "Dehydrated Onion Exports (Nasik)",
+      "crop": "Onion",
+      "quantityRange": { "min": 10, "max": 200, "unit": "quintals" },
+      "serviceDistricts": ["Nashik"],
+      "qualityRequirements": {
+        "minGrade": "A",
+        "maxMoisturePct": 10,
+        "maxDamagePct": 2,
+        "sizePreference": "50-70mm"
+      },
+      "preferredDeliveryWindow": "Within 3 days",
+      "paymentTerms": "On acceptance (simulated)",
+      "label": "DEMO — static requirement, not live demand"
+    },
+    {
+      "id": "req8",
+      "buyerId": "b10",
+      "buyerName": "Pune Agro Exports Pvt Ltd",
+      "crop": "Onion",
+      "quantityRange": { "min": 20, "max": 300, "unit": "quintals" },
+      "serviceDistricts": ["Pune"],
+      "qualityRequirements": {
+        "minGrade": "A",
+        "maxMoisturePct": 10,
+        "maxDamagePct": 3,
+        "sizePreference": "40-60mm"
+      },
+      "preferredDeliveryWindow": "Within 3 days",
+      "paymentTerms": "On acceptance (simulated)",
+      "label": "DEMO — static requirement, not live demand"
+    }
+  ]
+}

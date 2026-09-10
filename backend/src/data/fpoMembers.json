@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "note": "MOCK FPO MEMBER FARMERS for the SIH demo — illustrative households, not real users. Production would pull member lots from real farmer accounts.",
+    "district": "Pune",
+    "cropFocus": "Soybean"
+  },
+  "members": [
+    { "uid": "fpo-m1", "name": "Ravi Patil", "village": "Kavthe", "crop": "Soybean", "quantity": 12, "unit": "quintals" },
+    { "uid": "fpo-m2", "name": "Sunita Kale", "village": "Wadgaon", "crop": "Soybean", "quantity": 8, "unit": "quintals" },
+    { "uid": "fpo-m3", "name": "Ganesh More", "village": "Pargaon", "crop": "Soybean", "quantity": 15, "unit": "quintals" },
+    { "uid": "fpo-m4", "name": "Anita Shinde", "village": "Kavthe", "crop": "Soybean", "quantity": 6, "unit": "quintals" },
+    { "uid": "fpo-m5", "name": "Vikram Jadhav", "village": "Nighoje", "crop": "Soybean", "quantity": 9, "unit": "quintals" }
+  ]
+}

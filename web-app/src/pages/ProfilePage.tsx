@@ -1,9 +1,17 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { getDemoUser } from '../lib/api';
 import { Link } from 'react-router-dom';
+
+const ROLE_LABELS: Record<string, { label: string; icon: string; desc: string }> = {
+  farmer: { label: 'Farmer', icon: '🧑‍🌾', desc: 'Check prices, list lots, sell produce' },
+  buyer: { label: 'Buyer', icon: '🏭', desc: 'Accept offers, release funds (simulated)' },
+  fpo: { label: 'FPO', icon: '🤝', desc: 'Aggregate and buy for a producer group' },
+};
 
 const ProfilePage = () => {
   const { user } = useAuth();
+  const demoUser = getDemoUser();
 
   if (!user) {
     return (
@@ -16,9 +24,13 @@ const ProfilePage = () => {
     );
   }
 
+  const roleInfo = demoUser?.role ? ROLE_LABELS[demoUser.role] : null;
+
   const details = [
     { label: 'Email', value: user.email || '—' },
     { label: 'Display Name', value: user.displayName || '—' },
+    { label: 'Role', value: roleInfo ? `${roleInfo.icon} ${roleInfo.label}` : (demoUser?.role || '—') },
+    ...(demoUser?.district ? [{ label: 'District', value: demoUser.district }] : []),
     { label: 'Email Verified', value: user.emailVerified ? '✅ Yes' : '❌ No' },
     { label: 'Account Created', value: user.metadata?.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : '—' },
     { label: 'Last Sign In', value: user.metadata?.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—' },

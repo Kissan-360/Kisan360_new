@@ -44,8 +44,6 @@ def predict(image: Image.Image) -> dict:
     # High diversity (noise) vs natural (mostly green)
     hsv = cv2.cvtColor(img_np, cv2.COLOR_RGB2HSV)
     hue_std = float(np.std(hsv[:, :, 0]))
-    sat_mean = float(np.mean(hsv[:, :, 1]))
-    val_mean = float(np.mean(hsv[:, :, 2]))
 
     # Green dominance: fraction of pixels in green hue range (35-85 in OpenCV)
     green_mask = cv2.inRange(hsv, np.array([35, 30, 30]), np.array([85, 255, 255]))
@@ -83,9 +81,6 @@ def predict(image: Image.Image) -> dict:
     entropy = -torch.sum(probs * torch.log(probs + eps), dim=1).item()
     max_entropy = len(id2label) * (1/len(id2label)) * -float(torch.log(torch.tensor(1/len(id2label) + eps)))
     norm_entropy = entropy / max_entropy if max_entropy > 0 else 0
-
-    num_classes = min(5, len(id2label))
-    top2_ratio = top5_probs[0][0].item() / (top5_probs[0][1].item() + eps) if num_classes >= 2 else 99
 
     # Final OOD decision — strict: need both decent confidence AND image looks like a leaf
     # confidence threshold 0.40 calibrated: random on 38 classes is ~0.026;

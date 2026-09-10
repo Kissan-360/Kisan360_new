@@ -11,22 +11,41 @@ function isBuyerSide(role) {
   return ['buyer', 'fpo', 'admin'].includes(role);
 }
 
+// Listing scope comes from the VERIFIED token role, not the query string.
+// `?role=` is only a view selector that must match the caller's own side — a
+// farmer asking for the buyer escrow book (`?role=buyer`) is rejected.
+function listingScope(req) {
+  const side = isBuyerSide(req.user.role) ? 'buyer' : 'farmer';
+  const requested = String(req.query.role || '').toLowerCase();
+  if (requested && ['farmer', 'buyer'].includes(requested) && requested !== side) {
+    const err = new Error("You cannot view the other side's book with this login");
+    err.status = 403;
+    throw err;
+  }
+  return side;
+}
+
 // GET /api/payments?role=farmer|buyer — farmers see their own; buyer-side demo
 // logins see the simulated escrow book.
 router.get('/', async (req, res) => {
   try {
-    const role = (req.query.role || 'farmer').toLowerCase();
-    const filter = isBuyerSide(role) ? {} : { farmerUid: req.user.uid };
-    const payments = await Payment.find(filter).sort({ createdAt: -1 }).limit(50).lean();
+    const side = listingScope(req);
+    const filter = side === 'buyer' ? {} : { farmerUid: req.user.uid };
+    // Populate the lot's district so buyer-side benchmark/outcome cards use the
+    // REAL haul district — without this the UI falls back to a wrong default.
+    const payments = await Payment.find(filter).sort({ createdAt: -1 }).limit(50)
+      .populate('lotId', 'crop quantity unit district grade status')
+      .lean();
     res.json({
       success: true,
       count: payments.length,
       payments,
-      view: role,
+      view: side,
       mocked: true,
       note: 'Simulated payment statuses for the demo — no real money movement.',
     });
   } catch (error) {
+    if (error.status === 403) return res.status(403).json({ success: false, error: error.message });
     console.error('List payments error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to list payments' });
   }

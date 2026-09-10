@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "note": "STATIC DEMO STORAGE OPTIONS — illustrative storage facilities for the SIH demo. Production would source from a real warehouse registry. Costs are documented assumptions, not live quotes.",
+    "purpose": "Enables sell-now vs store economic comparison without claiming real storage availability"
+  },
+  "options": [
+    {
+      "id": "wh1",
+      "name": "Nashik Cold Storage Cooperative",
+      "type": "cold_storage",
+      "district": "Nashik",
+      "capacityQuintals": 500,
+      "costPerQuintalPerDay": 1.5,
+      "maxDurationDays": 14,
+      "availability": "demo_assumed",
+      "label": "DEMO — assumed availability, not live inventory"
+    },
+    {
+      "id": "wh2",
+      "name": "Pune APMC Warehouse",
+      "type": "covered_warehouse",
+      "district": "Pune",
+      "capacityQuintals": 1000,
+      "costPerQuintalPerDay": 1.0,
+      "maxDurationDays": 7,
+      "availability": "demo_assumed",
+      "label": "DEMO — assumed availability, not live inventory"
+    },
+    {
+      "id": "wh3",
+      "name": "Nagpur Grain Storage Facility",
+      "type": "covered_warehouse",
+      "district": "Nagpur",
+      "capacityQuintals": 2000,
+      "costPerQuintalPerDay": 0.8,
+      "maxDurationDays": 21,
+      "availability": "demo_assumed",
+      "label": "DEMO — assumed availability, not live inventory"
+    },
+    {
+      "id": "wh4",
+      "name": "Akola FPO Storage Shed",
+      "type": "open_shed",
+      "district": "Akola",
+      "capacityQuintals": 300,
+      "costPerQuintalPerDay": 0.5,
+      "maxDurationDays": 5,
+      "availability": "demo_assumed",
+      "label": "DEMO — assumed availability, not live inventory"
+    }
+  ]
+}

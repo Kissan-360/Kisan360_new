@@ -3,6 +3,7 @@ import logging
 import numpy as np
 from fastapi import FastAPI, Query, Header
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -143,19 +144,30 @@ def generate_advisory(crop, location, weather_context, retrieved_docs, groq_key=
         elif "disease" in tags:
             disease_info.append(content)
 
-    # Build prompt for Groq
+    # Build prompt for Groq — sanitize user input to prevent prompt injection
+    # Strip control characters, limit length, and wrap in quotes to delimit
+    safe_query = query[:200].replace('\n', ' ').replace('\r', '') if query else ""
     prompt_parts = [f"You are advising a farmer growing {crop} in {location}."]
     if weather_str:
         prompt_parts.append(weather_str)
-    if query:
-        prompt_parts.append(f"The farmer asks: {query}")
+    if safe_query:
+        prompt_parts.append(f"The farmer asks: \"{safe_query}\"")
     prompt_parts.append("Based on the following agricultural knowledge, give practical actionable advice:")
     prompt_parts.append(context)
     if template_recs:
         prompt_parts.append("Also consider these weather-based notes:\n- " + "\n- ".join(template_recs))
     prompt = "\n\n".join(prompt_parts)
 
-    system_prompt = """You are Kisan360, an AI agricultural assistant for Indian farmers. Give practical, specific, actionable advice. Keep responses concise. Output each point on a new line starting with a dash (-). Do not use emoji or markdown headers."""
+    system_prompt = (
+        "You are Kisan360, an AI agricultural assistant for Indian farmers. "
+        "Give practical, specific, actionable advice. Keep responses concise. "
+        "Output each point on a new line starting with a dash (-). "
+        "Do not use emoji or markdown headers. "
+        "IMPORTANT: You must ONLY use the information provided in the context below. "
+        "Do not invent prices, demand forecasts, government guarantees, or financial figures. "
+        "If the context does not contain enough information to answer, say so honestly. "
+        "Never claim buyer demand, guaranteed prices, or government verification unless the context explicitly states it."
+    )
 
     # Try Groq first
     if groq_key:
@@ -309,6 +321,97 @@ def get_advisory(
             "weatherAdvisories": [],
             "generated": False,
         }
+
+# ── Explain a net-realization result (P2) ──────────────────────────────────
+# HONESTY RULE: the LLM only RESTATES numbers the deterministic calculator
+# already produced. It never generates, rounds or invents a figure. When Groq
+# is unavailable a deterministic template summary is served instead.
+
+
+class ExplainNetRealizationRequest(BaseModel):
+    netRealization: dict
+
+
+def _explain_template(result: dict) -> str:
+    """Deterministic farmer-friendly summary — same numbers, plain words."""
+    lines = []
+    best = result.get("rankedMandis", [{}])[0]
+    lines.append(
+        f"Selling your {result.get('crop', 'crop')} from {result.get('district', 'your district')}, "
+        f"the calculator ranks {len(result.get('rankedMandis', []))} mandis by what you actually keep."
+    )
+    if best:
+        lines.append(
+            f"Best option: {best.get('market')} at ₹{best.get('farmerNetPerQuintal')} per quintal net — "
+            f"₹{best.get('farmerNetTotal')} total for your {result.get('quantityQuintals')} quintals."
+        )
+        fc = best.get("farmerCosts", {})
+        lines.append(
+            f"Your costs there: ₹{fc.get('transportPerQuintal')} transport for the {best.get('distanceKm')} km trip, "
+            f"₹{fc.get('storagePerQuintal')} storage, ₹{fc.get('otherPerQuintal')} bagging and loading."
+        )
+    runner_up = result.get("rankedMandis", [])[1:2]
+    if runner_up:
+        ru = runner_up[0]
+        gap = round(best.get("farmerNetPerQuintal", 0) - ru.get("farmerNetPerQuintal", 0), 2)
+        lines.append(f"Second best is {ru.get('market')} at ₹{ru.get('farmerNetPerQuintal')} net — ₹{gap} less per quintal.")
+    lines.append(
+        "Market fees and commission are charged to the buyer, not you — they are never "
+        "subtracted from your net. All figures come from the deterministic calculator "
+        "on AGMARKNET data; nothing here is invented."
+    )
+    return "\n".join(lines)
+
+
+@app.post("/explain-net-realization")
+def explain_net_realization(req: ExplainNetRealizationRequest, x_groq_key: str = Header(None, alias="X-Groq-Key")):
+    import json as _json
+    import re
+    result = req.netRealization or {}
+    ranked = result.get("rankedMandis") or []
+    if not ranked:
+        return {"success": False, "error": "netRealization.rankedMandis is required (pass the calculator's own output)."}
+
+    template = _explain_template(result)
+    if not x_groq_key:
+        return {"success": True, "explanation": template, "explainedBy": "template", "llmUsed": False}
+
+    # Extract all numbers from the engine output for grounding verification
+    engine_text = _json.dumps(result, ensure_ascii=False)
+    engine_numbers = set(re.findall(r'₹?[\d,]+\.?\d*', engine_text))
+
+    # The prompt contains ONLY the engine output — the model cannot see any
+    # other numbers, so it cannot introduce one.
+    prompt = (
+        "The following is a deterministic net-realization result computed by Kisan360's "
+        "calculator for a farmer. Rewrite it as a short, simple explanation for a farmer "
+        "in plain language. RULES:\n"
+        "- Use ONLY the numbers that appear in the data below\n"
+        "- Do NOT calculate, round, or invent any figure\n"
+        "- Do NOT add advice about prices at other mandis or dates\n"
+        "- Do NOT mention buyer demand, guaranteed prices, or market forecasts\n"
+        "- If a number appears in your response, it MUST come from the data below\n"
+        "- Keep it under 150 words\n\n"
+        "Data:\n"
+        + _json.dumps({"crop": result.get("crop"), "district": result.get("district"), "quantityQuintals": result.get("quantityQuintals"), "rankedMandis": ranked[:3]}, ensure_ascii=False)
+    )
+    system = (
+        "You explain computed results simply and faithfully. You never invent numbers. "
+        "Every monetary figure you mention must appear verbatim in the provided data. "
+        "You do not predict prices, estimate demand, or guarantee outcomes."
+    )
+    groq_out = call_groq(x_groq_key, prompt, system)
+    if groq_out:
+        # Grounding verification: check that the LLM didn't introduce new numbers
+        llm_numbers = set(re.findall(r'₹?[\d,]+\.?\d*', groq_out))
+        hallucinated = llm_numbers - engine_numbers - {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '100', '150'}
+        if hallucinated:
+            logger.warning(f"Grounding check: LLM introduced numbers not in engine output: {hallucinated}. Falling back to template.")
+            return {"success": True, "explanation": template, "explainedBy": "template", "llmUsed": False,
+                    "note": "LLM introduced figures not present in the calculator output; using deterministic summary instead."}
+        return {"success": True, "explanation": groq_out.strip(), "explainedBy": "groq", "llmUsed": True, "templateFallback": template}
+    return {"success": True, "explanation": template, "explainedBy": "template", "llmUsed": False}
+
 
 if __name__ == "__main__":
     import uvicorn

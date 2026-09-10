@@ -12,6 +12,24 @@ const Payment = require('../models/Payment');
 const router = express.Router();
 router.use(authenticateUser, requireDb);
 
+// Listing scope comes from the VERIFIED token role, not the query string.
+// `?role=` is accepted only as a view selector that matches the caller's own
+// side — a farmer asking for the buyer book (`?role=buyer`) is an escalation
+// attempt and is rejected, not silently downgraded.
+function isBuyerSideRole(role) {
+  return ['buyer', 'fpo', 'admin'].includes(role);
+}
+function listingScope(req) {
+  const side = isBuyerSideRole(req.user.role) ? 'buyer' : 'farmer';
+  const requested = String(req.query.role || '').toLowerCase();
+  if (requested && requested !== side && ['farmer', 'buyer'].includes(requested)) {
+    const err = new Error('You cannot view the buyer-side book with this login');
+    err.status = 403;
+    throw err;
+  }
+  return side;
+}
+
 const BUYERS_FILE = path.join(__dirname, '..', 'data', 'buyers.json');
 let directoryBuyers = [];
 try {
@@ -38,8 +56,15 @@ router.post('/', async (req, res) => {
     if (!lotId || !buyerId) {
       return res.status(400).json({ success: false, error: 'lotId and buyerId are required' });
     }
-    if (!offeredPricePerQuintal || offeredPricePerQuintal <= 0) {
-      return res.status(400).json({ success: false, error: 'offeredPricePerQuintal must be positive (₹/quintal)' });
+    const price = Number(offeredPricePerQuintal);
+    if (!Number.isFinite(price) || price <= 0 || price > 10000000) {
+      return res.status(400).json({ success: false, error: 'offeredPricePerQuintal must be a number between 0 and 10000000 (₹/quintal)' });
+    }
+    if (typeof buyerId !== 'string' || buyerId.length > 80) {
+      return res.status(400).json({ success: false, error: 'buyerId must be a short buyer-directory id' });
+    }
+    if (notes && (typeof notes !== 'string' || notes.length > 2000)) {
+      return res.status(400).json({ success: false, error: 'notes must be a string of at most 2000 characters' });
     }
     if (!mongoose.Types.ObjectId.isValid(lotId)) {
       return res.status(400).json({ success: false, error: 'lotId is not a valid id' });
@@ -66,7 +91,7 @@ router.post('/', async (req, res) => {
       buyerName: buyer.name,
       crop: lot.crop,
       quantityQuintals: quantityQtl,
-      offeredPricePerQuintal,
+      offeredPricePerQuintal: price,
       amount,
       status: 'SENT',
       history: [{ status: 'SENT', at: new Date().toISOString(), by: req.user.uid, note: 'Offer sent to buyer' }],
@@ -85,23 +110,21 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /api/offers?role=farmer|buyer — farmer sees their offers; buyer/fpo/admin
-// sees inbound offers (demo semantics; a buyer has no user account of its own).
+// GET /api/offers?role=farmer|buyer — scope is decided by the authenticated
+// role: farmers see only their own offers; buyer/fpo/admin (demo escrow role)
+// sees inbound offers. A farmer cannot opt into the buyer view.
 router.get('/', async (req, res) => {
   try {
-    const role = (req.query.role || 'farmer').toLowerCase();
-    const isBuyerSide = role === 'buyer' || role === 'fpo' || role === 'admin';
-    const filter = isBuyerSide ? {} : { farmerUid: req.user.uid };
-    if (!isBuyerSide && !['farmer', 'fpo', 'admin'].includes(req.user.role)) {
-      // anyone can list their own sent offers; buyers see everything (demo)
-    }
+    const side = listingScope(req);
+    const filter = side === 'buyer' ? {} : { farmerUid: req.user.uid };
     const offers = await Offer.find(filter)
       .populate('lotId', 'crop variety quantity unit status district grade')
       .sort({ createdAt: -1 })
       .limit(50)
       .lean();
-    res.json({ success: true, count: offers.length, offers, view: role });
+    res.json({ success: true, count: offers.length, offers, view: side });
   } catch (error) {
+    if (error.status === 403) return res.status(403).json({ success: false, error: error.message });
     console.error('List offers error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to list offers' });
   }

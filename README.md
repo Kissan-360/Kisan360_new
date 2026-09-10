@@ -57,16 +57,26 @@ what it started on Ctrl+C. Logs in `/tmp/k360-*.log`.
 ### Refreshing the real price snapshot (daily)
 
 The offline cache is `backend/src/data/priceSnapshots.json` — machine-generated
-from a live AGMARKNET pull:
+from a live AGMARKNET pull. **Run this daily** — each pull also appends to
+`priceHistory.json`, which powers the 7/14/30-day trend endpoint:
 
 ```bash
 cd backend
-node scripts/refresh-prices.js            # pull + rewrite the stamped snapshot
+node scripts/refresh-prices.js            # pull + rewrite snapshot + append history
 node scripts/refresh-prices.js --dry-run  # preview first
 ```
 
 Current snapshot: **85 real rows (soybean/onion/tomato, Maharashtra), fetched 2026-09-08**.
 The ML pipeline snapshot builder is covered by unit tests (`backend/tests/unit/priceSnapshot.test.js`).
+
+### Seeding the demo state
+
+```bash
+cd backend && node scripts/seed-demo.js   # lots + a SENT offer awaiting the buyer
+```
+
+Lets the presenter start mid-journey (e.g. accept an offer live as the buyer)
+instead of clicking through setup.
 
 HLD-to-implementation status is tracked in `docs/HLD_PROGRESS.md` (updated per build day).
 
@@ -90,10 +100,11 @@ For the demo, users sign in as a **demo farmer / demo buyer / FPO** via `POST /a
 | `GET /api/market/net-realization?crop&district&quantity` | Rank mandis by estimated farmer net (Node → FastAPI `:8002`) | ✅ |
 | `GET /api/market/net-realization/assumptions` | Documented cost assumptions (transport ₹/km, storage, etc.) | ✅ |
 | `GET /api/buyers` | Buyer directory with 4-tier trust badges | ✅ |
-| **Web screens** | `/net-realization` comparison cards + "Why?" drawer · `/trade` lots, buyer badges, offers, payment timeline | ✅ |
-| `POST/GET /api/lots` | Farmer lot creation (structured quality fields) | ✅ |
-| `POST /api/offers`, `GET /api/offers` | Offers to matched buyers | ✅ |
-| `POST /api/offers/:id/accept`, `POST /api/payments/:id/release` | Simulated Pending → Held → Released flow | ✅ |
+| `POST /api/fpo/pool`, `GET /api/fpo/members` | FPO bulk-lot pooling: pooled vs individual uplift (bulk transport tier ≥40 q) | ✅ |
+| `GET /api/market/trend?crop&market&window=7\|14\|30` | Observed price trend — describes the past, never forecasts | ✅ |
+| `GET /api/market/net-realization/explain` | RAG restates the calculator's own output in simple words (`explainedBy` tag); never generates numbers | ✅ |
+| `POST/GET /api/grievances`, `POST /api/grievances/:id/transition` | Raise → Open → Under Review → Resolved on the shared state machine | ✅ |
+| **Web screens** | `/net-realization` (cards + Why? drawer + AI explain + EN/मराठी/हिंदी + freshness badges) · `/trade` (lots, badges, offers, payment timeline) · `/fpo` (side-by-side uplift) | ✅ |
 | `GET /api/disease/detect`, `GET /api/advisory`, `GET /api/weather` | Secondary features (existing) | ✅ |
 | FPO bulk-lot pooling endpoints | P1 — aggregation math owned by Market Data engineer | 🔜 |
 

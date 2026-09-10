@@ -3,9 +3,13 @@ const router = express.Router();
 const axios = require('axios');
 const FormData = require('form-data');
 const multer = require('multer');
+const { authenticateUser } = require('../middleware/auth');
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB max upload
+});
 
 const DISEASE_INFO = {
   'Apple Scab': { severity: 'High', treatment: 'Apply fungicide (captan or sulfur) at 7-10 day intervals', recommendations: ['Remove infected leaves', 'Improve air circulation', 'Avoid overhead watering'] },
@@ -59,7 +63,7 @@ function stripBase64Prefix(data) {
 
 // POST /api/disease/detect - Analyze crop image for disease detection
 // Accepts either: multipart file upload OR JSON with base64 imageData
-router.post('/detect', upload.single('image'), async (req, res) => {
+router.post('/detect', authenticateUser, upload.single('image'), async (req, res) => {
   try {
     let imageBuffer;
     let originalFilename = 'uploaded_image.jpg';
@@ -164,10 +168,9 @@ router.post('/detect', upload.single('image'), async (req, res) => {
     if (error.response) {
       return res.status(502).json({
         error: 'ML service error',
-        details: error.response.data?.detail || error.message,
       });
     }
-    res.status(500).json({ error: 'Failed to detect disease', details: error.message });
+    res.status(500).json({ error: 'Failed to detect disease' });
   }
 });
 

@@ -60,10 +60,10 @@ const NotificationBell = () => {
     }
   }, [user]);
 
-  const markAllRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-    setUnread(0);
-  };
+  // NOTE: there is deliberately no "mark all read" button. The notifications
+  // API exposes no mark-read endpoint, so a local-only clear would silently
+  // revert on the next poll — a button that lies. Unread badges here are
+  // informational for the demo.
 
   if (!user) return null;
 
@@ -84,15 +84,11 @@ const NotificationBell = () => {
         )}
       </button>
 
+      {/* Responsive width: fixed w-96 overflows mobile viewports */}
       {open && (
-        <div className="absolute right-0 mt-2 w-96 bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col">
+        <div className="absolute right-0 mt-2 w-[min(24rem,calc(100vw-2rem))] bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
             <h3 className="font-semibold text-gray-800">Notifications</h3>
-            {unread > 0 && (
-              <button onClick={markAllRead} className="text-xs text-green-600 hover:text-green-700 font-medium">
-                Mark all read
-              </button>
-            )}
           </div>
 
           <div className="overflow-y-auto flex-1">

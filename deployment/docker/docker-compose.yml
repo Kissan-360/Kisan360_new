@@ -1,0 +1,103 @@
+version: "3.8"
+
+services:
+  net-realization:
+    build:
+      context: ../ml-service
+      dockerfile: deployment/docker/Dockerfile.ml
+    environment:
+      - PORT=8002
+    ports:
+      - "8002:8002"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped
+
+  advisory:
+    build:
+      context: ../ml-service
+      dockerfile: deployment/docker/Dockerfile.ml
+    environment:
+      - PORT=8001
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    restart: unless-stopped
+
+  disease:
+    build:
+      context: ../ml-service
+      dockerfile: deployment/docker/Dockerfile.ml
+    environment:
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: deployment/docker/Dockerfile.backend
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGODB_URI=${MONGODB_URI}
+      - ML_SERVICE_URL=http://disease:8000
+      - RAG_SERVICE_URL=http://advisory:8001
+      - NET_REALIZATION_URL=http://net-realization:8002
+      - AGMARKNET_API_KEY=${AGMARKNET_API_KEY:-}
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - DEMO_JWT_SECRET=${DEMO_JWT_SECRET:?Set DEMO_JWT_SECRET in .env}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:80}
+      - FIREBASE_SERVICE_ACCOUNT_KEY=${FIREBASE_SERVICE_ACCOUNT_KEY:-}
+      - KISAN_DEMO_MEMORY_DB=0
+    ports:
+      - "5000:5000"
+    depends_on:
+      net-realization:
+        condition: service_healthy
+      advisory:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../web-app
+      dockerfile: deployment/docker/Dockerfile.frontend
+      args:
+        VITE_API_URL=${VITE_API_URL:-/api}
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      start_period: 5s
+      retries: 3
+    restart: unless-stopped

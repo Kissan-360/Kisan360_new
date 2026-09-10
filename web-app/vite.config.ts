@@ -7,12 +7,12 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:5050',
         changeOrigin: true,
       },
     },
   },
   define: {
-    'process.env.REACT_APP_API_URL': JSON.stringify(process.env.VITE_API_URL || 'http://localhost:5000/api'),
+    'process.env.REACT_APP_API_URL': JSON.stringify(process.env.VITE_API_URL || '/api'),
   },
 });

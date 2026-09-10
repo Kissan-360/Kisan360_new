@@ -21,6 +21,7 @@ const LoginPage = () => {
   const [demoLoadingRole, setDemoLoadingRole] = useState<string | null>(null);
 
   const handleDemoSignIn = async (role: string) => {
+    if (demoLoadingRole) return; // ignore rapid double-clicks / multi-role races
     setDemoError('');
     setDemoLoadingRole(role);
     try {
@@ -41,7 +42,16 @@ const LoginPage = () => {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message.replace('Firebase: ', '').replace(/\(.*\)/, ''));
+      const code = err?.code || '';
+      const friendlyMessages: Record<string, string> = {
+        'auth/invalid-credential': 'Email or password is incorrect. Try the demo sign-in below.',
+        'auth/user-not-found': 'No account found with this email. Try the demo sign-in below.',
+        'auth/wrong-password': 'Incorrect password. Try the demo sign-in below.',
+        'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
+        'auth/network-request-failed': 'Network error — check your connection and try again.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+      };
+      setError(friendlyMessages[code] || 'Sign-in failed. Try the demo sign-in below.');
     } finally {
       setLoading(false);
     }

@@ -23,6 +23,16 @@ const MACHINES = {
       EXPIRED: [],
     },
   },
+  // Grievance (HLD P1): Raise → Open → Under Review → Resolved (or Rejected).
+  grievance: {
+    initial: 'OPEN',
+    allowed: {
+      OPEN: ['UNDER_REVIEW', 'RESOLVED', 'REJECTED'],
+      UNDER_REVIEW: ['RESOLVED', 'REJECTED'],
+      RESOLVED: [],
+      REJECTED: [],
+    },
+  },
 };
 
 function canTransition(machineName, from, to) {

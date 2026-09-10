@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const SETTINGS_KEY = 'kisan_settings';
 
@@ -27,7 +28,8 @@ const loadSettings = (): Settings => {
 };
 
 const SettingsPage = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [settings, setSettings] = useState<Settings>(loadSettings);
   const [saved, setSaved] = useState(false);
 
@@ -115,7 +117,13 @@ const SettingsPage = () => {
         <p className="text-sm text-gray-600 mb-4">
           {user ? `Signed in as ${user.email}` : 'Not signed in'}
         </p>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={async () => { try { await logout(); } finally { navigate('/'); } }}
+            className="btn-primary text-sm"
+          >
+            Sign out
+          </button>
           <button onClick={() => { localStorage.clear(); window.location.reload(); }} className="btn-secondary text-sm">
             Clear Local Data
           </button>

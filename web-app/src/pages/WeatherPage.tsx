@@ -1,16 +1,39 @@
 import React, { useEffect, useState } from 'react';
 
 import { API_URL, apiFetch } from '../lib/api';
+import { MAHARASHTRA_DISTRICTS, DISTRICT_COORDS, REGIONS } from '../lib/maharashtraData';
+
+const DEFAULT_DISTRICT = 'Nashik';
 
 const WeatherPage = () => {
   const [weather, setWeather] = useState<any>(null);
-  const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
+  const [coords, setCoords] = useState<{ lat: number; lon: number; name: string } | null>(null);
   const [error, setError] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState(DEFAULT_DISTRICT);
 
+  // Use the selected district's coordinates — never silently use New Delhi.
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
-      (pos) => setCoords({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-      () => setCoords({ lat: 28.61, lon: 77.23 }),
+      (pos) => {
+        // If browser geolocation succeeds, find the nearest district
+        const nearest = Object.entries(DISTRICT_COORDS)
+          .sort((a, b) => {
+            const da = Math.hypot(a[1].lat - pos.coords.latitude, a[1].lon - pos.coords.longitude);
+            const db = Math.hypot(b[1].lat - pos.coords.latitude, b[1].lon - pos.coords.longitude);
+            return da - db;
+          })[0];
+        if (nearest) {
+          setSelectedDistrict(nearest[0]);
+          setCoords({ ...nearest[1], name: nearest[0] });
+        } else {
+          setCoords({ lat: DISTRICT_COORDS[DEFAULT_DISTRICT].lat, lon: DISTRICT_COORDS[DEFAULT_DISTRICT].lon, name: DEFAULT_DISTRICT });
+        }
+      },
+      () => {
+        // Geolocation denied — use selected district, NOT New Delhi
+        const d = DISTRICT_COORDS[selectedDistrict] || DISTRICT_COORDS[DEFAULT_DISTRICT];
+        setCoords({ lat: d.lat, lon: d.lon, name: selectedDistrict });
+      },
       { timeout: 5000 }
     );
   }, []);
@@ -22,6 +45,12 @@ const WeatherPage = () => {
       .then(setWeather)
       .catch(() => setError('Failed to load weather'));
   }, [coords]);
+
+  const handleDistrictChange = (district: string) => {
+    setSelectedDistrict(district);
+    const d = DISTRICT_COORDS[district];
+    if (d) setCoords({ lat: d.lat, lon: d.lon, name: district });
+  };
 
   const getIcon = (c = '') => {
     const s = c.toLowerCase();
@@ -52,9 +81,30 @@ const WeatherPage = () => {
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Weather</h1>
-        <p className="text-gray-500 text-sm mt-1">{weather.location?.name} — Real-time agricultural weather</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Weather</h1>
+          <p className="text-gray-500 text-sm mt-1">Agricultural weather for your selected district</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-gray-600 font-medium">District:</label>
+          <select
+            value={selectedDistrict}
+            onChange={(e) => handleDistrictChange(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+          >
+            {REGIONS.map(region => {
+              const regionDistricts = MAHARASHTRA_DISTRICTS.filter(d => d.region === region);
+              return (
+                <optgroup key={region} label={region}>
+                  {regionDistricts.map(d => (
+                    <option key={d.id} value={d.name}>{d.name}</option>
+                  ))}
+                </optgroup>
+              );
+            })}
+          </select>
+        </div>
       </div>
 
       {/* Current conditions */}

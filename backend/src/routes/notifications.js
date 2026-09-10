@@ -123,7 +123,8 @@ const generateNotifications = async (lat, lon) => {
 // GET /api/notifications - Get user notifications (auth required)
 router.get('/', authenticateUser, async (req, res) => {
   try {
-    let lat = 28.61, lon = 77.23;
+    // Default to Nashik (canonical demo district) — never silently New Delhi.
+    let lat = 19.9975, lon = 73.7898;
 
     if (req.query.latitude && req.query.longitude) {
       lat = parseFloat(req.query.latitude);
