@@ -92,18 +92,24 @@ const FpoPage = () => {
     setLoading(true);
     setError('');
     setCoverage(null);
+    // Never send a crop the price cache cannot price (e.g. Cotton carried in
+    // from another screen's decision context, or a stale coverage fetch that
+    // left the full static list up). That path always 422s — snap to the
+    // first priced crop instead of showing a red card.
+    const effectiveCrop = cropOptions.includes(crop) ? crop : cropOptions[0];
+    if (effectiveCrop !== crop) setCrop(effectiveCrop);
     try {
       // Pool first to get the actual pooled quantity, then fetch buyer coverage
       // at the real pooled size (not a hardcoded estimate).
       const res = await apiFetch(`${API_URL}/fpo/pool`, {
         method: 'POST',
-        body: JSON.stringify({ district, crop }),
+        body: JSON.stringify({ district, crop: effectiveCrop }),
       });
       const data: PoolResponse = await res.json();
       if (data.success) {
         setResult(data);
         const pooledQty = data.pool?.pooledQuantity || 50;
-        const covRes = await apiFetch(`${API_URL}/market/buyer-coverage?crop=${encodeURIComponent(crop)}&district=${encodeURIComponent(district)}&quantity=${pooledQty}`)
+        const covRes = await apiFetch(`${API_URL}/market/buyer-coverage?crop=${encodeURIComponent(effectiveCrop)}&district=${encodeURIComponent(district)}&quantity=${pooledQty}`)
           .then(r => r.json())
           .catch(() => null);
         if (covRes?.success) setCoverage(covRes);
