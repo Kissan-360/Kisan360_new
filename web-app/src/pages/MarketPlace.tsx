@@ -108,7 +108,7 @@ const TradingChannels = ({ crop }: { crop: string }) => {
             <div className="mt-auto pt-3 flex flex-col gap-2">
               <a href={ch.website} target="_blank" rel="noreferrer" className="inline-flex items-center -my-1 py-1.5 min-h-[36px] text-xs font-medium text-emerald-600 hover:text-emerald-700">{t('market.channelWebsite')} ↗</a>
               {ch.id === 'enam' && (
-                <button onClick={() => navigate('/schemes?slug=enam')} className="text-left text-xs font-medium text-sky-600 hover:text-sky-700">
+                <button onClick={() => navigate('/schemes?slug=enam')} className="text-left text-xs font-medium text-sky-600 hover:text-sky-700 -my-1 py-1.5 min-h-[36px]">
                   {t('market.schemeEnam')} →
                   <span className="block text-stone-400">{t('market.schemeEnamHint')}</span>
                 </button>
