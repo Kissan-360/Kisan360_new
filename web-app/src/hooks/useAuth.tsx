@@ -85,7 +85,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     let cancelled = false;
     const sync = () => {
-      firebaseUser.getIdToken().then((t) => { if (!cancelled) setFirebaseToken(t); }).catch(() => {});
+      // Defensive: only real Firebase User instances carry getIdToken.
+      const getToken = (firebaseUser as any)?.getIdToken;
+      if (typeof getToken !== 'function') return;
+      getToken
+        .call(firebaseUser)
+        .then((t: string) => { if (!cancelled) setFirebaseToken(t); })
+        .catch(() => {});
     };
     sync();
     const timer = setInterval(sync, 50 * 60 * 1000);
@@ -113,13 +119,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setDemoUser(normalized);
   };
 
+  // Bumps the component so the (mutated-in-place) Firebase User re-renders.
+  // NEVER spread/clone the User object: its methods (getIdToken, reload…)
+  // live on the prototype, and a plain clone throws "getIdToken is not a
+  // function" on the next token sync.
+  const [, setTick] = useState(0);
   const refreshUser = async () => {
     if (!auth) return;
     try {
       await auth.currentUser?.reload();
-      // Clone so React sees a new object identity and re-renders.
-      const u = auth.currentUser;
-      setFirebaseUser(u ? ({ ...u } as any) : null);
+      setFirebaseUser(auth.currentUser);
+      setTick((n) => n + 1);
     } catch { /* keep stale user rather than signing out */ }
   };
 
