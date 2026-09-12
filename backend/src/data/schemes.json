@@ -1,0 +1,521 @@
+[
+  {
+    "slug": "pm-kisan",
+    "shortName": "PM-KISAN",
+    "name": "Pradhan Mantri Kisan Samman Nidhi",
+    "category": "central",
+    "state": "India",
+    "benefitBucket": "income",
+    "description": "Direct income support of ₹6,000 per year to all landholding farmer families, paid in three equal installments of ₹2,000 every four months. Transferred directly to the farmer's bank account via DBT.",
+    "benefitAmount": 6000,
+    "benefitType": "amount_per_year",
+    "benefitLabel": "₹6,000 per year (3 × ₹2,000 installments)",
+    "eligibility": [
+      "Farmer family with cultivable land holding",
+      "Land must be in the name of the farmer or family members",
+      "Valid Aadhaar number",
+      "Active bank account linked to Aadhaar"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0.01,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": [],
+      "cropFilter": []
+    },
+    "documents": [
+      "Aadhaar card",
+      "Land ownership records (7/12 / 8-A / Patta)",
+      "Bank account passbook (linked to Aadhaar)",
+      "Caste certificate (if applicable)"
+    ],
+    "applySteps": [
+      "Visit the official PM-KISAN portal or nearest Common Service Centre (CSC)",
+      "Self-register using Aadhaar number and mobile OTP",
+      "Upload land records and bank account details",
+      "Submit the application — status is tracked on the portal",
+      "Installments are released on 1st of April, August, and December each year after verification"
+    ],
+    "officialUrl": "https://pmkisan.gov.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["income", "dbt", "direct transfer", "all farmers"],
+    "priority": 10
+  },
+  {
+    "slug": "nsmny-maharashtra",
+    "shortName": "Maha NSMNY",
+    "name": "Namo Shetkari Mahasanman Nidhi Yojana (Maharashtra)",
+    "category": "state",
+    "state": "Maharashtra",
+    "benefitBucket": "income",
+    "description": "Top-up income support from the Government of Maharashtra of ₹6,000 per year over and above PM-KISAN. Combined benefit of ₹12,000 per year for eligible Maharashtra farmers. Paid in three installments.",
+    "benefitAmount": 6000,
+    "benefitType": "amount_per_year",
+    "benefitLabel": "₹6,000 per year (+ PM-KISAN = ₹12,000 total)",
+    "eligibility": [
+      "Resident farmer of Maharashtra",
+      "Land holding in the name of the farmer in Maharashtra",
+      "Already registered under PM-KISAN (preferred, not mandatory)",
+      "Bank account in Maharashtra linked to Aadhaar"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0.01,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": ["Maharashtra"],
+      "cropFilter": []
+    },
+    "documents": [
+      "Aadhaar card",
+      "7/12 extract or 8-A land record (Maharashtra)",
+      "Domicile / residence proof of Maharashtra",
+      "Bank passbook"
+    ],
+    "applySteps": [
+      "Register on the Maharashtra NSMNY portal or through your local Gram Sevak",
+      "Link your PM-KISAN registration number (if available)",
+      "Submit 7/12 extracts for all land parcels",
+      "Verification is done at Taluka Agriculture Office level",
+      "Installments are released by the Maharashtra Agriculture Department via DBT"
+    ],
+    "officialUrl": "https://mahadbt.maharashtra.gov.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["maharashtra", "income", "top-up", "₹12000 combined"],
+    "priority": 12
+  },
+  {
+    "slug": "pm-fby",
+    "shortName": "PMFBY",
+    "name": "Pradhan Mantri Fasal Bima Yojana",
+    "category": "central",
+    "state": "India",
+    "benefitBucket": "insurance",
+    "description": "Crop insurance scheme that protects farmers against yield loss due to natural calamities (drought, flood, hail, pest attack). Premium is heavily subsidized: 2% for Kharif, 1.5% for Rabi, 5% for commercial/horticultural crops.",
+    "benefitPct": 98,
+    "benefitType": "insurance_cover",
+    "benefitLabel": "Sum insured = Notional value of crop · Premium 1.5% - 5% only",
+    "eligibility": [
+      "All farmers growing notified crops in notified areas",
+      "Loanee farmers (KCC) are mandatory covered; non-loanee voluntary",
+      "Sharecroppers and tenant farmers (with documented proof) are eligible",
+      "Enrollment before sowing season cutoff date"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": [],
+      "cropFilter": []
+    },
+    "documents": [
+      "Land records (7/12 or equivalent)",
+      "Aadhaar card",
+      "Sowing declaration / sowing certificate",
+      "Bank account details"
+    ],
+    "applySteps": [
+      "Approach your nearest bank branch (KCC) or insurance company office or CSC before sowing cutoff",
+      "Fill the PMFBY enrollment form with crop name, area, sowing date",
+      "Pay the subsidized premium (2% Kharif / 1.5% Rabi / 5% commercial)",
+      "Receive the insurance certificate — keep it safe",
+      "In case of crop loss: report within 72 hours via portal/CSC, apply for claim, receive on-the-spot assessment, claim via DBT"
+    ],
+    "officialUrl": "https://pmfby.gov.in",
+    "deadline": "31-Jul (Kharif) · 31-Dec (Rabi)",
+    "deadlineOpen": true,
+    "tags": ["insurance", "crop loss", "drought", "flood", "premium subsidy"],
+    "priority": 20
+  },
+  {
+    "slug": "kcc",
+    "shortName": "KCC",
+    "name": "Kisan Credit Card",
+    "category": "central",
+    "state": "India",
+    "benefitBucket": "credit",
+    "description": "Revolving crop loan credit card with 4% effective interest rate (on prompt repayment). Covers production credit for crops, working capital for allied activities, and contingency needs. ATM-enabled RuPay card for cash withdrawals.",
+    "benefitAmount": 300000,
+    "benefitPct": 4,
+    "benefitType": "interest_rate",
+    "benefitLabel": "Up to ₹3 lakh · 7% interest · 4% after 3% subsidy (prompt repayment)",
+    "eligibility": [
+      "All individual farmers / joint borrowers who are owner-cultivators",
+      "Tenant farmers, oral lessees, sharecroppers",
+      "Self-Help Groups (SHGs) or Joint Liability Groups (JLGs) of farmers",
+      "No minimum land required for small/marginal farmers"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": [],
+      "cropFilter": []
+    },
+    "documents": [
+      "Aadhaar card",
+      "Land records or tenant / sharecropper agreement",
+      "Passport size photo",
+      "Address proof",
+      "Existing bank account details"
+    ],
+    "applySteps": [
+      "Visit your nearest bank branch (SBI, PNB, BOI, cooperative bank or any scheduled commercial bank)",
+      "Fill the KCC application form with details of crops, area, land holding",
+      "Submit Aadhaar, land records, photographs — no collateral for loans up to ₹1.6 lakh",
+      "Bank appraises and sanctions the credit limit within 10-15 days",
+      "Receive RuPay Kisan Credit Card — use it for purchase of inputs, ATM withdrawal, POS transactions"
+    ],
+    "officialUrl": "https://www.nabard.org/content1.aspx?id=592&catid=23&mid=530",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["credit", "loan", "working capital", "interest subsidy", "rupay card"],
+    "priority": 15
+  },
+  {
+    "slug": "pm-kusum",
+    "shortName": "PM-KUSUM",
+    "name": "Pradhan Mantri Kisan Urja Suraksha evam Utthaan Mahabhiyan",
+    "category": "central",
+    "state": "India",
+    "benefitBucket": "input",
+    "description": "Subsidy on solar pumps for irrigation and installation of grid-connected solar power plants on barren/fallow land. Three components: Component A (10 GW solar plants), Component B (1.75 mn standalone solar pumps), Component C (1 mn grid-connected solarized pumps).",
+    "benefitPct": 70,
+    "benefitType": "subsidy_pct",
+    "benefitLabel": "60% - 80% subsidy on solar pumps · Balance can be on easy EMI",
+    "eligibility": [
+      "Small and marginal farmers for standalone pumps (Component B)",
+      "All farmers for grid-connected pumps (Component C)",
+      "Farmer groups / cooperatives / panchayats for large solar plants (Component A)",
+      "Barren or fallow land available for solar plant installation"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0.5,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": [],
+      "cropFilter": []
+    },
+    "documents": [
+      "Aadhaar card",
+      "Land records (ownership)",
+      "Electricity connection details (if existing)",
+      "Bank account",
+      "Caste certificate (for additional state-level subsidy if applicable)"
+    ],
+    "applySteps": [
+      "Apply on the PM-KUSUM portal or through your DISCOM office / state Nodal Agency",
+      "Choose Component B (standalone pump) or C (grid-connected)",
+      "Submit land records, electricity bill copy, Aadhaar, bank details",
+      "Approval → empaneled vendor installs the pump / solar plant → inspection by DISCOM → subsidy released directly to vendor",
+      "Farmer pays remaining 20-40% share; can be financed via NABARD loan"
+    ],
+    "officialUrl": "https://pmkusum.mnre.gov.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["solar", "pump", "irrigation", "green energy", "subsidy"],
+    "priority": 25
+  },
+  {
+    "slug": "magel-tyala-solar",
+    "shortName": "Magel Tyala Solar",
+    "name": "Magel Tyala Solar Krushi Pump Yojana (Maharashtra)",
+    "category": "state",
+    "state": "Maharashtra",
+    "benefitBucket": "input",
+    "description": "Maharashtra State scheme providing solar agricultural pumps to farmers at just 5-10% of actual cost. Farmers get 3 HP / 5 HP / 7.5 HP solar pumps depending on category. Priority to small/marginal, SC/ST, women farmers, drought-prone talukas.",
+    "benefitPct": 95,
+    "benefitType": "subsidy_pct",
+    "benefitLabel": "Farmer pays only 5% - 10% of cost · Rest 90%+ subsidy",
+    "eligibility": [
+      "Resident farmer of Maharashtra",
+      "Own cultivable land with confirmed irrigation requirement",
+      "Priority order: SC/ST → Small/Marginal → Women → General",
+      "No existing grid-connected electric pump on the survey number (for some categories)"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 1,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": ["Maharashtra"],
+      "cropFilter": []
+    },
+    "documents": [
+      "7/12 extract and 8-A of land",
+      "Aadhaar card + domicile certificate",
+      "Caste certificate (if SC/ST/OBC)",
+      "Income certificate",
+      "Bank passbook",
+      "Recent passport photo"
+    ],
+    "applySteps": [
+      "Apply online on Maharashtra Krishi Department portal or via Taluka Agriculture Officer",
+      "Application is considered as per annual quota and priority category",
+      "Once selected, pay the farmer share (5-10%) via online challan",
+      "Empaneled agency installs solar pump, conducts technical inspection",
+      "After TAO verification, pump is handed over with 5-year AMC warranty"
+    ],
+    "officialUrl": "https://agri.maharashtra.gov.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["maharashtra", "solar pump", "irrigation", "90% subsidy", "sc/st priority"],
+    "priority": 22
+  },
+  {
+    "slug": "pm-aasha",
+    "shortName": "PM-AASHA",
+    "name": "Pradhan Mantri Annadata Aay SanraksHan Abhiyan",
+    "category": "central",
+    "state": "India",
+    "benefitBucket": "market",
+    "description": "Umbrella scheme guaranteeing Minimum Support Price (MSP) to farmers for notified crops. Three sub-schemes: Price Support Scheme (PSS) — direct procurement by NAFED/FCI, Price Deficiency Payment Scheme (PDPS) — pays the MSP difference to farmer's bank if mandi price is below MSP, Pilot of Private Procurement & Stockist Scheme (PPPS).",
+    "benefitType": "msp_guarantee",
+    "benefitLabel": "MSP gap made good via PDPS or direct procurement",
+    "eligibility": [
+      "Farmer growing MSP-notified crops in the state/UT where the scheme is notified",
+      "Crop sown within the sowing window and sold within notified marketing season",
+      "Sale at designated mandi (for PSS) or proof of sale at sub-MSP price (for PDPS)",
+      "Land records and Aadhaar-linked bank account"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": [],
+      "cropFilter": ["paddy", "wheat", "pulses", "oilseeds", "cotton", "maize", "millet", "sugarcane", "onion", "soybean", "groundnut"]
+    },
+    "documents": [
+      "Land records / 7/12",
+      "Aadhaar card",
+      "Sowing declaration / area sown certificate",
+      "Sale receipt from mandi (J-Form / auction slip)",
+      "Bank details for DBT"
+    ],
+    "applySteps": [
+      "During sowing season, register your crop, area and variety at the nearest APMC / CSC",
+      "Harvest and bring produce to designated APMC mandi",
+      "Sell either to procurement agency at MSP (PSS) OR to any buyer in mandi (PDPS)",
+      "If sold below MSP, PDPS deficiency amount is auto-calculated and credited to your account within 15 days",
+      "You can track status on the NAFED / state agriculture portal"
+    ],
+    "officialUrl": "https://agricoop.nic.in/pmaasha",
+    "deadline": "Varies per crop / marketing season",
+    "deadlineOpen": true,
+    "tags": ["msp", "price support", "procurement", "apmc", "nafed", "deficiency payment"],
+    "priority": 30
+  },
+  {
+    "slug": "enam",
+    "shortName": "eNAM",
+    "name": "Electronic National Agriculture Market (e-NAM)",
+    "category": "central",
+    "state": "India",
+    "benefitBucket": "market",
+    "description": "All-India electronic trading portal integrating 1,656+ regulated APMC mandis into a single national market. Farmers can sell produce online to buyers across India, get transparent price discovery, avoid commission agent exploitation, and receive payment directly in bank account within hours.",
+    "benefitType": "free_service",
+    "benefitLabel": "Free enrollment · Trade across 1,656+ mandis · Direct bank payment",
+    "eligibility": [
+      "All farmers, regardless of land holding",
+      "Farmer Producer Organizations (FPOs)",
+      "Traders / commission agents with valid license (as buyers)",
+      "Must be registered at an eNAM-integrated mandi"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": [],
+      "cropFilter": []
+    },
+    "documents": [
+      "Aadhaar card",
+      "Bank account details",
+      "APMC farmer registration number / Kisan ID",
+      "Address proof"
+    ],
+    "applySteps": [
+      "Visit your nearest eNAM integrated APMC mandi",
+      "Meet the Mandi eNAM Manager or a local CSC for one-time registration",
+      "Provide Aadhaar, bank account, and existing APMC farmer ID — biometric eKYC done on spot",
+      "You receive eNAM farmer ID and login credentials for the eNAM mobile app",
+      "List your produce (lot) via app or mandi entry counter → bidding happens → accept best bid → payment within 4 hours to bank account"
+    ],
+    "officialUrl": "https://enam.gov.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["market", "online trading", "apmc", "transparent price", "fpo"],
+    "priority": 35
+  },
+  {
+    "slug": "soil-health-card",
+    "shortName": "Soil Health Card",
+    "name": "Soil Health Card Scheme",
+    "category": "central",
+    "state": "India",
+    "benefitBucket": "soil",
+    "description": "Free soil testing to all farmers once every 2-3 years. A printed card shows 12 parameters: N, P, K, S, Zn, Fe, Cu, Mn, Bo, pH, EC, OC — along with crop-specific fertilizer and amendment recommendations. Saves cost on excessive fertilizer use.",
+    "benefitType": "free_service",
+    "benefitLabel": "FREE soil test + personalized recommendation",
+    "eligibility": [
+      "All farmers with cultivable land holding",
+      "No minimum or maximum land requirement",
+      "Every farm parcel is tested once in a 2-3 year cycle",
+      "You can apply more frequently at a nominal charge"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": [],
+      "cropFilter": []
+    },
+    "documents": [
+      "Aadhaar card",
+      "Land records (survey number, area)",
+      "Contact number"
+    ],
+    "applySteps": [
+      "Approach your nearest Krishi Vigyan Kendra (KVK), ATMA office, or Block Agriculture Officer",
+      "Provide your survey number, area, current crop, irrigation source",
+      "Soil sample is collected by extension worker OR you can collect it as per instructions (10-15 spots, depth 6-9 in)",
+      "Sample tested at government soil testing lab — results are ready in 2-4 weeks",
+      "Soil Health Card is printed and delivered at doorstep or available online on the portal"
+    ],
+    "officialUrl": "https://soilhealth.dac.gov.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["soil test", "fertilizer", "nutrient management", "cost reduction", "free"],
+    "priority": 40
+  },
+  {
+    "slug": "pmksy",
+    "shortName": "PMKSY (Micro-Irrigation)",
+    "name": "Pradhan Mantri Krishi Sinchayee Yojana — Per Drop More Crop",
+    "category": "central",
+    "state": "India",
+    "benefitBucket": "input",
+    "description": "Subsidy on drip irrigation and sprinkler irrigation systems. Enables 55-90% subsidy (varies by category and state) on approved system cost. Increases yield 30-40%, reduces water consumption 40-60%, saves fertilizer, and allows fertigation.",
+    "benefitPct": 70,
+    "benefitType": "subsidy_pct",
+    "benefitLabel": "55% - 90% subsidy · Drip & Sprinkler · 30%+ yield increase",
+    "eligibility": [
+      "All farmers, small and marginal, who own or lease cultivable land",
+      "Farmer groups, FPOs, cooperatives can apply collectively",
+      "Water source available (well / borewell / canal / water body) of sufficient capacity",
+      "Area minimum: 0.2 ha (0.5 acre) for drip, 0.4 ha (1 acre) for sprinkler"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0.5,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": [],
+      "cropFilter": []
+    },
+    "documents": [
+      "Aadhaar card",
+      "Land records or registered lease / tenant agreement",
+      "Water source proof",
+      "Bank passbook",
+      "Caste certificate (for SC/ST subsidy slab)"
+    ],
+    "applySteps": [
+      "Apply at the Block Agriculture Office / ATMA / online on state PMKSY portal",
+      "Submit layout sketch of the field showing water source, location of proposed system",
+      "Technical feasibility check — approval letter from Horticulture / Agriculture department",
+      "Pay 10-45% farmer share in advance or through bank loan",
+      "Empaneled vendor installs the system, joint inspection by department → subsidy released to vendor → farmer gets free 1-year training + 2-year warranty"
+    ],
+    "officialUrl": "https://pmksy.nic.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["drip", "sprinkler", "irrigation", "water saving", "subsidy", "fertigation"],
+    "priority": 45
+  },
+  {
+    "slug": "ambedkar-krushi",
+    "shortName": "Ambedkar Krushi",
+    "name": "Dr. Babasaheb Ambedkar Krushi Swabhiman Yojana (Maharashtra)",
+    "category": "state",
+    "state": "Maharashtra",
+    "benefitBucket": "input",
+    "description": "Comprehensive support scheme for Scheduled Caste (SC) and Scheduled Tribe (ST) farmers in Maharashtra. Benefits include land development, free seed kits, farm equipment subsidy, micro-irrigation subsidy, marketing support, agricultural training, and support to women SC/ST farmer groups.",
+    "benefitPct": 100,
+    "benefitType": "subsidy_pct",
+    "benefitLabel": "100% seed kits · Up to ₹1 lakh equipment subsidy · Priority on all agri schemes",
+    "eligibility": [
+      "Farmer belonging to Scheduled Caste (SC) or Scheduled Tribe (ST) as per caste certificate",
+      "Resident of Maharashtra with cultivable land holding (or identified as landless agricultural laborer with alternative)",
+      "Priority given to women farmers within SC/ST category",
+      "Aadhaar-linked bank account"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0,
+      "maxLandAcres": null,
+      "farmerCategories": ["SC", "ST"],
+      "states": ["Maharashtra"],
+      "cropFilter": []
+    },
+    "documents": [
+      "Caste certificate (SC/ST) issued by competent authority",
+      "Aadhaar card",
+      "7/12 land record if land owner; laborer registration if landless",
+      "Domicile of Maharashtra",
+      "Bank passbook",
+      "Women applicants: self-declaration or Aadhaar gender"
+    ],
+    "applySteps": [
+      "Approach your nearest District Level SC/ST Welfare Officer or Taluka Agriculture Officer",
+      "Register under the scheme with required caste and land documents",
+      "Choose benefit component: seed kit → equipment → micro-irrigation → land development → training",
+      "District Committee verifies and sanctions benefit as per annual quota",
+      "Seeds, equipment are distributed through departmental distribution camps; monetary components via DBT"
+    ],
+    "officialUrl": "https://socialjustice.maharashtra.gov.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["maharashtra", "sc/st", "equipment subsidy", "seed kits", "welfare"],
+    "priority": 42
+  },
+  {
+    "slug": "maha-agri-ai",
+    "shortName": "Maha Agri-AI",
+    "name": "Maha Agri AI Mission (Maharashtra)",
+    "category": "state",
+    "state": "Maharashtra",
+    "benefitBucket": "advisory",
+    "description": "AI-driven agriculture mission of Maharashtra Government. Provides hyperlocal crop advisories, pest & disease prediction, weather-based alerts, market price forecast, and digital land record services. Integrated with Kisan360-style dashboards for demonstration to Amul-type FPO clusters.",
+    "benefitType": "free_service",
+    "benefitLabel": "Free AI advisory · Weather + pest + market alerts in Marathi · WhatsApp push",
+    "eligibility": [
+      "All Maharashtra-based farmers",
+      "Smartphone not mandatory — alerts reach via SMS, WhatsApp, or village-level extension worker",
+      "FPOs get priority access to data dashboards and market matching",
+      "Pilot districts get enhanced coverage first; rest phased in"
+    ],
+    "eligibilityRules": {
+      "minLandAcres": 0,
+      "maxLandAcres": null,
+      "farmerCategories": ["All"],
+      "states": ["Maharashtra"],
+      "cropFilter": []
+    },
+    "documents": [
+      "Mobile number (for SMS / WhatsApp alerts)",
+      "Aadhaar card (optional but recommended)",
+      "Survey number of the farm (to get hyperlocal data)"
+    ],
+    "applySteps": [
+      "Give a missed call to the designated Maha Agri AI number or register via CSC / Gram Sevak",
+      "You will receive onboarding SMS — confirm your district, taluka, village, survey number and primary crops",
+      "Within 48 hours your profile is created in the mission's platform",
+      "You receive regular advisories in Marathi: pest alerts, sowing windows, weather warnings, mandi price trends",
+      "If you own a smartphone, you can also use the mobile app to access your personalised dashboard, and connect to the FPO marketplace"
+    ],
+    "officialUrl": "https://agri.maharashtra.gov.in",
+    "deadline": "",
+    "deadlineOpen": true,
+    "tags": ["maharashtra", "ai advisory", "weather", "pest prediction", "fpo", "marathi"],
+    "priority": 50
+  }
+]

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "note": "DEMO crop perishability profiles — evidence-informed shelf-life ranges for storage-risk awareness. Production would source from ICAR/NHM cold-chain guidelines or verified post-harvest research. All numeric ranges are approximate and educational, not predictive.",
+    "purpose": "Enables crop-aware storage-risk analysis so the system can warn when planned storage duration may exceed supported shelf life",
+    "classification": "DEMO",
+    "lastReviewed": "2026-09-10"
+  },
+  "profiles": [
+    {
+      "crop": "Onion",
+      "shelfLifeDays": { "min": 14, "max": 30 },
+      "storageConditions": "Cool, dry, well-ventilated. Ambient storage 10-15°C ideal. Avoid moisture and direct sunlight.",
+      "riskNotes": "Onion stores relatively well. Risk increases if bulbs are cured improperly or exposed to high humidity (>65% RH). Sprouting begins after several weeks at ambient temperature.",
+      "suitableStorageTypes": ["covered_warehouse", "open_shed", "cold_storage"],
+      "source": "SOURCE_REFERENCE",
+      "sourceReference": "Post-harvest handling of onion — general agricultural extension knowledge (demo approximation)",
+      "classification": "DEMO"
+    },
+    {
+      "crop": "Tomato",
+      "shelfLifeDays": { "min": 5, "max": 10 },
+      "storageConditions": "12-15°C, 90-95% RH. Do not refrigerate below 10°C (causes chilling injury). Handle gently to avoid bruising.",
+      "riskNotes": "Tomato is highly perishable. Ripening accelerates at ambient temperature. Cold-chain integrity is critical. Each day of delay after harvest increases spoilage risk significantly.",
+      "suitableStorageTypes": ["cold_storage"],
+      "source": "SOURCE_REFERENCE",
+      "sourceReference": "Post-harvest vegetable storage — general agricultural extension knowledge (demo approximation)",
+      "classification": "DEMO"
+    },
+    {
+      "crop": "Soybean",
+      "shelfLifeDays": { "min": 180, "max": 365 },
+      "storageConditions": "Dry grain at <12% moisture. Cool, dry storage. Sealed containers preferred. Fumigation may be needed for insect control.",
+      "riskNotes": "Soybean is a durable grain when properly dried. Primary risks are moisture re-absorption and insect infestation, not rapid perishability. Long storage is feasible.",
+      "suitableStorageTypes": ["covered_warehouse", "cold_storage"],
+      "source": "SOURCE_REFERENCE",
+      "sourceReference": "Grain storage principles — general agricultural extension knowledge (demo approximation)",
+      "classification": "DEMO"
+    },
+    {
+      "crop": "Rice",
+      "shelfLifeDays": { "min": 180, "max": 365 },
+      "storageConditions": "Dry grain at <14% moisture. Airtight containers preferred. Neem leaves or alum as natural protectants.",
+      "riskNotes": "Rice is a durable grain. Moisture and insects are the primary threats. Properly dried rice stores well for months.",
+      "suitableStorageTypes": ["covered_warehouse", "cold_storage"],
+      "source": "SOURCE_REFERENCE",
+      "sourceReference": "Grain storage principles — general agricultural extension knowledge (demo approximation)",
+      "classification": "DEMO"
+    },
+    {
+      "crop": "Maize",
+      "shelfLifeDays": { "min": 120, "max": 240 },
+      "storageConditions": "Dry grain at <13% moisture. Cool, dry storage. Airtight containers for extended storage.",
+      "riskNotes": "Maize stores well when dried properly. Susceptible to weevil and aflatoxin if moisture is high.",
+      "suitableStorageTypes": ["covered_warehouse", "cold_storage"],
+      "source": "SOURCE_REFERENCE",
+      "sourceReference": "Grain storage principles — general agricultural extension knowledge (demo approximation)",
+      "classification": "DEMO"
+    },
+    {
+      "crop": "Cotton",
+      "shelfLifeDays": { "min": 180, "max": 365 },
+      "storageConditions": "Dry, clean storage. Moisture content <8% for lint. Cool, well-ventilated.",
+      "riskNotes": "Cotton lint stores well. Primary risk is moisture absorption and contamination. Raw cotton is durable.",
+      "suitableStorageTypes": ["covered_warehouse"],
+      "source": "SOURCE_REFERENCE",
+      "sourceReference": "Cotton post-harvest handling — general agricultural extension knowledge (demo approximation)",
+      "classification": "DEMO"
+    },
+    {
+      "crop": "Groundnut",
+      "shelfLifeDays": { "min": 60, "max": 120 },
+      "storageConditions": "Dry at <9% moisture. Cool, dry storage. Airtight containers to prevent aflatoxin development.",
+      "riskNotes": "Groundnut is susceptible to aflatoxin contamination if stored with high moisture. Proper drying is critical.",
+      "suitableStorageTypes": ["covered_warehouse", "cold_storage"],
+      "source": "SOURCE_REFERENCE",
+      "sourceReference": "Groundnut storage guidelines — general agricultural extension knowledge (demo approximation)",
+      "classification": "DEMO"
+    }
+  ]
+}

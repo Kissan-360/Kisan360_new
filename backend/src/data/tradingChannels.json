@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "note": "DEMO TRADING CHANNELS — structured reference for digital/electronic trading venues a farmer can sell through. Labeled DEMO_CHANNEL; production would sync from the eNAM registry, APMC notifications, and FPO program listings. Fees and rules change — always verify on the official portal before transacting.",
+    "classification": "DEMO_CHANNEL",
+    "lastVerified": "2026-09-12"
+  },
+  "channels": [
+    {
+      "id": "enam",
+      "name": "eNAM — Electronic National Agriculture Market",
+      "operator": "Ministry of Agriculture & Farmers Welfare, Government of India",
+      "type": "National electronic trading platform",
+      "description": "Online bidding platform linking APMC mandis across India. A farmer registered at an eNAM-integrated mandi can receive bids from traders in other states on the same lot — price discovery without moving produce first.",
+      "coverage": "1,000+ integrated mandis across India, including APMCs across Maharashtra",
+      "crops": ["all"],
+      "fees": "No platform fee for farmers; regular APMC market fees apply at the mandi",
+      "settlement": "Payment credited directly to the farmer's Aadhaar-linked bank account after sale",
+      "howToJoin": "Register at an eNAM-integrated APMC with Aadhaar and bank details; the integrated-mandi list is on the portal",
+      "website": "https://enam.gov.in",
+      "source": "DEMO_SEED — eNAM public information (illustrative summary)"
+    },
+    {
+      "id": "apmc-eauction",
+      "name": "APMC Electronic Auctions (e-Auction)",
+      "operator": "State APMC market committees (e.g., Vashi, Pune, Lasalgaon)",
+      "type": "Mandi-level electronic auction",
+      "description": "Several Maharashtra APMCs run computerized auction halls where lots are bid digitally inside the market, replacing open outcry for select commodities. Every bid is recorded, reducing cartel influence.",
+      "coverage": "Selected APMCs in Maharashtra — commodity-specific (e.g., onion lanes at Lasalgaon/Pimpalgaon, fruits & vegetables at Vashi)",
+      "crops": ["Onion", "Tomato", "Grape", "Pomegranate"],
+      "fees": "Standard APMC charges (market fee, hamali, weighment) as displayed at the mandi",
+      "settlement": "Same-day sale memo; payment via the APMC as per its rules",
+      "howToJoin": "No separate registration — arrive at the e-auction lane with the gate pass; the lot enters the digital auction roll",
+      "website": "https://www.krishi.maharashtra.gov.in",
+      "source": "DEMO_SEED — APMC public notices (illustrative summary)"
+    },
+    {
+      "id": "fpo-digital",
+      "name": "FPO Digital Procurement Programs",
+      "operator": "Farmer Producer Organisations & institutional buyers",
+      "type": "B2B aggregation channel",
+      "description": "FPOs and institutional buyers (processors, exporters, retail chains) run procurement programs where graded, aggregated lots are contracted digitally — often at pre-agreed, quality-linked prices.",
+      "coverage": "District-level FPOs across Maharashtra; volumes vary by season",
+      "crops": ["Soybean", "Cotton", "Onion", "Grape", "Tomato", "Wheat", "Paddy"],
+      "fees": "Membership/service charges vary by FPO; many programs are free for member farmers",
+      "settlement": "Per the purchase agreement — advance or on-delivery payment",
+      "howToJoin": "Join your local FPO; Kisan360's FPO Pooling workspace can prepare a graded lot for submission",
+      "website": "https://enam.gov.in",
+      "source": "DEMO_SEED — illustrative; FPO programs change by district"
+    }
+  ]
+}

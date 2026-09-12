@@ -19,7 +19,14 @@ const offerRoutes = require('./routes/offers');
 const paymentRoutes = require('./routes/payments');
 const grievanceRoutes = require('./routes/grievances');
 const fpoRoutes = require('./routes/fpo');
+const logisticsRoutes = require('./routes/logistics');
+const transactionCostRoutes = require('./routes/transactionCost');
 const diagnosticsRoutes = require('./routes/diagnostics');
+const chatRoutes = require('./routes/chat');
+const schemeRoutes = require('./routes/schemes');
+const communityRoutes = require('./routes/community');
+const gradeAssessmentRoutes = require('./routes/gradeAssessment');
+const tradingChannelsRoutes = require('./routes/tradingChannels');
 
 // Error handling
 const errorHandler = require('./middleware/errorHandler');
@@ -38,7 +45,17 @@ const { startScheduler, stopScheduler } = require('./services/scheduler');
 startScheduler(); // daily at 09:00 IST
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+// Port contract: an explicitly invalid PORT (0, negative, non-numeric) must
+// fail loudly rather than bind an ephemeral port nobody can find. `"0" || 5000`
+// is truthy in JS — a bare `||` once started the server on port 0 and the demo
+// lost the backend. Parse defensively.
+const RAW_PORT = process.env.PORT;
+const PORT = Number.parseInt(RAW_PORT, 10);
+if (RAW_PORT !== undefined && (!Number.isInteger(PORT) || PORT <= 0 || PORT > 65535)) {
+  console.error(`❌ Invalid PORT "${RAW_PORT}" — must be an integer between 1 and 65535. Refusing to start on an unpredictable port.`);
+  process.exit(1);
+}
+const EFFECTIVE_PORT = Number.isInteger(PORT) && PORT > 0 ? PORT : 5000;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 // Behind a reverse proxy (nginx etc.) this makes req.ip the real client IP —
@@ -98,18 +115,38 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Health check — distinguishes process alive vs database ready vs scheduler
-// state, without falsely reporting degraded systems as healthy.
+// state vs calculator availability, without falsely reporting degraded
+// systems as healthy.
 const { getHealth: getSchedulerHealth } = require('./services/scheduler');
-app.get('/health', (req, res) => {
+
+// Calculator (net-realization) readiness: probed with a short timeout and
+// cached so /health stays fast even when the service is down. Not claiming
+// any external API is healthy just because this process is alive.
+const NET_REALIZATION_URL = process.env.NET_REALIZATION_URL || 'http://localhost:8002';
+let mlProbe = { ready: false, checkedAt: 0 };
+async function probeMlService() {
+  if (Date.now() - mlProbe.checkedAt < 30000) return mlProbe; // 30s cache
+  try {
+    const res = await fetch(`${NET_REALIZATION_URL}/health`, { signal: AbortSignal.timeout(1500) });
+    mlProbe = { ready: res.ok, checkedAt: Date.now() };
+  } catch {
+    mlProbe = { ready: false, checkedAt: Date.now() };
+  }
+  return mlProbe;
+}
+app.get('/health', async (req, res) => {
   const dbMode = getDbMode(); // 'connected' | 'memory' | 'offline'
   const dbReady = dbMode === 'connected' || dbMode === 'memory';
   const scheduler = getSchedulerHealth();
-  const degraded = dbMode === 'offline' || scheduler.consecutiveFailures > 0;
+  const ml = await probeMlService();
+  const degraded = dbMode === 'offline' || scheduler.consecutiveFailures > 0 || !ml.ready;
   res.status(200).json({
     status: degraded ? 'DEGRADED' : 'OK',
     message: 'Kisan360 Backend is running',
     db: dbMode,
     dbReady,
+    mlServiceReady: ml.ready,
+    mlServiceUrl: NET_REALIZATION_URL,
     scheduler,
     timestamp: new Date().toISOString(),
   });
@@ -130,7 +167,14 @@ app.use('/api/offers', offerRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/grievances', grievanceRoutes);
 app.use('/api/fpo', fpoRoutes);
+app.use('/api/logistics', logisticsRoutes);
+app.use('/api/transaction-cost', transactionCostRoutes);
 app.use('/api/diagnostics', diagnosticsRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/schemes', schemeRoutes);
+app.use('/api/community', communityRoutes);
+app.use('/api/grade-assessment', gradeAssessmentRoutes);
+app.use('/api/trading-channels', tradingChannelsRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -140,13 +184,49 @@ app.use('*', (req, res) => {
 // Error handling middleware (must be registered after routes)
 app.use(errorHandler);
 
-const server = app.listen(PORT, () => {
-  console.log(`🚀 Kisan360 Backend server is running on port ${PORT}`);
-  console.log(`📊 Health check available at: http://localhost:${PORT}/health`);
+const server = app.listen(EFFECTIVE_PORT, () => {
+  console.log(`🚀 Kisan360 Backend server is running on port ${EFFECTIVE_PORT}`);
+  console.log(`📊 Health check available at: http://localhost:${EFFECTIVE_PORT}/health`);
   if (getDbMode() === 'memory') {
     console.log('🧪 DEMO FALLBACK active: in-memory database. Production never takes this path.');
   }
 });
+
+// Demo-day hardening: in memory mode a restart wipes the demo journey. The DB
+// mode settles ASYNCHRONOUSLY (the memory fallback may finish after listen),
+// so instead of hooking the listen callback we poll until the connection is
+// queryable, then self-seed the canonical scenario ONLY when the demo farmer
+// has no lots — a restart always leaves the demo ready and never duplicates.
+// Production DB mode ('connected') is skipped entirely.
+(async () => {
+  if (process.env.NODE_ENV === 'production') return;
+  for (let attempt = 0; attempt < 30; attempt++) {
+    await new Promise((r) => setTimeout(r, 1000));
+    const mode = getDbMode();
+    if (mode === 'connected') return; // real database — seeding is a demo-only concern
+    if (mode !== 'memory') continue;  // still settling (offline / starting memory server)
+    try {
+      const Lot = require('./models/Lot');
+      const existing = await Lot.countDocuments({ farmerUid: 'demo-farmer' });
+      if (existing > 0) {
+        console.log(`🌱 Demo data present (${existing} lots) — auto-seed skipped.`);
+        return;
+      }
+      const { seedDemoScenario } = require('./lib/demoSeed');
+      await seedDemoScenario({
+        baseUrl: `http://127.0.0.1:${EFFECTIVE_PORT}/api`,
+        log: (m) => console.log(`🌱 ${m}`),
+      });
+      console.log('🌱 Auto-seed complete — canonical demo scenario ready (Onion · 10 q · Nashik).');
+      return;
+    } catch (err) {
+      if (attempt === 29) {
+        console.error('🌱 Auto-seed skipped/failed:', err.message, '— manual seed: node scripts/seed-demo.js');
+      }
+      // otherwise keep waiting for the ephemeral connection
+    }
+  }
+})();
 
 // Graceful shutdown: stop accepting requests → stop the scheduler → close DB.
 // Keeps a background cron from firing into a closing process and lets Atlas

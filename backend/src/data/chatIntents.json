@@ -1,0 +1,95 @@
+{
+  "intents": [
+    {
+      "name": "compare_mandis",
+      "keywords": ["compare", "mandi", "market", "price", "which market", "best mandi", "net realization", "tulna", "bajar", "bazaar", "mandis"],
+      "pattern": "(compare|mandi|market|price|best|which|tulna|bajar|bazaar).*(mandi|market|price|sell|vikri)",
+      "handler": "navigate_decision",
+      "response": "Let me take you to the Decision Workspace where you can compare mandis for your lot."
+    },
+    {
+      "name": "my_lot_status",
+      "keywords": ["my lot", "lot status", "lot", "crop", "quantity", "where sell", "kuthe", "kahan"],
+      "pattern": "(my|lot|crop|sell|where|kuthe|kahan).*(lot|sell|price|status)",
+      "handler": "fetch_lot_status",
+      "response": "Here's your current lot status."
+    },
+    {
+      "name": "how_it_works",
+      "keywords": ["how does", "work", "what is", "kaise", "kaam", "kya hai", "kisan360"],
+      "pattern": "(how|what|kaise|kya).*(work|kaam|kisan360|do|does|hai)",
+      "handler": "answer_how_it_works",
+      "response": "Kisan360 compares markets by net realization."
+    },
+    {
+      "name": "explain_net_realization",
+      "keywords": ["explain", "net realization", "calculator", "net", "understand", "how much", "pocket", "take home", "mil"],
+      "pattern": "(explain|understand|how|samjha|samjun).*(net|realization|calculator|take home|pocket|mil|shuddh)",
+      "handler": "navigate_net_realization",
+      "response": "I'll open the Net Realization Calculator so you can see exactly what you pocket at each mandi."
+    },
+    {
+      "name": "pathway_options",
+      "keywords": ["pathway", "option", "sell now", "store", "fpo", "pool", "aggregate", "marag", "vikri", "raasta"],
+      "pattern": "(pathway|option|sell|store|fpo|pool|aggregate|vikri|marag|raasta).*(now|store|fpo|pool|option|sell)",
+      "handler": "navigate_pathways",
+      "response": "Let me show you all the selling pathways computed for your lot."
+    },
+    {
+      "name": "trade_help",
+      "keywords": ["trade", "buyer", "offer", "create lot", "sell", "vyapar", "khariddar", "khareedar"],
+      "pattern": "(trade|buyer|offer|lot|create|sell|vyapar|khariddar|khareedar).*(trade|buyer|offer|lot|sell)",
+      "handler": "navigate_trade",
+      "response": "Opening the Trade desk where you can create lots and connect with buyers."
+    },
+    {
+      "name": "weather_info",
+      "keywords": ["weather", "rain", "temperature", "forecast", "havaman", "paus", "tapman", "mausam", "barish"],
+      "pattern": "(weather|rain|temperature|forecast|havaman|paus|tapman|mausam|barish)",
+      "handler": "navigate_weather",
+      "response": "Let me check the weather for your area."
+    },
+    {
+      "name": "crop_health",
+      "keywords": ["disease", "pest", "leaf", "health", "crop health", "rog", "keed", "aushadh", "bimari"],
+      "pattern": "(disease|pest|leaf|health|rog|keed|bimari).*(detect|check|identify|photo|crop|health|leaf|patta)",
+      "handler": "navigate_disease",
+      "response": "Opening Crop Health. Upload a leaf photo and the app will analyze it for diseases."
+    },
+    {
+      "name": "advisory",
+      "keywords": ["advice", "advisory", "farming", "tips", "fertilizer", "irrigation", "sallah", "salah", "sujhav"],
+      "pattern": "(advice|advisory|farming|tips|fertilizer|irrigation|sallah|salah|sujhav)",
+      "handler": "navigate_advisory",
+      "response": "I'll take you to the Advisory section with farming tips for your crops."
+    },
+    {
+      "name": "govt_schemes",
+      "keywords": ["scheme", "government", "pm-kisan", "subsidy", "yojana", "sarkari", "government scheme"],
+      "pattern": "(scheme|government|pm.?kisan|subsidy|yojana|sarkari)",
+      "handler": "answer_schemes",
+      "response": "Here are the government schemes relevant to you."
+    },
+    {
+      "name": "community_ask",
+      "keywords": ["community", "forum", "ask farmers", "discuss", "samasya", "farmer discussion", "samasya", "samasya", "samasya", "pucho", "samasya", "प्रश्न", "चर्चा", "फोरम", "समस्या"],
+      "pattern": "(community|forum|ask farmers|discuss|farmer discussion|puch|pucho|चर्चा|फोरम|समस्या|प्रश्न).*(farmer|post|पोस्ट|reply|जवाब)",
+      "handler": "navigate_community",
+      "response": "Opening the Farmer Community forum so you can ask other farmers and share experience."
+    },
+    {
+      "name": "greeting",
+      "keywords": ["hello", "hi", "namaste", "namaskar", "hey", "good morning", "good evening"],
+      "pattern": "^(hello|hi|namaste|namaskar|hey|good morning|good evening)",
+      "handler": "respond_greeting",
+      "response": "Namaste! I'm Kisan360 Assistant. I can help you compare markets, understand your net realization, find government schemes, or connect you with the farmer community. What would you like to do?"
+    },
+    {
+      "name": "fallback",
+      "keywords": [],
+      "pattern": ".*",
+      "handler": "llm_fallback",
+      "response": null
+    }
+  ]
+}
