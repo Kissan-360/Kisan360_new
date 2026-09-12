@@ -47,3 +47,15 @@ backend/.data/
 *.njsproj
 *.sln
 *.sw?
+
+# ML training workspace (large dataset zip + venvs — never commit)
+backend/scripts/ml-work/
+.venv-ml/
+ml-pip.log
+ml-dl.log
+
+# Local reference material & scratch (not part of the product)
+Frontend-kisan-360/
+.trae/
+Kisan360_HLD (2).pdf
+*.log
