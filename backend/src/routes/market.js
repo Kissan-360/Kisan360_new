@@ -14,6 +14,8 @@ const logger = require('../utils/logger');
 const BUYERS_FILE = path.join(__dirname, '..', 'data', 'buyers.json');
 
 const NET_REALIZATION_URL = process.env.NET_REALIZATION_URL || 'http://localhost:8002';
+// Wake-tolerant engine timeout + cold-start detection (free-tier sleep).
+const { CALC_TIMEOUT_MS, isColdStart, coldStartMessage } = require('../lib/calculator');
 
 // Shared engine-compose: best-known prices → dedupe → deterministic calculator.
 // Used by every economics route so all of them consume the SAME ranked mandis
@@ -40,7 +42,7 @@ async function composeEngineResult({ crop, district, quantity }) {
   }));
   const mlRes = await axios.post(`${NET_REALIZATION_URL}/net-realization`, {
     crop, district, quantity, prices,
-  }, { timeout: 15000 });
+  }, { timeout: CALC_TIMEOUT_MS });
   const engine = mlRes.data;
   if (!engine || engine.success === false) {
     return { error: engine?.error || 'Calculator rejected the request', marketSource: priceResult.source };
@@ -207,7 +209,7 @@ router.get('/net-realization', async (req, res) => {
       district,
       quantity: qty,
       prices,
-    }, { timeout: 15000 });
+    }, { timeout: CALC_TIMEOUT_MS });
 
     const data = mlRes.data;
     if (data && data.success === false) {
@@ -230,6 +232,14 @@ router.get('/net-realization', async (req, res) => {
         error: 'Net-realization service unavailable',
         serviceStatus: 'offline',
         message: 'Start the calculator: cd ml-service && python -m uvicorn net_realization:app --port 8002',
+      });
+    }
+    if (isColdStart(error)) {
+      logger.warn('Net-realization service waking from sleep');
+      return res.status(503).json({
+        success: false,
+        error: coldStartMessage(),
+        serviceStatus: 'waking',
       });
     }
     if (error.response) {
@@ -330,7 +340,7 @@ router.get('/net-realization/explain', async (req, res) => {
 
     const mlRes = await axios.post(`${NET_REALIZATION_URL}/net-realization`, {
       crop, district, quantity: qty, prices,
-    }, { timeout: 15000 });
+    }, { timeout: CALC_TIMEOUT_MS });
     const engine = mlRes.data;
     if (!engine || engine.success === false) {
       return res.status(422).json({ success: false, error: engine?.error || 'Calculator rejected the request' });
@@ -425,7 +435,7 @@ router.get('/buyer-coverage', async (req, res) => {
 
     const mlRes = await axios.post(`${NET_REALIZATION_URL}/net-realization`, {
       crop, district, quantity: qty, prices,
-    }, { timeout: 15000 });
+    }, { timeout: CALC_TIMEOUT_MS });
     const engine = mlRes.data;
     if (!engine || engine.success === false) {
       return res.status(422).json({ success: false, error: engine?.error || 'Calculator rejected the request' });
@@ -495,7 +505,7 @@ router.get('/pathways', async (req, res) => {
 
     const mlRes = await axios.post(`${NET_REALIZATION_URL}/net-realization`, {
       crop, district, quantity: qty, prices,
-    }, { timeout: 15000 });
+    }, { timeout: CALC_TIMEOUT_MS });
     const engineResult = mlRes.data;
     if (!engineResult || engineResult.success === false) {
       return res.status(422).json({ success: false, error: engineResult?.error || 'Calculator rejected the request' });

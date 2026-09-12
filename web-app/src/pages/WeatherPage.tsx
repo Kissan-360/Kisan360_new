@@ -42,8 +42,17 @@ const WeatherPage = () => {
 
   useEffect(() => {
     if (!coords) return;
+    setError('');
+    setWeather(null);
+    // NOTE: must check r.ok — the backend returns JSON error bodies (e.g.
+    // missing API key) that must NOT be treated as weather data, otherwise
+    // every field renders "undefined" with no error shown.
     apiFetch(`${API_URL}/weather?latitude=${coords.lat}&longitude=${coords.lon}`)
-      .then((r) => r.json())
+      .then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error((data as any)?.error || 'load failed');
+        return data;
+      })
       .then(setWeather)
       .catch(() => setError(t('weather.error.loadFailed')));
   }, [coords]);
@@ -73,10 +82,12 @@ const WeatherPage = () => {
     );
   }
 
-  if (error) {
+  // Belt-and-braces: a payload without current conditions must never render
+  // as "undefined°C" — show the honest error card instead.
+  if (error || (weather && !weather.current)) {
     return (
       <div className="p-6 lg:p-8">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">{error}</div>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">{error || t('weather.error.loadFailed')}</div>
       </div>
     );
   }

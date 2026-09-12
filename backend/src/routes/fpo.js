@@ -24,7 +24,7 @@ function buyerFromDirectory(buyerId) {
   return directoryBuyers.find(b => b.id === buyerId) || null;
 }
 
-const NET_REALIZATION_URL = process.env.NET_REALIZATION_URL || 'http://localhost:8002';
+const { NET_REALIZATION_URL, CALC_TIMEOUT_MS, isColdStart, coldStartMessage } = require('../lib/calculator');
 
 // Same dedupe/sanitize the /market/net-realization route does before handing
 // prices to the calculator — kept local so both routes stay independent.
@@ -52,7 +52,7 @@ async function computeNetWithPrices(crop, district, quantity, priceResult) {
     district,
     quantity,
     prices: priceRowsForCalculator(priceResult),
-  }, { timeout: 15000 });
+  }, { timeout: CALC_TIMEOUT_MS });
   const data = mlRes.data;
   if (!data || data.success === false) {
     const err = new Error(data?.error || 'Calculator rejected the request');
@@ -165,6 +165,9 @@ router.post('/pool', async (req, res) => {
     }
     if (error.code === 'ECONNREFUSED') {
       return res.status(503).json({ success: false, error: 'Net-realization service unavailable', serviceStatus: 'offline' });
+    }
+    if (isColdStart(error)) {
+      return res.status(503).json({ success: false, error: coldStartMessage(), serviceStatus: 'waking' });
     }
     if (error.message && error.message.startsWith('A pool needs') ) {
       return res.status(400).json({ success: false, error: error.message });
