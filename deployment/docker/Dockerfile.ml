@@ -22,4 +22,4 @@ EXPOSE 8000 8001 8002
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:${PORT:-8000}/health')" || exit 1
 
-CMD ["python", "net_realization.py"]
+CMD ["python", "-m", "uvicorn", "net_realization:app", "--port", "8002"]

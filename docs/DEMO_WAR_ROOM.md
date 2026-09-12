@@ -55,7 +55,7 @@ must answer WHO / PROBLEM / SOLUTION.
 |---|---|---|
 | 0:00 | Problem | Landing + dashboard hero. Concept line. "Headline price ≠ take-home." |
 | 0:20 | Farmer input | Onion · Nashik · 10 q → "Where should I sell?" Results load. |
-| 0:40 | **Inversion (WOW 1)** | WITHOUT/WITH card: naive headline choice = ₹____ take-home vs Kisan360 pick = ₹____ → **"₹____ more on this lot — by not chasing the highest price."** Badge reads *estimated decision difference — not an income guarantee*. |
+| 0:40 | **Inversion (WOW 1)** | WITHOUT/WITH card: naive headline choice = ₹47,209 take-home vs Kisan360 pick = ₹51,530 → **"₹4,321 more on this lot — by not chasing the highest price."** Badge reads *estimated decision difference — not an income guarantee*. *(verified 2026-09-12 — re-read from the live card on demo morning)* |
 | 1:10 | Why / evidence | Open the **Why?** drawer once: price `[data]`, transport ₹/q/km `[assumption]`, quantity `[your input]`, quote date + retrieved `[data]`. "We don't ask the farmer to trust a black box." |
 | 1:30 | **50 q flip (WOW 2)** | "What could change this decision?" → click **What if I sell 50 q** → server-side recompute renders OLD recommendation → NEW recommendation. "Quantity changed the logistics economics — the 40 q full-truck threshold halves the transport rate." |
 | 2:00 | **Can I sell here? (WOW 3)** | Buyer-coverage card: "the economically best mandi isn't enough — can the farmer actually sell there?" Show compatible-buyer counts and the divergence card if it appears. |
@@ -85,7 +85,7 @@ Same as above through 2:40, then:
 
 1. **WHERE SHOULD I SELL?** hero: recommended mandi + estimated net ₹/q + badges
    (robust/sensitive, trust level, live/cached + freshness).
-2. **Estimated money for your lot:** `10 q × ₹____/q = ₹____` — the hero number of the whole product.
+2. **Estimated money for your lot:** `10 q × ₹5,153/q = ₹51,530` — the hero number of the whole product. *(verified 2026-09-12 — re-read from the live card)*
 3. **Why this market / advantage vs next best / watch** strip (engine-authored).
 4. Primary CTA: **"Sell at ___ — create lot →"** (pre-fills Trade).
 5. WITHOUT/WITH card (with the estimated-decision-difference badge).
@@ -93,7 +93,7 @@ Same as above through 2:40, then:
 7. Ranked mandis with per-row Why? drawers (price / transport / quantity / net / quote date /
    retrieved / decision status) + skipped-markets honesty block.
 8. Can-I-sell-here coverage + divergence card.
-9. Break-even transport + stress-test rows + "How Kisan360 decided" trace.
+9. Stress-test rows + decision trace (the Why? drawer's tagged cost breakdown + the assumptions endpoint — presented as "how Kisan360 decided").
 
 Everything below the hero is progressive disclosure: it answers interrupts without crowding the decision.
 
@@ -159,7 +159,7 @@ Everything below the hero is progressive disclosure: it answers interrupts witho
 - **Never** display "farmers earn X% more." The card says what it is:
   *"estimated decision difference — not an income guarantee"*, computed on the judge's own
   scenario: "On this 10 q lot, the naive headline-price decision would leave approximately
-  ₹____ less according to our current data and assumptions."
+  ₹4,321 less according to our current data and assumptions."
 - **Scale proof = one more crop, not new code:** run Soybean · Akola · 12 q live in Q&A.
   The crop dropdown follows the price cache; nothing in the engine is onion-specific
   (enforced by tests). New mandi/buyer/FPO = data entry, not a rebuild.
@@ -226,13 +226,11 @@ cd web-app && npm run dev                                            # the UI
 **Login:** landing → "Try the demo — no signup" → **Farmer**. Buyer act: sign out → demo sign-in → **Buyer**.
 
 **Seed / reset state (either one):**
-- In-app: Dashboard → *Demo controls* → **↺ Reset demo state** (calls `POST /api/auth/demo/seed`
-  — seeds the canonical Onion 10 q Nashik lot + a SENT offer to Dehydrated Onion Exports b7 at
-  ₹4,632/q = ₹46,320, awaiting the buyer act).
-- CLI: `cd backend && node scripts/seed-demo.js` (same state + a Soybean 12 q Akola alt-crop lot).
+- In-app (presenter mode): Dashboard with **`?demo=1`** in the URL → *Presenter controls* → **↺ Reset demo state** (calls `POST /api/auth/demo/seed`, seeds the canonical Onion 10 q lot + a SENT offer, then reloads) or **▶ Run canonical scenario** (deep-links `/net-realization?crop=Onion&district=Nagpur&quantity=10`). Hidden from judges on the normal flow.
+- CLI: `cd backend && node scripts/seed-demo.js` (same state + a Soybean 12 q Akola alt-crop lot). The server also auto-seeds this scenario on startup whenever the memory DB is empty.
 
-**Canonical scenario:** Dashboard → **▶ Run canonical scenario** (deep-links
-`/net-realization?crop=Onion&district=Nashik&quantity=10`) or enter it manually. The flagship
+**Canonical scenario:** Dashboard (with `?demo=1`) → **▶ Run canonical scenario** (deep-links
+`/net-realization?crop=Onion&district=Nagpur&quantity=10`) or enter it manually. The flagship
 auto-computes and lands on results. Alt-crop proof: Soybean · Akola · 12.
 
 **History reset:** on an in-memory DB, restarting the API wipes lots/payments — always re-run
@@ -241,7 +239,7 @@ sold/RELEASED history remains, which is fine (it feeds the receipt/history story
 
 **Recovery:** wedged screen → hard refresh (decision context survives in sessionStorage);
 wrong state → re-run the seeder and re-login; engine down → restart :8002 → re-run compute;
-API down → `PORT=5000 npm start`, check `/health` for `"db":"connected"|"memory"`, re-seed.
+API down → `PORT=5000 npm start`, check `/health` for `"db":"connected"|"memory"`. Auto-seed now repopulates the canonical scenario on restart when the memory DB is empty — only manually re-seed if you want an extra fresh scenario stacked.
 
 **Pre-session machine check (2 min):** 1920×1080, zoom 100% · hero + lot-total card legible at
 3 m · Why drawer opens with `[data]`/`[assumption]` tags visible · 50 q flip renders · buyer
@@ -251,13 +249,7 @@ cards/offer/transaction/receipt render · DevTools console clean once · one ful
 
 **P0 (fix immediately if seen):**
 - Calculator (:8002) not running — the flagship cannot compute. Never demo without it.
-- Atlas DNS flakiness → memory-DB mode silently wipes state on API restart; re-seed after restarts.
-- Inversion/flip depends on the snapshot's price geography — verify on demo morning that the
-  canonical scenario still shows a non-zero WITHOUT/WITH difference. **Verified live 2026-09-09:**
-  Lasalgaon(Niphad) ₹4,510.5/q (lot ₹45,105) vs naive APMC Nagpur ₹43,130 → **+₹1,975**; 50 q flips
-  to APMC Nagpur (bulk tier); FPO Onion pool +₹13,000 (+5.76%); Soybean·Akola·12 → APMC Latur
-  ₹5,813/q. If a future refresh converges the prices, pick the district that demonstrates the gap
-  and say the numbers live.
+- Atlas DNS flakiness → memory-DB mode wipes state on API restart; the server now AUTO-SEEDS the canonical scenario (Onion · 10 q · Nashik + in-flight offer) on startup when the DB is empty — no manual step. `node scripts/seed-demo.js` still works for stacking a fresh scenario mid-journey.- Inversion/flip depends on the snapshot's price geography — verify on demo morning that the canonical scenario still shows a non-zero WITHOUT/WITH difference. **Re-verified live 2026-09-12:** the Onion·Nashik cache has CONVERGED (+₹0 — Mangal Wedha leads on both gross and net, no inversion). Canonical scenario moved to **Onion · Nagpur · 10 q**: naive Mangal Wedha ₹5,510/q gross → ₹47,209 take-home vs APMC Nagpur ₹5,250/q gross → **₹51,530 → +₹4,321 on the lot**; at 50 q the recommendation **flips to APMC Mangal Wedha** (₹5,190.5/q net — full-truck threshold halves transport). Alt-crop: Soybean·Akola·12 → Krushna Krishi Bazar, Washim ₹6,161.7/q net. Fallback districts with live inversions: Satara (+₹2,757), Sangli (+₹2,118), Kolhapur (+₹2,616), Amravati (+₹5,070). If a future refresh converges Nagpur too, sweep these districts and pick the widest gap.
 
 **P1 (acknowledged, defensible):**
 - Buyer directory and payments are simulated (labeled everywhere) — offers are directory-driven, not live demand.
@@ -295,7 +287,7 @@ rendering. Backend 44/44 tests green, web production build green.
 
 ## 16. What must NOT be built (freeze list)
 
-Price-prediction ML · real payments/KYC · OSRM/live routing · AI produce grading · blockchain ·
+Price-prediction ML · real payments/KYC · OSRM/live routing · per-crop vision grading beyond freshness (freshness grader shipped) · blockchain ·
 new dashboards · a generic chatbot · confidence percentages dressed as probabilities · any
 fabricated impact metric · any new feature that does not serve the selling-decision story.
 Everything above is roadmap, not demo scope.

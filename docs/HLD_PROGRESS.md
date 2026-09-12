@@ -24,7 +24,7 @@ P3 is explicit roadmap (scored 0 by design, excluded from the numerator).
 |---|---|---|
 | FPO aggregation — 5 mock farmers → 1 bulk lot → realization comparison | Done — `POST /api/fpo/pool` + `/fpo` screen with side-by-side uplift; bulk transport tier (≥40 q) added to the calculator and documented | 100 |
 | Localized trend — 7/14/30-day, no forecasting ML | Done — `GET /api/market/trend` over accumulated observed history (`priceHistory.json`, appended by the daily refresher); explicitly descriptive, never predictive. History depth grows daily | 90 |
-| Quality — structured fields grade/size/moisture/damage/assay, no vision model | Done — Lot model + API + tested (TL) | 100 |
+| Quality — structured fields grade/size/moisture/damage/assay + trained vision freshness grader | Done — Lot model + API + tested (TL); MobileNetV2 freshness weights trained & shipped (`/models/crop-grader/`), AGMARK rule engine computes the grade | 100 |
 | Logistics — distance × documented ₹/km assumption, no OSRM | Done — assumptions endpoint + calculator (TL) | 100 |
 | Grievance — Raise → Open → Under Review → Resolved | Done — `Grievance` model + routes on the shared state machine; legal path tested, illegal jumps rejected | 90 |
 | Lot-creation + buyer-list UI with trust badges | Done — Trade page (TL) | 100 |
@@ -43,8 +43,8 @@ P3 is explicit roadmap (scored 0 by design, excluded from the numerator).
 ## P3 — explicit roadmap (not scored)
 
 GST/FSSAI live API verification · real payment gateway/escrow · OSRM/truck
-aggregation · quality-grading vision model · immutable audit trail · mobile
-rewrite · predictive price ML.
+aggregation · vision grading beyond freshness (per-crop weights) · immutable
+audit trail · mobile rewrite · predictive price ML.
 
 ## Totals
 

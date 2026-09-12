@@ -193,7 +193,9 @@ The system calculates:
 
 Result: MATCH / PARTIAL MATCH / NO MATCH / UNKNOWN
 
-**Limitation:** Quality is farmer-entered, not AI-verified. No computer vision grading.
+**AI grading (shipped, with trained weights):** The **Grade My Crop** screen (`/grade-crop`) grades produce against AGMARK standards. A MobileNetV2 vision model — **trained weights shipped in-app** (trained locally on ~13.5k public fruit-freshness photos, HuggingFace openrail dataset) — classifies the photo as fresh/rotten and maps it to AGMARK visual grades, feeding damage/foreign-matter estimates into the grade call alongside a short questionnaire. The deterministic AGMARK rule engine (`gradeRules`, DMI thresholds, 7 crops × 3 grades) computes the final grade, confidence and expected price range. Certificates carry a lifecycle (AI_GRADED → SUBMITTED_TO_FPO → FPO_VERIFIED) and link to lots.
+
+**Limitation (we say it on screen):** the photo model covers fruit freshness — its training domain. Grain crops grade via the questionnaire + rule engine; and if the vision weights fail to load, the grader falls back to rules and labels the result "Rule-based grading" instead of "AI-Verified" — the farmer always knows which engine produced the number.
 
 ---
 
@@ -291,7 +293,7 @@ This is information asymmetry reduction, not price fixing.
 - **Storage:** Real facility partnerships + availability API
 - **Transport:** Real transporter integration + booking
 - **Payments:** Real payment gateway (Razorpay/UPI)
-- **Quality:** Optional AI grading (computer vision)
+- **Quality:** AI grading already in-app (MobileNetV2 vision + AGMARK rule engine) — production scales training data
 - **Deployment:** Cloud hosting (AWS/GCP) + CDN
 
 The architecture is designed for this — the demo uses static data where production would use real integrations.
@@ -430,7 +432,7 @@ The innovation is the *decision intelligence* layer, not any single component.
 - Market fees: Published schedules (not live verification)
 - Buyer directory: Demo data (not real demand)
 - Storage availability: Demo data (not real facilities)
-- Quality grading: Farmer-entered (not AI-verified)
+- Quality grading: AI-assisted (AGMARK rules + vision); result labeled AI-Verified vs Rule-based honestly
 - Payment processing: Simulated (not real money)
 
 Every assumption is labeled in the evidence drawer.
@@ -447,7 +449,7 @@ Every assumption is labeled in the evidence drawer.
 3. Transporter API (booking + tracking)
 4. Storage facility partnerships
 5. Payment gateway (Razorpay/UPI)
-6. Optional: AI quality grading (computer vision)
+6. Scale the AI grading model (freshness weights are trained and shipped in-app today; extend to per-crop Maharashtra datasets)
 7. Optional: Price trend notifications
 8. Optional: Grievance escalation workflows
 

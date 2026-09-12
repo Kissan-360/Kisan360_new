@@ -77,7 +77,7 @@ cp web-app/.env.example  web-app/.env     # VITE_API_URL can stay empty (vite pr
 ```bash
 # 1) Calculator (must be up before the web journey)
 cd ml-service && pip install -r requirements.txt
-python net_realization.py                     # :8002
+python -m uvicorn net_realization:app --port 8002  # :8002
 
 # 2) API
 cd backend && npm install
@@ -134,7 +134,7 @@ docker-compose up --build
 ### Net-realization service
 
 - **Dockerfile**: `deployment/docker/Dockerfile.ml`
-- **Start command override**: `python net_realization.py`
+- **Start command override**: `python -m uvicorn net_realization:app --port 8002`
 - **Port**: 8002
 - **Health check**: `/health`
 

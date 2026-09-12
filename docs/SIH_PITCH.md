@@ -60,10 +60,10 @@ Then connects the decision to an executable workflow.
 "Let's take a real scenario: Onion, 10 quintals, Nashik."
 
 **1:50–2:10 — Market Comparison**
-"The system compares 30 mandis. Lasalgaon has the highest headline price at ₹2,800/q. But after transport and costs, the farmer net is lower."
+"The system ranks 21 regional mandis by farmer net — not by headline. Local APMC Nagpur leads on net today. But headline leader ≠ net leader: after transport and costs, the ranking flips."
 
 **2:10–2:30 — The Inversion**
-"Market B has a lower headline price but higher farmer net. The difference for this lot: ₹1,975.
+"Market B has a lower headline price but higher farmer net. The difference for this lot: read the live WITH/WITHOUT card on the decision screen on demo morning — never recite a memorized figure. **Verified live 2026-09-12 on the canonical Onion·Nagpur·10 scenario:** naive headline-chase nets ₹47,209; Kisan360's pick (local APMC Nagpur) nets ₹51,530 — **+₹4,321 on this lot**. At 50 q the recommendation flips to the far high-price mandi — quantity changed the logistics economics."
 
 This is the inversion — and it's the core insight."
 
