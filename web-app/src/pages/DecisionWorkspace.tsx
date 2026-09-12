@@ -180,7 +180,7 @@ const DecisionWorkspace = () => {
 
   // Save context whenever it changes
   useEffect(() => {
-    saveDecisionContext({ crop, district, quantityQuintals: qty, grade });
+    saveDecisionContext({ crop, district, quantity: qty, quantityQuintals: qty, grade });
   }, [crop, district, qty, grade]);
 
   // Auto-run once when arriving via a deep link with explicit parameters.

@@ -170,10 +170,14 @@ const FpoPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2 text-sm">
             <div className="rounded-xl border border-stone-200 p-4">
               <span className="badge badge-blue">{t('fpo.pathA')}</span>
-              <p className="text-stone-800 mt-2">{ctx.crop} · {ctx.quantity} q · {ctx.district}</p>
+              <p className="text-stone-800 mt-2">{ctx.crop} · {(ctx.quantity ?? ctx.quantityQuintals) ?? 0} q · {ctx.district}</p>
               <p className="text-[11px] text-stone-400 mt-0.5">the decision you just made on the calculator</p>
-              <p className="text-stone-600 mt-1">Best mandi: {ctx.mandi} · est. {inr(ctx.net)}/q net</p>
-              <p className="text-xs text-stone-400 mt-1">Small-lot transport tier; buyers with minimums above {ctx.quantity} q are out of reach.</p>
+              {ctx.mandi || ctx.net != null ? (
+                <p className="text-stone-600 mt-1">Best mandi: {ctx.mandi || '—'}{ctx.net != null && ctx.net > 0 ? <> · est. {inr(ctx.net)}/q net</> : null}</p>
+              ) : (
+                <p className="text-stone-600 mt-1">Run the calculator to attach a best-mandi reference to this path.</p>
+              )}
+              <p className="text-xs text-stone-400 mt-1">Small-lot transport tier; buyers with minimums above {(ctx.quantity ?? ctx.quantityQuintals) ?? 0} q are out of reach.</p>
             </div>
             <div className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
               <span className="badge badge-blue">{t('fpo.pathB')}</span>
