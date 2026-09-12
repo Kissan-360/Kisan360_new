@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import { API_URL, apiFetch } from '../lib/api';
+import { PrimaryButton } from '../components/ui/kit';
+import { useTranslation } from '../i18n';
 const COMMON_CROPS = [
   'Rice', 'Wheat', 'Maize', 'Sugarcane', 'Cotton',
   'Groundnut', 'Tomato', 'Onion', 'Mango', 'Banana',
@@ -12,6 +14,7 @@ const cropEmoji: Record<string, string> = {
 };
 
 const CropAdvisory = () => {
+  const { t } = useTranslation();
   const [step, setStep] = useState<'select' | 'result'>('select');
   const [selectedCrop, setSelectedCrop] = useState('');
   const [location, setLocation] = useState('');
@@ -73,15 +76,15 @@ const CropAdvisory = () => {
     <div className="p-6 lg:p-8">
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Crop Advisory</h1>
-          <p className="text-gray-500 text-sm mt-1">Get AI-powered recommendations for your crops</p>
+          <h1 className="text-2xl font-bold text-stone-900 tracking-tight">{t('advisory.title')}</h1>
+          <p className="text-stone-500 text-sm mt-1">{t('advisory.subtitle')}</p>
         </div>
 
         {step === 'select' && (
           <div className="space-y-6">
             {/* Crop selector */}
             <div className="card p-6 lg:p-8">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Select a crop</h2>
+              <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-4">{t('advisory.selectCrop')}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                 {COMMON_CROPS.map((crop) => (
                   <button
@@ -90,11 +93,11 @@ const CropAdvisory = () => {
                     className={`p-4 rounded-xl border-2 text-center transition-all duration-150 ${
                       selectedCrop === crop
                         ? 'border-emerald-500 bg-emerald-50 shadow-sm ring-1 ring-emerald-500/20'
-                        : 'border-gray-200 hover:border-emerald-300 hover:bg-gray-50'
+                        : 'border-stone-200 hover:border-emerald-300 hover:bg-stone-50'
                     }`}
                   >
                     <div className="text-3xl mb-1">{cropEmoji[crop] || '🌱'}</div>
-                    <div className="text-sm font-medium text-gray-700">{crop}</div>
+                    <div className="text-sm font-medium text-stone-700">{crop}</div>
                   </button>
                 ))}
               </div>
@@ -103,24 +106,24 @@ const CropAdvisory = () => {
             {/* Form */}
             <div className="card p-6 lg:p-8 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Your location</label>
+                <label className="block text-sm font-medium text-stone-700 mb-1.5">{t('advisory.yourLocation')}</label>
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder="e.g. Punjab, Maharashtra, Uttar Pradesh..."
+                  placeholder={t('advisory.locationPlaceholder')}
                   className="input-field"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Specific question <span className="text-gray-400 font-normal">(optional)</span>
+                <label className="block text-sm font-medium text-stone-700 mb-1.5">
+                  {t('advisory.specificQuestion')} <span className="text-stone-400 font-normal">({t('advisory.optional')})</span>
                 </label>
                 <textarea
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="e.g. How to control pest attack? What fertilizer to use?"
+                  placeholder={t('advisory.questionPlaceholder')}
                   rows={2}
                   className="input-field resize-none"
                 />
@@ -129,7 +132,7 @@ const CropAdvisory = () => {
               {weather && (
                 <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 text-sm text-blue-700 flex items-center gap-2">
                   <span>📍</span>
-                  <span>{location || 'Current location'}</span>
+                  <span>{location || t('advisory.currentLocation')}</span>
                   <span className="text-blue-300">|</span>
                   <span>🌡️ {weather.temperature}°C</span>
                   <span className="text-blue-300">|</span>
@@ -139,10 +142,10 @@ const CropAdvisory = () => {
                 </div>
               )}
 
-              <button
+              <PrimaryButton
                 onClick={getAdvisory}
                 disabled={!selectedCrop || !location || loading}
-                className="btn-primary w-full flex items-center justify-center gap-2"
+                className="w-full justify-center"
               >
                 {loading ? (
                   <>
@@ -150,12 +153,12 @@ const CropAdvisory = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
-                    Consulting AI...
+                    {t('advisory.consultingAI')}
                   </>
                 ) : (
-                  '🌱 Get Advisory'
+                  t('advisory.getAdvisory')
                 )}
-              </button>
+              </PrimaryButton>
 
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-start gap-2">
@@ -169,9 +172,9 @@ const CropAdvisory = () => {
 
         {step === 'result' && advisory && (
           <div className="space-y-6">
-            <button onClick={reset} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
-              ← Back to crops
-            </button>
+              <button onClick={reset} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+                {t('advisory.backToCrops')}
+              </button>
 
             <div className="card p-6 lg:p-8">
               <div className="flex items-center gap-4 mb-6">
@@ -179,8 +182,8 @@ const CropAdvisory = () => {
                   {cropEmoji[advisory.crop] || '🌱'}
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900">{advisory.crop}</h2>
-                  <p className="text-sm text-gray-500">{advisory.location}</p>
+                  <h2 className="text-xl font-bold text-stone-900">{advisory.crop}</h2>
+                  <p className="text-sm text-stone-500">{advisory.location}</p>
                 </div>
               </div>
 
@@ -198,10 +201,10 @@ const CropAdvisory = () => {
 
               {advisory.recommendations?.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Recommendations</h3>
+                  <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">{t('advisory.recommendations')}</h3>
                   <ul className="space-y-2">
                     {advisory.recommendations.map((r: string, i: number) => (
-                      <li key={i} className="text-sm text-gray-700 bg-gray-50 rounded-xl px-4 py-3 border border-gray-100 leading-relaxed">
+                      <li key={i} className="text-sm text-stone-700 bg-stone-50 rounded-xl px-4 py-3 border border-stone-100 leading-relaxed">
                         {r}
                       </li>
                     ))}
@@ -213,7 +216,7 @@ const CropAdvisory = () => {
                 {advisory.pestAlerts?.length > 0 && (
                   <div className="md:col-span-3">
                     <h3 className="text-sm font-semibold text-red-600 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <span>🐛</span> Pest Alerts
+                      <span>🐛</span> {t('advisory.pestAlerts')}
                     </h3>
                     <div className="space-y-2">
                       {advisory.pestAlerts.map((p: string, i: number) => (
@@ -226,7 +229,7 @@ const CropAdvisory = () => {
                 {advisory.diseaseInfo?.length > 0 && (
                   <div className="md:col-span-3">
                     <h3 className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <span>🩺</span> Disease Information
+                      <span>🩺</span> {t('advisory.diseaseInfo')}
                     </h3>
                     <div className="space-y-2">
                       {advisory.diseaseInfo.map((d: string, i: number) => (
@@ -239,7 +242,7 @@ const CropAdvisory = () => {
                 {advisory.weatherAdvisories?.length > 0 && (
                   <div className="md:col-span-3">
                     <h3 className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <span>🌤️</span> Weather Advisories
+                      <span>🌤️</span> {t('advisory.weatherAdvisories')}
                     </h3>
                     <div className="space-y-2">
                       {advisory.weatherAdvisories.map((w: string, i: number) => (
@@ -250,12 +253,12 @@ const CropAdvisory = () => {
                 )}
               </div>
 
-              <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                <span className="text-xs text-gray-400">
-                  {advisory.source === 'fallback' ? 'Generic advisory' : 'Powered by Kisan360 RAG'}
+              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
+                <span className="text-xs text-stone-400">
+                  {advisory.source === 'fallback' ? t('advisory.genericAdvisory') : t('advisory.poweredBy')}
                 </span>
                 <button onClick={() => { setQuery(''); getAdvisory(); }} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
-                  Refresh
+                  {t('advisory.refresh')}
                 </button>
               </div>
             </div>

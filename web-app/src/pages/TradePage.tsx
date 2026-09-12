@@ -1,13 +1,31 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { API_URL, apiFetch, getDemoUser } from '../lib/api';
+import {
+  API_URL, apiFetch, getDemoUser,
+} from '../lib/api';
 import { getDecisionContext, setDecisionContext, DecisionContext } from '../lib/decisionContext';
 import { MAHARASHTRA_DISTRICTS, MAHARASHTRA_CROPS, REGIONS } from '../lib/maharashtraData';
+import {
+  PageTransition, PageHeader, Card, SectionLabel, Chip, EmptyState,
+  SkeletonLines, StaggerList, StaggerItem, PrimaryButton, GhostButton, StatCard, CropIcon,
+} from '../components/ui/kit';
+import { useTranslation } from '../i18n';
+import PaymentTimeline from '../components/PaymentTimeline';
+import { useFlow } from '../components/FlowContext';
+import {
+  Package, Users, Send, Wallet, BadgeCheck, Search, FlaskConical, AlertTriangle,
+  Target, Plus, X, Check, ArrowRight, MapPin, FileText, LifeBuoy, TrendingUp,
+  CheckCircle2, AlertCircle, Banknote, Receipt, Clock, Scale, Info,
+} from 'lucide-react';
 
 // Trade page — HLD P0.3/P0.4 screens: create a lot, see matched buyers with
 // trust badges, send an offer, and watch the simulated payment move
 // Pending → Held → Released. All backend contracts are already tested; this
 // is pure UI against them.
+//
+// Milestone 3 — visual migration onto the unified design system. Every API
+// call, request body, response field, state machine, role gate and decision
+// calculation below is UNCHANGED; only the presentation uses the shared kit.
 
 interface Lot {
   _id: string;
@@ -66,6 +84,7 @@ interface Grievance {
 
 interface Payment {
   _id: string;
+  quantityQuintals?: number;
   lotId?: any; // backend populates { district, ... } so buyer-side benchmarks use the REAL haul district
   buyerName: string;
   crop: string;
@@ -75,17 +94,40 @@ interface Payment {
   history?: { from: string | null; to: string; at: string; note?: string }[];
 }
 
-const TIER_STYLES: Record<string, { cls: string; icon: string }> = {
-  REAL_VERIFIED: { cls: 'badge-green', icon: '✅' },
-  SOURCE_VERIFIED: { cls: 'badge-blue', icon: '🔎' },
-  DEMO_VERIFIED: { cls: 'badge-yellow', icon: '🧪' },
-  SELF_DECLARED: { cls: 'badge-red', icon: '⚠️' },
+// Trust tiers keep the backend's EXACT vocabulary — never flattened into
+// "Verified buyer". Icons are lucide; colors stay tier-specific.
+const TIER_CLS: Record<string, string> = {
+  REAL_VERIFIED: 'badge-green',
+  SOURCE_VERIFIED: 'badge-blue',
+  DEMO_VERIFIED: 'badge-yellow',
+  SELF_DECLARED: 'badge-red',
+};
+const TIER_ICONS: Record<string, React.ElementType> = {
+  REAL_VERIFIED: BadgeCheck,
+  SOURCE_VERIFIED: Search,
+  DEMO_VERIFIED: FlaskConical,
+  SELF_DECLARED: AlertTriangle,
 };
 
-const OFFER_STEPS = ['SENT', 'ACCEPTED', 'REJECTED', 'WITHDRAWN'];
 const PAYMENT_STEPS = ['PENDING', 'HELD', 'RELEASED'];
 const GRIEVANCE_STEPS = ['OPEN', 'UNDER_REVIEW', 'RESOLVED', 'REJECTED'];
 const GRIEVANCE_CATEGORIES = ['PAYMENT_DELAY', 'QUALITY_DISPUTE', 'WEIGHT_DISPUTE', 'BUYER_NO_SHOW', 'OTHER'];
+
+// Product journey — this screen is the SELL step. Presentational only.
+const JOURNEY = ['INFORM', 'COMPARE', 'DECIDE', 'CONNECT', 'SELL'];
+
+// Single source of truth for the /trade?prefill=… deep-link params, used by
+// both the decision-context seed (mount) and the prefill effect (mount).
+function parsePrefillParams(sp: URLSearchParams) {
+  const qty = parseFloat(sp.get('quantity') || '0');
+  return {
+    crop: sp.get('crop') || undefined,
+    district: sp.get('district') || undefined,
+    quantity: qty > 0 ? qty : undefined,
+    mandi: sp.get('mandi') || undefined,
+    net: Number(sp.get('net') || 0),
+  };
+}
 
 const inr = (n: number) => `₹${(n ?? 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
 
@@ -96,7 +138,8 @@ const isBuyerSide = (role?: string) => ['buyer', 'fpo', 'admin'].includes(role |
 // comes from the deterministic engine for the lot's crop+district. No
 // fabricated uplift — if the engine is unreachable we show the deal only.
 const PaymentOutcome = ({ payment, lot }: { payment: Payment; lot?: Lot }) => {
-  const dealPerQ = payment.quantityQuintals > 0 ? Math.round((payment.amount / payment.quantityQuintals) * 100) / 100 : 0;
+  const dealPerQ = payment.quantityQuintals && payment.quantityQuintals > 0
+    ? Math.round((payment.amount / payment.quantityQuintals) * 100) / 100 : 0;
   const [bench, setBench] = useState<{ bestNet: number; bestMandi: string } | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -132,38 +175,39 @@ const PaymentOutcome = ({ payment, lot }: { payment: Payment; lot?: Lot }) => {
   const delta = bench ? Math.round((dealPerQ - bench.bestNet) * 100) / 100 : null;
   const beat = delta != null && delta >= 0;
 
-  return (      <div className={`mt-3 rounded-xl p-4 border ${beat ? 'border-emerald-300 bg-emerald-50/70' : bench ? 'border-amber-200 bg-amber-50/60' : 'border-gray-200 bg-gray-50'}`}>
-        {/* Three-tier story: reference (market) vs offer (negotiated) vs deal (locked) */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-          <div className="rounded-lg border border-gray-200 bg-white p-3">
-            <p className="text-[11px] uppercase tracking-wider text-gray-400">Market reference</p>
-            {bench ? (
-              <>
-                <p className="font-semibold text-gray-800 mt-0.5">{inr(bench.bestNet)}/q</p>
-                <p className="text-[11px] text-gray-400">engine's estimated best net today ({bench.bestMandi}) — an observation, not a guaranteed price</p>
-              </>
-            ) : <p className="text-xs text-gray-400 mt-0.5">unavailable</p>}
-          </div>
-          <div className="rounded-lg border border-gray-200 bg-white p-3">
-            <p className="text-[11px] uppercase tracking-wider text-gray-400">Buyer offer (accepted)</p>
-            <p className="font-semibold text-gray-800 mt-0.5">{inr(dealPerQ)}/q</p>
-            <p className="text-[11px] text-gray-400">negotiated between farmer and buyer</p>
-          </div>
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
-            <p className="text-[11px] uppercase tracking-wider text-emerald-600">Locked deal</p>
-            <p className="font-bold text-emerald-800 mt-0.5">{inr(payment.amount)}</p>
-            <p className="text-[11px] text-gray-400">for {payment.quantityQuintals} q of {payment.crop} — the transaction record</p>
-          </div>
+  return (
+    <div className={`mt-3 rounded-xl p-4 border ${beat ? 'border-emerald-300 bg-emerald-50/70' : bench ? 'border-amber-200 bg-amber-50/60' : 'border-stone-200 bg-stone-50'}`}>
+      {/* Three-tier story: reference (market) vs offer (negotiated) vs deal (locked) */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+        <div className="rounded-lg border border-stone-200 bg-white p-3">
+          <p className="text-[11px] uppercase tracking-wider text-stone-400 flex items-center gap-1"><Scale size={12} /> Market reference</p>
+          {bench ? (
+            <>
+              <p className="font-semibold text-stone-800 mt-0.5">{inr(bench.bestNet)}/q</p>
+              <p className="text-[11px] text-stone-400">engine's estimated best net today ({bench.bestMandi}) — an observation, not a guaranteed price</p>
+            </>
+          ) : <p className="text-xs text-stone-400 mt-0.5">unavailable</p>}
         </div>
-        {bench && delta != null && (
-          <p className={`text-sm mt-3 ${beat ? 'text-emerald-800' : 'text-amber-800'}`}>
-            {beat
-              ? <>The accepted offer landed <strong>{inr(delta)}/q above</strong> today's market reference.</>
-              : <>The accepted offer is <strong>{inr(Math.abs(delta))}/q below</strong> today's market reference. References are market observations, not guaranteed transaction prices — offers can sit below reference for many honest reasons, and prices move.</>}
-          </p>
-        )}
-      {failed && <p className="text-xs text-gray-400 mt-1">Benchmark context unavailable right now — the deal figures above are the transaction record.</p>}
-      <p className="text-[10px] text-gray-400 mt-1.5">Deal figures come from the transaction record; the benchmark comes from the deterministic engine. Payment itself is simulated.</p>
+        <div className="rounded-lg border border-stone-200 bg-white p-3">
+          <p className="text-[11px] uppercase tracking-wider text-stone-400 flex items-center gap-1"><Send size={12} /> Buyer offer (accepted)</p>
+          <p className="font-semibold text-stone-800 mt-0.5">{inr(dealPerQ)}/q</p>
+          <p className="text-[11px] text-stone-400">negotiated between farmer and buyer</p>
+        </div>
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+          <p className="text-[11px] uppercase tracking-wider text-emerald-600 flex items-center gap-1"><Banknote size={12} /> Locked deal</p>
+          <p className="font-bold text-emerald-800 mt-0.5">{inr(payment.amount)}</p>
+          <p className="text-[11px] text-stone-400">for {payment.quantityQuintals} q of {payment.crop} — the transaction record</p>
+        </div>
+      </div>
+      {bench && delta != null && (
+        <p className={`text-sm mt-3 ${beat ? 'text-emerald-800' : 'text-amber-800'}`}>
+          {beat
+            ? <>The accepted offer landed <strong>{inr(delta)}/q above</strong> today's market reference.</>
+            : <>The accepted offer is <strong>{inr(Math.abs(delta))}/q below</strong> today's market reference. References are market observations, not guaranteed transaction prices — offers can sit below reference for many honest reasons, and prices move.</>}
+        </p>
+      )}
+      {failed && <p className="text-xs text-stone-400 mt-1">Benchmark context unavailable right now — the deal figures above are the transaction record.</p>}
+      <p className="text-[10px] text-stone-400 mt-1.5">Deal figures come from the transaction record; the benchmark comes from the deterministic engine. Payment itself is simulated.</p>
     </div>
   );
 };
@@ -180,9 +224,9 @@ const OfferBenchmark = ({ offer, lot, buyer }: { offer: Offer; lot?: Lot; buyer?
   // Phase 7 — offer context grounded in structured data that actually exists
   // on the lot and buyer records. Nothing speculative.
   const factors: string[] = [];
-  if (lot?.grade && lot.grade !== 'Unassessed') factors.push(`Lot grade: ${lot.grade}`);
-  if (lot?.moisturePct != null) factors.push(`Lot moisture: ${lot.moisturePct}%`);
-  if (lot?.damagePct != null) factors.push(`Visible damage: ${lot.damagePct}%`);
+  if (lot?.grade && lot.grade !== 'Unassessed') factors.push(`Lot grade: ${lot.grade} (declared)`);
+  if (lot?.moisturePct != null) factors.push(`Lot moisture: ${lot.moisturePct}% (declared)`);
+  if (lot?.damagePct != null) factors.push(`Visible damage: ${lot.damagePct}% (declared)`);
   if (buyer && offer.quantityQuintals < buyer.minQuantityQuintals) factors.push(`Quantity ${offer.quantityQuintals} q is below ${buyer.name}'s usual ${buyer.minQuantityQuintals} q minimum`);
   if (buyer?.paymentTermsLabel) factors.push(`Buyer's terms: ${buyer.paymentTermsLabel}`);
 
@@ -208,33 +252,33 @@ const OfferBenchmark = ({ offer, lot, buyer }: { offer: Offer; lot?: Lot; buyer?
   }, [offer._id]);
 
   if (failed) {
-    return <p className="text-[11px] text-gray-400 mt-2">Market reference unavailable right now — compare against today's mandi prices before accepting.</p>;
+    return <p className="text-[11px] text-stone-400 mt-2">Market reference unavailable right now — compare against today's mandi prices before accepting.</p>;
   }
   if (!bench) return null;
   const diff = Math.round((offer.offeredPricePerQuintal - bench.net) * 100) / 100;
   const pct = bench.net > 0 ? Math.round((diff / bench.net) * 1000) / 10 : 0;
   const status = diff >= 0 ? 'ABOVE REFERENCE' : pct >= -OFFER_BAND_PCT ? 'NEAR REFERENCE' : 'BELOW REFERENCE';
-  const cls = diff >= 0 ? 'badge-green' : pct >= -OFFER_BAND_PCT ? 'badge-yellow' : 'badge-red';
+  const chipColor = diff >= 0 ? 'emerald' : pct >= -OFFER_BAND_PCT ? 'amber' : 'red';
   return (
-    <div className="mt-2 rounded-lg border border-gray-200 bg-gray-50/70 p-3">
+    <div className="mt-2 rounded-lg border border-stone-200 bg-stone-50/70 p-3">
       <div className="flex flex-wrap items-center gap-2">
-        <span className={`badge ${cls} shrink-0`}>{status}</span>
-        <span className="text-xs text-gray-600">
+        <Chip color={chipColor}>{status}</Chip>
+        <span className="text-xs text-stone-600">
           Offer <strong>{inr(offer.offeredPricePerQuintal)}/q</strong> vs market reference <strong>{inr(bench.net)}/q</strong> ({bench.mandi}) → {diff >= 0 ? '+' : '−'}{inr(Math.abs(diff))}/q ({pct >= 0 ? '+' : ''}{pct}%)
         </span>
       </div>
-      <p className="text-[11px] text-gray-500 mt-1.5">
+      <p className="text-[11px] text-stone-500 mt-1.5">
         Reference = estimated farmer net at the best mandi today, after farmer-borne costs — a market observation, not a guaranteed transaction price.
       </p>
       {status === 'BELOW REFERENCE' && factors.length === 0 && (
-        <p className="text-[11px] text-gray-500 mt-1">Not enough structured information on this lot or buyer to explain the difference — ask the buyer directly.</p>
+        <p className="text-[11px] text-stone-500 mt-1">Not enough structured information on this lot or buyer to explain the difference — ask the buyer directly.</p>
       )}
-      <p className="text-[10px] text-gray-400 mt-1">Deterministic comparison (within {OFFER_BAND_PCT}% = near reference). Kisan360 informs — you decide.</p>
+      <p className="text-[10px] text-stone-400 mt-1">Deterministic comparison (within {OFFER_BAND_PCT}% = near reference). Kisan360 informs — you decide.</p>
       {factors.length > 0 && (
         <div className="mt-1.5">
-          <p className="text-[11px] font-medium text-gray-500">Factors on record that may explain the difference:</p>
-          <ul className="text-[11px] text-gray-500 mt-0.5 space-y-0.5">
-            {factors.map((f) => <li key={f}>• {f}</li>)}
+          <p className="text-[11px] font-medium text-stone-500">Factors on record that may explain the difference:</p>
+          <ul className="text-[11px] text-stone-500 mt-0.5 space-y-0.5">
+            {factors.map((f) => <li key={f} className="flex items-start gap-1"><span className="mt-0.5 text-emerald-600"><Check size={10} /></span>{f}</li>)}
           </ul>
         </div>
       )}
@@ -269,11 +313,13 @@ const LotEconomics = ({ lot, offers }: { lot: Lot; offers: Offer[] }) => {
   const bestOfferQ = lotOffers.length ? Math.max(...lotOffers.map(o => o.offeredPricePerQuintal)) : null;
   const gap = bestOfferQ != null ? Math.round((bestOfferQ - bench.net) * 100) / 100 : null;
   return (
-    <p className="text-[11px] text-gray-500 mt-1.5">
-      📊 Lot value — engine benchmark: <strong>{inr(benchmarkTotal)}</strong> ({inr(bench.net)}/q at {bench.mandi})
-      {bestOfferQ != null && gap != null && (
-        <> · best offer: <strong>{inr(bestOfferQ)}/q</strong> ({gap >= 0 ? '+' : '−'}{inr(Math.abs(gap))}/q vs benchmark)</>
-      )}
+    <p className="text-[11px] text-stone-500 mt-1.5 flex items-start gap-1.5">
+      <TrendingUp size={12} className="text-emerald-600 mt-0.5 shrink-0" />
+      <span>Lot value — engine benchmark: <strong>{inr(benchmarkTotal)}</strong> ({inr(bench.net)}/q at {bench.mandi})
+        {bestOfferQ != null && gap != null && (
+          <> · best offer: <strong>{inr(bestOfferQ)}/q</strong> ({gap >= 0 ? '+' : '−'}{inr(Math.abs(gap))}/q vs benchmark)</>
+        )}
+      </span>
     </p>
   );
 };
@@ -284,22 +330,41 @@ const LotEconomics = ({ lot, offers }: { lot: Lot; offers: Offer[] }) => {
 const DecisionReceipt = ({ ctx, payments, lots }: { ctx: DecisionContext; payments: Payment[]; lots: Lot[] }) => {
   const p = payments[0];
   const lot = lots.find(l => l._id === String(p.lotId));
-  const dealPerQ = p.quantityQuintals > 0 ? Math.round((p.amount / p.quantityQuintals) * 100) / 100 : 0;
-  const diff = ctx.net > 0 ? Math.round((dealPerQ - ctx.net) * 100) / 100 : null;
+  const dealPerQ = p.quantityQuintals && p.quantityQuintals > 0 ? Math.round((p.amount / p.quantityQuintals) * 100) / 100 : 0;
+  const diff = ctx.net != null && ctx.net > 0 ? Math.round((dealPerQ - ctx.net) * 100) / 100 : null;
   return (
-    <div className="card p-5 border-emerald-300 bg-emerald-50/50">
-      <div className="flex items-center justify-between">
-        <p className="font-semibold text-gray-900">Kisan360 selling decision — receipt</p>
-        <span className="badge badge-yellow">simulated transaction</span>
+    <Card spotlight className="p-5 border-emerald-300 bg-emerald-50/50">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Receipt size={18} className="text-emerald-700" />
+          <p className="font-semibold text-stone-900">Kisan360 selling decision — receipt</p>
+        </div>
+        <Chip color="amber">simulated transaction</Chip>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 text-sm">
-        <div><p className="text-[11px] uppercase tracking-wider text-gray-400">You told us</p><p className="text-gray-800 font-medium">{ctx.crop} · {ctx.quantity} q · {ctx.district}</p></div>
-        <div><p className="text-[11px] uppercase tracking-wider text-gray-400">We recommended</p><p className="text-gray-800 font-medium">{ctx.mandi} · est. {inr(ctx.net)}/q</p></div>
-        <div><p className="text-[11px] uppercase tracking-wider text-gray-400">Buyer offered / deal</p><p className="text-gray-800 font-medium">{p.buyerName} · {inr(dealPerQ)}/q ({inr(p.amount)})</p></div>
-        <div><p className="text-[11px] uppercase tracking-wider text-gray-400">Vs recommendation</p><p className={diff != null ? (diff >= 0 ? 'text-emerald-700 font-medium' : 'text-amber-700 font-medium') : 'text-gray-400'}>{diff != null ? `${diff >= 0 ? '+' : '−'}${inr(Math.abs(diff))}/q` : 'reference unavailable'}</p></div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-3 text-sm">
+        <div className="rounded-lg border border-stone-200 bg-white p-3">
+          <p className="text-[11px] uppercase tracking-wider text-stone-400">You told us</p>
+          <p className="text-stone-800 font-medium mt-0.5">{ctx.crop} · {ctx.quantity} q · {ctx.district}</p>
+        </div>
+        <div className="rounded-lg border border-stone-200 bg-white p-3">
+          <p className="text-[11px] uppercase tracking-wider text-stone-400">We recommended</p>
+          <p className="text-stone-800 font-medium mt-0.5">{ctx.mandi} · {ctx.net != null ? `est. ${inr(ctx.net)}/q` : 'reference —'}</p>
+        </div>
+        <div className="rounded-lg border border-stone-200 bg-white p-3">
+          <p className="text-[11px] uppercase tracking-wider text-stone-400">Buyer offered / deal</p>
+          <p className="text-stone-800 font-medium mt-0.5">{p.buyerName} · {inr(dealPerQ)}/q ({inr(p.amount)})</p>
+        </div>
+        <div className={`rounded-lg border p-3 ${diff != null && diff >= 0 ? 'border-emerald-200 bg-emerald-50/60' : diff != null ? 'border-amber-200 bg-amber-50/60' : 'border-stone-200 bg-white'}`}>
+          <p className="text-[11px] uppercase tracking-wider text-stone-400">Vs recommendation</p>
+          <p className={`font-semibold mt-0.5 ${diff != null ? (diff >= 0 ? 'text-emerald-700' : 'text-amber-700') : 'text-stone-400'}`}>
+            {diff != null ? `${diff >= 0 ? '+' : '−'}${inr(Math.abs(diff))}/q` : 'reference unavailable'}
+          </p>
+        </div>
       </div>
-      <p className="text-[11px] text-gray-500 mt-3">Price source: {ctx.source === 'agmarknet_live' ? 'live AGMARKNET pull' : 'cached AGMARKNET snapshot'} at decision time · lot {lot ? lot._id.slice(-6) : (p.lotId && typeof p.lotId === 'object' ? String(p.lotId._id) : String(p.lotId ?? 'unknown')).slice(-6)} · recorded {new Date(p.createdAt).toLocaleDateString('en-IN')}. The estimate was a market observation — the deal is the outcome.</p>
-    </div>
+      <p className="text-[11px] text-stone-500 mt-3">
+        Price source: {ctx.source === 'agmarknet_live' ? 'live AGMARKNET pull' : 'cached AGMARKNET snapshot'} at decision time · lot {lot ? lot._id.slice(-6) : (p.lotId && typeof p.lotId === 'object' ? String(p.lotId._id) : String(p.lotId ?? 'unknown')).slice(-6)} · recorded {new Date(p.createdAt).toLocaleDateString('en-IN')}. The estimate was a market observation — the deal is the outcome.
+      </p>
+    </Card>
   );
 };
 
@@ -342,39 +407,44 @@ const DecisionHistory = ({ payments, lots }: { payments: Payment[]; lots: Lot[] 
 
   if (settled.length === 0) return null;
   return (
-    <div className="card p-5">
-      <h2 className="font-semibold text-gray-900 mb-1">Your selling record</h2>
-      <p className="text-xs text-gray-400 mb-1">Completed deals from this account vs the market reference on record. Demonstrates the outcome loop on demo transactions only.</p>
-      <p className="text-[11px] text-gray-400 mb-3">Records like these are how the product learns over time — comparing outcomes against assumptions is what would refine future cost estimates. Kisan360 observes, decides, transacts, records; it does not predict.</p>
-      <div className="space-y-2">
+    <Card className="p-5">
+      <div className="flex items-center gap-2 mb-1">
+        <TrendingUp size={16} className="text-emerald-700" />
+        <h2 className="font-semibold text-stone-900">Your selling record</h2>
+      </div>
+      <p className="text-xs text-stone-400 mb-1">Completed deals from this account vs the market reference on record. Demonstrates the outcome loop on demo transactions only.</p>
+      <p className="text-[11px] text-stone-400 mb-3">Records like these are how the product learns over time — comparing outcomes against assumptions is what would refine future cost estimates. Kisan360 observes, decides, transacts, records; it does not predict.</p>
+      <StaggerList className="space-y-2">
         {settled.map((p) => {
-          const dealPerQ = p.quantityQuintals > 0 ? Math.round((p.amount / p.quantityQuintals) * 100) / 100 : 0;
+          const dealPerQ = p.quantityQuintals && p.quantityQuintals > 0 ? Math.round((p.amount / p.quantityQuintals) * 100) / 100 : 0;
           const r = refs[p._id];
           const ref = r && r !== 'fail' ? r.ref : null;
           const diff = ref != null ? Math.round((dealPerQ - ref) * 100) / 100 : null;
           return (
-            <div key={p._id} className="flex flex-wrap items-center justify-between gap-3 border border-gray-100 rounded-xl px-4 py-3 text-sm">
-              <div>
-                <p className="font-medium text-gray-900">{p.crop} · {p.quantityQuintals} q → {p.buyerName}</p>
-                <p className="text-xs text-gray-400">{new Date(p.createdAt).toLocaleDateString('en-IN')} · accepted at {inr(dealPerQ)}/q</p>
+            <StaggerItem key={p._id}>
+              <div className="flex flex-wrap items-center justify-between gap-3 border border-stone-100 rounded-xl px-4 py-3 text-sm">
+                <div>
+                  <p className="font-medium text-stone-900">{p.crop} · {p.quantityQuintals} q → {p.buyerName}</p>
+                  <p className="text-xs text-stone-400">{new Date(p.createdAt).toLocaleDateString('en-IN')} · accepted at {inr(dealPerQ)}/q</p>
+                </div>
+                <div className="text-right">
+                  {ref != null && diff != null ? (
+                    <>
+                      <p className={`font-semibold ${diff >= 0 ? 'text-emerald-700' : 'text-amber-700'}`}>
+                        {diff >= 0 ? '+' : '−'}{inr(Math.abs(diff))}/q vs reference ({inr(ref)}/q)
+                      </p>
+                      <p className="text-[10px] text-stone-400">reference = engine's best-mandi estimate{r && r !== 'fail' ? ` (${r.mandi})` : ''}</p>
+                    </>
+                  ) : (
+                    <p className="text-xs text-stone-400">reference unavailable right now</p>
+                  )}
+                </div>
               </div>
-              <div className="text-right">
-                {ref != null && diff != null ? (
-                  <>
-                    <p className={`font-semibold ${diff >= 0 ? 'text-emerald-700' : 'text-amber-700'}`}>
-                      {diff >= 0 ? '+' : '−'}{inr(Math.abs(diff))}/q vs reference ({inr(ref)}/q)
-                    </p>
-                    <p className="text-[10px] text-gray-400">reference = engine's best-mandi estimate{r && r !== 'fail' ? ` (${r.mandi})` : ''}</p>
-                  </>
-                ) : (
-                  <p className="text-xs text-gray-400">reference unavailable right now</p>
-                )}
-              </div>
-            </div>
+            </StaggerItem>
           );
         })}
-      </div>
-    </div>
+      </StaggerList>
+    </Card>
   );
 };
 
@@ -382,11 +452,17 @@ const TradePage = () => {
   const user = getDemoUser();
   const buyerView = isBuyerSide(user?.role);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
+  const { flowStep, setFlowStep, inFlow } = useFlow();
+
+  // Refs for auto-scrolling to sections in flow mode
+  const lotsRef = React.useRef<HTMLDivElement>(null);
+  const buyersRef = React.useRef<HTMLDivElement>(null);
+  const paymentsRef = React.useRef<HTMLDivElement>(null);
 
   const [lots, setLots] = useState<Lot[]>([]);
   const [buyers, setBuyers] = useState<Buyer[]>([]);
-  const [trustTiers, setTrustTiers] = useState<Record<string, { label: string; description: string }>>({});
   const [offers, setOffers] = useState<Offer[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [grievances, setGrievances] = useState<Grievance[]>([]);
@@ -396,6 +472,10 @@ const TradePage = () => {
   const [gLotId, setGLotId] = useState('');
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  // Skeletons only while a section genuinely has no data yet — actions that
+  // reload in the background never flash the whole page back to placeholders.
+  const showSkeleton = (has: boolean) => loading && !has;
 
   // Lot form
   const [showLotForm, setShowLotForm] = useState(false);
@@ -414,16 +494,40 @@ const TradePage = () => {
   // Decision→action handoff: /trade?prefill=1&crop=Onion&district=Nashik&quantity=10&mandi=...&net=...
   const [prefillNote, setPrefillNote] = useState('');
   // Decision continuity: the canonical selling context from the calculator.
-  const [ctx] = useState(() => getDecisionContext());
+  // When arriving via a cold prefill deep link (no prior session decision),
+  // the context is only written AFTER mount by the prefill effect below — so
+  // we seed it from the URL here to keep the header honest about the decision
+  // actually being executed (crop · qty · mandi · reference).
+  const [ctx] = useState<DecisionContext | null>(() => {
+    const fromStorage = getDecisionContext();
+    const pre = parsePrefillParams(new URLSearchParams(window.location.search));
+    if (pre.crop || pre.district || pre.quantity) {
+      return {
+        ...(fromStorage || {}),
+        crop: pre.crop || fromStorage?.crop || 'Soybean',
+        district: pre.district || fromStorage?.district || 'Pune',
+        quantity: pre.quantity || (fromStorage?.quantity ?? fromStorage?.quantityQuintals ?? 10),
+        quantityQuintals: pre.quantity || (fromStorage?.quantityQuintals ?? 10),
+        mandi: pre.mandi || fromStorage?.mandi || 'the best mandi',
+        net: pre.net > 0 ? pre.net : (fromStorage?.net ?? 0),
+        source: fromStorage?.source,
+      };
+    }
+    return fromStorage;
+  });
 
   // Offer form
   const [offerLot, setOfferLot] = useState<Lot | null>(null);
   const [offerBuyer, setOfferBuyer] = useState<Buyer | null>(null);
   const [offerPrice, setOfferPrice] = useState('');
+  // Buyer detail "flash card" — every click on a buyer answers something:
+  // with an active lot it selects the buyer; without one it opens this card.
+  const [buyerDetail, setBuyerDetail] = useState<Buyer | null>(null);
   const [cropFilter, setCropFilter] = useState('');
 
   const loadAll = async () => {
     try {
+      setLoading(true);
       // The backend picks the listing scope from the ?role= query param
       // (default 'farmer'). Buyer/fpo logins MUST send role=buyer or they see
       // an empty book and cannot accept/release anything.
@@ -441,15 +545,14 @@ const TradePage = () => {
       const paymentsData = await paymentsRes.json();
       const grievancesData = await grievancesRes.json();
       if (lotsData.success) setLots(lotsData.lots);
-      if (buyersData.success) {
-        setBuyers(buyersData.buyers);
-        setTrustTiers(buyersData.trustTiers || {});
-      }
+      if (buyersData.success) setBuyers(buyersData.buyers);
       if (offersData.success) setOffers(offersData.offers);
       if (paymentsData.success) setPayments(paymentsData.payments);
       if (grievancesData.success) setGrievances(grievancesData.grievances);
     } catch {
       setError('Could not reach the backend — check the API connection and try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -457,29 +560,46 @@ const TradePage = () => {
     loadAll();
     // One-time prefill from the net-realization decision.
     if (searchParams.get('prefill') === '1') {
-      const pCrop = searchParams.get('crop');
-      const pDistrict = searchParams.get('district');
-      const pQty = searchParams.get('quantity');
-      const pMandi = searchParams.get('mandi');
-      const pNet = searchParams.get('net');
-      if (pCrop) setCrop(pCrop);
-      if (pDistrict) setDistrict(pDistrict);
-      if (pQty && parseFloat(pQty) > 0) setQuantity(pQty);
-      if (pNet) setExpectedNet(pNet);
+      const pre = parsePrefillParams(searchParams);
+      if (pre.crop) setCrop(pre.crop);
+      if (pre.district) setDistrict(pre.district);
+      if (pre.quantity) setQuantity(String(pre.quantity));
+      if (pre.net > 0) setExpectedNet(String(pre.net));
       setShowLotForm(true);
-      setPrefillNote(`From your decision: sell ${pCrop || 'your crop'} at ${pMandi || 'the best mandi'} — estimated ${pNet ? `₹${Number(pNet).toLocaleString('en-IN')}/q net` : 'best net realization'}. Confirm the details and publish.`);
+      setPrefillNote(`From your decision: sell ${pre.crop || 'your crop'} at ${pre.mandi || 'the best mandi'} — estimated ${pre.net > 0 ? `₹${pre.net.toLocaleString('en-IN')}/q net` : 'best net realization'}. Confirm the details and publish.`);
       // Remember the recommended mandi for the decision header.
       setDecisionContext({
-        crop: pCrop || 'Soybean',
-        district: pDistrict || 'Pune',
-        quantity: Number(pQty) || 10,
-        mandi: pMandi || 'the best mandi',
-        net: Number(pNet) || 0,
+        crop: pre.crop || 'Soybean',
+        district: pre.district || 'Pune',
+        quantity: pre.quantity || 10,
+        quantityQuintals: pre.quantity || 10,
+        mandi: pre.mandi || 'the best mandi',
+        net: pre.net,
       });
       window.history.replaceState({}, '', '/trade');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ── Flow auto-focus: when in flow mode, scroll to the relevant section ──
+  useEffect(() => {
+    if (!inFlow) return;
+    // Small delay to let the page render
+    const timer = setTimeout(() => {
+      if (flowStep === 3) {
+        // Step 3 (Lot): auto-open the lot form and scroll to lots
+        setShowLotForm(true);
+        lotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (flowStep === 4) {
+        // Step 4 (Buyers): scroll to buyers section
+        buyersRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (flowStep === 5) {
+        // Step 5 (Payment): scroll to payment section
+        paymentsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [flowStep, inFlow]);
 
   const myQuantityQuintals = useMemo(() => {
     if (!offerLot) return 0;
@@ -516,6 +636,10 @@ const TradePage = () => {
         setDamagePct('');
         setAssayStatus('pending');
         loadAll();
+        // Auto-advance flow: lot created → move to buyers step
+        if (inFlow && flowStep === 3) {
+          setTimeout(() => setFlowStep(4), 800);
+        }
       } else {
         setError(data.error || 'Failed to create lot');
       }
@@ -541,6 +665,10 @@ const TradePage = () => {
         setOfferBuyer(null);
         setOfferPrice('');
         loadAll();
+        // Auto-advance flow: offer sent → move to payment step
+        if (inFlow && flowStep === 4) {
+          setTimeout(() => setFlowStep(5), 800);
+        }
       } else {
         setError(data.error || 'Failed to send offer');
       }
@@ -600,10 +728,8 @@ const TradePage = () => {
     }
   };
 
-  const openLots = lots.filter((l) => l.status === 'OPEN' || l.status === 'OFFERED');
-
-  // Decision state strip (continuity): DISCOVERING → … → COMPLETED, derived
-  // from existing transaction state — not a workflow engine, just a mirror.
+  // Transaction phase derived from existing state — drives whether the
+  // DecisionReceipt is shown (a RELEASED payment closes the journey).
   const decisionPhase = (() => {
     if (payments.some(p => p.status === 'RELEASED')) return 'COMPLETED';
     if (payments.some(p => p.status === 'HELD' || p.status === 'PENDING')) return 'DEAL ACCEPTED';
@@ -612,524 +738,801 @@ const TradePage = () => {
     if (lots.length > 0) return 'READY TO SELL';
     return ctx ? 'READY TO SELL' : 'DISCOVERING';
   })();
-  const PHASES = ['DISCOVERING', 'EVALUATING', 'READY TO SELL', 'BUYER FOUND', 'OFFER RECEIVED', 'DEAL ACCEPTED', 'COMPLETED'];
-  // BUYER FOUND: an offer lot has a selected buyer, or buyers exist for the context crop.
-  const buyerFound = offerBuyer != null || buyers.some(b => !ctx || b.crops.some(c => c.toLowerCase() === ctx.crop.toLowerCase()));
-  const phaseIdx = Math.max(PHASES.indexOf(decisionPhase), buyerFound ? 3 : 0);
-
   const releasedPayments = payments.filter(p => p.status === 'RELEASED');
   const showReceipt = decisionPhase === 'COMPLETED' && ctx && releasedPayments.length > 0;
 
+  const activeOfferCount = offers.filter(o => !['REJECTED', 'WITHDRAWN', 'EXPIRED'].includes(o.status)).length;
+
   return (
     <div className="p-6 lg:p-8 space-y-6">
-      {/* Decision context header — the SAME selling decision carried across pages */}
-      {ctx && (
-        <div className="card p-4 border-emerald-200 bg-emerald-50/60">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-[11px] uppercase tracking-wider text-emerald-700 font-semibold">Your current selling decision</p>
-              <p className="text-sm text-gray-800 mt-0.5">
-                <strong>{ctx.crop}</strong> · {ctx.quantity} q · {ctx.district} → <strong>{ctx.mandi}</strong>
-                {ctx.net > 0 && <> · est. net <strong>{inr(ctx.net)}/q</strong></>}
-                {ctx.source && <> · <span className="text-gray-400">{ctx.source === 'agmarknet_live' ? 'live prices' : 'cached prices'}</span></>}
-              </p>
+      <PageTransition>
+        {/* ── Decision context header — the SAME selling decision carried across pages ── */}
+        {ctx && (
+          <Card className="p-4 border-emerald-200 bg-emerald-50/60">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold flex items-center gap-1.5">
+                  <Target size={12} /> Your current selling decision
+                </p>
+                <p className="text-sm text-stone-800 mt-1 flex flex-wrap items-center gap-x-1.5">
+                  <strong>{ctx.crop}</strong> · {(ctx.quantity ?? ctx.quantityQuintals) ?? 0} q · {ctx.district}
+                  <ArrowRight size={12} className="text-stone-400" />
+                  <strong>{ctx.mandi}</strong>
+                  {ctx.net != null && ctx.net > 0 && <> · est. net <strong>{inr(ctx.net)}/q</strong></>}
+                  {ctx.source && <> · <span className="text-stone-400">{ctx.source === 'agmarknet_live' ? 'live prices' : 'cached prices'}</span></>}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <GhostButton className="text-xs" onClick={() => navigate('/net-realization')}>
+                  <Scale size={14} /> Review decision
+                </GhostButton>
+                <GhostButton className="text-xs" onClick={() => navigate('/fpo')}>
+                  <Users size={14} /> What if I pool?
+                </GhostButton>
+              </div>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <button className="btn-secondary text-xs" onClick={() => navigate('/net-realization')}>Review decision</button>
-              <button className="btn-secondary text-xs" onClick={() => navigate('/fpo')}>What if I pool?</button>
+
+            {/* Product journey indicator — SELL is the stage this screen executes */}
+            <div className="mt-3 flex items-center gap-1 overflow-x-auto pb-0.5">
+              {JOURNEY.map((step, i) => {
+                const active = i === JOURNEY.length - 1;
+                const done = i < JOURNEY.length - 1;
+                return (
+                  <React.Fragment key={step}>
+                    {i > 0 && <div className="flex-1 h-0.5 min-w-3 bg-emerald-300" />}
+                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${active ? 'bg-emerald-800 text-white shadow-sm' : done ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-400'}`}>
+                      {step}
+                    </span>
+                  </React.Fragment>
+                );
+              })}
             </div>
-          </div>
-          {/* Phase strip — existing transaction state, mirrored */}
-          <div className="mt-3 flex items-center gap-1">
-            {PHASES.map((ph, i) => {
-              const reached = i <= phaseIdx;
-              return (
-                <React.Fragment key={ph}>
-                  {i > 0 && <div className={`flex-1 h-0.5 ${reached ? 'bg-emerald-400' : 'bg-gray-200'}`} />}
-                  <div className="flex flex-col items-center">
-                    <div className={`w-2 h-2 rounded-full ${reached ? 'bg-emerald-500' : 'bg-gray-200'}`} />
-                    <span className={`text-[9px] mt-0.5 ${reached ? 'text-emerald-700 font-medium' : 'text-gray-400'}`}>{ph}</span>
-                  </div>
-                </React.Fragment>
-              );
-            })}
-          </div>
+
+          </Card>
+        )}
+
+        {/* ── Page header ── */}
+        <PageHeader
+          eyebrow={t('trade.eyebrow')}
+          title={t('trade.title')}
+          subtitle={buyerView
+            ? t('trade.subtitleBuyer')
+            : t('trade.subtitleFarmer')}
+        />
+
+        {/* ── Execution summary (real counts only) ── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 -mt-2 mb-6">
+          <StatCard label="Lots" value={lots.length} icon={Package} />
+          <StatCard label="Matched buyers" value={buyers.length} icon={Users} delay={0.05} />
+          <StatCard label="Active offers" value={activeOfferCount} icon={Send} delay={0.1} />
+          <StatCard label="Simulated payments" value={payments.length} icon={Wallet} delay={0.15} />
         </div>
-      )}
 
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Trade — Lots, Buyers &amp; Payments</h1>
-        <p className="text-gray-500 text-sm mt-1">
-          {buyerView
-            ? 'Buyer-side demo view: accept or reject inbound offers and release simulated funds.'
-            : 'Create a lot, pick a buyer you trust, and track the simulated sale end-to-end.'}
-        </p>
-      </div>
-
-      {prefillNote && (
-        <div className="card p-4 border-emerald-300 bg-emerald-50/70 text-sm text-emerald-900 flex items-start justify-between gap-3">
-          <span>🎯 {prefillNote}</span>
-          <button className="text-xs text-gray-400 hover:text-gray-600" onClick={() => setPrefillNote('')}>✕</button>
-        </div>
-      )}
-      {notice && <div className="card p-4 border-emerald-200 bg-emerald-50/60 text-sm text-emerald-800">{notice}</div>}
-      {error && <div className="card p-4 border-red-200 bg-red-50/60 text-sm text-red-600">{error}</div>}
-
-      {/* ── Lots ─────────────────────────────────────────────── */}
-      <div className="card p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-gray-900">My lots</h2>
-          {!buyerView && (
-            <button className="btn-primary text-sm" onClick={() => setShowLotForm((v) => !v)}>
-              {showLotForm ? 'Close' : '+ New lot'}
+        {/* ── Prefill banner ── */}
+        {prefillNote && (
+          <div className="card p-4 border-emerald-300 bg-emerald-50/70 text-sm text-emerald-900 flex items-start justify-between gap-3">
+            <span className="flex items-start gap-2">
+              <Target size={16} className="mt-0.5 shrink-0" />
+              {prefillNote}
+            </span>
+            <button
+              className="text-xs text-stone-400 hover:text-stone-600 shrink-0"
+              onClick={() => setPrefillNote('')}
+              aria-label="Dismiss prefill notice"
+            >
+              <X size={16} />
             </button>
-          )}
-        </div>
-
-        {showLotForm && !buyerView && (
-          <form onSubmit={createLot} className="mb-5 p-4 bg-gray-50 rounded-xl space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Crop</label>
-                <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
-                  {MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active').map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">District</label>
-                <select className="input-field" value={district} onChange={(e) => setDistrict(e.target.value)}>
-                  {REGIONS.map(region => {
-                    const regionDistricts = MAHARASHTRA_DISTRICTS.filter(d => d.region === region);
-                    return (
-                      <optgroup key={region} label={region}>
-                        {regionDistricts.map(d => (
-                          <option key={d.id} value={d.name}>{d.name}</option>
-                        ))}
-                      </optgroup>
-                    );
-                  })}
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Quantity</label>
-                <input className="input-field" type="number" min="0.1" step="0.1" value={quantity} onChange={(e) => setQuantity(e.target.value)} required placeholder="e.g. 10" />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Variety <span className="text-gray-400">(optional)</span></label>
-                <input className="input-field" value={variety} onChange={(e) => setVariety(e.target.value)} placeholder="e.g. JS-335" />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Unit</label>
-                <select className="input-field" value={unit} onChange={(e) => setUnit(e.target.value)}>
-                  <option value="quintals">quintals</option>
-                  <option value="kg">kg</option>
-                  <option value="tonnes">tonnes</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Harvest date <span className="text-gray-400">(optional)</span></label>
-                <input className="input-field" type="date" value={harvestDate} onChange={(e) => setHarvestDate(e.target.value)} />
-              </div>
-            </div>
-            {/* Quality details — collapsible to reduce form clutter */}
-            <details className="group">
-              <summary className="text-xs font-medium text-gray-500 cursor-pointer hover:text-gray-700 select-none">
-                Quality details <span className="text-gray-400 font-normal">(optional — helps buyers understand your lot)</span>
-              </summary>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Quality grade</label>
-                  <select className="input-field" value={grade} onChange={(e) => setGrade(e.target.value)}>
-                    {['Unassessed', 'A', 'B', 'C'].map((g) => <option key={g}>{g}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Size <span className="text-gray-400">(optional)</span></label>
-                  <input className="input-field" value={size} onChange={(e) => setSize(e.target.value)} placeholder="e.g. 40–50mm" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Moisture % <span className="text-gray-400">(optional)</span></label>
-                  <input className="input-field" type="number" min="0" max="100" step="0.1" value={moisturePct} onChange={(e) => setMoisturePct(e.target.value)} placeholder="e.g. 8" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Visible damage % <span className="text-gray-400">(optional)</span></label>
-                  <input className="input-field" type="number" min="0" max="100" step="0.1" value={damagePct} onChange={(e) => setDamagePct(e.target.value)} placeholder="e.g. 2" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Assay status</label>
-                  <select className="input-field" value={assayStatus} onChange={(e) => setAssayStatus(e.target.value)}>
-                    {['pending', 'in_progress', 'passed', 'failed'].map((s) => <option key={s}>{s}</option>)}
-                  </select>
-                </div>
-              </div>
-            </details>
-            <div>
-              <p className="text-[11px] text-gray-400 mb-2">Quality fields are structured only — Kisan360 does not grade produce by AI. Fields help buyers understand the lot.</p>
-              <button type="submit" className="btn-primary w-full sm:w-auto">Create lot</button>
-            </div>
-          </form>
-        )}
-
-        {expectedNet && (
-          <p className="text-xs text-emerald-700 mb-3">Target from your calculator decision: <strong>₹{Number(expectedNet).toLocaleString('en-IN')}/q net</strong> — price your offer at or above this to keep your expected realization.</p>
-        )}
-        {lots.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">No lots yet — create one to start selling.</p>
-        ) : (
-          <div className="space-y-2">
-            {lots.map((lot) => (
-              <div key={lot._id} className="flex flex-wrap items-center justify-between gap-3 border border-gray-100 rounded-xl px-4 py-3">
-                <div className="min-w-0">
-                  <p className="font-medium text-gray-900 text-sm">
-                    {lot.crop}{lot.variety ? ` · ${lot.variety}` : ''} — {lot.quantity} {lot.unit}
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    {lot.district || '—'} · grade {lot.grade || 'Unassessed'}
-                    {lot.moisturePct != null ? ` · moisture ${lot.moisturePct}%` : ''}
-                    {lot.damagePct != null ? ` · damage ${lot.damagePct}%` : ''}
-                    · assay {lot.assayStatus || 'pending'}
-                    · {new Date(lot.createdAt).toLocaleDateString('en-IN')}
-                  </p>
-                  <LotEconomics lot={lot} offers={offers} />
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className={`badge ${lot.status === 'OPEN' ? 'badge-green' : lot.status === 'CLOSED' ? 'badge-blue' : 'badge-yellow'}`}>
-                    {lot.status}
-                  </span>
-                  {!buyerView && (lot.status === 'OPEN' || lot.status === 'OFFERED') && (
-                    <>
-                      <button
-                        className="btn-secondary text-xs"
-                        onClick={() => { setOfferLot(lot); setOfferBuyer(null); setOfferPrice(''); }}
-                      >
-                        Send offer
-                      </button>
-                      <button
-                        className="btn-secondary text-xs text-red-600"
-                        onClick={() => act(`/lots/${lot._id}/withdraw`, 'Lot withdrawn.')}
-                      >
-                        Withdraw
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
           </div>
         )}
-      </div>
+        {notice && (
+          <div className="card p-4 border-emerald-200 bg-emerald-50/60 text-sm text-emerald-800 flex items-start gap-2">
+            <CheckCircle2 size={16} className="mt-0.5 shrink-0" />
+            {notice}
+          </div>
+        )}
+        {error && (
+          <div className="card p-4 border-red-200 bg-red-50/60 text-sm text-red-600 flex items-start gap-2">
+            <AlertCircle size={16} className="mt-0.5 shrink-0" />
+            {error}
+          </div>
+        )}
 
-      {/* ── Buyer matching with trust badges ─────────────────── */}
-      <div className="card p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 className="font-semibold text-gray-900">Matched buyers</h2>
-            <p className="text-xs text-gray-400 mt-0.5">Trust badges are simulated for the demo — production verifies FSSAI/GST registries.</p>
-            {!buyerView && !offerLot && lots.some(l => l.status === 'OPEN' || l.status === 'OFFERED') && (
-              <p className="text-xs text-emerald-700 mt-1">Pick "Send offer" on one of your lots — matching reasons then appear against that exact lot (crop · service area · quantity).</p>
+        {/* ── Lots ─────────────────────────────────────────────── */}
+        <div ref={lotsRef}>
+        <Card className="p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div>
+              <SectionLabel>{t('trade.yourLot')}</SectionLabel>
+              <h2 className="font-semibold text-stone-900 mt-0.5">{t('trade.myLots')}</h2>
+            </div>
+            {!buyerView && (
+              showLotForm ? (
+                <GhostButton className="text-sm" onClick={() => setShowLotForm(false)}>
+                  <X size={16} /> Close
+                </GhostButton>
+              ) : (
+                <PrimaryButton className="text-sm" onClick={() => setShowLotForm(true)} icon={Plus}>
+                  {t('trade.newLot')}
+                </PrimaryButton>
+              )
             )}
           </div>
-          <select className="input-field w-auto text-sm" value={cropFilter} onChange={(e) => setCropFilter(e.target.value)}>
-            <option value="">All crops</option>
-            {MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active').map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
-          </select>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {buyers.map((b) => {
-            const tier = TIER_STYLES[b.trustTier] || TIER_STYLES.SELF_DECLARED;
-            const tooSmall = offerLot ? myQuantityQuintals < b.minQuantityQuintals : false;
-            // Explainable matching — derived from the buyer record's own fields,
-            // never an opaque score.
-            const reasons: string[] = [];
-            if (offerLot) {
-              if (b.crops.some(c => c.toLowerCase() === offerLot.crop.toLowerCase())) reasons.push(`buys ${offerLot.crop}`);
-              if (b.districts.some(d => d.toLowerCase() === (offerLot.district || '').toLowerCase())) reasons.push(`serves ${offerLot.district}`);
-              reasons.push(`accepts ${b.minQuantityQuintals} q+ lots`);
-            }
-            return (
-              <div key={b.id} className={`border rounded-xl p-4 transition-colors ${offerBuyer?.id === b.id ? 'border-emerald-400 bg-emerald-50/40' : 'border-gray-200'}`}>
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="font-medium text-gray-900 text-sm">{b.name}</p>
-                    <p className="text-xs text-gray-400">{b.category} · min {b.minQuantityQuintals} q</p>
-                  </div>
-                  <span className={`badge ${tier.cls} shrink-0`} title={b.tierDescription}>
-                    {tier.icon} {b.tierLabel}
-                  </span>
+          {showLotForm && !buyerView && (
+            <form onSubmit={createLot} className="mb-5 p-4 bg-stone-50 rounded-2xl space-y-3 border border-stone-100">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-stone-500 mb-1">Crop</label>
+                  <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
+                    {MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active' || c.marketCoverage === 'limited').map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
+                  </select>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">{b.description}</p>
-                {reasons.length > 0 && (
-                  <div className="text-[11px] text-emerald-700 mt-1.5">
-                    <span className="font-medium">Matched because:</span>
-                    <ul className="mt-0.5 space-y-0.5">
-                      {reasons.map((r, i) => (<li key={i}>✓ {r}</li>))}
-                    </ul>
-                  </div>
-                )}
-                <p className="text-[11px] text-gray-400 mt-1.5">
-                  Serves: {b.districts.join(', ')} · crops: {b.crops.join(', ')} · {b.paymentTermsLabel}
-                </p>
-                {!buyerView && offerLot && (
-                  <button
-                    className={`mt-3 text-xs font-medium ${tooSmall ? 'text-gray-300 cursor-not-allowed' : 'text-emerald-600 hover:text-emerald-700'}`}
-                    disabled={tooSmall}
-                    onClick={() => {
-                      setOfferBuyer(b);
-                      // Phase 9 — prefill with the decision's engine reference so
-                      // the offer composer starts from the calculator, never a
-                      // guess. The farmer can still edit it down if they choose.
-                      setOfferPrice(ctx && ctx.net > 0 ? String(Math.round(ctx.net)) : '');
-                    }}
-                  >
-                    {tooSmall ? `Below ${b.minQuantityQuintals} q minimum` : `→ Offer to ${b.name}`}
-                  </button>
-                )}
+                <div>
+                  <label className="block text-xs font-medium text-stone-500 mb-1">District</label>
+                  <select className="input-field" value={district} onChange={(e) => setDistrict(e.target.value)}>
+                    {REGIONS.map(region => {
+                      const regionDistricts = MAHARASHTRA_DISTRICTS.filter(d => d.region === region);
+                      return (
+                        <optgroup key={region} label={region}>
+                          {regionDistricts.map(d => (
+                            <option key={d.id} value={d.name}>{d.name}</option>
+                          ))}
+                        </optgroup>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-500 mb-1">Quantity</label>
+                  <input className="input-field" type="number" min="0.1" step="0.1" value={quantity} onChange={(e) => setQuantity(e.target.value)} required placeholder="e.g. 10" />
+                </div>
               </div>
-            );
-          })}
-          {buyers.length === 0 && (
-            <p className="text-sm text-gray-400 py-4 text-center col-span-2">No buyers match this crop.</p>
-          )}
-        </div>
-      </div>
-
-      {/* ── Offer composer ───────────────────────────────────── */}
-      {offerLot && (
-        <form onSubmit={sendOffer} className="card p-5 border-emerald-200">
-          <h2 className="font-semibold text-gray-900 mb-3">
-            Offer {offerLot.crop} ({offerLot.quantity} {offerLot.unit})
-            {offerBuyer ? ` to ${offerBuyer.name}` : ' — pick a buyer above'}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Your price (₹/quintal)</label>
-              <input className="input-field" type="number" min="1" step="1" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)} required />
-            </div>
-            <p className="text-sm text-gray-500">
-              {offerPrice && Number(offerPrice) > 0
-                ? <>Lot total: <span className="font-semibold text-gray-800">{inr(Number(offerPrice) * myQuantityQuintals)}</span> ({myQuantityQuintals} q)</>
-                : `${myQuantityQuintals} q in this lot`}
-            </p>
-            <button type="submit" className="btn-primary" disabled={!offerBuyer}>Send offer</button>
-          </div>
-        </form>
-      )}
-
-      {/* ── Offers ───────────────────────────────────────────── */}
-      <div className="card p-5">
-        <h2 className="font-semibold text-gray-900 mb-4">{buyerView ? 'Inbound offers' : 'My offers'}</h2>
-        {offers.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">No offers yet.</p>
-        ) : (
-          <div className="space-y-3">
-            {offers.map((o) => (
-              <div key={o._id} className="border border-gray-100 rounded-xl px-4 py-3">
-                <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-stone-500 mb-1">Variety <span className="text-stone-400">(optional)</span></label>
+                  <input className="input-field" value={variety} onChange={(e) => setVariety(e.target.value)} placeholder="e.g. JS-335" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-500 mb-1">Unit</label>
+                  <select className="input-field" value={unit} onChange={(e) => setUnit(e.target.value)}>
+                    <option value="quintals">quintals</option>
+                    <option value="kg">kg</option>
+                    <option value="tonnes">tonnes</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-500 mb-1">Harvest date <span className="text-stone-400">(optional)</span></label>
+                  <input className="input-field" type="date" value={harvestDate} onChange={(e) => setHarvestDate(e.target.value)} />
+                </div>
+              </div>
+              {/* Quality details — collapsible to reduce form clutter */}
+              <details className="group">
+                <summary className="text-xs font-medium text-stone-500 cursor-pointer hover:text-stone-700 select-none">
+                  Quality details <span className="text-stone-400 font-normal">(your estimates — helps buyers understand your lot)</span>
+                </summary>
+                <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50/50 px-3 py-2">
+                  <p className="text-[11px] text-amber-700">These are your assessments, not independent verification. Kisan360 does not grade produce. Buyers see your declared values.</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      {o.crop} · {o.quantityQuintals} q → {o.buyerName}
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      {inr(o.offeredPricePerQuintal)}/q · total {inr(o.amount)} · {new Date(o.createdAt).toLocaleDateString('en-IN')}
-                    </p>
+                    <label className="block text-xs font-medium text-stone-500 mb-1">Grade (your assessment)</label>
+                    <select className="input-field" value={grade} onChange={(e) => setGrade(e.target.value)}>
+                      {['Unassessed', 'A', 'B', 'C'].map((g) => <option key={g}>{g}</option>)}
+                    </select>
+                    <p className="text-[10px] text-stone-400 mt-0.5">Declared by you — not independently verified</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`badge ${o.status === 'ACCEPTED' ? 'badge-green' : o.status === 'SENT' ? 'badge-yellow' : 'badge-red'}`}>{o.status}</span>
-                    {buyerView && o.status === 'SENT' && (
-                      <>
-                        <button className="btn-primary text-xs" onClick={() => act(`/offers/${o._id}/accept`, 'Offer accepted — payment held (simulated escrow).')}>
-                          Accept
-                        </button>
-                        <button className="btn-secondary text-xs" onClick={() => act(`/offers/${o._id}/reject`, 'Offer rejected.')}>
-                          Reject
-                        </button>
-                      </>
-                    )}
-                    {!buyerView && o.status === 'SENT' && (
-                      <button className="btn-secondary text-xs" onClick={() => act(`/offers/${o._id}/withdraw`, 'Offer withdrawn.')}>
-                        Withdraw
-                      </button>
-                    )}
+                  <div>
+                    <label className="block text-xs font-medium text-stone-500 mb-1">Size <span className="text-stone-400">(your estimate)</span></label>
+                    <input className="input-field" value={size} onChange={(e) => setSize(e.target.value)} placeholder="e.g. 40–50mm" />
+                    <p className="text-[10px] text-stone-400 mt-0.5">Declared by you — not measured by Kisan360</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-stone-500 mb-1">Moisture % <span className="text-stone-400">(your estimate)</span></label>
+                    <input className="input-field" type="number" min="0" max="100" step="0.1" value={moisturePct} onChange={(e) => setMoisturePct(e.target.value)} placeholder="e.g. 8" />
+                    <p className="text-[10px] text-stone-400 mt-0.5">Declared by you — not lab-tested</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-stone-500 mb-1">Visible damage % <span className="text-stone-400">(your estimate)</span></label>
+                    <input className="input-field" type="number" min="0" max="100" step="0.1" value={damagePct} onChange={(e) => setDamagePct(e.target.value)} placeholder="e.g. 2" />
+                    <p className="text-[10px] text-stone-400 mt-0.5">Declared by you — visual inspection only</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-stone-500 mb-1">Lab verification status</label>
+                    <select className="input-field" value={assayStatus} onChange={(e) => setAssayStatus(e.target.value)}>
+                      {['pending', 'in_progress', 'passed', 'failed'].map((s) => <option key={s}>{s}</option>)}
+                    </select>
+                    <p className="text-[10px] text-stone-400 mt-0.5">Lab testing available in production</p>
                   </div>
                 </div>
-                <OfferBenchmark offer={o} lot={lots.find(l => l._id === String(o.lotId))} buyer={buyers.find(b => b.id === o.buyerId)} />
-                {/* Offer mini-timeline */}
-                {o.history && o.history.length > 0 && (
-                  <p className="text-[11px] text-gray-400 mt-2">
-                    {o.history.map((h, i) => (
-                      <span key={i}>{i > 0 && ' → '}{h.status}{h.at ? ` (${new Date(h.at).toLocaleDateString('en-IN')})` : ''}</span>
-                    ))}
-                  </p>
-                )}
+              </details>
+              <div>
+                <PrimaryButton type="submit" icon={Package}>Create lot</PrimaryButton>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </form>
+          )}
 
-      {/* ── Payments with Pending → Held → Released timeline ── */}
-      <div className="card p-5">
-        <div className="flex items-center justify-between mb-1">
-          <h2 className="font-semibold text-gray-900">Payments</h2>
-          <span className="badge badge-yellow">simulated — no real money moves</span>
-        </div>
-        <p className="text-xs text-gray-400 mb-4">Escrow status timeline per the HLD: Pending → Held → Released.</p>
-        {payments.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">No payments yet — accept an offer to create one.</p>
-        ) : (
-          <div className="space-y-3">
-            {payments.map((p) => {
-              const idx = PAYMENT_STEPS.indexOf(p.status);
-              const cancelled = p.status === 'CANCELLED';
-              return (
-                <div key={p._id} className="border border-gray-100 rounded-xl px-4 py-4">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {p.crop} → {p.buyerName} · <span className="font-semibold text-emerald-700">{inr(p.amount)}</span>
+          {expectedNet && (
+            <p className="text-xs text-emerald-700 mb-3 flex items-center gap-1.5">
+              <Target size={12} className="shrink-0" /> Target from your calculator decision: <strong>₹{Number(expectedNet).toLocaleString('en-IN')}/q net</strong> — price your offer at or above this to keep your expected realization.
+            </p>
+          )}
+          {showSkeleton(lots.length > 0) ? (
+            <SkeletonLines rows={3} />
+          ) : lots.length === 0 ? (
+            <EmptyState
+              icon={Package}
+              title={t('trade.noLots')}
+              description={t('trade.noLotsDesc')}
+              action={!buyerView ? <PrimaryButton className="text-sm" onClick={() => setShowLotForm(true)} icon={Plus}>{t('trade.createFirstLot')}</PrimaryButton> : undefined}
+            />
+          ) : (
+            <StaggerList className="space-y-2">
+              {lots.map((lot) => (
+                <StaggerItem key={lot._id}>
+                  <div className="flex flex-wrap items-center justify-between gap-3 border border-stone-100 rounded-xl px-4 py-3 hover:border-stone-200 transition-colors">
+                    <div className="min-w-0">
+                      <p className="font-medium text-stone-900 text-sm flex items-center gap-1.5">
+                        <CropIcon cropName={lot.crop} size={14} className="text-emerald-600" />
+                        {lot.crop}{lot.variety ? ` · ${lot.variety}` : ''} — {lot.quantity} {lot.unit}
                       </p>
-                      <p className="text-xs text-gray-400">{new Date(p.createdAt).toLocaleString('en-IN')}</p>
+                      <p className="text-xs text-stone-400 mt-0.5">
+                        {lot.district || '—'} · grade {lot.grade || 'Unassessed'} (declared)
+                        {lot.moisturePct != null ? ` · moisture ${lot.moisturePct}% (declared)` : ''}
+                        {lot.damagePct != null ? ` · damage ${lot.damagePct}% (declared)` : ''}
+                        · assay {lot.assayStatus || 'pending'}
+                        · {new Date(lot.createdAt).toLocaleDateString('en-IN')}
+                      </p>
+                      <LotEconomics lot={lot} offers={offers} />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`badge ${p.status === 'RELEASED' ? 'badge-green' : cancelled ? 'badge-red' : 'badge-yellow'}`}>{p.status}</span>
-                      {buyerView && p.status === 'HELD' && (
-                        <button className="btn-primary text-xs" onClick={() => act(`/payments/${p._id}/release`, 'Funds released to the farmer (simulated).')}>
-                          Release funds
-                        </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Chip color={lot.status === 'OPEN' ? 'emerald' : lot.status === 'CLOSED' ? 'sky' : 'amber'}>{lot.status}</Chip>
+                      {!buyerView && (lot.status === 'OPEN' || lot.status === 'OFFERED') && (
+                        <>
+                          <GhostButton
+                            className="text-xs"
+                            onClick={() => { setOfferLot(lot); setOfferBuyer(null); setOfferPrice(''); }}
+                          >
+                            <Send size={14} /> Send offer
+                          </GhostButton>
+                          <GhostButton
+                            className="text-xs text-red-600 hover:bg-red-50"
+                            onClick={() => act(`/lots/${lot._id}/withdraw`, 'Lot withdrawn.')}
+                          >
+                            <AlertTriangle size={14} /> Withdraw
+                          </GhostButton>
+                        </>
                       )}
                     </div>
                   </div>
-                  {/* Timeline */}
-                  <div className="mt-3 flex items-center gap-1">
-                    {PAYMENT_STEPS.map((step, i) => {
-                      const reached = !cancelled && idx >= i;
-                      return (
-                        <React.Fragment key={step}>
-                          {i > 0 && <div className={`flex-1 h-0.5 ${reached ? 'bg-emerald-400' : 'bg-gray-200'}`} />}
-                          <div className="flex flex-col items-center">
-                            <div className={`w-3 h-3 rounded-full ${reached ? 'bg-emerald-500' : 'bg-gray-200'}`} />
-                            <span className={`text-[10px] mt-1 ${reached ? 'text-emerald-700 font-medium' : 'text-gray-400'}`}>{step}</span>
-                          </div>
-                        </React.Fragment>
-                      );
-                    })}
-                    {cancelled && <span className="ml-2 text-[11px] text-red-500 font-medium">cancelled</span>}
-                  </div>
-                  {p.status === 'RELEASED' && <PaymentOutcome payment={p} lot={lots.find(l => l._id === String(p.lotId))} />}
-                  {p.history && p.history.length > 0 && (
-                    <ul className="mt-3 space-y-0.5">
-                      {p.history.map((h, i) => (
-                        <li key={i} className="text-[11px] text-gray-400">
-                          {h.to} · {new Date(h.at).toLocaleString('en-IN')}{h.note ? ` — ${h.note}` : ''}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {!buyerView && showReceipt && <DecisionReceipt ctx={ctx!} payments={releasedPayments} lots={lots} />}
-      {!buyerView && <DecisionHistory payments={payments} lots={lots} />}
-
-      {/* ── Help & grievances (HLD P1: Raise → Open → Under Review → Resolved) ── */}
-      <div className="card p-5">
-        <div className="flex items-center justify-between mb-1">
-          <h2 className="font-semibold text-gray-900">Help &amp; Grievances</h2>
-          {!buyerView && (
-            <button className="btn-secondary text-sm" onClick={() => setShowGrievanceForm((v) => !v)}>
-              {showGrievanceForm ? 'Close' : 'Raise an issue'}
-            </button>
+                </StaggerItem>
+              ))}
+            </StaggerList>
           )}
+        </Card>
         </div>
-        <p className="text-xs text-gray-400 mb-4">Payment delay, quality dispute or a no-show buyer? Raise it and track it here.</p>
 
-        {showGrievanceForm && !buyerView && (
-          <form onSubmit={raiseGrievance} className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5 p-4 bg-gray-50 rounded-xl">
+        {/* ── Buyer matching with trust badges ─────────────────── */}
+        <div ref={buyersRef}>
+        <Card className="p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Issue type</label>
-              <select className="input-field" value={gCategory} onChange={(e) => setGCategory(e.target.value)}>
-                {GRIEVANCE_CATEGORIES.map((c) => <option key={c}>{c.replace(/_/g, ' ')}</option>)}
-              </select>
+              <SectionLabel>{t('trade.buyers')}</SectionLabel>
+              <h2 className="font-semibold text-stone-900 mt-0.5">{t('trade.matchedBuyers')}</h2>
+              <p className="text-xs text-stone-400 mt-0.5">Trust badges are simulated for the demo — production verifies FSSAI/GST registries.</p>
+              {!buyerView && !offerLot && lots.some(l => l.status === 'OPEN' || l.status === 'OFFERED') && (
+                <p className="text-xs text-emerald-700 mt-1">Pick "Send offer" on one of your lots — matching reasons then appear against that exact lot (crop · service area · quantity).</p>
+              )}
             </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Related lot (optional)</label>
-              <select className="input-field" value={gLotId} onChange={(e) => setGLotId(e.target.value)}>
-                <option value="">None</option>
-                {lots.map((l) => <option key={l._id} value={l._id}>{l.crop} · {l.quantity} {l.unit} · {l.status}</option>)}
-              </select>
+            <select className="input-field w-auto text-sm" value={cropFilter} onChange={(e) => setCropFilter(e.target.value)} aria-label="Filter buyers by crop">
+              <option value="">{t('trade.allCrops')}</option>
+              {MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active' || c.marketCoverage === 'limited').map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
+            </select>
+          </div>
+
+          {showSkeleton(buyers.length > 0) ? (
+            <SkeletonLines rows={2} />
+          ) : buyers.length === 0 ? (
+            <EmptyState
+              icon={Users}
+              title={t('trade.noBuyers')}
+              description={t('trade.noBuyersDesc')}
+            />
+          ) : (
+            <StaggerList className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {buyers.map((b) => {
+                const tier = TIER_CLS[b.trustTier] || TIER_CLS.SELF_DECLARED;
+                const TierIcon = TIER_ICONS[b.trustTier] || AlertTriangle;
+                const tooSmall = offerLot ? myQuantityQuintals < b.minQuantityQuintals : false;
+                // Explainable matching — derived from the buyer record's own fields,
+                // never an opaque score.
+                const reasons: string[] = [];
+                if (offerLot) {
+                  if (b.crops.some(c => c.toLowerCase() === offerLot.crop.toLowerCase())) reasons.push(`buys ${offerLot.crop}`);
+                  if (b.districts.some(d => d.toLowerCase() === (offerLot.district || '').toLowerCase())) reasons.push(`serves ${offerLot.district}`);
+                  reasons.push(`accepts ${b.minQuantityQuintals} q+ lots`);
+                }
+                const selected = offerBuyer?.id === b.id;
+                return (
+                  <StaggerItem key={b.id}>
+                    <div
+                      className={`h-full border rounded-xl p-4 transition-all cursor-pointer ${selected ? 'border-emerald-400 ring-2 ring-emerald-100 bg-emerald-50/40' : 'border-stone-200 hover:border-stone-300 hover:shadow-sm'}`}
+                      onClick={() => {
+                        if (buyerView) return;
+                        // No active lot → a click answers "who is this buyer?"
+                        // (detail flash card) instead of doing nothing.
+                        if (!offerLot) { setBuyerDetail(b); return; }
+                        setOfferBuyer(b);
+                        const target = Number(expectedNet) > 0
+                          ? Number(expectedNet)
+                          : (ctx && ctx.net != null && ctx.net > 0 ? ctx.net : 0);
+                        setOfferPrice(target > 0 ? String(Math.round(target)) : '');
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Select buyer ${b.name}`}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click(); } }}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="font-medium text-stone-900 text-sm">{b.name}</p>
+                          <p className="text-xs text-stone-400">{b.category} · min {b.minQuantityQuintals} q</p>
+                        </div>
+                        <span className="flex items-center gap-1 shrink-0">
+                          <span className={`badge ${tier} inline-flex items-center gap-1.5`} title={b.tierDescription}>
+                            <TierIcon size={12} /> {b.tierLabel}
+                          </span>
+                          <button
+                            className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
+                            aria-label={`More info about ${b.name}`}
+                            onClick={(e) => { e.stopPropagation(); setBuyerDetail(b); }}
+                          >
+                            <Info size={14} />
+                          </button>
+                        </span>
+                      </div>
+                      <p className="text-xs text-stone-500 mt-2">{b.description}</p>
+                      {reasons.length > 0 && (
+                        <div className="text-[11px] text-emerald-700 mt-1.5">
+                          <span className="font-medium">Matched because:</span>
+                          <ul className="mt-0.5 space-y-0.5">
+                            {reasons.map((r, i) => (
+                              <li key={i} className="flex items-center gap-1">
+                                <Check size={11} className="text-emerald-600 shrink-0" /> {r}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      <p className="text-[11px] text-stone-400 mt-1.5 flex items-start gap-1">
+                        <MapPin size={11} className="mt-0.5 shrink-0" />
+                        <span>Serves: {b.districts.join(', ')} · crops: {b.crops.join(', ')} · {b.paymentTermsLabel}</span>
+                      </p>
+                      {!buyerView && offerLot && (
+                        <button
+                          className={`mt-3 inline-flex items-center gap-1.5 text-xs font-medium ${tooSmall ? 'text-stone-300 cursor-not-allowed' : 'text-emerald-600 hover:text-emerald-700'}`}
+                          disabled={tooSmall}
+                          onClick={() => {
+                            setOfferBuyer(b);
+                            // Phase 9 — prefill with the decision's engine reference so
+                            // the offer composer starts from the calculator, never a
+                            // guess. The farmer can still edit it down if they choose.
+                            // expectedNet (the URL's net target) wins; ctx.net is the
+                            // session fallback.
+                            const target = Number(expectedNet) > 0
+                              ? Number(expectedNet)
+                              : (ctx && ctx.net != null && ctx.net > 0 ? ctx.net : 0);
+                            setOfferPrice(target > 0 ? String(Math.round(target)) : '');
+                          }}
+                        >
+                          {tooSmall ? `Below ${b.minQuantityQuintals} q minimum` : (<><ArrowRight size={12} /> Offer to {b.name}</>)}
+                        </button>
+                      )}
+                    </div>
+                  </StaggerItem>
+                );
+              })}
+            </StaggerList>
+          )}
+        </Card>
+
+        {/* ── Offer composer ───────────────────────────────────── */}
+        {offerLot && (
+          <form onSubmit={sendOffer} className="card p-5 border-emerald-200">
+            <SectionLabel>{t('trade.offerSection')}</SectionLabel>
+            <h2 className="font-semibold text-stone-900 mt-0.5 mb-3">
+              Offer {offerLot.crop} ({offerLot.quantity} {offerLot.unit})
+              {offerBuyer ? ` to ${offerBuyer.name}` : ' — pick a buyer above'}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+              <div>
+                <label className="block text-xs font-medium text-stone-500 mb-1">Your price (₹/quintal)</label>
+                <input className="input-field" type="number" min="1" step="1" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)} required aria-label="Offer price per quintal" />
+              </div>
+              <p className="text-sm text-stone-500">
+                {offerPrice && Number(offerPrice) > 0
+                  ? <>Lot total: <span className="font-semibold text-stone-800">{inr(Number(offerPrice) * myQuantityQuintals)}</span> ({myQuantityQuintals} q)</>
+                  : `${myQuantityQuintals} q in this lot`}
+              </p>
+              <PrimaryButton type="submit" icon={Send} disabled={!offerBuyer}>Send offer</PrimaryButton>
             </div>
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-gray-500 mb-1">What happened?</label>
-              <input className="input-field" value={gDescription} onChange={(e) => setGDescription(e.target.value)} placeholder="Describe the issue in a sentence" required />
-            </div>
-            <div className="sm:col-span-3">
-              <p className="text-[11px] text-gray-400 mb-2">This is a Kisan360 grievance workflow for demo purposes — not a direct government complaint platform.</p>
-              <button type="submit" className="btn-primary w-full sm:w-auto">Submit grievance</button>
-            </div>
+            {ctx && ctx.net != null && ctx.net > 0 && (
+              <p className="text-[11px] text-stone-400 mt-2">Engine benchmark from your decision: est. {inr(ctx.net)}/q net at {ctx.mandi} — an observation, not a guaranteed price.</p>
+            )}
           </form>
         )}
 
-        {grievances.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">No grievances — nothing outstanding.</p>
-        ) : (
-          <div className="space-y-3">
-            {grievances.map((g) => {
-              const idx = GRIEVANCE_STEPS.indexOf(g.status);
-              const done = g.status === 'RESOLVED' || g.status === 'REJECTED';
-              return (
-                <div key={g._id} className="border border-gray-100 rounded-xl px-4 py-4">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-900">{g.category.replace(/_/g, ' ')}</p>
-                      <p className="text-xs text-gray-500 truncate">{g.description}</p>
+        {/* ── Offers ───────────────────────────────────────────── */}
+        <Card className="p-5">
+          <div className="mb-4">
+            <SectionLabel>{t('trade.offerStatus')}</SectionLabel>
+            <h2 className="font-semibold text-stone-900 mt-0.5">{buyerView ? t('trade.inboundOffers') : t('trade.myOffers')}</h2>
+          </div>
+          {showSkeleton(offers.length > 0) ? (
+            <SkeletonLines rows={2} />
+          ) : offers.length === 0 ? (
+            <EmptyState icon={Send} title={t('trade.noOffers')} description={t('trade.noOffersDesc')} />
+          ) : (
+            <StaggerList className="space-y-3">
+              {offers.map((o) => (
+                <StaggerItem key={o._id}>
+                  <div className="border border-stone-100 rounded-xl px-4 py-3 hover:border-stone-200 transition-colors">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-medium text-stone-900">
+                          {o.crop} · {o.quantityQuintals} q → {o.buyerName}
+                        </p>
+                        <p className="text-xs text-stone-400">
+                          {inr(o.offeredPricePerQuintal)}/q · total {inr(o.amount)} · {new Date(o.createdAt).toLocaleDateString('en-IN')}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Chip color={o.status === 'ACCEPTED' ? 'emerald' : o.status === 'SENT' ? 'amber' : o.status === 'WITHDRAWN' ? 'stone' : 'red'}>{o.status}</Chip>
+                        {buyerView && o.status === 'SENT' && (
+                          <>
+                            <PrimaryButton className="text-xs !px-3 !py-1.5" icon={Check} onClick={() => act(`/offers/${o._id}/accept`, 'Offer accepted — payment held (simulated escrow).')}>
+                              Accept
+                            </PrimaryButton>
+                            <GhostButton className="text-xs !px-3 !py-1.5" onClick={() => act(`/offers/${o._id}/reject`, 'Offer rejected.')}>
+                              Reject
+                            </GhostButton>
+                          </>
+                        )}
+                        {!buyerView && o.status === 'SENT' && (
+                          <GhostButton className="text-xs !px-3 !py-1.5" onClick={() => act(`/offers/${o._id}/withdraw`, 'Offer withdrawn.')}>
+                            <X size={14} /> Withdraw
+                          </GhostButton>
+                        )}
+                      </div>
                     </div>
-                    <span className={`badge ${g.status === 'RESOLVED' ? 'badge-green' : g.status === 'REJECTED' ? 'badge-red' : 'badge-yellow'}`}>{g.status.replace(/_/g, ' ')}</span>
+                    <OfferBenchmark offer={o} lot={lots.find(l => l._id === String(o.lotId))} buyer={buyers.find(b => b.id === o.buyerId)} />
+                    {/* Offer mini-timeline */}
+                    {o.history && o.history.length > 0 && (
+                      <p className="text-[11px] text-stone-400 mt-2">
+                        {o.history.map((h, i) => (
+                          <span key={i}>{i > 0 && ' → '}{h.status}{h.at ? ` (${new Date(h.at).toLocaleDateString('en-IN')})` : ''}</span>
+                        ))}
+                      </p>
+                    )}
                   </div>
-                  {!done && (
-                    <div className="mt-3 flex items-center gap-1">
-                      {GRIEVANCE_STEPS.map((step, i) => {
-                        const reached = idx >= i;
-                        return (
-                          <React.Fragment key={step}>
-                            {i > 0 && <div className={`flex-1 h-0.5 ${reached ? 'bg-emerald-400' : 'bg-gray-200'}`} />}
-                            <div className="flex flex-col items-center">
-                              <div className={`w-3 h-3 rounded-full ${reached ? 'bg-emerald-500' : 'bg-gray-200'}`} />
-                              <span className={`text-[10px] mt-1 ${reached ? 'text-emerald-700 font-medium' : 'text-gray-400'}`}>{step.replace(/_/g, ' ')}</span>
-                            </div>
-                          </React.Fragment>
-                        );
-                      })}
+                </StaggerItem>
+              ))}
+            </StaggerList>
+          )}
+        </Card>
+        </div>
+
+        {/* ── Payment Timeline — 7-step journey from lot to money ── */}
+        <div ref={paymentsRef}>
+        {!buyerView ? (
+          <PaymentTimeline
+            currentStep={payments.some(p => p.status === 'RELEASED') ? 7
+              : payments.some(p => p.status === 'HELD') ? 6
+              : payments.some(p => p.status === 'PENDING') ? 5
+              : offers.some(o => o.status === 'ACCEPTED') ? 4
+              : offers.length > 0 ? 3
+              : lots.length > 0 ? 2
+              : 1}
+            onAdvance={() => {
+              // Single-device demo ladder: no escrow yet → simulate buyer
+              // acceptance (offer SENT → ACCEPTED, payment HELD); escrow held →
+              // simulate settlement (HELD → RELEASED = the cash moment).
+              const held = payments.find(p => p.status === 'HELD');
+              if (held) {
+                act(`/payments/${held._id}/simulate-release`, 'Funds released — the farmer has the cash (simulated).');
+              } else if (offers.some(o => o.status === 'SENT')) {
+                act('/payments/simulate/accept-latest', 'Buyer accepted your offer — funds held in escrow (simulated).');
+              }
+            }}
+            onFail={() => {
+              // Demo control: buyer never releases → payment CANCELLED →
+              // farmer raises a grievance for authority handling.
+              const held = payments.find(p => p.status === 'HELD');
+              if (held) act(`/payments/${held._id}/simulate-failure`, 'Payment cancelled — buyer did not pay. Raise an issue below; the authority workflow takes over.');
+            }}
+            amount={releasedPayments.length > 0 ? releasedPayments.reduce((sum, p) => sum + (p.amount || 0), 0) : undefined}
+            farmerName={user?.displayName}
+          />
+        ) : (
+        /* ── Buyer view: Payments with release controls ── */
+        <Card className="p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+            <div>
+              <SectionLabel>{t('trade.paymentStatus')}</SectionLabel>
+              <h2 className="font-semibold text-stone-900 mt-0.5">Payments</h2>
+            </div>
+            <Chip color="amber"><Banknote size={11} /> SIMULATED — NO REAL MONEY MOVES</Chip>
+          </div>
+          <p className="text-xs text-stone-400 mb-4">Escrow status timeline per the HLD: Pending → Held → Released. Simulated escrow only.</p>
+          {showSkeleton(payments.length > 0) ? (
+            <SkeletonLines rows={2} />
+          ) : payments.length === 0 ? (
+            <EmptyState icon={Wallet} title={t('trade.noPayments')} description={t('trade.acceptOffer')} />
+          ) : (
+            <StaggerList className="space-y-3">
+              {payments.map((p) => {
+                const idx = PAYMENT_STEPS.indexOf(p.status);
+                const cancelled = p.status === 'CANCELLED';
+                return (
+                  <StaggerItem key={p._id}>
+                    <div className="border border-stone-100 rounded-xl px-4 py-4 hover:border-stone-200 transition-colors">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-medium text-stone-900 flex items-center gap-1.5">
+                            <Wallet size={14} className="text-emerald-600 shrink-0" />
+                            {p.crop} → {p.buyerName} · <span className="font-semibold text-emerald-700">{inr(p.amount)}</span>
+                          </p>
+                          <p className="text-xs text-stone-400">{new Date(p.createdAt).toLocaleString('en-IN')}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Chip color={p.status === 'RELEASED' ? 'emerald' : cancelled ? 'red' : p.status === 'HELD' ? 'amber' : 'stone'}>{p.status}</Chip>
+                          {p.status === 'HELD' && (
+                            <PrimaryButton className="text-xs !px-3 !py-1.5" icon={Banknote} onClick={() => act(`/payments/${p._id}/release`, 'Funds released to the farmer (simulated).')}>
+                              Release funds
+                            </PrimaryButton>
+                          )}
+                        </div>
+                      </div>
+                      {/* Timeline */}
+                      <div className="mt-3 flex items-center gap-1">
+                        {PAYMENT_STEPS.map((step, i) => {
+                          const reached = !cancelled && idx >= i;
+                          return (
+                            <React.Fragment key={step}>
+                              {i > 0 && <div className={`flex-1 h-0.5 ${reached ? 'bg-emerald-400' : 'bg-stone-200'}`} />}
+                              <div className="flex flex-col items-center">
+                                <div className={`w-3 h-3 rounded-full ${reached ? 'bg-emerald-500' : 'bg-stone-200'}`} />
+                                <span className={`text-[10px] mt-1 ${reached ? 'text-emerald-700 font-medium' : 'text-stone-400'}`}>{step}</span>
+                              </div>
+                            </React.Fragment>
+                          );
+                        })}
+                        {cancelled && <span className="ml-2 text-[11px] text-red-500 font-medium">cancelled</span>}
+                      </div>
+                      {p.status === 'RELEASED' && <PaymentOutcome payment={p} lot={lots.find(l => l._id === String(p.lotId))} />}
+                      {p.history && p.history.length > 0 && (
+                        <ul className="mt-3 space-y-0.5">
+                          {p.history.map((h, i) => (
+                            <li key={i} className="text-[11px] text-stone-400">
+                              {h.to} · {new Date(h.at).toLocaleString('en-IN')}{h.note ? ` — ${h.note}` : ''}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
-                  )}
-                  {buyerView && g.status === 'OPEN' && (
-                    <div className="mt-3 flex gap-2">
-                      <button className="btn-primary text-xs" onClick={() => act(`/grievances/${g._id}/transition`, 'Moved to under review.', { to: 'UNDER_REVIEW' })}>Take for review</button>
-                    </div>
-                  )}
-                  {buyerView && g.status === 'UNDER_REVIEW' && (
-                    <div className="mt-3 flex gap-2">
-                      <button className="btn-primary text-xs" onClick={() => act(`/grievances/${g._id}/transition`, 'Grievance resolved.', { to: 'RESOLVED', note: 'Resolved by buyer-side review (demo)' })}>Mark resolved</button>
-                      <button className="btn-secondary text-xs" onClick={() => act(`/grievances/${g._id}/transition`, 'Grievance rejected.', { to: 'REJECTED', note: 'Rejected by buyer-side review (demo)' })}>Reject</button>
-                    </div>
-                  )}
-                  {g.history && g.history.length > 0 && (
-                    <p className="text-[11px] text-gray-400 mt-2">
-                      {g.history.map((h, i) => (<span key={i}>{i > 0 && ' → '}{h.to.replace(/_/g, ' ')}</span>))}
-                    </p>
+                  </StaggerItem>
+                );
+              })}
+            </StaggerList>
+          )}
+        </Card>
+        )}
+        </div>
+
+        {/* ── Buyer detail flash card — "who am I selling to?" in one click ── */}
+        {buyerDetail && (
+          <div
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-stone-900/40 backdrop-blur-sm p-4"
+            onClick={() => setBuyerDetail(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Buyer details: ${buyerDetail.name}`}
+          >
+            <div
+              className="bg-white rounded-2xl shadow-xl border border-stone-200 w-full max-w-md p-5 animate-in fade-in slide-in-from-bottom-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-bold text-stone-900">{buyerDetail.name}</p>
+                  <p className="text-xs text-stone-400">{buyerDetail.category}</p>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <span className={`badge ${TIER_CLS[buyerDetail.trustTier] || TIER_CLS.SELF_DECLARED} inline-flex items-center gap-1.5`}>
+                    {(TIER_ICONS[buyerDetail.trustTier] || AlertTriangle) && React.createElement(TIER_ICONS[buyerDetail.trustTier] || AlertTriangle, { size: 12 })}
+                    {buyerDetail.tierLabel}
+                  </span>
+                  <button className="p-1.5 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100" onClick={() => setBuyerDetail(null)} aria-label="Close buyer details">
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
+              <p className="text-xs text-stone-500 mt-1.5">{buyerDetail.tierDescription}</p>
+              <p className="text-sm text-stone-600 mt-3 leading-relaxed">{buyerDetail.description}</p>
+              <div className="mt-4 grid grid-cols-1 gap-2 text-sm">
+                <div className="flex items-start gap-2 border border-stone-100 rounded-lg px-3 py-2">
+                  <BadgeCheck size={14} className="text-emerald-600 mt-0.5 shrink-0" />
+                  <span className="text-stone-600"><span className="font-medium text-stone-800">Verification:</span> {buyerDetail.verificationNote}</span>
+                </div>
+                <div className="flex items-start gap-2 border border-stone-100 rounded-lg px-3 py-2">
+                  <Wallet size={14} className="text-emerald-600 mt-0.5 shrink-0" />
+                  <span className="text-stone-600"><span className="font-medium text-stone-800">Payment terms:</span> {buyerDetail.paymentTermsLabel}</span>
+                </div>
+                <div className="flex items-start gap-2 border border-stone-100 rounded-lg px-3 py-2">
+                  <Package size={14} className="text-emerald-600 mt-0.5 shrink-0" />
+                  <span className="text-stone-600"><span className="font-medium text-stone-800">Minimum lot:</span> {buyerDetail.minQuantityQuintals} quintals</span>
+                </div>
+                <div className="flex items-start gap-2 border border-stone-100 rounded-lg px-3 py-2">
+                  <MapPin size={14} className="text-emerald-600 mt-0.5 shrink-0" />
+                  <span className="text-stone-600"><span className="font-medium text-stone-800">Serves:</span> {buyerDetail.districts.join(', ')}</span>
+                </div>
+                <div className="flex items-start gap-2 border border-stone-100 rounded-lg px-3 py-2">
+                  <CropIcon cropName={buyerDetail.crops[0] || ''} size={14} className="text-emerald-600 mt-0.5 shrink-0" />
+                  <span className="text-stone-600"><span className="font-medium text-stone-800">Buys:</span> {buyerDetail.crops.join(', ')}</span>
+                </div>
+              </div>
+              {!buyerView && (
+                <div className="mt-4">
+                  {lots.some(l => l.status === 'OPEN' || l.status === 'OFFERED') ? (
+                    <PrimaryButton
+                      className="w-full"
+                      icon={ArrowRight}
+                      onClick={() => {
+                        const openLot = lots.find(l => l.status === 'OPEN' || l.status === 'OFFERED') || null;
+                        if (openLot) setOfferLot(openLot);
+                        setOfferBuyer(buyerDetail);
+                        const target = Number(expectedNet) > 0 ? Number(expectedNet) : (ctx && ctx.net != null && ctx.net > 0 ? ctx.net : 0);
+                        setOfferPrice(target > 0 ? String(Math.round(target)) : '');
+                        setBuyerDetail(null);
+                        setTimeout(() => buyersRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+                      }}
+                    >
+                      Select this buyer & send offer
+                    </PrimaryButton>
+                  ) : (
+                    <PrimaryButton
+                      className="w-full"
+                      icon={Plus}
+                      onClick={() => { setShowLotForm(true); setBuyerDetail(null); setTimeout(() => lotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100); }}
+                    >
+                      Create a lot first
+                    </PrimaryButton>
                   )}
                 </div>
-              );
-            })}
+              )}
+              <p className="text-[10px] text-stone-400 mt-3">Trust badges are simulated for the demo — production verifies FSSAI/GST registries.</p>
+            </div>
           </div>
         )}
-      </div>
+
+        {!buyerView && showReceipt && <DecisionReceipt ctx={ctx!} payments={releasedPayments} lots={lots} />}
+        {!buyerView && <DecisionHistory payments={payments} lots={lots} />}
+
+        {/* ── Help & grievances (HLD P1: Raise → Open → Under Review → Resolved) ── */}
+        <Card className="p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+            <div>
+              <SectionLabel tone="amber">{t('trade.grievance')}</SectionLabel>
+              <h2 className="font-semibold text-stone-900 mt-0.5 flex items-center gap-1.5">
+                <LifeBuoy size={16} className="text-amber-600" /> Support workflow
+              </h2>
+            </div>
+            {!buyerView && (
+              showGrievanceForm ? (
+                <GhostButton className="text-sm" onClick={() => setShowGrievanceForm(false)}>
+                  <X size={16} /> Close
+                </GhostButton>
+              ) : (
+                <PrimaryButton className="text-sm" icon={FileText} onClick={() => setShowGrievanceForm(true)}>
+                  Raise an issue
+                </PrimaryButton>
+              )
+            )}
+          </div>
+          <p className="text-xs text-stone-400 mb-4">Payment delay, quality dispute or a no-show buyer? Raise it and track it here.</p>
+
+          {showGrievanceForm && !buyerView && (
+            <form onSubmit={raiseGrievance} className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5 p-4 bg-stone-50 rounded-2xl border border-stone-100">
+              <div>
+                <label className="block text-xs font-medium text-stone-500 mb-1">Issue type</label>
+                <select className="input-field" value={gCategory} onChange={(e) => setGCategory(e.target.value)}>
+                  {GRIEVANCE_CATEGORIES.map((c) => <option key={c}>{c.replace(/_/g, ' ')}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-stone-500 mb-1">Related lot (optional)</label>
+                <select className="input-field" value={gLotId} onChange={(e) => setGLotId(e.target.value)}>
+                  <option value="">None</option>
+                  {lots.map((l) => <option key={l._id} value={l._id}>{l.crop} · {l.quantity} {l.unit} · {l.status}</option>)}
+                </select>
+              </div>
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-medium text-stone-500 mb-1">What happened?</label>
+                <input className="input-field" value={gDescription} onChange={(e) => setGDescription(e.target.value)} placeholder="Describe the issue in a sentence" required />
+              </div>
+              <div className="sm:col-span-3">
+                <p className="text-[11px] text-stone-400 mb-2 flex items-start gap-1"><AlertTriangle size={11} className="mt-0.5 shrink-0" /> This is a Kisan360 grievance workflow for demo purposes — not a direct government complaint platform.</p>
+                <PrimaryButton type="submit" icon={Send}>Submit grievance</PrimaryButton>
+              </div>
+            </form>
+          )}
+
+          {showSkeleton(grievances.length > 0) ? (
+            <SkeletonLines rows={2} />
+          ) : grievances.length === 0 ? (
+            <EmptyState icon={LifeBuoy} title={t('trade.noGrievances')} description={t('trade.noPaymentsDesc')} />
+          ) : (
+            <StaggerList className="space-y-3">
+              {grievances.map((g) => {
+                const idx = GRIEVANCE_STEPS.indexOf(g.status);
+                const done = g.status === 'RESOLVED' || g.status === 'REJECTED';
+                return (
+                  <StaggerItem key={g._id}>
+                    <div className="border border-stone-100 rounded-xl px-4 py-4 hover:border-stone-200 transition-colors">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-stone-900 flex items-center gap-1.5">
+                            <AlertTriangle size={14} className="text-amber-600 shrink-0" /> {g.category.replace(/_/g, ' ')}
+                          </p>
+                          <p className="text-xs text-stone-500 mt-0.5">{g.description}</p>
+                        </div>
+                        <Chip color={g.status === 'RESOLVED' ? 'emerald' : g.status === 'REJECTED' ? 'red' : 'amber'}>{g.status.replace(/_/g, ' ')}</Chip>
+                      </div>
+                      {!done && (
+                        <div className="mt-3 flex items-center gap-1">
+                          {GRIEVANCE_STEPS.map((step, i) => {
+                            const reached = idx >= i;
+                            return (
+                              <React.Fragment key={step}>
+                                {i > 0 && <div className={`flex-1 h-0.5 ${reached ? 'bg-emerald-400' : 'bg-stone-200'}`} />}
+                                <div className="flex flex-col items-center">
+                                  <div className={`w-3 h-3 rounded-full ${reached ? 'bg-emerald-500' : 'bg-stone-200'}`} />
+                                  <span className={`text-[10px] mt-1 ${reached ? 'text-emerald-700 font-medium' : 'text-stone-400'}`}>{step.replace(/_/g, ' ')}</span>
+                                </div>
+                              </React.Fragment>
+                            );
+                          })}
+                        </div>
+                      )}
+                      {buyerView && g.status === 'OPEN' && (
+                        <div className="mt-3 flex gap-2">
+                          <PrimaryButton className="text-xs !px-3 !py-1.5" onClick={() => act(`/grievances/${g._id}/transition`, 'Moved to under review.', { to: 'UNDER_REVIEW' })}>
+                            Take for review
+                          </PrimaryButton>
+                        </div>
+                      )}
+                      {buyerView && g.status === 'UNDER_REVIEW' && (
+                        <div className="mt-3 flex gap-2">
+                          <PrimaryButton className="text-xs !px-3 !py-1.5" icon={Check} onClick={() => act(`/grievances/${g._id}/transition`, 'Grievance resolved.', { to: 'RESOLVED', note: 'Resolved by buyer-side review (demo)' })}>
+                            Mark resolved
+                          </PrimaryButton>
+                          <GhostButton className="text-xs !px-3 !py-1.5" onClick={() => act(`/grievances/${g._id}/transition`, 'Grievance rejected.', { to: 'REJECTED', note: 'Rejected by buyer-side review (demo)' })}>
+                            Reject
+                          </GhostButton>
+                        </div>
+                      )}
+                      {g.history && g.history.length > 0 && (
+                        <p className="text-[11px] text-stone-400 mt-2">
+                          {g.history.map((h, i) => (<span key={i}>{i > 0 && ' → '}{h.to.replace(/_/g, ' ')}</span>))}
+                        </p>
+                      )}
+                    </div>
+                  </StaggerItem>
+                );
+              })}
+            </StaggerList>
+          )}
+        </Card>
+      </PageTransition>
     </div>
   );
 };

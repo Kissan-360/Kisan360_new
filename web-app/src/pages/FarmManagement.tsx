@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { API_URL, apiFetch } from '../lib/api';
+import { PrimaryButton } from '../components/ui/kit';
+import { useTranslation } from '../i18n';
 
 interface Farm {
   _id: string;
@@ -20,6 +22,7 @@ const loadLocalFarms = (): Farm[] => {
 };
 
 const FarmManagement = () => {
+  const { t } = useTranslation();
   const [farms, setFarms] = useState<Farm[]>(loadLocalFarms);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -90,7 +93,7 @@ const FarmManagement = () => {
   };
 
   const remove = async (id: string) => {
-    if (!confirm('Delete this farm?')) return;
+    if (!confirm(t('farm.deleteConfirm'))) return;
     try {
       await apiFetch(`${API_URL}/farms/${id}`, { method: 'DELETE' });
     } catch {}
@@ -125,39 +128,39 @@ const FarmManagement = () => {
     <div className="p-6 lg:p-8 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">My Farms</h1>
-          <p className="text-gray-500 text-sm mt-1">{farms.length} farm{farms.length !== 1 ? 's' : ''} registered</p>
+          <h1 className="text-2xl font-bold text-stone-900 tracking-tight">{t('farm.title')}</h1>
+          <p className="text-stone-500 text-sm mt-1">{t('farm.farmsRegistered', { count: farms.length })}</p>
         </div>
-        <button onClick={() => { setShowForm(!showForm); setEditing(null); setForm({ name: '', location: '', area: 0, unit: 'acres', crops: [], soilType: 'loam', notes: '' }); }} className="btn-primary text-sm">
-          {showForm ? 'Cancel' : '+ Add Farm'}
-        </button>
+        <PrimaryButton onClick={() => { setShowForm(!showForm); setEditing(null); setForm({ name: '', location: '', area: 0, unit: 'acres', crops: [], soilType: 'loam', notes: '' }); }} className="!px-3 !py-2 !min-h-0 !text-sm">
+          {showForm ? t('common.cancel') : t('farm.addFarm')}
+        </PrimaryButton>
       </div>
 
       {showForm && (
         <div className="card p-6 space-y-4">
-          <h2 className="font-semibold text-gray-800">{editing ? 'Edit Farm' : 'New Farm'}</h2>
+          <h2 className="font-semibold text-stone-800">{editing ? t('farm.editFarm') : t('farm.newFarm')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Farm name</label>
-              <input className="input-field" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. North Field" />
+              <label className="block text-xs font-medium text-stone-600 mb-1">{t('farm.farmName')}</label>
+              <input className="input-field" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder={t('farm.e.gNorthField')} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Location</label>
-              <input className="input-field" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} placeholder="e.g. Sangrur, Punjab" />
+              <label className="block text-xs font-medium text-stone-600 mb-1">{t('farm.location')}</label>
+              <input className="input-field" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} placeholder={t('farm.e.gSangrur')} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Area</label>
+              <label className="block text-xs font-medium text-stone-600 mb-1">{t('farm.area')}</label>
               <div className="flex gap-2">
                 <input type="number" className="input-field flex-1" value={form.area || ''} onChange={e => setForm({ ...form, area: parseFloat(e.target.value) || 0 })} placeholder="10" />
                 <select className="input-field w-24" value={form.unit} onChange={e => setForm({ ...form, unit: e.target.value })}>
-                  <option value="acres">acres</option>
-                  <option value="hectares">hectares</option>
-                  <option value="bigha">bigha</option>
+                  <option value="acres">{t('farm.acres')}</option>
+                  <option value="hectares">{t('farm.hectares')}</option>
+                  <option value="bigha">{t('farm.bigha')}</option>
                 </select>
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Soil type</label>
+              <label className="block text-xs font-medium text-stone-600 mb-1">{t('farm.soilType')}</label>
               <select className="input-field" value={form.soilType} onChange={e => setForm({ ...form, soilType: e.target.value })}>
                 {soilTypes.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -165,10 +168,10 @@ const FarmManagement = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Crops grown</label>
+            <label className="block text-xs font-medium text-stone-600 mb-1">{t('farm.cropsGrown')}</label>
             <div className="flex gap-2">
-              <input className="input-field flex-1" value={cropInput} onChange={e => setCropInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addCrop())} placeholder="Type crop and press Enter" />
-              <button type="button" onClick={addCrop} className="btn-secondary text-sm">Add</button>
+              <input className="input-field flex-1" value={cropInput} onChange={e => setCropInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addCrop())} placeholder={t('farm.typeCropPressEnter')} />
+              <button type="button" onClick={addCrop} className="btn-secondary text-sm">{t('farm.add')}</button>
             </div>
             {form.crops.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
@@ -183,24 +186,24 @@ const FarmManagement = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Notes</label>
-            <textarea className="input-field resize-none" rows={2} value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} placeholder="Any notes about this farm..." />
+            <label className="block text-xs font-medium text-stone-600 mb-1">{t('farm.notes')}</label>
+            <textarea className="input-field resize-none" rows={2} value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} placeholder={t('farm.anyNotes')} />
           </div>
 
-          <button onClick={save} disabled={!form.name.trim()} className="btn-primary">{editing ? 'Update Farm' : 'Save Farm'}</button>
+          <PrimaryButton onClick={save} disabled={!form.name.trim()}>{editing ? t('farm.updateFarm') : t('farm.saveFarm')}</PrimaryButton>
         </div>
       )}
 
       {loading && farms.length === 0 && (
-        <div className="card p-12 text-center text-gray-400">Loading farms...</div>
+        <div className="card p-12 text-center text-stone-400">{t('farm.loading')}</div>
       )}
 
       {!loading && farms.length === 0 && !showForm && (
         <div className="card p-12 text-center">
           <div className="text-5xl mb-4">🏠</div>
-          <p className="text-gray-500 font-medium">No farms registered yet</p>
-          <p className="text-gray-400 text-sm mt-1">Add your farm to get started</p>
-          <button onClick={() => setShowForm(true)} className="btn-primary mt-4 text-sm">+ Add Your First Farm</button>
+          <p className="text-stone-500 font-medium">{t('farm.noFarms')}</p>
+          <p className="text-stone-400 text-sm mt-1">{t('farm.addFirstFarm')}</p>
+          <PrimaryButton onClick={() => setShowForm(true)} className="mt-4 !px-3 !py-2 !min-h-0 !text-sm">{t('farm.addFirstFarm')}</PrimaryButton>
         </div>
       )}
 
@@ -209,15 +212,15 @@ const FarmManagement = () => {
           <div key={farm._id} className="card p-5">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="font-semibold text-gray-900">{farm.name}</h3>
-                <p className="text-sm text-gray-500 mt-0.5">{farm.location}</p>
+                <h3 className="font-semibold text-stone-900">{farm.name}</h3>
+                <p className="text-sm text-stone-500 mt-0.5">{farm.location}</p>
               </div>
               <div className="flex gap-1">
-                <button onClick={() => edit(farm)} className="text-xs text-gray-400 hover:text-emerald-600 px-2 py-1 rounded hover:bg-emerald-50">Edit</button>
-                <button onClick={() => remove(farm._id)} className="text-xs text-gray-400 hover:text-red-600 px-2 py-1 rounded hover:bg-red-50">Delete</button>
+                <button onClick={() => edit(farm)} className="text-xs text-stone-400 hover:text-emerald-600 px-2 py-1 rounded hover:bg-emerald-50">{t('farm.edit')}</button>
+                <button onClick={() => remove(farm._id)} className="text-xs text-stone-400 hover:text-red-600 px-2 py-1 rounded hover:bg-red-50">{t('farm.delete')}</button>
               </div>
             </div>
-            <div className="mt-3 flex flex-wrap gap-3 text-sm text-gray-600">
+            <div className="mt-3 flex flex-wrap gap-3 text-sm text-stone-600">
               <span>📏 {farm.area} {farm.unit}</span>
               <span>🧑‍🌾 {farm.soilType} soil</span>
             </div>
@@ -226,7 +229,7 @@ const FarmManagement = () => {
                 {farm.crops.map(c => <span key={c} className="badge-green text-xs">{c}</span>)}
               </div>
             )}
-            {farm.notes && <p className="mt-2 text-xs text-gray-400 italic">{farm.notes}</p>}
+            {farm.notes && <p className="mt-2 text-xs text-stone-400 italic">{farm.notes}</p>}
           </div>
         ))}
       </div>
