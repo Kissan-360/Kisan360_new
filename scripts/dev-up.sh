@@ -126,6 +126,16 @@ else
   log "ℹ️  optional ML services skipped (--core)"
 fi
 
+# ── disease warmup (best-effort; weights load at import, first predict warms torch) ──
+if [ "$INCLUDE_OPTIONAL" = "1" ]; then
+  WARM_IMG="$ROOT/ml-service/test_images/tomato_healthy.jpg"
+  if [ -f "$WARM_IMG" ] && is_up "http://localhost:$DISEASE_PORT/health"; then
+    log "🔥 warming disease model (first predict, up to 120s)…"
+    WARM_CODE=$(curl -s -m 120 -o /dev/null -w '%{http_code}' -X POST "http://localhost:$DISEASE_PORT/predict" -F "file=@$WARM_IMG" 2>/dev/null)
+    if [ "$WARM_CODE" = "200" ]; then log "✅ disease model warm"; else log "⚠️  disease warmup HTTP $WARM_CODE — service still usable, first click will be slow"; fi
+  fi
+fi
+
 echo
 log "──── stack status ────"
 report "backend   (critical)" "http://localhost:$BACKEND_PORT/health" 1

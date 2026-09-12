@@ -285,6 +285,32 @@ negative quantities, unknown crop/district, 39.9/40/40.1 q threshold), decision 
 NetRealization → Trade → FPO, offer pre-fill at the engine reference, receipt + selling-record
 rendering. Backend 44/44 tests green, web production build green.
 
+## 15c. Hardening verification log (2026-09-12)
+
+Min-TRL-6 sweep — every claim below was verified live, not inferred:
+
+1. **Test recount:** backend **546/546 (22/22 suites)** + calculator **29/29** = 575 total.
+   `DEMO_READINESS.md` (said 538) synced; `SIH26132_COVERAGE.md` (546) was already right.
+2. **Snapshot re-stamp:** on-disk pull is **250 rows · 33 crops · 71 markets, retrieved
+   2026-09-11**, serving **LIVE** (`/cache-status`). Docs saying "85 rows / 2026-09-08"
+   updated; number legend added to READINESS (snapshot total vs per-crop slice vs
+   ranked mandis — e.g. Onion ≈ 36 rows / 31 markets).
+3. **Disease model boots:** HF MobileNetV2 (38 classes) loads in ~24 s on CPU, first
+   predict 0.3 s — hence the `dev-up.sh` warmup step (tomato test image → expect HTTP
+   200). Frontend crop list is Maharashtra-first; service-offline shows the
+   `disease.offlineNote` line and the selling journey is unaffected.
+4. **FPO renders on load:** `seedDemoScenario` + `POST /api/auth/demo/seed` now both
+   create a pooled lot — verified live: **50 q / 5 members** (Soybean mock seed).
+   `/fpo/pool` returns `mocked: true` with the real-math uplift.
+5. **Seed district:** demo farmer session is Nashik (was Pune) — matches the lot.
+6. **Judge-visible fixes:** Settings language dropdown now calls `setLanguage` with
+   `en/mr/hi` (legacy word-form values normalized on load); NotFoundPage fully
+   translated (`notFound.*` keys, already in all 3 locales); `gray-*` → `stone-*`
+   in ErrorBoundary/NotificationBell/DataProvenance/App.
+7. **Canonical moved to Nagpur:** Onion·Nashik converged (+₹0 inversion, no demo
+   story) — RUNBOOK §CANONICAL re-verified Nagpur numbers on 2026-09-12. Rule stands:
+   say the live number, never a memorized one.
+
 ## 16. What must NOT be built (freeze list)
 
 Price-prediction ML · real payments/KYC · OSRM/live routing · per-crop vision grading beyond freshness (freshness grader shipped) · blockchain ·

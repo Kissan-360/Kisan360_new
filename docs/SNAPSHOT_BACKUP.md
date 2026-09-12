@@ -7,11 +7,11 @@ The cached market snapshot lives at `backend/src/data/priceSnapshots.json`.
 | Field | Value |
 |-------|-------|
 | File | `priceSnapshots.json` |
-| Rows | 85 |
-| Crops | Onion, Soybean, Tomato |
-| Markets | 65 canonical mandis |
+| Rows | 250 |
+| Crops | 33 (incl. Onion, Soybean, Tomato) |
+| Markets | 71 distinct markets |
 | Source | AGMARKNET API pull via `scripts/refresh-prices.js` |
-| Last pulled | 2026-09-08 |
+| Last pulled | 2026-09-11 |
 
 ## Backup Commands
 

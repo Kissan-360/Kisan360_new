@@ -1,0 +1,6 @@
+# Minimal deps for the net-realization calculator service ONLY.
+# net_realization.py is pure math + FastAPI — deliberately excludes the
+# torch/transformers stack (see requirements.txt for the full ML service).
+fastapi>=0.100.0
+uvicorn>=0.20.0
+pydantic>=2.0.0

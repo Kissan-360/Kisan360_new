@@ -110,7 +110,7 @@ const SchemesPage: React.FC = () => {
         }
       />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         <Card className="p-4">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone-400">{t('schemes.statTotal')}</p>
           <p className="mt-1 font-display text-2xl font-extrabold text-stone-900 tabular">{loading ? '—' : stats.total}</p>
@@ -120,12 +120,12 @@ const SchemesPage: React.FC = () => {
           <p className="mt-1 font-display text-2xl font-extrabold text-emerald-800 tabular">{loading ? '—' : stats.central}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-amber-700">{t('schemes.statState')}</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-amber-700 break-words">{t('schemes.statState')}</p>
           <p className="mt-1 font-display text-2xl font-extrabold text-amber-800 tabular">{loading ? '—' : stats.state}</p>
         </Card>
-        <Card className="p-4">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-sky-700">{t('schemes.statIncome')}</p>
-          <p className="mt-1 font-display text-2xl font-extrabold text-sky-800 tabular">
+        <Card className="p-4 min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-sky-700 break-words">{t('schemes.statIncome')}</p>
+          <p className="mt-1 font-display text-2xl font-extrabold text-sky-800 tabular whitespace-nowrap">
             {loading ? '—' : `₹${stats.income.toLocaleString('en-IN')}`}
           </p>
         </Card>

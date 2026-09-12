@@ -204,7 +204,7 @@ const MarketPulse = ({ rows, meta, error, reload }: PulseFeed) => {
       {error && (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs text-stone-300">{error}</p>
-          <GhostButton onClick={reload} className="!border-stone-600 !text-white !bg-white/5 !py-1.5 !px-3 !min-h-0 !text-xs">
+          <GhostButton onClick={reload} className="!border-stone-600 !text-white !bg-white/5 !py-2 !px-3 !min-h-[36px] !text-xs">
             {t('common.retry')}
           </GhostButton>
         </div>
@@ -220,7 +220,7 @@ const MarketPulse = ({ rows, meta, error, reload }: PulseFeed) => {
           {rows.map((r) => (
             <div key={`${r.market}-${r.variety}`} className="rounded-lg bg-white/5 border border-white/10 px-3 py-2.5">
               <p className="text-[10px] font-semibold text-stone-300 truncate">
-                {r.market} <span className="text-stone-500">({r.variety || r.district || ''})</span>
+                {r.market} <span className="text-stone-500 max-w-full inline-block truncate align-bottom">({r.variety || r.district || ''})</span>
               </p>
               <p className="text-sm font-extrabold text-white tabular mt-0.5">₹{r.modalPrice?.toLocaleString('en-IN') ?? '—'}/q</p>
             </div>
@@ -440,7 +440,7 @@ const Dashboard = () => {
                   )}
                 </div>
               </div>
-              <Link to="/farms" className="mt-3.5 inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800">
+              <Link to="/farms" className="mt-3.5 inline-flex items-center gap-1 -my-1.5 py-1.5 min-h-[36px] text-[11px] font-semibold text-emerald-700 hover:text-emerald-800">
                 {t('dashboard.miniTools.myFarms')} <ArrowRight size={11} />
               </Link>
             </>
@@ -450,7 +450,7 @@ const Dashboard = () => {
                 <Home size={20} />
               </div>
               <p className="text-xs text-stone-500 mt-3 leading-relaxed">{t('dashboard.portfolio.noFarms')}</p>
-              <Link to="/farms" className="mt-2.5 inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800">
+              <Link to="/farms" className="mt-2.5 inline-flex items-center gap-1 -my-1.5 py-1.5 min-h-[36px] text-[11px] font-semibold text-emerald-700 hover:text-emerald-800">
                 {t('dashboard.miniTools.myFarms')} <ArrowRight size={11} />
               </Link>
             </div>
@@ -466,7 +466,7 @@ const Dashboard = () => {
               {t('dashboard.lots.activeBadge', { n: lots.length })}
             </span>
           </div>
-          <Link to="/trade" className="text-[11px] font-semibold text-emerald-700 flex items-center gap-1 hover:text-emerald-800">
+          <Link to="/trade" className="inline-flex items-center gap-1 -my-2 py-2 min-h-[36px] text-[11px] font-semibold text-emerald-700 hover:text-emerald-800">
             {t('dashboard.lots.archival')} <ArrowRight size={11} />
           </Link>
         </div>

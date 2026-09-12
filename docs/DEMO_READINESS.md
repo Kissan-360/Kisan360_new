@@ -9,16 +9,16 @@
 | Frontend starts on port 3000 | PASS | Vite dev server |
 | `/health` returns OK/DEGRADED | PASS | Returns DEGRADED when DB offline, not DOWN |
 | MongoDB fallback works | PASS | In-memory server created on Atlas failure |
-| Cached snapshot loaded | PASS | 85 rows from 2026-09-08 |
+| Cached snapshot loaded | PASS | 250 rows · 33 crops · 71 markets, retrieved 2026-09-11 |
 
 ## Test Suites
 
 | Suite | Tests | Status |
 |-------|-------|--------|
-| Node (Jest) — 14 unit + 7 integration | 538 | PASS |
+| Node (Jest) — 19 unit + 3 integration | 546 | PASS |
 | Python (pytest) — net_realization | 29 | PASS |
 | Frontend build (Vite) | 1 build | PASS |
-| Total | **538** | **ALL GREEN** |
+| Total | **575** | **ALL GREEN** |
 
 ## Core Journey
 
@@ -27,8 +27,8 @@
 | Demo login (farmer) | POST /api/auth/demo-login | PASS |
 | Demo login (buyer) | POST /api/auth/demo-login | PASS |
 | Demo seed | POST /api/auth/demo/seed | PASS |
-| Net realization | GET /api/market/net-realization | PASS (21 mandis ranked) |
-| Market prices | GET /api/market/prices | PASS (22 rows for Onion/Maharashtra) |
+| Net realization | GET /api/market/net-realization | PASS (ranked mandis for Onion/Nashik/10q; count varies with live vs cached slice — say the live number) |
+| Market prices | GET /api/market/prices | PASS (Onion/Maharashtra slice of the 250-row snapshot; 36 rows / 31 markets on 2026-09-11 pull) |
 | Farm context | GET /api/market/farm-context | PASS |
 | Cache status | GET /api/market/cache-status | PASS (85 rows) |
 | Health | GET /health | PASS (DEGRADED — expected) |
@@ -94,4 +94,9 @@ bash scripts/demo-reset.sh
 
 **READY FOR DEMO.**
 
-All 538 tests pass. All fallback paths verified. All documentation complete.
+All 575 tests pass (546 backend + 29 calculator). All fallback paths verified. All documentation complete.
+
+**Number legend (why counts differ across docs):** the on-disk snapshot is the FULL pull
+(250 rows · 33 crops · 71 markets, 2026-09-11); per-crop slices are smaller
+(e.g. Onion ≈ 36 rows / 31 markets); ranked mandis are smaller still (only costable
+mandis for the queried district/quantity). Always quote the number on screen, never a memorized one.

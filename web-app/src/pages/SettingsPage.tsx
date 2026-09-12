@@ -1,33 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from '../i18n';
+import { useTranslation, type Lang } from '../i18n';
 
 const SETTINGS_KEY = 'kisan_settings';
+
+// Legacy word-form values (pre-i18n wiring) map to real language codes.
+const normalizeLang = (v: unknown): Lang =>
+  v === 'hi' || v === 'hindi' ? 'hi'
+  : v === 'mr' || v === 'marathi' ? 'mr'
+  : 'en';
 
 interface Settings {
   tempUnit: 'celsius' | 'fahrenheit';
   notifications: boolean;
-  language: string;
+  language: Lang;
   forecastDays: number;
 }
 
 const defaultSettings: Settings = {
   tempUnit: 'celsius',
   notifications: true,
-  language: 'english',
+  language: 'en',
   forecastDays: 5,
 };
 
 const loadSettings = (): Settings => {
   try {
     const stored = localStorage.getItem(SETTINGS_KEY);
-    return stored ? { ...defaultSettings, ...JSON.parse(stored) } : defaultSettings;
+    if (!stored) return defaultSettings;
+    const parsed = { ...defaultSettings, ...JSON.parse(stored) };
+    return { ...parsed, language: normalizeLang((parsed as Settings).language) };
   } catch { return defaultSettings; }
 };
 
 const SettingsPage = () => {
-  const { t } = useTranslation();
+  const { t, setLanguage } = useTranslation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [settings, setSettings] = useState<Settings>(loadSettings);
@@ -80,10 +88,14 @@ const SettingsPage = () => {
       label: t('settings.language'),
       desc: t('settings.languageDesc'),
       control: (
-        <select className="input-field w-36" value={settings.language} onChange={(e) => update('language', e.target.value)}>
-          <option value="english">English</option>
-          <option value="hindi">हिन्दी</option>
-          <option value="marathi">मराठी</option>
+        <select
+          className="input-field w-36"
+          value={settings.language}
+          onChange={(e) => { const lang = normalizeLang(e.target.value); update('language', lang); setLanguage(lang); }}
+        >
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="mr">मराठी</option>
         </select>
       ),
     },

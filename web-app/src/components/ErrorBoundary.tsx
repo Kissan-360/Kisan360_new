@@ -36,11 +36,11 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { err
 function ErrorFallback({ message, onRetry }: { message: string; onRetry: () => void }) {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
       <div className="card p-8 max-w-md text-center">
         <div className="text-3xl">⚠️</div>
-        <h1 className="text-lg font-semibold text-gray-900 mt-3">Something went wrong on this screen</h1>
-        <p className="text-sm text-gray-500 mt-2">
+        <h1 className="text-lg font-semibold text-stone-900 mt-3">Something went wrong on this screen</h1>
+        <p className="text-sm text-stone-500 mt-2">
           The rest of Kisan360 is still available. Your data is safe — this was a display error, not a data error.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2 mt-5">

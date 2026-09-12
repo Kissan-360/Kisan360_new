@@ -104,7 +104,7 @@ const ErrorBanner: React.FC<{ message: string; onRetry?: () => void }> = ({ mess
       </p>
     </div>
     {onRetry && (
-      <button onClick={onRetry} className="text-xs text-red-600 underline hover:text-red-800 whitespace-nowrap shrink-0">
+      <button onClick={onRetry} className="text-xs text-red-600 underline hover:text-red-800 whitespace-nowrap shrink-0 -my-2 py-2 min-h-[36px]">
         Retry
       </button>
     )}
@@ -300,7 +300,7 @@ const DecisionWorkspace = () => {
           </PrimaryButton>
           <button
             onClick={() => navigate('/grade-crop')}
-            className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-2"
+            className="inline-flex items-center -my-2 py-2 text-xs font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-2"
           >
             Or grade with AGMARK standards first →
           </button>

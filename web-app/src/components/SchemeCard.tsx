@@ -110,7 +110,7 @@ export const SchemeCard: React.FC<Props> = ({ scheme, expanded = false, onToggle
         </div>
         <button
           onClick={() => onToggleExpand?.(scheme.slug)}
-          className="shrink-0 h-8 w-8 rounded-lg border border-stone-200 bg-stone-50 text-stone-500 hover:bg-stone-100 flex items-center justify-center"
+          className="shrink-0 h-9 w-9 rounded-lg border border-stone-200 bg-stone-50 text-stone-500 hover:bg-stone-100 flex items-center justify-center"
           aria-label={expanded ? 'Collapse' : 'Expand'}
           aria-expanded={expanded}
         >

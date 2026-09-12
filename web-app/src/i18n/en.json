@@ -904,6 +904,7 @@
   "disease.recommendations": "Recommendations",
   "disease.treatment": "Treatment",
   "disease.severity": "{severity} severity",
+  "disease.offlineNote": "Disease service offline — the core selling journey (prices, lots, offers) is unaffected.",
   "fpo.title": "FPO Bulk Selling",
   "fpo.subtitle": "Pool produce. Negotiate as one lot. See exactly who gains what.",
   "fpo.demoNote": "Demonstration using simulated FPO member data — no real farmer impact is claimed.",

@@ -89,8 +89,11 @@ describe('seed idempotency', () => {
     const res = await call('POST', '/api/auth/demo/seed', { token: farmerToken, body: {} });
     expect(res.status).toBe(200);
     expect(res.data.reused).toBe(true);
+    expect(res.data.pooledLotId).toBeTruthy();
     const lots = await call('GET', '/api/lots', { token: farmerToken });
-    expect(lots.data.count).toBe(1); // still one lot, not two
+    // canonical lot + pooled FPO lot — still two, not four
+    expect(lots.data.count).toBe(2);
+    expect(lots.data.lots.filter(l => l.poolMetadata && l.poolMetadata.isPooled)).toHaveLength(1);
   });
 });
 
@@ -100,10 +103,10 @@ describe('financial integrity', () => {
 
   beforeAll(async () => {
     farmerToken = await login('farmer');
-    // Create a lot via seed, then extract its ID
+    // Create a lot via seed, then extract the CANONICAL (non-pooled) lot ID
     await call('POST', '/api/auth/demo/seed', { token: farmerToken, body: {} });
     const lots = await call('GET', '/api/lots', { token: farmerToken });
-    lotId = lots.data.lots[0]._id;
+    lotId = lots.data.lots.find(l => !(l.poolMetadata && l.poolMetadata.isPooled))._id;
   });
 
   test('server ignores client-supplied amount; computes from price × quantity', async () => {
@@ -138,7 +141,8 @@ describe('duplicate prevention', () => {
     buyerToken = await login('buyer');
     await call('POST', '/api/auth/demo/seed', { token: farmerToken, body: {} });
     const lots = await call('GET', '/api/lots', { token: farmerToken });
-    lotId = lots.data.lots[0]._id;
+    // canonical (non-pooled) lot — the seed's SENT offer to b7 lives here
+    lotId = lots.data.lots.find(l => !(l.poolMetadata && l.poolMetadata.isPooled))._id;
   });
 
   test('duplicate offer to same buyer is rejected (409)', async () => {

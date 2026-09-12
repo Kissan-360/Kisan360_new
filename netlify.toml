@@ -1,0 +1,21 @@
+# Netlify config — alternative static host for the Kisan360 frontend.
+# Primary option is the Render Blueprint (render.yaml) which deploys the whole
+# stack in one pass. Use this only if you prefer Netlify for the static site.
+#
+# Required env var in the Netlify UI (Site settings → Environment variables):
+#   VITE_API_URL = https://<your-api-host>/api
+# Vite reads it at build time; changing it requires a rebuild.
+
+[build]
+  base = "web-app"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback — deep links must serve index.html for react-router.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

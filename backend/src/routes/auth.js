@@ -99,14 +99,26 @@ router.post('/demo/seed', authenticateUser, async (req, res) => {
       isNewOffer = true;
     }
 
+    // Pooled lot (FPO rehearsal state) — find-or-create so /fpo renders the
+    // pooled-lot handoff without manual setup. Pure mock-member math, no
+    // calculator needed.
+    let pooledLot = await Lot.findOne({ farmerUid, 'poolMetadata.isPooled': true, status: 'OPEN' });
+    if (!pooledLot) {
+      const fpoPool = require('../services/fpoPool');
+      const seedMembers = fpoPool.loadMembers();
+      const { lotFields } = fpoPool.createPooledLot({ district: 'Nashik', members: seedMembers.members });
+      pooledLot = await Lot.create({ ...lotFields, farmerUid });
+    }
+
     const reused = !isNewLot && !isNewOffer;
     return res.json({
       success: true,
       note: reused
         ? 'Canonical scenario already seeded for this session — reusing existing lot and offer.'
-        : 'Demo state seeded: 1 canonical Onion lot (10 q, Nashik) + 1 SENT offer to Dehydrated Onion Exports (b7).',
+        : 'Demo state seeded: 1 canonical Onion lot (10 q, Nashik) + 1 SENT offer to Dehydrated Onion Exports (b7) + 1 pooled FPO lot.',
       lotId: lot._id,
       offerId: offer._id,
+      pooledLotId: pooledLot._id,
       reused,
     });
   } catch (error) {

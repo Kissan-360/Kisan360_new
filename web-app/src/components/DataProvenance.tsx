@@ -68,43 +68,43 @@ export const DataProvenance: React.FC<ProvenanceProps> = ({ crop, district, quan
   }
 
   return (
-    <div className="card p-4 border-gray-200">
+    <div className="card p-4 border-stone-200">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">Data Provenance</p>
+        <p className="text-[11px] uppercase tracking-wider text-stone-400 font-semibold">Data Provenance</p>
         <Badge label={confidence.label} color={confidence.color} />
       </div>
 
-      <p className="text-xs text-gray-500 mb-3">{confidence.detail}</p>
+      <p className="text-xs text-stone-500 mb-3">{confidence.detail}</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-        <div className="rounded-lg bg-gray-50 p-2">
-          <p className="text-lg font-bold text-gray-900">{coverage.summary.districtsActive}</p>
-          <p className="text-[10px] text-gray-400">Districts with data</p>
-          <p className="text-[10px] text-gray-300">of {coverage.summary.totalDistricts} total</p>
+        <div className="rounded-lg bg-stone-50 p-2">
+          <p className="text-lg font-bold text-stone-900">{coverage.summary.districtsActive}</p>
+          <p className="text-[10px] text-stone-400">Districts with data</p>
+          <p className="text-[10px] text-stone-300">of {coverage.summary.totalDistricts} total</p>
         </div>
-        <div className="rounded-lg bg-gray-50 p-2">
-          <p className="text-lg font-bold text-gray-900">{coverage.summary.cropsWithRealData}</p>
-          <p className="text-[10px] text-gray-400">Crops with data</p>
-          <p className="text-[10px] text-gray-300">of {coverage.summary.cropsInCatalog} catalogued</p>
+        <div className="rounded-lg bg-stone-50 p-2">
+          <p className="text-lg font-bold text-stone-900">{coverage.summary.cropsWithRealData}</p>
+          <p className="text-[10px] text-stone-400">Crops with data</p>
+          <p className="text-[10px] text-stone-300">of {coverage.summary.cropsInCatalog} catalogued</p>
         </div>
-        <div className="rounded-lg bg-gray-50 p-2">
-          <p className="text-lg font-bold text-gray-900">{coverage.summary.totalMarkets}</p>
-          <p className="text-[10px] text-gray-400">Source markets</p>
-          <p className="text-[10px] text-gray-300">observed by AGMARKNET</p>
+        <div className="rounded-lg bg-stone-50 p-2">
+          <p className="text-lg font-bold text-stone-900">{coverage.summary.totalMarkets}</p>
+          <p className="text-[10px] text-stone-400">Source markets</p>
+          <p className="text-[10px] text-stone-300">observed by AGMARKNET</p>
         </div>
-        <div className="rounded-lg bg-gray-50 p-2">
-          <p className="text-lg font-bold text-gray-900">{cropObsCount}</p>
-          <p className="text-[10px] text-gray-400">{crop} observations</p>
-          <p className="text-[10px] text-gray-300">{cropDistricts.length} districts covered</p>
+        <div className="rounded-lg bg-stone-50 p-2">
+          <p className="text-lg font-bold text-stone-900">{cropObsCount}</p>
+          <p className="text-[10px] text-stone-400">{crop} observations</p>
+          <p className="text-[10px] text-stone-300">{cropDistricts.length} districts covered</p>
         </div>
       </div>
 
       <div className="mt-3 flex flex-wrap gap-2 text-[10px]">
-        <span className="text-gray-400">Source: AGMARKNET (data.gov.in)</span>
-        <span className="text-gray-300">·</span>
-        <span className="text-gray-400">{coverage.summary.totalObservations} total observations</span>
-        <span className="text-gray-300">·</span>
-        <span className="text-gray-400">Prices are observed, not predicted</span>
+        <span className="text-stone-400">Source: AGMARKNET (data.gov.in)</span>
+        <span className="text-stone-300">·</span>
+        <span className="text-stone-400">{coverage.summary.totalObservations} total observations</span>
+        <span className="text-stone-300">·</span>
+        <span className="text-stone-400">Prices are observed, not predicted</span>
       </div>
     </div>
   );

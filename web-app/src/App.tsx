@@ -27,7 +27,7 @@ import GradeCrop from './pages/GradeCrop';
 
 const ProtectedRoute = () => {
   const { user, loading } = useAuth();
-  if (loading) return <div className="flex items-center justify-center h-screen text-gray-400">Loading...</div>; // Note: This is outside I18nProvider, so it stays English
+  if (loading) return <div className="flex items-center justify-center h-screen text-stone-400">Loading...</div>; // Note: This is outside I18nProvider, so it stays English
   if (!user) return <Navigate to="/login" replace />;
   return (
     <Layout>

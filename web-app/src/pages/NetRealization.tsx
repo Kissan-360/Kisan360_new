@@ -301,7 +301,7 @@ const NetRealization = () => {
 
         {/* ── Inputs ── */}
         <form onSubmit={compute} className="card p-5">
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 items-end [&>div]:min-w-0">
             <div>
               <label className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.crop')}</label>
               <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
@@ -334,7 +334,7 @@ const NetRealization = () => {
                 onChange={(e) => setQuantity(e.target.value)}
               />
             </div>
-            <PrimaryButton type="submit" icon={Calculator} disabled={loading}>
+            <PrimaryButton type="submit" icon={Calculator} disabled={loading} className="!px-4 whitespace-nowrap">
               {loading ? '…' : t('netRealization.compareCta')}
             </PrimaryButton>
           </div>
@@ -367,7 +367,7 @@ const NetRealization = () => {
                   <CropIcon cropName={result.crop} size={14} className="text-emerald-100" />
                   {t('netRealization.bestMandiFor')} {result.crop} · {result.district} ({result.quantityQuintals} q)
                 </p>
-                <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+                <div className="flex items-center gap-2 flex-wrap justify-end min-w-0">
                   {result?.decision?.robustness && (
                     <Chip color={result.decision.robustness.verdict === 'ROBUST' ? 'emerald' : 'amber'} className="!bg-white/10 !border-white/20 !text-white">
                       {result.decision.robustness.verdict === 'ROBUST' ? <><ShieldCheck size={11} /> Robust decision</> : <><Scale size={11} /> Sensitive decision</>}
@@ -476,18 +476,18 @@ const NetRealization = () => {
                   <div className="rounded-xl border border-amber-200 bg-white p-4">
                     <Chip color="amber">Without Kisan360</Chip>
                     <p className="font-semibold text-stone-900 mt-2">{result.decision.withoutWith.naive.market}</p>
-                    <ul className="text-sm text-stone-600 mt-2 space-y-1">
-                      <li className="flex justify-between"><span>{t('netRealization.headlinePrice')}</span><span className="font-medium">{inr(result.decision.withoutWith.naive.headlinePerQuintal)}/q</span></li>
-                      <li className="flex justify-between border-t border-amber-100 pt-1"><span className="font-semibold">You take home</span><span className="font-bold text-amber-700">{inr(result.decision.withoutWith.naive.netTotal)}</span></li>
+                    <ul className="text-sm text-stone-600 mt-2 space-y-1 [&>li]:gap-2 [&>li>span]:min-w-0">
+                      <li className="flex justify-between"><span className="shrink-0">{t('netRealization.headlinePrice')}</span><span className="font-medium text-right">{inr(result.decision.withoutWith.naive.headlinePerQuintal)}/q</span></li>
+                      <li className="flex justify-between border-t border-amber-100 pt-1"><span className="font-semibold shrink-0">You take home</span><span className="font-bold text-amber-700 text-right">{inr(result.decision.withoutWith.naive.netTotal)}</span></li>
                     </ul>
                     <p className="text-[11px] text-stone-400 mt-1">choice: {result.decision.withoutWith.naive.basis}</p>
                   </div>
                   <div className="rounded-xl border border-emerald-300 bg-white p-4">
                     <Chip color="emerald">With Kisan360</Chip>
                     <p className="font-semibold text-stone-900 mt-2">{result.decision.withoutWith.recommended.market}</p>
-                    <ul className="text-sm text-stone-600 mt-2 space-y-1">
-                      <li className="flex justify-between"><span>{t('netRealization.headlinePrice')}</span><span className="font-medium">{inr(best.grossPricePerQuintal)}/q</span></li>
-                      <li className="flex justify-between border-t border-emerald-100 pt-1"><span className="font-semibold">You take home</span><span className="font-bold text-emerald-700">{inr(result.decision.withoutWith.recommended.netTotal)}</span></li>
+                    <ul className="text-sm text-stone-600 mt-2 space-y-1 [&>li]:gap-2 [&>li>span]:min-w-0">
+                      <li className="flex justify-between"><span className="shrink-0">{t('netRealization.headlinePrice')}</span><span className="font-medium text-right">{inr(best.grossPricePerQuintal)}/q</span></li>
+                      <li className="flex justify-between border-t border-emerald-100 pt-1"><span className="font-semibold shrink-0">You take home</span><span className="font-bold text-emerald-700 text-right">{inr(result.decision.withoutWith.recommended.netTotal)}</span></li>
                     </ul>
                     <p className="text-[11px] text-stone-400 mt-1">choice: {result.decision.withoutWith.recommended.basis}</p>
                   </div>
@@ -607,7 +607,7 @@ const NetRealization = () => {
                                 <DataTag label="no directory buyer" tone="stone" />
                               )}
                             </div>
-                            <div className="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1 text-sm">
+                            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-1 text-sm min-w-0 [&>span]:truncate">
                               <span className="text-stone-500">{t('netRealization.headlinePrice')}: <span className="text-stone-800 font-medium">{inr(m.grossPricePerQuintal)}/q</span></span>
                               <span className="text-stone-500">{t('netRealization.yourCosts')}: <span className="text-amber-700 font-medium">−{inr(m.farmerCosts.totalCostsPerQuintal)}/q</span></span>
                               <span className="text-stone-500">{t('netRealization.estimatedNet')}: <span className="text-emerald-700 font-semibold">{inr(m.farmerNetPerQuintal)}/q</span></span>

@@ -92,7 +92,7 @@ const NotificationBell = () => {
         aria-label={`Notifications${unread > 0 ? ` (${unread} unread)` : ''}`}
         aria-expanded={open}
         aria-haspopup="true"
-        className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        className="relative p-2 rounded-lg hover:bg-stone-100 transition-colors"
       >
         <span className="text-xl">🔔</span>
         {unread > 0 && (
@@ -104,19 +104,19 @@ const NotificationBell = () => {
 
       {/* Responsive width: fixed w-96 overflows mobile viewports */}
       {open && (
-        <div className="absolute right-0 mt-2 w-[min(24rem,calc(100vw-2rem))] bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-800">Notifications</h3>
+        <div className="absolute right-0 mt-2 w-[min(24rem,calc(100vw-2rem))] bg-white rounded-xl shadow-xl border border-stone-200 z-50 max-h-[500px] flex flex-col">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100">
+            <h3 className="font-semibold text-stone-800">Notifications</h3>
           </div>
 
           <div className="overflow-y-auto flex-1">
             {notifications.length === 0 ? (
-              <div className="p-8 text-center text-gray-400 text-sm">No notifications yet</div>
+              <div className="p-8 text-center text-stone-400 text-sm">No notifications yet</div>
             ) : (
               notifications.map((n) => (
                 <div
                   key={n.id}
-                  className={`px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors ${
+                  className={`px-4 py-3 border-b border-stone-50 hover:bg-stone-50 transition-colors ${
                     !n.read ? 'bg-green-50/50' : ''
                   }`}
                 >
@@ -124,12 +124,12 @@ const NotificationBell = () => {
                     <span className="text-base mt-0.5">{typeIcons[n.type] || 'ℹ️'}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-sm font-medium text-gray-800 truncate">{n.title}</span>
-                        <span className="text-xs text-gray-400 shrink-0">
+                        <span className="text-sm font-medium text-stone-800 truncate">{n.title}</span>
+                        <span className="text-xs text-stone-400 shrink-0">
                           {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">{n.message}</p>
+                      <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">{n.message}</p>
                     </div>
                   </div>
                 </div>

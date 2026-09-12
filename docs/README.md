@@ -31,3 +31,6 @@ Sixteen docs live in `docs/`. This is the order to read them in, by role.
 - Test counts quote the current suite (**546 backend tests, 22 suites**).
 - The calculator starts with `python -m uvicorn net_realization:app --port 8002` (a bare `python net_realization.py` does nothing — the module has no `__main__` runner).
 - `DEMO_WAR_ROOM.md` wins on run-of-show conflicts.
+- **Out of demo scope:** `Frontend-kisan-360/` is a legacy prototype (ignore it);
+  `mobile-app/` is exploratory and not part of the judged demo. The demo is
+  `web-app` + `backend` + `ml-service` only.

@@ -135,10 +135,10 @@ const WeatherPage = () => {
               { label: t('weather.windSpeed'), value: `${weather.current?.windSpeed} km/h`, icon: '🌬️' },
               { label: t('weather.precipitation'), value: `${weather.current?.precipitation} mm`, icon: '🌧️' },
             ].map((s) => (
-            <div key={s.label} className="bg-white/10 backdrop-blur rounded-xl p-3 text-center">
+            <div key={s.label} className="bg-white/10 backdrop-blur rounded-xl p-3 text-center min-w-0">
               <p className="text-lg">{s.icon}</p>
               <p className="text-sm font-medium mt-1">{s.value}</p>
-              <p className="text-xs text-emerald-200/70 mt-0.5">{s.label}</p>
+              <p className="text-xs text-emerald-200/70 mt-0.5 break-words">{s.label}</p>
             </div>
           ))}
         </div>
@@ -150,19 +150,19 @@ const WeatherPage = () => {
           <h2 className="section-title mb-4">{t('weather.forecastTitle')}</h2>
           <div className="space-y-3">
             {weather.forecast.slice(0, 5).map((f: any, i: number) => (
-              <div key={i} className="flex items-center justify-between py-3 border-b border-stone-100 last:border-0">
-                <div className="w-20 text-sm font-medium text-stone-700">
-                  {i === 0 ? t('weather.today') : new Date(f.date).toLocaleDateString('en-IN', { weekday: 'long' })}
+              <div key={i} className="flex items-center justify-between gap-2 py-3 border-b border-stone-100 last:border-0">
+                <div className="w-16 sm:w-20 shrink-0 text-sm font-medium text-stone-700">
+                  {i === 0 ? t('weather.today') : new Date(f.date).toLocaleDateString('en-IN', { weekday: 'short' })}
                 </div>
-                <div className="flex items-center gap-2 flex-1">
-                  <span className="text-xl">{getIcon(f.condition)}</span>
-                  <span className="text-sm text-stone-600 capitalize">{f.description || f.condition}</span>
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <span className="text-xl shrink-0">{getIcon(f.condition)}</span>
+                  <span className="text-sm text-stone-600 capitalize truncate">{f.description || f.condition}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm">
+                <div className="flex items-center gap-2 sm:gap-3 text-sm shrink-0">
                   <span className="font-semibold text-stone-900">{Math.round(f.temperature.max)}°</span>
                   <span className="text-stone-400">/</span>
                   <span className="text-stone-500">{Math.round(f.temperature.min)}°</span>
-                  <span className="text-xs text-blue-600 w-10 text-right">{Math.round(f.precipitation)}%</span>
+                  <span className="text-xs text-blue-600 w-9 text-right">{Math.round(f.precipitation)}%</span>
                 </div>
               </div>
             ))}

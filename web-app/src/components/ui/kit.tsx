@@ -155,14 +155,14 @@ export function StatCard({
       <div className="relative">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">{label}</p>
+            <p className="text-xs font-semibold text-stone-500 uppercase tracking-wide break-words">{label}</p>
             <p className="text-2xl md:text-3xl font-extrabold text-neutral-900 tabular mt-2">
               {prefix}
               <AnimatedCounter value={value} suffix={suffix} />
             </p>
           </div>
           {Icon && (
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+            <div className="hidden min-[400px]:flex h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
               <Icon size={20} />
             </div>
           )}

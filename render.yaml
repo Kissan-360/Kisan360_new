@@ -1,0 +1,78 @@
+# Render Blueprint — one-click deploy of the full Kisan360 stack.
+#
+#   1. Push this repo to GitHub.  2. render.com → New → Blueprint → pick the repo.
+#   3. Fill the two sync:false prompts (MONGODB_URI, FRONTEND_URL) — see
+#      docs/DEPLOYMENT_GUIDE.md. Everything else is pre-wired.
+#
+# Topology:
+#   kisan360-web   static Vite build (browser runs the trained TF.js grader)
+#   kisan360-api   Express API (boots fine without Mongo; set Atlas for persistence)
+#   kisan360-calc  net-realization FastAPI (pure-Python: math/pydantic only)
+#
+# The heavy ML service (ml-service/main.py — torch/transformers) is NOT deployed:
+# the trained 18-class grader already ships as TF.js and runs in the browser,
+# and disease/advisory routes degrade gracefully when the optional services are
+# down (verified by backend tests). This keeps the free-tier footprint small.
+
+services:
+  # ── Frontend: static Vite build ──────────────────────────────────────────
+  - type: web
+    name: kisan360-web
+    runtime: static
+    rootDir: web-app
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    # SPA fallback — react-router owns client-side routing; every path must
+    # serve index.html or deep links (e.g. /net-realization) 404 on refresh.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /models/*
+        name: Cache-Control
+        value: public, max-age=3600
+    envVars:
+      # Build-time API base. Render injects the api service's private URL as
+      # `fromService:`; the /api prefix must be appended for config/api.ts.
+      - key: VITE_API_URL
+        value: https://kisan360-api.onrender.com/api
+      - key: NODE_VERSION
+        value: "20"
+
+  # ── Express API ──────────────────────────────────────────────────────────
+  - type: web
+    name: kisan360-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: MONGODB_URI
+        sync: false   # paste an Atlas SRV string (free M0 cluster) at deploy
+      - key: FRONTEND_URL
+        sync: false   # e.g. https://kisan360-web.onrender.com — CORS allow-list
+      - key: DEMO_JWT_SECRET
+        generateValue: true   # stable across restarts so demo sessions survive
+      - key: NET_REALIZATION_URL
+        value: https://kisan360-calc.onrender.com
+      # AGMARKNET_API_KEY / OPENWEATHER_API_KEY / GROQ_API_KEY are OPTIONAL —
+      # every consumer has a stamped-cache or template fallback. Add them in
+      # the Render dashboard if live pulls are wanted for the demo.
+
+  # ── Net-realization calculator (the flagship engine) ─────────────────────
+  - type: web
+    name: kisan360-calc
+    runtime: python
+    rootDir: ml-service
+    # A dedicated requirements file: net_realization.py needs only fastapi,
+    # uvicorn and pydantic — NOT the torch/transformers stack in
+    # requirements.txt (that would blow the free-tier RAM/disk budget).
+    buildCommand: pip install -r requirements-calc.txt
+    startCommand: uvicorn net_realization:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    plan: free

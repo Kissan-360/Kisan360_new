@@ -177,9 +177,14 @@ const DiseaseDetection = () => {
 
           {/* Error */}
           {error && (
-            <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl text-sm flex items-start gap-2">
-              <span className="text-lg shrink-0 mt-0.5">⚠️</span>
-              <span>{error}</span>
+            <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl text-sm">
+              <div className="flex items-start gap-2">
+                <span className="text-lg shrink-0 mt-0.5">⚠️</span>
+                <span>{error}</span>
+              </div>
+              {/unavailable|offline|not running|Failed to detect/i.test(error) && (
+                <p className="mt-1.5 text-xs text-amber-700">{t('disease.offlineNote')}</p>
+              )}
             </div>
           )}
 

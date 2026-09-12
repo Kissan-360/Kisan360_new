@@ -566,7 +566,7 @@ const CommunityPage: React.FC = () => {
                                 <button
                                   onClick={() => startEditTopic(topic)}
                                   title={t('community.edit')}
-                                  className="h-8 w-8 rounded-lg border border-stone-200 bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-stone-400 flex items-center justify-center"
+                                  className="h-9 w-9 rounded-lg border border-stone-200 bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-stone-400 flex items-center justify-center"
                                 >
                                   <Pencil size={13} />
                                 </button>
@@ -575,7 +575,7 @@ const CommunityPage: React.FC = () => {
                                 <button
                                   onClick={() => deleteTopic(topic.id)}
                                   title={t('community.delete')}
-                                  className="h-8 w-8 rounded-lg border border-stone-200 bg-white hover:bg-red-50 text-stone-400 hover:text-red-600 hover:border-red-200 flex items-center justify-center"
+                                  className="h-9 w-9 rounded-lg border border-stone-200 bg-white hover:bg-red-50 text-stone-400 hover:text-red-600 hover:border-red-200 flex items-center justify-center"
                                 >
                                   <Trash2 size={13} />
                                 </button>
@@ -583,7 +583,7 @@ const CommunityPage: React.FC = () => {
                               <button
                                 onClick={() => reportTopic(topic.id)}
                                 title={t('community.report')}
-                                className="h-8 w-8 rounded-lg border border-stone-200 bg-white hover:bg-red-50 text-stone-400 hover:text-red-600 hover:border-red-200 flex items-center justify-center"
+                                className="h-9 w-9 rounded-lg border border-stone-200 bg-white hover:bg-red-50 text-stone-400 hover:text-red-600 hover:border-red-200 flex items-center justify-center"
                               >
                                 <Flag size={13} />
                               </button>
@@ -608,7 +608,7 @@ const CommunityPage: React.FC = () => {
                 <button
                   key={tag}
                   onClick={() => setQuery(tag)}
-                  className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-semibold text-emerald-800 px-2.5 py-1 hover:bg-emerald-100"
+                  className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-semibold text-emerald-800 px-2.5 min-h-[36px] hover:bg-emerald-100"
                 >
                   #{tag}
                 </button>

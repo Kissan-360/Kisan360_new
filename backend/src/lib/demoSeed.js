@@ -36,7 +36,7 @@ async function seedDemoScenario({ baseUrl = DEFAULT_BASE, log = () => {} } = {})
   //    the role (`demo-farmer`), so this session owns everything the UI shows.
   const login = await api('/auth/demo-login', {
     method: 'POST',
-    body: { role: 'farmer', name: 'Ravi Patil', district: 'Pune' },
+    body: { role: 'farmer', name: 'Ravi Patil', district: 'Nashik' },
   });
   const token = login.token;
   log('farmer session ready (demo-farmer)');
@@ -64,7 +64,28 @@ async function seedDemoScenario({ baseUrl = DEFAULT_BASE, log = () => {} } = {})
   })).offer;
   log(`offer ${offer._id} SENT to ${offer.buyerName} (₹${offer.amount}) — buyer can accept it live`);
 
-  return { token, lotA, lotB, offer };
+  // 4. FPO rehearsal state — pooled compute + pooled lot so /fpo renders without
+  //    manual setup. Best-effort: never fail the canonical seed (calculator may
+  //    be down; /fpo still computes on demand in that case).
+  let pooled = null;
+  try {
+    pooled = await api('/fpo/pool', {
+      method: 'POST',
+      token,
+      body: { district: 'Nashik' },
+    });
+    const pooledLot = await api('/fpo/create-pooled-lot', {
+      method: 'POST',
+      token,
+      body: { district: 'Nashik' },
+    });
+    const econ = pooledLot.pooledEconomics || {};
+    log(`fpo pool ready — pooled lot ${pooledLot.lot._id} (${econ.pooledQuantity}q, ${econ.memberCount} members) — /fpo renders on load`);
+  } catch (e) {
+    log(`fpo pool skipped (${e.message}) — /fpo still computes on demand`);
+  }
+
+  return { token, lotA, lotB, offer, pooled };
 }
 
 module.exports = { seedDemoScenario, DEFAULT_BASE };

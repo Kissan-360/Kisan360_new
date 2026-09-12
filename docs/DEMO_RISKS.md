@@ -72,7 +72,7 @@
 - **Recovery:** None needed — templates work fine for demo
 
 ### R9: Market snapshot stale (>24h old)
-- **Probability:** Low (snapshot from 2026-09-08)
+- **Probability:** Low (snapshot from 2026-09-11; 250 rows · 33 crops · 71 markets)
 - **Impact:** Prices labeled "STALE" in UI
 - **Mitigation:** Snapshot is real data. "STALE" label is honest — not a bug.
 - **Recovery:** Run `node scripts/refresh-prices.js` when AGMARKNET is available
@@ -121,7 +121,7 @@
 4. ✅ `/health` returns `OK` or `DEGRADED` (not `DOWN`)
 5. ✅ Net-realization returns ranked mandis
 6. ✅ Demo seed creates canonical fixtures
-7. ✅ Cached snapshot loaded (85 rows)
+7. ✅ Cached snapshot loaded (250 rows · 33 crops · 71 markets, 2026-09-11)
 8. ✅ Farmer login works
 9. ✅ Buyer login works
 10. ✅ Offer flow works (create → accept → payment)

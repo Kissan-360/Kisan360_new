@@ -1082,7 +1082,7 @@ const TradePage = () => {
                             <TierIcon size={12} /> {b.tierLabel}
                           </span>
                           <button
-                            className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
+                            className="h-9 w-9 -my-1 -mr-1 grid place-items-center rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
                             aria-label={`More info about ${b.name}`}
                             onClick={(e) => { e.stopPropagation(); setBuyerDetail(b); }}
                           >
