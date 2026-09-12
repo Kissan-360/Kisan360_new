@@ -23,9 +23,10 @@ export interface Crop {
   name: string;
   season: string;
   majorDistricts: string[];
-  marketCoverage: 'active' | 'no_data';
+  marketCoverage: 'active' | 'limited' | 'not_available';
   buyerCoverage: 'demo' | 'none';
   qualityGrades: string[];
+  coverageNote?: string;
 }
 
 export const MAHARASHTRA_DISTRICTS: District[] = [
@@ -70,22 +71,29 @@ export const MAHARASHTRA_DISTRICTS: District[] = [
 ];
 
 export const MAHARASHTRA_CROPS: Crop[] = [
-  // Active market coverage
+  // Live AGMARKNET observations — strong mandi coverage
   { id: 'onion', name: 'Onion', season: 'rabi', majorDistricts: ['Nashik', 'Pune', 'Ahmednagar', 'Solapur', 'Satara'], marketCoverage: 'active', buyerCoverage: 'demo', qualityGrades: ['Grade A', 'Grade B', 'Grade C'] },
   { id: 'soybean', name: 'Soybean', season: 'kharif', majorDistricts: ['Akola', 'Amravati', 'Buldhana', 'Washim', 'Nagpur'], marketCoverage: 'active', buyerCoverage: 'demo', qualityGrades: ['FAQ', 'Light', 'Heavy'] },
   { id: 'tomato', name: 'Tomato', season: 'both', majorDistricts: ['Pune', 'Nashik', 'Ahmednagar', 'Kolhapur', 'Solapur'], marketCoverage: 'active', buyerCoverage: 'demo', qualityGrades: ['Grade A', 'Grade B'] },
-  // No current market data
-  { id: 'cotton', name: 'Cotton', season: 'kharif', majorDistricts: ['Akola', 'Amravati', 'Washim', 'Yavatmal', 'Buldhana'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['Fine', 'Medium', 'Bengal'] },
-  { id: 'jowar', name: 'Jowar (Sorghum)', season: 'kharif', majorDistricts: ['Solapur', 'Sangli', 'Pune', 'Ahmednagar', 'Satara'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
-  { id: 'bajra', name: 'Bajra (Pearl Millet)', season: 'kharif', majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Satara', 'Jalgaon'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
-  { id: 'wheat', name: 'Wheat', season: 'rabi', majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Satara', 'Solapur'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ', 'Durum'] },
-  { id: 'tur-dal', name: 'Tur Dal (Pigeon Pea)', season: 'kharif', majorDistricts: ['Akola', 'Amravati', 'Washim', 'Nagpur', 'Buldhana'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
-  { id: 'chilli', name: 'Chilli', season: 'kharif', majorDistricts: ['Akola', 'Washim', 'Yavatmal', 'Amravati', 'Nagpur'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ', 'Bold', 'Medium'] },
-  { id: 'maize', name: 'Maize', season: 'kharif', majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Jalgaon', 'Solapur'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
-  { id: 'groundnut', name: 'Groundnut', season: 'kharif', majorDistricts: ['Jalgaon', 'Ahmednagar', 'Solapur', 'Sangli', 'Nashik'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ', 'Bold', 'Java'] },
-  { id: 'sugarcane', name: 'Sugarcane', season: 'annual', majorDistricts: ['Kolhapur', 'Sangli', 'Solapur', 'Pune', 'Ahmednagar'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
-  { id: 'grapes', name: 'Grapes', season: 'rabi', majorDistricts: ['Nashik', 'Sangli', 'Pune'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['Export', 'Table', 'FAQ'] },
-  { id: 'pomegranate', name: 'Pomegranate', season: 'rabi', majorDistricts: ['Solapur', 'Sangli', 'Ahmednagar', 'Pune'], marketCoverage: 'no_data', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
+  { id: 'chilli', name: 'Chilli', season: 'kharif', majorDistricts: ['Akola', 'Washim', 'Yavatmal', 'Amravati', 'Nagpur'], marketCoverage: 'active', buyerCoverage: 'none', qualityGrades: ['FAQ', 'Bold', 'Medium'] },
+  { id: 'wheat', name: 'Wheat', season: 'rabi', majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Satara', 'Solapur'], marketCoverage: 'active', buyerCoverage: 'none', qualityGrades: ['FAQ', 'Durum'] },
+  { id: 'pomegranate', name: 'Pomegranate', season: 'rabi', majorDistricts: ['Solapur', 'Sangli', 'Ahmednagar', 'Pune'], marketCoverage: 'active', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
+  // Limited mandi coverage — fewer than 15 mandis typically
+  { id: 'jowar', name: 'Jowar (Sorghum)', season: 'kharif', majorDistricts: ['Solapur', 'Sangli', 'Pune', 'Ahmednagar', 'Satara'], marketCoverage: 'limited', buyerCoverage: 'none', qualityGrades: ['FAQ'], coverageNote: 'Limited mandi coverage — prices may vary by region' },
+  { id: 'maize', name: 'Maize', season: 'kharif', majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Jalgaon', 'Solapur'], marketCoverage: 'limited', buyerCoverage: 'none', qualityGrades: ['FAQ'], coverageNote: 'Limited mandi coverage — prices may vary by region' },
+  { id: 'tur-dal', name: 'Tur Dal (Pigeon Pea)', season: 'kharif', majorDistricts: ['Akola', 'Amravati', 'Washim', 'Nagpur', 'Buldhana'], marketCoverage: 'limited', buyerCoverage: 'none', qualityGrades: ['FAQ'], coverageNote: 'Limited mandi coverage — prices may vary by region' },
+  { id: 'bajra', name: 'Bajra (Pearl Millet)', season: 'kharif', majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Satara', 'Jalgaon'], marketCoverage: 'limited', buyerCoverage: 'none', qualityGrades: ['FAQ'], coverageNote: 'Limited mandi coverage — prices may vary by region' },
+  { id: 'grapes', name: 'Grapes', season: 'rabi', majorDistricts: ['Nashik', 'Sangli', 'Pune'], marketCoverage: 'limited', buyerCoverage: 'none', qualityGrades: ['Export', 'Table', 'FAQ'], coverageNote: 'Seasonal — sparse outside harvest window' },
+  { id: 'cotton', name: 'Cotton', season: 'kharif', majorDistricts: ['Akola', 'Amravati', 'Washim', 'Yavatmal', 'Buldhana'], marketCoverage: 'limited', buyerCoverage: 'none', qualityGrades: ['Fine', 'Medium', 'Bengal'], coverageNote: 'Limited mandi coverage — most trade is via ginning mills' },
+  { id: 'groundnut', name: 'Groundnut', season: 'kharif', majorDistricts: ['Jalgaon', 'Ahmednagar', 'Solapur', 'Sangli', 'Nashik'], marketCoverage: 'limited', buyerCoverage: 'none', qualityGrades: ['FAQ', 'Bold', 'Java'], coverageNote: 'Limited mandi coverage — prices may vary by region' },
+  // Additional crops with AGMARKNET observations
+  { id: 'ginger', name: 'Ginger', season: 'kharif', majorDistricts: ['Pune', 'Nashik', 'Ahmednagar', 'Kolhapur', 'Sangli'], marketCoverage: 'active', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
+  { id: 'black-gram', name: 'Black Gram (Urad)', season: 'kharif', majorDistricts: ['Akola', 'Amravati', 'Washim', 'Nagpur', 'Buldhana'], marketCoverage: 'active', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
+  { id: 'green-gram', name: 'Green Gram (Moong)', season: 'kharif', majorDistricts: ['Akola', 'Amravati', 'Washim', 'Nagpur', 'Buldhana'], marketCoverage: 'active', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
+  { id: 'bengal-gram', name: 'Bengal Gram (Chana)', season: 'rabi', majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Satara', 'Solapur'], marketCoverage: 'active', buyerCoverage: 'none', qualityGrades: ['FAQ'] },
+  { id: 'green-peas', name: 'Green Peas', season: 'rabi', majorDistricts: ['Pune', 'Nashik', 'Ahmednagar', 'Satara', 'Solapur'], marketCoverage: 'limited', buyerCoverage: 'none', qualityGrades: ['FAQ'], coverageNote: 'Limited mandi coverage — prices may vary by region' },
+  // Not available through AGMARKNET mandi data
+  { id: 'sugarcane', name: 'Sugarcane', season: 'annual', majorDistricts: ['Kolhapur', 'Sangli', 'Solapur', 'Pune', 'Ahmednagar'], marketCoverage: 'not_available', buyerCoverage: 'none', qualityGrades: ['FAQ'], coverageNote: 'Sold directly to sugar mills — not through APMC mandis' },
 ];
 
 // Coordinate lookup — used by WeatherPage, DecisionWorkspace, and notifications
@@ -102,9 +110,18 @@ export function findDistrict(name: string): District | undefined {
   return MAHARASHTRA_DISTRICTS.find(d => d.name.toLowerCase() === name.toLowerCase());
 }
 
-// Helper: get crops with active market data
+// Helper: get crops with market data (active + limited)
 export function getActiveMarketCrops(): Crop[] {
-  return MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active');
+  return MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active' || c.marketCoverage === 'limited');
+}
+
+// Helper: get crops grouped by coverage status for the selector
+export function getCropsByCoverage(): { active: Crop[]; limited: Crop[]; notAvailable: Crop[] } {
+  return {
+    active: MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active'),
+    limited: MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'limited'),
+    notAvailable: MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'not_available'),
+  };
 }
 
 // Helper: get all crops (for full catalog display)

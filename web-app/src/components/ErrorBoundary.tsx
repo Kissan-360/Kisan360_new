@@ -44,9 +44,9 @@ function ErrorFallback({ message, onRetry }: { message: string; onRetry: () => v
           The rest of Kisan360 is still available. Your data is safe — this was a display error, not a data error.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2 mt-5">
-          <button className="btn-secondary" onClick={onRetry}>Try again</button>
+          <button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-stone-200 bg-white text-stone-700 text-[13px] font-semibold hover:bg-stone-50 transition-colors" onClick={onRetry}>Try again</button>
           <button
-            className="btn-primary"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-800 text-white text-[13px] font-semibold hover:bg-emerald-900 shadow-sm transition-colors"
             onClick={() => { onRetry(); navigate('/dashboard', { replace: true }); }}
           >
             Go to Dashboard

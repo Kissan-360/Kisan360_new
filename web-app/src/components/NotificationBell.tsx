@@ -22,6 +22,17 @@ const NotificationBell = () => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  // Respect the Settings toggle: when off, the bell neither fetches nor
+  // shows an unread count. The stored value is read live so flipping the
+  // toggle takes effect without a reload.
+  const notificationsEnabled = (() => {
+    try {
+      const raw = localStorage.getItem('kisan_settings');
+      const settings = raw ? JSON.parse(raw) : null;
+      return settings ? settings.notifications !== false : true;
+    } catch { return true; }
+  })();
+
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -53,19 +64,23 @@ const NotificationBell = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && notificationsEnabled) {
       fetchNotifications();
       const interval = setInterval(fetchNotifications, 300000);
       return () => clearInterval(interval);
     }
-  }, [user]);
+    if (!notificationsEnabled) {
+      setNotifications([]);
+      setUnread(0);
+    }
+  }, [user, notificationsEnabled]);
 
   // NOTE: there is deliberately no "mark all read" button. The notifications
   // API exposes no mark-read endpoint, so a local-only clear would silently
   // revert on the next poll — a button that lies. Unread badges here are
   // informational for the demo.
 
-  if (!user) return null;
+  if (!user || !notificationsEnabled) return null;
 
   return (
     <div ref={ref} className="relative">
@@ -74,6 +89,9 @@ const NotificationBell = () => {
           setOpen(!open);
           if (!open) fetchNotifications();
         }}
+        aria-label={`Notifications${unread > 0 ? ` (${unread} unread)` : ''}`}
+        aria-expanded={open}
+        aria-haspopup="true"
         className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
       >
         <span className="text-xl">🔔</span>

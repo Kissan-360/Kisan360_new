@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
-import { auth } from '../firebaseConfig';
+import { auth, firebaseReady } from '../firebaseConfig';
 import { User, onAuthStateChanged, signOut as fbSignOut } from 'firebase/auth';
 import { API_URL, DemoUser, DemoRole, getDemoToken, getDemoUser, setDemoAuth, clearDemoAuth, isDemoSession } from '../lib/api';
 
@@ -41,11 +41,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [demoUser, setDemoUser] = useState<DemoUser | null>(() => getDemoUser());
 
   useEffect(() => {
+    // If Firebase didn't initialize (missing config, network error), skip
+    // the auth listener entirely and fall through to demo-only mode.
+    if (!firebaseReady || !auth) {
+      console.warn('[Kisan360] Firebase auth unavailable — demo-only mode');
+      setFirebaseLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setFirebaseUser(user);
       setFirebaseLoading(false);
     });
-    return () => unsubscribe();
+
+    // Safety timeout: if onAuthStateChanged doesn't fire within 5s (e.g.
+    // Firebase unreachable on rural 2G/3G), stop waiting and let the demo
+    // session proceed or show the login page.
+    const timeout = setTimeout(() => {
+      setFirebaseLoading((prev) => {
+        if (prev) console.warn('[Kisan360] Firebase auth timed out — falling back to demo mode');
+        return false;
+      });
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeout);
+      unsubscribe();
+    };
   }, []);
 
   // Prefer the persisted demo session so the demo works even before Firebase
@@ -70,7 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    if (firebaseUser) {
+    if (firebaseUser && auth) {
       try { await fbSignOut(auth); } catch {}
     }
     clearDemoAuth();

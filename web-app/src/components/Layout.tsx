@@ -1,55 +1,95 @@
 import React, { useState } from 'react';
-import Sidebar from './Sidebar';
-import NotificationBell from './NotificationBell';
+import { useNavigate } from 'react-router-dom';
+import { Sprout } from 'lucide-react';
+import Sidebar, { MobileNav } from './Sidebar';
+import Topbar from './Topbar';
+import ChatBot from './ChatBot';
+import FlowGuidanceBar from './FlowGuidanceBar';
+import { FlowProvider, useFlow } from './FlowContext';
 import { useAuth } from '../hooks/useAuth';
-import { Link } from 'react-router-dom';
+import { useTranslation } from '../i18n';
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const SIDEBAR_COLLAPSED_KEY = 'kisan360-sidebar-collapsed';
+
+const readCollapsedPref = (): boolean => {
+  try { return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1'; } catch { return false; }
+};
+
+/* Floating "Sell My Crop" button — visible on all pages when not in flow mode. */
+function SellFab() {
+  const { inFlow, startFlow } = useFlow();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  if (inFlow) return null;
+
+  const handleClick = () => {
+    startFlow();
+    navigate('/decision');
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="fixed bottom-5 right-6 z-40 flex items-center gap-2 rounded-full bg-emerald-800 px-5 py-3.5 text-sm font-bold text-white shadow-xl hover:bg-emerald-900 hover:shadow-2xl transition-all active:scale-95 md:bottom-5 md:right-8"
+      aria-label={t('flow.sellMyCrop')}
+    >
+      <Sprout size={18} />
+      <span className="hidden sm:inline">{t('flow.sellMyCrop')}</span>
+    </button>
+  );
+}
+
+/* App shell — reference layout: white sidebar + enterprise topbar over a
+   stone-50 content canvas. When in flow mode, the sidebar is replaced by
+   a stepper bar at the top. A floating "Sell My Crop" button appears on
+   all pages when not in flow mode. */
+const LayoutInner = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { inFlow } = useFlow();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(readCollapsedPref);
+
+  const toggleCollapse = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try { localStorage.setItem(SIDEBAR_COLLAPSED_KEY, next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
 
   if (!user) return <>{children}</>;
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
-      <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+    <div className="flex h-screen bg-[#faf8ff] overflow-hidden">
+      {/* Sidebar: hidden in flow mode on desktop, always hidden on mobile (MobileNav handles it) */}
+      {!inFlow && <Sidebar collapsed={collapsed} onToggleCollapse={toggleCollapse} />}
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 shrink-0">
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-400 hidden sm:block">
-              {new Date().toLocaleDateString('en-IN', {
-                weekday: 'short', day: 'numeric', month: 'short', year: 'numeric',
-              })}
-            </span>
-          </div>
+        {/* Flow stepper: replaces sidebar header when in flow mode */}
+        {inFlow && <FlowGuidanceBar />}
 
-          <div className="flex items-center gap-2">
-            <span
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-50 border border-amber-200 text-[11px] font-medium text-amber-700 whitespace-nowrap"
-              title="Payments, buyer verification and FPO data are simulated for the Smart India Hackathon demo. No real money moves."
-            >
-              🧪 SIH Prototype · simulated
-            </span>
-            <NotificationBell />
-            <Link
-              to="/profile"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors text-sm text-gray-600 hover:text-gray-800"
-            >
-              <div className="w-6 h-6 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center text-white text-[10px] font-bold">
-                {(user?.displayName || user?.email || 'F').slice(0, 1).toUpperCase()}
-              </div>
-              <span className="hidden sm:inline">{user?.email}</span>
-            </Link>
+        <Topbar onMenu={() => setMobileOpen(true)} />
+        <main className="flex-1 overflow-y-auto k-scroll">
+          <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 lg:py-8">
+            {children}
           </div>
-        </header>
-
-        <main className="flex-1 overflow-y-auto bg-gray-50">
-          <div className="max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
+
+      {/* Mobile nav: only shows when NOT in flow mode */}
+      {!inFlow && <MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />}
+
+      <ChatBot />
+      <SellFab />
     </div>
   );
 };
+
+const Layout = ({ children }: { children: React.ReactNode }) => (
+  <FlowProvider>
+    <LayoutInner>{children}</LayoutInner>
+  </FlowProvider>
+);
 
 export default Layout;

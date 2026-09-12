@@ -21,11 +21,12 @@ export const DistrictSelector: React.FC<DistrictSelectorProps> = ({
   value, onChange, label = 'District', className = '',
 }) => (
   <div>
-    <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+    <label htmlFor="district-selector" className="block text-xs font-medium text-stone-600 mb-1">{label}</label>
     <select
+      id="district-selector"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${className}`}
+      className={`input-field !min-h-[44px] ${className}`}
     >
       {REGIONS.map(region => {
         const regionDistricts = MAHARASHTRA_DISTRICTS.filter(d => d.region === region);
@@ -47,16 +48,17 @@ export const CropSelector: React.FC<{
   className?: string;
   showAll?: boolean;
 }> = ({ value, onChange, className = '', showAll = false }) => {
-  const activeCrops = MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active');
-  const inactiveCrops = MAHARASHTRA_CROPS.filter(c => c.marketCoverage !== 'active');
+  const activeCrops = MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active' || c.marketCoverage === 'limited');
+  const inactiveCrops = MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'not_available');
 
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-600 mb-1">Crop</label>
+      <label htmlFor="crop-selector" className="block text-xs font-medium text-stone-600 mb-1">Crop</label>
       <select
+        id="crop-selector"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${className}`}
+        className={`input-field !min-h-[44px] ${className}`}
       >
         <optgroup label="Market data available">
           {activeCrops.map(c => (
@@ -82,14 +84,15 @@ export const CropSelector: React.FC<{
 
 export const QuantityInput: React.FC<{ value: string; onChange: (q: string) => void; className?: string }> = ({ value, onChange, className = '' }) => (
   <div>
-    <label className="block text-xs font-medium text-gray-600 mb-1">Quantity (quintals)</label>
+    <label htmlFor="quantity-input" className="block text-xs font-medium text-stone-600 mb-1">Quantity (quintals)</label>
     <input
+      id="quantity-input"
       type="number"
       min="0.1"
       step="0.1"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${className}`}
+      className={`input-field !min-h-[44px] ${className}`}
     />
   </div>
 );

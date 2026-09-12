@@ -10,6 +10,15 @@ export interface LotContext {
   size?: string;
   moisturePct?: number;
   damagePct?: number;
+  // Type-only honesty fix (Milestone 3): the journey's canonical writer,
+  // NetRealization, persists quantity/mandi/net/source/reason at runtime.
+  // These optional fields make the type match what actually flows between
+  // screens. Purely additive — no runtime or architecture change.
+  quantity?: number;
+  mandi?: string;
+  net?: number;
+  source?: string;
+  reason?: string;
 }
 
 const STORAGE_KEY = 'k360_decision_context';
