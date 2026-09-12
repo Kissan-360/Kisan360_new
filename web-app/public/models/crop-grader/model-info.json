@@ -1,0 +1,64 @@
+{
+  "formats": [
+    "tfjs-layers"
+  ],
+  "model": "mobilenetv2-freshness-grader",
+  "version": "1.1.0",
+  "trained": "2026-09-12",
+  "description": "MobileNetV2 trained on ~23.6k fruit/vegetable freshness photos; 18-class head (9 fruits x fresh/rotten), aggregated to fresh/rotten in the browser and mapped to AGMARK visual grades",
+  "trainedOn": [
+    "Densu341/Fresh-rotten-fruit (HuggingFace, openrail) \u2014 apples, banana, bittergourd, capsicum, cucumber, okra, oranges, potato, tomato"
+  ],
+  "crops": [
+    "apple",
+    "banana",
+    "bittergourd",
+    "capsicum",
+    "cucumber",
+    "okra",
+    "orange",
+    "potato",
+    "tomato"
+  ],
+  "classes": {
+    "output": [
+      "freshapples",
+      "freshbanana",
+      "freshbittergroud",
+      "freshcapsicum",
+      "freshcucumber",
+      "freshokra",
+      "freshoranges",
+      "freshpotato",
+      "freshtomato",
+      "rottenapples",
+      "rottenbanana",
+      "rottenbittergroud",
+      "rottencapsicum",
+      "rottencucumber",
+      "rottenokra",
+      "rottenoranges",
+      "rottenpotato",
+      "rottentomato"
+    ],
+    "aggregation": "classes prefixed \"fresh\" vs \"rotten\"; browser sums softmax mass per group",
+    "description": {
+      "fresh": "Grade I \u2014 premium visual quality, minimal visible damage",
+      "rotten": "Grade III \u2014 visible decay; complement with AGMARK questionnaire parameters"
+    }
+  },
+  "inputShape": [
+    224,
+    224,
+    3
+  ],
+  "preprocessing": "resize 224x224, normalize to [-1, 1] (MobileNetV2 preprocess_input)",
+  "testAccuracyPct": {
+    "fine18": 99.0,
+    "binaryFreshRotten": 99.2,
+    "n": 6738
+  },
+  "modelUrl": "/models/crop-grader/model.json",
+  "fallbackToRuleBased": true,
+  "note": "Trained locally with TensorFlow 2.20 (CPU). Photo ML covers produce freshness \u2014 its training domain; all crops also grade via the AGMARK questionnaire rule engine."
+}
