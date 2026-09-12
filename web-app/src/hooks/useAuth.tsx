@@ -11,6 +11,10 @@ type AuthContextType = {
   isDemo: boolean;
   demoSignIn: (role: DemoRole, name?: string, district?: string) => Promise<void>;
   logout: () => Promise<void>;
+  // Re-reads auth.currentUser into state. Needed after updateProfile, which
+  // does not refire onAuthStateChanged — without this the UI keeps showing
+  // the stale display name until the next login.
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -19,6 +23,7 @@ const AuthContext = createContext<AuthContextType>({
   isDemo: false,
   demoSignIn: async () => {},
   logout: async () => {},
+  refreshUser: async () => {},
 });
 
 function normalizeDemoUser(raw: any): DemoUser & { displayName: string; email: string } {
@@ -108,6 +113,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setDemoUser(normalized);
   };
 
+  const refreshUser = async () => {
+    if (!auth) return;
+    try {
+      await auth.currentUser?.reload();
+      // Clone so React sees a new object identity and re-renders.
+      const u = auth.currentUser;
+      setFirebaseUser(u ? ({ ...u } as any) : null);
+    } catch { /* keep stale user rather than signing out */ }
+  };
+
   const logout = async () => {
     if (firebaseUser && auth) {
       try { await fbSignOut(auth); } catch {}
@@ -118,7 +133,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isDemo, demoSignIn, logout }}>
+    <AuthContext.Provider value={{ user, loading, isDemo, demoSignIn, logout, refreshUser }}>
       {!loading && children}
     </AuthContext.Provider>
   );

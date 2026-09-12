@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, firebaseReady } from '../../firebaseConfig';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth';
 import { PageTransition, PrimaryButton, Card } from '../../components/ui/kit';
 import { Logo } from '../../components/brand';
 import { useTranslation } from '../../i18n';
@@ -24,7 +24,20 @@ const RegisterPage = () => {
         setError(t('register.firebaseNotConfigured'));
         return;
       }
-      await createUserWithEmailAndPassword(auth, email, password);
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      // Persist the typed Full Name — without this Firebase leaves
+      // displayName null and the whole UI falls back to the email address.
+      // A profile-write failure must never block registration: the account
+      // exists and the name stays editable on the Profile page.
+      const displayName = name.trim();
+      if (displayName) {
+        try {
+          await updateProfile(cred.user, { displayName });
+          await cred.user.reload();
+        } catch {
+          /* name stays editable on Profile — do not fail registration */
+        }
+      }
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.message);
