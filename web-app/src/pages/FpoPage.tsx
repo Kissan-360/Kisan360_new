@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL, apiFetch } from '../lib/api';
 import { getDecisionContext } from '../lib/decisionContext';
@@ -68,6 +68,24 @@ const FpoPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [coverage, setCoverage] = useState<any | null>(null);
+  // Only offer crops the price cache can actually price — otherwise the
+  // pool call 422s with "no mandi prices". Falls back to the static list.
+  const [cropOptions, setCropOptions] = useState<string[]>(ACTIVE_CROPS);
+  useEffect(() => {
+    apiFetch(`${API_URL}/market/coverage`)
+      .then(r => r.json())
+      .then(d => {
+        const priced = (d?.crops || []).filter((c: any) => c.hasMarketData).map((c: any) => c.name);
+        const usable = ACTIVE_CROPS.filter(c => priced.includes(c));
+        // Guard against a stale backend whose coverage flags lag the snapshot:
+        // never narrow the list to a stub — fall back to the static list.
+        if (usable.length >= 10) {
+          setCropOptions(usable);
+          setCrop(prev => (usable.includes(prev) ? prev : usable[0]));
+        }
+      })
+      .catch(() => { /* static list stands */ });
+  }, []);
 
   const compute = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -112,7 +130,7 @@ const FpoPage = () => {
           <div>
             <label className="block text-xs font-medium text-stone-500 mb-1">{t('fpo.crop')}</label>
             <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
-              {ACTIVE_CROPS.map((c) => <option key={c}>{c}</option>)}
+              {cropOptions.map((c) => <option key={c}>{c}</option>)}
             </select>
           </div>
           <div>

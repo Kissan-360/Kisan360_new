@@ -20,6 +20,11 @@
  * Each status field is reported separately.
  */
 
+// Alias-tolerant matching lives in marketCache (single source of truth for
+// AGMARKNET spelling variance); the catalog delegates to it so coverage flags
+// stay consistent with what the price routes actually serve.
+const { cropMatches } = require('../services/marketCache');
+
 const CROPS = [
   // ── Strong AGMARKNET coverage (10+ mandis) ───────────────────────
   {
@@ -317,10 +322,10 @@ function getActiveMarketCrops() {
  * Returns the crop with hasMarketData, observationCount, and districtsWithData.
  */
 function enrichCropWithCoverage(crop, snapshotRows) {
-  const matchingRows = (snapshotRows || []).filter(r => {
-    const rc = (r.crop || '').toLowerCase();
-    return rc === crop.name.toLowerCase() || (crop.aliases || []).some(a => a.toLowerCase() === rc);
-  });
+  const candidates = [crop.name, ...(crop.aliases || [])];
+  const matchingRows = (snapshotRows || []).filter(r =>
+    candidates.some(c => cropMatches(r.crop, c))
+  );
   const districts = [...new Set(matchingRows.map(r => (r.district || '').trim()))].filter(Boolean);
   return {
     ...crop,

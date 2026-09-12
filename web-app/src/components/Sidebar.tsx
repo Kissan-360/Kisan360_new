@@ -58,7 +58,11 @@ function NavItem({ entry, onNavigate, collapsed }: { entry: NavEntry; onNavigate
   const Icon = entry.icon;
   const { t } = useTranslation();
   const labelKey = `nav.${entry.to.replace('/', '').replace(/-/g, '')}`;
-  const label = t(labelKey) || entry.label;
+  // t() returns the key itself when a translation is missing (truthy), so a
+  // plain `||` fallback never fires — compare explicitly to keep raw `nav.*`
+  // keys off screen in every language, now and for future entries.
+  const translated = t(labelKey);
+  const label = translated === labelKey ? entry.label : translated;
 
   if (collapsed) {
     return (
