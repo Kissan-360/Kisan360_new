@@ -128,6 +128,7 @@
   "login.password.label": "पासवर्ड",
   "login.signIn": "साइन इन",
   "login.signingIn": "साइन इन होत आहे…",
+  "login.googleSignIn": "Google ने सुरू ठेवा",
   "login.divider": "डेमो साइन-इन",
   "login.demoNote": "SIH डेमोसाठी सिम्युलेटेड — खरे क्रेडेन्शियल्स नाहीत. एक भूमिका निवडा.",
   "register.subtitle": "तुमचे Kisan360 खाते तयार करा",

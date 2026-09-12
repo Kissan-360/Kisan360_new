@@ -55,6 +55,32 @@ export function isDemoSession(): boolean {
   return !!getDemoToken() && !!getDemoUser();
 }
 
+// Firebase ID token slot — filled by useAuth when a real (non-demo) user is
+// signed in. Preferred over the demo token so the API sees the same identity
+// the UI displays (firebaseUser wins over demoUser there too). Cleared on
+// Firebase sign-out, at which point any demo session underneath resumes.
+const FIREBASE_TOKEN_KEY = 'kisan360-fb-token';
+
+export function getFirebaseToken(): string | null {
+  try {
+    return localStorage.getItem(FIREBASE_TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function setFirebaseToken(token: string): void {
+  try {
+    localStorage.setItem(FIREBASE_TOKEN_KEY, token);
+  } catch { /* storage unavailable — session-only */ }
+}
+
+export function clearFirebaseToken(): void {
+  try {
+    localStorage.removeItem(FIREBASE_TOKEN_KEY);
+  } catch { /* ignore */ }
+}
+
 // Production builds should set VITE_API_URL explicitly. Same-origin /api is a
 // valid choice (reverse proxy), but an accidental omission should be visible
 // in the console, not discovered as mysterious 404s mid-demo.
@@ -69,13 +95,13 @@ try {
 } catch { /* import.meta unavailable in some test environments — ignore */ }
 
 // Thin wrapper over fetch that:
-//  - injects Authorization when a demo token exists,
+//  - injects Authorization (Firebase ID token preferred, demo token fallback),
 //  - applies a default timeout so no request can hang forever,
 //  - treats non-JSON responses as clean errors instead of a JSON-parse crash.
 // `url` is the full endpoint URL (e.g. `${API_URL}/farms`).
 export async function apiFetch(url: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers);
-  const token = getDemoToken();
+  const token = getFirebaseToken() || getDemoToken();
   if (token && !headers.has('Authorization')) {
     headers.set('Authorization', `Bearer ${token}`);
   }

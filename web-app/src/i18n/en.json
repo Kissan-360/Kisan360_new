@@ -128,6 +128,7 @@
   "login.password.label": "Password",
   "login.signIn": "Sign In",
   "login.signingIn": "Signing in…",
+  "login.googleSignIn": "Continue with Google",
   "login.divider": "Demo sign-in",
   "login.demoNote": "Simulated for the SIH demo — no real credentials. Choose a role.",
   "register.subtitle": "Create your Kisan360 account",

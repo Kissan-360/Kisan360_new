@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
 import { auth, firebaseReady } from '../firebaseConfig';
 import { User, onAuthStateChanged, signOut as fbSignOut } from 'firebase/auth';
-import { API_URL, DemoUser, DemoRole, getDemoToken, getDemoUser, setDemoAuth, clearDemoAuth, isDemoSession } from '../lib/api';
+import { API_URL, DemoUser, DemoRole, getDemoToken, getDemoUser, setDemoAuth, clearDemoAuth, isDemoSession, setFirebaseToken, clearFirebaseToken } from '../lib/api';
 
 type AuthUser = (User & { demo?: boolean; role?: string; district?: string }) | DemoUser | null;
 
@@ -70,6 +70,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
+  // Bridge the Firebase session into API calls: store a fresh ID token so
+  // apiFetch authenticates as the displayed (Firebase) identity. ID tokens
+  // expire after ~1h, hence the 50-minute refresh while signed in.
+  useEffect(() => {
+    if (!firebaseUser) {
+      clearFirebaseToken();
+      return;
+    }
+    let cancelled = false;
+    const sync = () => {
+      firebaseUser.getIdToken().then((t) => { if (!cancelled) setFirebaseToken(t); }).catch(() => {});
+    };
+    sync();
+    const timer = setInterval(sync, 50 * 60 * 1000);
+    return () => { cancelled = true; clearInterval(timer); };
+  }, [firebaseUser]);
+
   // Prefer the persisted demo session so the demo works even before Firebase
   // finishes loading or when Firebase is unreachable.
   const user: AuthUser = firebaseUser ? (firebaseUser as any) : demoUser;
@@ -95,6 +112,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (firebaseUser && auth) {
       try { await fbSignOut(auth); } catch {}
     }
+    clearFirebaseToken();
     clearDemoAuth();
     setDemoUser(null);
   };
