@@ -59,3 +59,14 @@ Frontend-kisan-360/
 .trae/
 Kisan360_HLD (2).pdf
 *.log
+
+# Office lock files (deck open in PowerPoint while git status runs)
+~$*.pptx
+~$*.docx
+
+# UI-audit harness ephemera — versioned: the .cjs probe scripts only.
+# Never commit: installed browser driver, chrome profile, screenshots, run results.
+.harness/node_modules/
+.harness/chrome-profile/
+.harness/shots/
+.harness/*.json
