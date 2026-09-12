@@ -4,6 +4,7 @@ const { authenticateUser } = require('../middleware/auth');
 const requireDb = require('../middleware/requireDb');
 const { transition, allowedTransitions } = require('../services/stateMachine');
 const Grievance = require('../models/Grievance');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 router.use(authenticateUser, requireDb);
@@ -34,7 +35,7 @@ router.post('/', async (req, res) => {
     });
     res.status(201).json({ success: true, grievance });
   } catch (error) {
-    console.error('Create grievance error:', error.message);
+    logger.error('Create grievance error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to raise grievance' });
   }
 });
@@ -46,7 +47,7 @@ router.get('/', async (req, res) => {
     const grievances = await Grievance.find(filter).sort({ createdAt: -1 }).limit(50).lean();
     res.json({ success: true, count: grievances.length, grievances, view: isBuyerSide(req.user.role) ? 'queue' : 'mine' });
   } catch (error) {
-    console.error('List grievances error:', error.message);
+    logger.error('List grievances error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to list grievances' });
   }
 });
@@ -62,7 +63,7 @@ router.get('/:id', async (req, res) => {
     res.json({ success: true, grievance: g, allowedTransitions: allowedTransitions('grievance', g.status) });
   } catch (error) {
     if (error.name === 'CastError') return res.status(404).json({ success: false, error: 'Grievance not found' });
-    console.error('Get grievance error:', error.message);
+    logger.error('Get grievance error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to load grievance' });
   }
 });
@@ -90,7 +91,7 @@ router.post('/:id/transition', async (req, res) => {
   } catch (error) {
     if (error.code === 'ILLEGAL_TRANSITION') return res.status(422).json({ success: false, error: error.message });
     if (error.name === 'CastError') return res.status(404).json({ success: false, error: 'Grievance not found' });
-    console.error('Transition grievance error:', error.message);
+    logger.error('Transition grievance error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to transition grievance' });
   }
 });

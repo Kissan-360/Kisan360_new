@@ -8,6 +8,7 @@ const { transition } = require('../services/stateMachine');
 const Lot = require('../models/Lot');
 const Offer = require('../models/Offer');
 const Payment = require('../models/Payment');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 router.use(authenticateUser, requireDb);
@@ -35,7 +36,7 @@ let directoryBuyers = [];
 try {
   directoryBuyers = (JSON.parse(fs.readFileSync(BUYERS_FILE, 'utf8')).buyers) || [];
 } catch (error) {
-  console.error('Failed to load buyer directory:', error.message);
+  logger.error('Failed to load buyer directory:', error.message);
 }
 
 function quantityInQuintals(lot) {
@@ -105,7 +106,7 @@ router.post('/', async (req, res) => {
 
     res.status(201).json({ success: true, offer, note: 'Offer sent. Simulated flow: the buyer accepts from a buyer/fpo demo login.' });
   } catch (error) {
-    console.error('Create offer error:', error.message);
+    logger.error('Create offer error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to create offer' });
   }
 });
@@ -125,7 +126,7 @@ router.get('/', async (req, res) => {
     res.json({ success: true, count: offers.length, offers, view: side });
   } catch (error) {
     if (error.status === 403) return res.status(403).json({ success: false, error: error.message });
-    console.error('List offers error:', error.message);
+    logger.error('List offers error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to list offers' });
   }
 });
@@ -141,7 +142,7 @@ router.get('/:id', async (req, res) => {
     res.json({ success: true, offer });
   } catch (error) {
     if (error.name === 'CastError') return res.status(404).json({ success: false, error: 'Offer not found' });
-    console.error('Get offer error:', error.message);
+    logger.error('Get offer error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to load offer' });
   }
 });
@@ -197,7 +198,7 @@ router.post('/:id/accept', async (req, res) => {
     });
   } catch (error) {
     if (error.code === 'ILLEGAL_TRANSITION') return res.status(422).json({ success: false, error: error.message });
-    console.error('Accept offer error:', error.message);
+    logger.error('Accept offer error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to accept offer' });
   }
 });
@@ -215,7 +216,7 @@ router.post('/:id/reject', async (req, res) => {
     res.json({ success: true, offer });
   } catch (error) {
     if (error.code === 'ILLEGAL_TRANSITION') return res.status(422).json({ success: false, error: error.message });
-    console.error('Reject offer error:', error.message);
+    logger.error('Reject offer error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to reject offer' });
   }
 });
@@ -230,7 +231,7 @@ router.post('/:id/withdraw', async (req, res) => {
     res.json({ success: true, offer });
   } catch (error) {
     if (error.code === 'ILLEGAL_TRANSITION') return res.status(422).json({ success: false, error: error.message });
-    console.error('Withdraw offer error:', error.message);
+    logger.error('Withdraw offer error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to withdraw offer' });
   }
 });

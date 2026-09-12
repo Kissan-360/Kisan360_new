@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "note": "DEMO TRANSPORT PROVIDERS — illustrative carrier directory for the SIH demo. Trust tiers do not represent real verification; production would verify carriers against transport registries, insurance documents, and fleet records.",
+    "trustTiers": {
+      "SOURCE_VERIFIED": { "label": "Source-verified carrier", "description": "Verified via a logistics partner or upstream reference" },
+      "DEMO_VERIFIED": { "label": "Demo-verified carrier", "description": "Demo directory entry; verification simulated for this build" },
+      "SELF_DECLARED": { "label": "Self-declared carrier", "description": "Profile self-declared; no verification performed yet" }
+    }
+  },
+  "providers": [
+    {
+      "id": "tp1",
+      "name": "Nashik Agro Logistics Co.",
+      "category": "FPO-linked transporter",
+      "vehicleTypes": ["LCV", "Pickup"],
+      "maxCapacityQuintals": 40,
+      "serviceDistricts": ["Nashik", "Pune", "Ahmednagar"],
+      "trustTier": "SOURCE_VERIFIED",
+      "verificationNote": "Linked to FPO aggregation partner (demo: static)",
+      "baseRatePerQuintalPerKm": 1.5,
+      "bulkRatePerQuintalPerKm": 0.75,
+      "bulkThresholdQuintals": 40,
+      "estimatedResponseHours": 4,
+      "description": "Local transport for small to medium lots within Nashik region."
+    },
+    {
+      "id": "tp2",
+      "name": "Maharashtra Express Carriers",
+      "category": "Regional carrier",
+      "vehicleTypes": ["LCV", "Truck", "Full-Truck"],
+      "maxCapacityQuintals": 200,
+      "serviceDistricts": ["Nashik", "Pune", "Mumbai", "Aurangabad", "Nagpur"],
+      "trustTier": "DEMO_VERIFIED",
+      "verificationNote": "Demo directory entry — verification simulated",
+      "baseRatePerQuintalPerKm": 1.25,
+      "bulkRatePerQuintalPerKm": 0.65,
+      "bulkThresholdQuintals": 40,
+      "estimatedResponseHours": 6,
+      "description": "Regional carrier covering major Maharashtra trade routes."
+    },
+    {
+      "id": "tp3",
+      "name": "Vidarbha Freight Services",
+      "category": "Long-haul carrier",
+      "vehicleTypes": ["Truck", "Full-Truck"],
+      "maxCapacityQuintals": 500,
+      "serviceDistricts": ["Nagpur", "Amravati", "Akola", "Aurangabad"],
+      "trustTier": "DEMO_VERIFIED",
+      "verificationNote": "Demo directory entry — verification simulated",
+      "baseRatePerQuintalPerKm": 1.0,
+      "bulkRatePerQuintalPerKm": 0.55,
+      "bulkThresholdQuintals": 40,
+      "estimatedResponseHours": 8,
+      "description": "Long-haul carrier for bulk shipments across Vidarbha."
+    },
+    {
+      "id": "tp4",
+      "name": "Kolhapur Veg Transport Hub",
+      "category": "Local transporter",
+      "vehicleTypes": ["Pickup", "LCV"],
+      "maxCapacityQuintals": 25,
+      "serviceDistricts": ["Kolhapur", "Satara", "Solapur"],
+      "trustTier": "SELF_DECLARED",
+      "verificationNote": "Self-declared profile — no verification yet",
+      "baseRatePerQuintalPerKm": 1.75,
+      "bulkRatePerQuintalPerKm": 1.0,
+      "bulkThresholdQuintals": 25,
+      "estimatedResponseHours": 3,
+      "description": "Local transporter for vegetable lots in Western Maharashtra."
+    }
+  ]
+}
