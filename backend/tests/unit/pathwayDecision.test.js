@@ -635,6 +635,82 @@ describe('Adversarial: Data basis must accurately classify sources', () => {
 // ═══════════════════════════════════════════════════════════════════════════
 // TEST SUITE 14: LOGICAL CONTRADICTION CHECKS
 // ═══════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 16: REASON CODES
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: Reason codes must be machine-readable and traceable', () => {
+  test('SELL_NOW recommendation must have reasonCodes array', () => {
+    const mandi = makeMandi();
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+
+    expect(result.recommendation.reasonCodes).toBeDefined();
+    expect(Array.isArray(result.recommendation.reasonCodes)).toBe(true);
+    expect(result.recommendation.reasonCodes.length).toBeGreaterThan(0);
+    // Must contain at least one code from the known set
+    const validCodes = [
+      'MARKET_NET_REALIZATION_FAVORABLE', 'ACTIONABLE_MARKET_AVAILABLE',
+      'RECENT_OBSERVATION', 'SALE_WINDOW_FAVORABLE', 'SALE_WINDOW_WEAK',
+      'NO_BUYER_AT_BEST_MARKET', 'EVIDENCE_STALE',
+      'AGGREGATION_AVAILABLE', 'LOT_SIZE_SUPPORTS_AGGREGATION',
+      'TRANSPORT_SAVING_THRESHOLD_MET', 'HIGHER_NET_REALIZATION_AVAILABLE',
+      'ACTIONABLE_BUYER_AT_ALTERNATIVE', 'ECONOMIC_COST_ACCEPTABLE',
+      'STORAGE_OPTION_AVAILABLE', 'BREAKEVEN_WITHIN_OBSERVED_RANGE',
+    ];
+    for (const code of result.recommendation.reasonCodes) {
+      expect(validCodes).toContain(code);
+    }
+  });
+
+  test('AGGREGATE recommendation must include AGGREGATION_AVAILABLE', () => {
+    const mandi = makeMandi({ distanceKm: 610 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+
+    if (result.recommendation.pathway === 'AGGREGATE_THROUGH_FPO') {
+      expect(result.recommendation.reasonCodes).toContain('AGGREGATION_AVAILABLE');
+      expect(result.recommendation.reasonCodes).toContain('TRANSPORT_SAVING_THRESHOLD_MET');
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 17: NEXT ACTION HANDOFF
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: nextAction must be present and valid', () => {
+  test('SELL_NOW must include nextAction', () => {
+    const mandi = makeMandi();
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+
+    expect(result.nextAction).toBeDefined();
+    expect(result.nextAction.type).toBeDefined();
+    expect(['CONNECT_BUYER', 'CREATE_LOT', 'CONSIDER_STORAGE']).toContain(result.nextAction.type);
+    expect(result.nextAction.reason).toBeDefined();
+  });
+
+  test('empty engine result must not crash on nextAction', () => {
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: { rankedMandis: [] },
+      trendData: null,
+    });
+
+    // Error case — nextAction may be null, that's fine
+    // But it must not crash
+    expect(result).toBeDefined();
+  });
+});
+
 describe('Adversarial: No logical contradictions in recommendations', () => {
   test('AGGREGATE recommendation must have positive transport saving', () => {
     const mandi = makeMandi({ distanceKm: 610 });
@@ -711,5 +787,363 @@ describe('Adversarial: Weather must not fabricate price predictions', () => {
     expect(fn).not.toContain('weather');
     expect(fn).not.toContain('temperature');
     expect(fn).not.toContain('rainfall');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 18: ECONOMIC BEST vs RECOMMENDED PATHWAY (CASE C)
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: economicBest vs recommendedPathway must be coherent', () => {
+  test('AGGREGATE recommendation with economic best market must not contradict', () => {
+    // 10q at 210km: saving = (1.5 - 0.75) × 210 = ₹157.5/q > ₹50 threshold
+    const mandi = makeMandi({ distanceKm: 210, farmerNetPerQuintal: 2663, farmerNetTotal: 26630 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+
+    if (result.recommendation.pathway === 'AGGREGATE_THROUGH_FPO') {
+      // economicSummary must exist and distinguish best market from recommended action
+      expect(result.economicSummary).toBeDefined();
+      expect(result.economicSummary.bestMarket).toBeDefined();
+      expect(result.economicSummary.recommendedPathway).toBe('AGGREGATE_THROUGH_FPO');
+      // The recommended market is the SAME as economic best (pooling improves same destination)
+      expect(result.economicSummary.recommendedMarket).toBe(result.economicSummary.bestMarket);
+      // reasonForDifference must explain the tradeoff
+      expect(result.economicSummary.reasonForDifference).toBeDefined();
+      expect(result.economicSummary.reasonForDifference).toContain('Pooling');
+    }
+  });
+
+  test('SELL_NOW recommendation must have economicSummary with identical best and recommended', () => {
+    const mandiA = makeMandi({
+      market: 'Market A', farmerNetPerQuintal: 4500, farmerNetTotal: 45000, distanceKm: 30,
+    });
+    const mandiB = makeMandi({
+      market: 'Market B', rank: 2, farmerNetPerQuintal: 4200, farmerNetTotal: 42000, distanceKm: 50,
+    });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandiA, mandiB]),
+      trendData: makeTrendData({ market: 'Market A' }),
+    });
+
+    if (result.recommendation.pathway === 'SELL_NOW') {
+      expect(result.economicSummary).toBeDefined();
+      expect(result.economicSummary.bestMarket).toBe('Market A');
+      expect(result.economicSummary.recommendedMarket).toBe('Market A');
+      expect(result.economicSummary.reasonForDifference).toBeNull();
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 19: NO VALID MARKET EVIDENCE (CASE G)
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: No valid market evidence must produce honest error', () => {
+  test('Empty rankedMandis → INSUFFICIENT_EVIDENCE with proper shape', () => {
+    const result = computePathways({
+      crop: 'Mango', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: { rankedMandis: [] },
+      trendData: null,
+    });
+
+    expect(result.error).toBeDefined();
+    expect(result.pathways).toEqual([]);
+    expect(result.recommendation).toBeDefined();
+    expect(result.recommendation.pathway).toBe('INSUFFICIENT_EVIDENCE');
+    expect(result.recommendation.reasonCodes).toContain('NO_VALID_MARKET_OBSERVATION');
+    expect(result.recommendation.confidence).toBe('INSUFFICIENT');
+    expect(result.nextAction).toBeNull();
+  });
+
+  test('Null engineResult → INSUFFICIENT_EVIDENCE with proper shape', () => {
+    const result = computePathways({
+      crop: 'Mango', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: null,
+      trendData: null,
+    });
+
+    expect(result.error).toBeDefined();
+    expect(result.recommendation.pathway).toBe('INSUFFICIENT_EVIDENCE');
+    expect(result.nextAction).toBeNull();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 20: STALE EVIDENCE (CASE H)
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: Stale evidence must produce safe behavior', () => {
+  test('Stale quote → confidence must be CAUTION or LIMITED, not STRONG', () => {
+    const mandi = makeMandi();
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({
+        currentQuote: {
+          modalPrice: 4000,
+          arrivalDate: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString(),
+          source: 'agmarknet',
+          retrievedAt: new Date().toISOString(),
+        },
+      }),
+    });
+
+    // Stale evidence must NOT produce STRONG confidence
+    expect(result.recommendation.confidence).not.toBe('STRONG');
+    expect(['CAUTION', 'LIMITED']).toContain(result.recommendation.confidence);
+  });
+
+  test('Stale quote must include EVIDENCE_STALE reason code if it reaches SELL_NOW', () => {
+    const mandi = makeMandi({ distanceKm: 30, farmerNetPerQuintal: 4325 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({
+        currentQuote: {
+          modalPrice: 4000,
+          arrivalDate: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString(),
+          source: 'agmarknet',
+          retrievedAt: new Date().toISOString(),
+        },
+        market: 'APMC Test',
+      }),
+    });
+
+    if (result.recommendation.pathway === 'SELL_NOW') {
+      expect(result.recommendation.reasonCodes).toContain('EVIDENCE_STALE');
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 21: INVALID QUANTITY (CASE J)
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: Invalid quantity must be handled safely', () => {
+  test('Zero quantity → must not crash', () => {
+    const mandi = makeMandi();
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 0, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData(),
+    });
+    expect(result).toBeDefined();
+    expect(result.recommendation).toBeDefined();
+  });
+
+  test('Negative quantity → must not crash', () => {
+    const mandi = makeMandi();
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: -5, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData(),
+    });
+    expect(result).toBeDefined();
+    expect(result.recommendation).toBeDefined();
+  });
+
+  test('Very large quantity → must not crash, must use bulk rate', () => {
+    const mandi = makeMandi({ distanceKm: 100 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 1000, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData(),
+    });
+    expect(result).toBeDefined();
+    expect(result.recommendation).toBeDefined();
+    // Must use bulk rate at 1000q
+    const fpo = result.pathways.find(p => p.pathway === 'AGGREGATE_THROUGH_FPO');
+    if (fpo) {
+      expect(fpo.isBulkQualified).toBe(true);
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 22: REASON CODE INTEGRITY
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: Reason codes must be evidence-backed', () => {
+  test('No valid market → must NOT contain ACTIONABLE_MARKET_AVAILABLE', () => {
+    const result = computePathways({
+      crop: 'Mango', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: { rankedMandis: [] },
+      trendData: null,
+    });
+    expect(result.recommendation.reasonCodes).not.toContain('ACTIONABLE_MARKET_AVAILABLE');
+    expect(result.recommendation.reasonCodes).toContain('NO_VALID_MARKET_OBSERVATION');
+  });
+
+  test('AGGREGATE must contain AGGREGATION_AVAILABLE', () => {
+    const mandi = makeMandi({ distanceKm: 610 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+    if (result.recommendation.pathway === 'AGGREGATE_THROUGH_FPO') {
+      expect(result.recommendation.reasonCodes).toContain('AGGREGATION_AVAILABLE');
+      expect(result.recommendation.reasonCodes).toContain('TRANSPORT_SAVING_THRESHOLD_MET');
+    }
+  });
+
+  test('SELL_NOW must contain MARKET_NET_REALIZATION_FAVORABLE', () => {
+    const mandi = makeMandi({ distanceKm: 30, farmerNetPerQuintal: 4325 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+    if (result.recommendation.pathway === 'SELL_NOW') {
+      expect(result.recommendation.reasonCodes).toContain('MARKET_NET_REALIZATION_FAVORABLE');
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 23: NEXT ACTION INTEGRITY
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: nextAction must match recommendation', () => {
+  test('INSUFFICIENT_EVIDENCE must have null nextAction', () => {
+    const result = computePathways({
+      crop: 'Mango', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: { rankedMandis: [] },
+      trendData: null,
+    });
+    expect(result.nextAction).toBeNull();
+  });
+
+  test('SELL_NOW must have nextAction with valid type', () => {
+    const mandi = makeMandi({ distanceKm: 30, farmerNetPerQuintal: 4325 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+    if (result.recommendation.pathway === 'SELL_NOW') {
+      expect(result.nextAction).toBeDefined();
+      expect(['CONNECT_BUYER', 'CREATE_LOT']).toContain(result.nextAction.type);
+      expect(result.nextAction.market).toBeDefined();
+      expect(result.nextAction.reason).toBeDefined();
+    }
+  });
+
+  test('AGGREGATE must have nextAction referencing the aggregation market', () => {
+    const mandi = makeMandi({ distanceKm: 610 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+    if (result.recommendation.pathway === 'AGGREGATE_THROUGH_FPO') {
+      expect(result.nextAction).toBeDefined();
+      expect(result.nextAction.market).toBe('APMC Test');
+      expect(result.nextAction.type).toMatch(/CONNECT_BUYER|CREATE_LOT/);
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 24: PROVENANCE LABELS
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: Provenance must accurately classify sources', () => {
+  test('dataBasis must classify buyer directory as DEMO', () => {
+    const mandi = makeMandi();
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+    expect(result.dataBasis.buyerDirectory).toMatch(/demo|static/i);
+    expect(result.dataBasis.storageOptions).toMatch(/demo|static/i);
+    expect(result.dataBasis.transportCosts).toMatch(/assumption/i);
+    expect(result.dataBasis.marketPrices).toMatch(/AGMARKNET/i);
+  });
+
+  test('No forecast disclaimer must be in assumptions', () => {
+    const mandi = makeMandi();
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+    const hasNoForecast = result.assumptions.some(a =>
+      a.toLowerCase().includes('no') && a.toLowerCase().includes('forecast')
+    );
+    expect(hasNoForecast).toBe(true);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 26: JOURNEY CONSISTENCY — decision → lot handoff
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: Decision output must be consistent with lot creation input', () => {
+  test('Decision economicSummary.bestMarket must match the market used for net calculation', () => {
+    const mandi = makeMandi({ market: 'APMC Vita', distanceKm: 320, farmerNetPerQuintal: 4898 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Vita' }),
+    });
+
+    // economicSummary.bestMarket must be the same market as rankedMandis[0]
+    expect(result.economicSummary.bestMarket).toBe('APMC Vita');
+    expect(result.economicSummary.bestNetPerQuintal).toBe(4898);
+    
+    // SELL_NOW pathway must reference the same market
+    const sellNow = result.pathways.find(p => p.pathway === 'SELL_NOW');
+    expect(sellNow.mandi).toBe('APMC Vita');
+    expect(sellNow.estimatedNetPerQuintal).toBe(4898);
+  });
+
+  test('Decision crop/district must match input crop/district', () => {
+    const mandi = makeMandi();
+    const result = computePathways({
+      crop: 'Soybean', district: 'Akola', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData(),
+    });
+
+    expect(result.crop).toBe('Soybean');
+    expect(result.district).toBe('Akola');
+    expect(result.quantityQuintals).toBe(10);
+  });
+
+  test('Quantity must flow through unchanged to economicSummary', () => {
+    const mandi = makeMandi({ farmerNetPerQuintal: 3000, farmerNetTotal: 150000 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 50, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData(),
+    });
+
+    expect(result.quantityQuintals).toBe(50);
+    expect(result.economicSummary.bestNetTotal).toBe(150000);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE 25: CONFIDENCE SEMANTICS
+// ═══════════════════════════════════════════════════════════════════════════
+describe('Adversarial: Confidence must reflect evidence quality', () => {
+  test('Fresh quote + valid price + buyer compat → must not be LIMITED', () => {
+    const mandi = makeMandi({ distanceKm: 30, farmerNetPerQuintal: 4325 });
+    const result = computePathways({
+      crop: 'Onion', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: mockEngineResult([mandi]),
+      trendData: makeTrendData({ market: 'APMC Test' }),
+    });
+    if (result.recommendation.pathway === 'SELL_NOW') {
+      expect(result.recommendation.confidence).not.toBe('LIMITED');
+    }
+  });
+
+  test('No data → confidence must be INSUFFICIENT', () => {
+    const result = computePathways({
+      crop: 'Mango', district: 'Nashik', quantityQuintals: 10, quality: {},
+      engineResult: { rankedMandis: [] },
+      trendData: null,
+    });
+    expect(result.recommendation.confidence).toBe('INSUFFICIENT');
   });
 });

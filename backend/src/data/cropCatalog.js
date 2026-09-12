@@ -21,7 +21,7 @@
  */
 
 const CROPS = [
-  // ── Currently supported (have AGMARKNET observations) ────────────
+  // ── Strong AGMARKNET coverage (10+ mandis) ───────────────────────
   {
     id: 'onion',
     name: 'Onion',
@@ -62,11 +62,11 @@ const CROPS = [
     qualityGrades: ['Grade A', 'Grade B'],
   },
 
-  // ── Major Maharashtra crops (no current AGMARKNET observations) ──
+  // ── Moderate AGMARKNET coverage (1–9 mandis) ────────────────────
   {
     id: 'cotton',
     name: 'Cotton',
-    aliases: ['Cotton', 'Kapas'],
+    aliases: ['Cotton (Raw)', 'Cotton', 'Kapas'],
     season: 'kharif',
     majorDistricts: ['Akola', 'Amravati', 'Washim', 'Yavatmal', 'Buldhana'],
     soilSuitability: { suitable: ['Black / Regur', 'Black / Mixed'], conditional: ['Red'] },
@@ -79,12 +79,12 @@ const CROPS = [
   {
     id: 'jowar',
     name: 'Jowar (Sorghum)',
-    aliases: ['Jowar', 'Sorghum', 'Sorghum (Jowar)'],
+    aliases: ['Jowar(Sorghum)', 'Jowar', 'Sorghum', 'Sorghum (Jowar)'],
     season: 'kharif',
     majorDistricts: ['Solapur', 'Sangli', 'Pune', 'Ahmednagar', 'Satara'],
     soilSuitability: { suitable: ['Black / Regur'], conditional: ['Red', 'Mixed'] },
     waterNeed: 'low',
-    marketCoverage: 'no_data',
+    marketCoverage: 'limited',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['FAQ'],
@@ -92,12 +92,12 @@ const CROPS = [
   {
     id: 'bajra',
     name: 'Bajra (Pearl Millet)',
-    aliases: ['Bajra', 'Pearl Millet', 'Bajari'],
+    aliases: ['Bajra(Pearl Millet/Cumbu)', 'Bajra', 'Pearl Millet', 'Bajari'],
     season: 'kharif',
     majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Satara', 'Jalgaon'],
     soilSuitability: { suitable: ['Black / Regur', 'Red', 'Alluvial'], conditional: ['Lateritic'] },
     waterNeed: 'low',
-    marketCoverage: 'no_data',
+    marketCoverage: 'limited',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['FAQ'],
@@ -110,7 +110,7 @@ const CROPS = [
     majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Satara', 'Solapur'],
     soilSuitability: { suitable: ['Black / Regur', 'Alluvial'], conditional: ['Red'] },
     waterNeed: 'moderate',
-    marketCoverage: 'no_data',
+    marketCoverage: 'active',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['FAQ', 'Durum'],
@@ -118,12 +118,12 @@ const CROPS = [
   {
     id: 'tur-dal',
     name: 'Tur Dal (Pigeon Pea)',
-    aliases: ['Tur', 'Arhar', 'Pigeon Pea', 'Tur Dal', 'Toor Dal'],
+    aliases: ['Red gram/Arhar/Tur(whole)', 'Tur', 'Arhar', 'Pigeon Pea', 'Tur Dal', 'Toor Dal'],
     season: 'kharif',
     majorDistricts: ['Akola', 'Amravati', 'Washim', 'Nagpur', 'Buldhana'],
     soilSuitability: { suitable: ['Black / Regur', 'Black / Mixed'], conditional: ['Red'] },
     waterNeed: 'low',
-    marketCoverage: 'no_data',
+    marketCoverage: 'limited',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['FAQ'],
@@ -131,12 +131,12 @@ const CROPS = [
   {
     id: 'chilli',
     name: 'Chilli',
-    aliases: ['Chilli', 'Chili', 'Mirchi', 'Red Chilli'],
+    aliases: ['Green Chilli', 'Chilli', 'Chili', 'Mirchi', 'Red Chilli'],
     season: 'kharif',
     majorDistricts: ['Akola', 'Washim', 'Yavatmal', 'Amravati', 'Nagpur'],
     soilSuitability: { suitable: ['Black / Regur', 'Red'], conditional: ['Mixed'] },
     waterNeed: 'moderate',
-    marketCoverage: 'no_data',
+    marketCoverage: 'active',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['FAQ', 'Bold', 'Medium'],
@@ -149,7 +149,7 @@ const CROPS = [
     majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Jalgaon', 'Solapur'],
     soilSuitability: { suitable: ['Black / Regur', 'Alluvial', 'Red'], conditional: ['Lateritic'] },
     waterNeed: 'moderate',
-    marketCoverage: 'no_data',
+    marketCoverage: 'limited',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['FAQ'],
@@ -162,7 +162,7 @@ const CROPS = [
     majorDistricts: ['Jalgaon', 'Ahmednagar', 'Solapur', 'Sangli', 'Nashik'],
     soilSuitability: { suitable: ['Red', 'Sandy Loam'], conditional: ['Black / Regur'] },
     waterNeed: 'moderate',
-    marketCoverage: 'no_data',
+    marketCoverage: 'limited',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['FAQ', 'Bold', 'Java'],
@@ -188,7 +188,7 @@ const CROPS = [
     majorDistricts: ['Nashik', 'Sangli', 'Pune'],
     soilSuitability: { suitable: ['Black / Regur', 'Red'], conditional: ['Alluvial'] },
     waterNeed: 'moderate',
-    marketCoverage: 'no_data',
+    marketCoverage: 'limited',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['Export', 'Table', 'FAQ'],
@@ -201,7 +201,74 @@ const CROPS = [
     majorDistricts: ['Solapur', 'Sangli', 'Ahmednagar', 'Pune'],
     soilSuitability: { suitable: ['Black / Regur', 'Red'], conditional: ['Mixed'] },
     waterNeed: 'low',
-    marketCoverage: 'no_data',
+    marketCoverage: 'active',
+    buyerCoverage: 'none',
+    storageCoverage: 'none',
+    qualityGrades: ['FAQ'],
+  },
+
+  // ── Additional crops with AGMARKNET observations ─────────────────
+  {
+    id: 'ginger',
+    name: 'Ginger',
+    aliases: ['Ginger(Green)', 'Ginger', 'Green Ginger'],
+    season: 'kharif',
+    majorDistricts: ['Pune', 'Nashik', 'Ahmednagar', 'Kolhapur', 'Sangli'],
+    soilSuitability: { suitable: ['Red', 'Lateritic'], conditional: ['Black / Regur'] },
+    waterNeed: 'high',
+    marketCoverage: 'active',
+    buyerCoverage: 'none',
+    storageCoverage: 'none',
+    qualityGrades: ['FAQ'],
+  },
+  {
+    id: 'black-gram',
+    name: 'Black Gram (Urad)',
+    aliases: ['Black Gram(Urd Beans)(Whole)', 'Black Gram', 'Urad', 'Urad Dal'],
+    season: 'kharif',
+    majorDistricts: ['Akola', 'Amravati', 'Washim', 'Nagpur', 'Buldhana'],
+    soilSuitability: { suitable: ['Black / Regur', 'Black / Mixed'], conditional: ['Red'] },
+    waterNeed: 'low',
+    marketCoverage: 'active',
+    buyerCoverage: 'none',
+    storageCoverage: 'none',
+    qualityGrades: ['FAQ'],
+  },
+  {
+    id: 'green-gram',
+    name: 'Green Gram (Moong)',
+    aliases: ['Green Gram(Moong)(Whole)', 'Green Gram', 'Moong', 'Moong Dal'],
+    season: 'kharif',
+    majorDistricts: ['Akola', 'Amravati', 'Washim', 'Nagpur', 'Buldhana'],
+    soilSuitability: { suitable: ['Black / Regur', 'Black / Mixed'], conditional: ['Red'] },
+    waterNeed: 'low',
+    marketCoverage: 'active',
+    buyerCoverage: 'none',
+    storageCoverage: 'none',
+    qualityGrades: ['FAQ'],
+  },
+  {
+    id: 'bengal-gram',
+    name: 'Bengal Gram (Chana)',
+    aliases: ['Bengal Gram(Gram)(Whole)', 'Bengal Gram', 'Chana', 'Chana Dal'],
+    season: 'rabi',
+    majorDistricts: ['Ahmednagar', 'Pune', 'Nashik', 'Satara', 'Solapur'],
+    soilSuitability: { suitable: ['Black / Regur', 'Red'], conditional: ['Alluvial'] },
+    waterNeed: 'low',
+    marketCoverage: 'active',
+    buyerCoverage: 'none',
+    storageCoverage: 'none',
+    qualityGrades: ['FAQ'],
+  },
+  {
+    id: 'green-peas',
+    name: 'Green Peas',
+    aliases: ['Green Peas', 'Matar'],
+    season: 'rabi',
+    majorDistricts: ['Pune', 'Nashik', 'Ahmednagar', 'Satara', 'Solapur'],
+    soilSuitability: { suitable: ['Black / Regur', 'Red'], conditional: ['Alluvial'] },
+    waterNeed: 'moderate',
+    marketCoverage: 'limited',
     buyerCoverage: 'none',
     storageCoverage: 'none',
     qualityGrades: ['FAQ'],
@@ -237,12 +304,12 @@ function getCrop(id) {
  * Get all crops with active market coverage.
  */
 /**
- * Get all crops with active market coverage.
- * NOTE: This returns crops with static 'active' flag. For dynamic coverage
+ * Get all crops with market data (active or limited coverage).
+ * NOTE: This returns crops with static flags. For dynamic coverage
  * based on actual snapshot data, use getCoverageMatrix().cropCoverage.
  */
 function getActiveMarketCrops() {
-  return CROPS.filter(c => c.marketCoverage === 'active');
+  return CROPS.filter(c => c.marketCoverage === 'active' || c.marketCoverage === 'limited');
 }
 
 /**

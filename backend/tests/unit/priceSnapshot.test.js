@@ -11,12 +11,17 @@ const RECORDS = [
 ];
 
 describe('priceSnapshot', () => {
-  test('targets the demo crops only', () => {
+  test('targets all scheduler crops', () => {
     expect(isTargetCrop('Soyabeen')).toBe(true);
     expect(isTargetCrop('soybean')).toBe(true);
     expect(isTargetCrop('Tomato')).toBe(true);
-    expect(isTargetCrop('Wheat')).toBe(false);
-    expect(TARGET_CROPS).toEqual(['Soybean', 'Onion', 'Tomato']);
+    expect(isTargetCrop('Wheat')).toBe(true);
+    expect(isTargetCrop('Green Chilli')).toBe(true);
+    expect(TARGET_CROPS).toContain('Soybean');
+    expect(TARGET_CROPS).toContain('Onion');
+    expect(TARGET_CROPS).toContain('Tomato');
+    expect(TARGET_CROPS).toContain('Wheat');
+    expect(TARGET_CROPS.length).toBe(19);
   });
 
   test('maps, filters, and dedupes records into snapshot rows', () => {

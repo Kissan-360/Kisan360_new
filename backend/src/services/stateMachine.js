@@ -33,6 +33,19 @@ const MACHINES = {
       REJECTED: [],
     },
   },
+  // Logistics: Requested → Quoted → Accepted → Scheduled → In Transit → Delivered.
+  logistics: {
+    initial: 'REQUESTED',
+    allowed: {
+      REQUESTED: ['QUOTED', 'CANCELLED'],
+      QUOTED: ['ACCEPTED', 'CANCELLED'],
+      ACCEPTED: ['SCHEDULED', 'CANCELLED'],
+      SCHEDULED: ['IN_TRANSIT', 'CANCELLED'],
+      IN_TRANSIT: ['DELIVERED', 'CANCELLED'],
+      DELIVERED: [],
+      CANCELLED: [],
+    },
+  },
 };
 
 function canTransition(machineName, from, to) {

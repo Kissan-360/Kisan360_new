@@ -4,8 +4,12 @@
 
 const { normalizeRow, validateRow, cropMatches } = require('./marketCache');
 
-// Crops the demo targets (2–3 is enough to prove the concept).
-const TARGET_CROPS = ['Soybean', 'Onion', 'Tomato'];
+// All crops the scheduler attempts to fetch from AGMARKNET.
+const TARGET_CROPS = [
+  'Soybean', 'Onion', 'Tomato', 'Cotton', 'Jowar', 'Bajra', 'Wheat',
+  'Tur', 'Chilli', 'Maize', 'Groundnut', 'Sugarcane', 'Grapes', 'Pomegranate',
+  'Ginger', 'Black Gram', 'Green Gram', 'Bengal Gram', 'Green Peas',
+];
 
 function isTargetCrop(crop) {
   return TARGET_CROPS.some(t => cropMatches(t, crop));

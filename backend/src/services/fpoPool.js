@@ -126,4 +126,32 @@ function computeUplift(pool, pooledResult, individualBests) {
   };
 }
 
-module.exports = { loadMembers, quantityInQuintals, buildPool, memberShares, computeUplift };
+// Creates a Lot-ready object from pooled members. Does NOT persist — the
+// route handler owns the DB write. Returns { lotFields, memberShares }.
+function createPooledLot({ district, crop, members }) {
+  const pool = buildPool(members);
+  if (crop && crop !== pool.crop) {
+    pool.crop = crop;
+  }
+  const shares = memberShares(pool, 0); // netPerQ=0 here; actual net computed at offer time
+  const lotFields = {
+    crop: pool.crop,
+    quantity: pool.pooledQuantity,
+    unit: 'quintals',
+    grade: 'Unassessed',
+    district: district || '',
+    status: 'OPEN',
+    poolMetadata: {
+      isPooled: true,
+      memberCount: shares.length,
+      members: shares.map(({ uid, name, village, quantityQuintals, sharePct, netAmount }) => ({
+        uid, name, village, quantityQuintals, sharePct, netAmount,
+      })),
+      pooledCrop: pool.crop,
+      pooledQuantity: pool.pooledQuantity,
+    },
+  };
+  return { lotFields, memberShares: shares, pool };
+}
+
+module.exports = { loadMembers, quantityInQuintals, buildPool, memberShares, computeUplift, createPooledLot };

@@ -210,4 +210,72 @@ describe('fpoPool', () => {
     expect(fpoPool.quantityInQuintals(5, 'quintals')).toBe(5);
     expect(fpoPool.quantityInQuintals(undefined, 'quintals')).toBe(0);
   });
+
+  // ── createPooledLot ──────────────────────────────────────────────────────
+
+  describe('createPooledLot', () => {
+    test('returns lotFields with poolMetadata populated', () => {
+      const result = fpoPool.createPooledLot({ district: 'Pune', crop: 'Soybean', members: MEMBERS });
+      expect(result.lotFields.crop).toBe('Soybean');
+      expect(result.lotFields.quantity).toBe(40);
+      expect(result.lotFields.unit).toBe('quintals');
+      expect(result.lotFields.grade).toBe('Unassessed');
+      expect(result.lotFields.district).toBe('Pune');
+      expect(result.lotFields.status).toBe('OPEN');
+      expect(result.lotFields.poolMetadata.isPooled).toBe(true);
+      expect(result.lotFields.poolMetadata.memberCount).toBe(3);
+      expect(result.lotFields.poolMetadata.pooledQuantity).toBe(40);
+      expect(result.lotFields.poolMetadata.members).toHaveLength(3);
+    });
+
+    test('memberShares from createPooledLot are proportional', () => {
+      const result = fpoPool.createPooledLot({ district: 'Pune', members: MEMBERS });
+      const totalPct = result.memberShares.reduce((s, m) => s + m.sharePct, 0);
+      expect(totalPct).toBeCloseTo(100, 1);
+      expect(result.memberShares[0].sharePct).toBeCloseTo(30, 1); // 12/40
+      expect(result.memberShares[1].sharePct).toBeCloseTo(20, 1); // 8/40
+    });
+
+    test('createPooledLot rejects mixed crops', () => {
+      expect(() => fpoPool.createPooledLot({
+        district: 'Pune',
+        members: [
+          { uid: 'a', name: 'A', crop: 'Onion', quantity: 5, unit: 'quintals' },
+          { uid: 'b', name: 'B', crop: 'Soybean', quantity: 5, unit: 'quintals' },
+        ],
+      })).toThrow(/same crop/);
+    });
+
+    test('createPooledLot rejects zero-quantity-only members', () => {
+      expect(() => fpoPool.createPooledLot({
+        district: 'Pune',
+        members: [
+          { uid: 'a', name: 'A', crop: 'Soybean', quantity: 0, unit: 'quintals' },
+        ],
+      })).toThrow(/Pooled quantity must be positive/);
+    });
+
+    test('createPooledLot rejects empty members', () => {
+      expect(() => fpoPool.createPooledLot({ district: 'Pune', members: [] })).toThrow(/at least one member/);
+    });
+
+    test('createPooledLot uses default district when omitted', () => {
+      const result = fpoPool.createPooledLot({ members: MEMBERS });
+      expect(result.lotFields.district).toBe('');
+    });
+
+    test('createPooledLot sets netAmount to 0 when netPerQ is 0', () => {
+      const result = fpoPool.createPooledLot({ members: MEMBERS });
+      for (const m of result.memberShares) {
+        expect(m.netAmount).toBe(0);
+      }
+    });
+
+    test('createPooledLot pool object is available for further computation', () => {
+      const result = fpoPool.createPooledLot({ members: MEMBERS });
+      expect(result.pool.pooledQuantity).toBe(40);
+      expect(result.pool.crop).toBe('Soybean');
+      expect(result.pool.members).toHaveLength(3);
+    });
+  });
 });

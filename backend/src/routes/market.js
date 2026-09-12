@@ -8,11 +8,55 @@ const priceHistory = require('../services/priceHistory');
 const actionability = require('../services/actionability');
 const { runRefreshPipeline, getHealth } = require('../services/scheduler');
 const { authenticateUser } = require('../middleware/auth');
+const perishability = require('../services/cropPerishability');
 const logger = require('../utils/logger');
 
 const BUYERS_FILE = path.join(__dirname, '..', 'data', 'buyers.json');
 
 const NET_REALIZATION_URL = process.env.NET_REALIZATION_URL || 'http://localhost:8002';
+
+// Shared engine-compose: best-known prices → dedupe → deterministic calculator.
+// Used by every economics route so all of them consume the SAME ranked mandis
+// (single source of truth for net realization) rather than re-deriving it.
+async function composeEngineResult({ crop, district, quantity }) {
+  const priceResult = await marketCache.getBestPrices({ crop, state: 'Maharashtra', limit: 500 });
+  if (priceResult.rows.length === 0) {
+    return { error: `No mandi prices available for crop "${crop}" right now (live pull failed and cache has no rows).`, marketSource: priceResult.source, provenance: priceResult.provenance };
+  }
+  const deduped = priceResult.rows
+    .slice()
+    .sort((a, b) => (b.modalPrice || 0) - (a.modalPrice || 0))
+    .filter((r, i, arr) => arr.findIndex(x => x.market.trim().toLowerCase() === r.market.trim().toLowerCase()) === i);
+  const prices = deduped.map(r => ({
+    market: r.market,
+    variety: r.variety,
+    minPrice: r.minPrice,
+    maxPrice: r.maxPrice,
+    modalPrice: r.modalPrice,
+    arrivalDate: r.arrivalDate,
+    district: r.district,
+    source: priceResult.provenance.source,
+    retrievedAt: priceResult.provenance.retrievedAt,
+  }));
+  const mlRes = await axios.post(`${NET_REALIZATION_URL}/net-realization`, {
+    crop, district, quantity, prices,
+  }, { timeout: 15000 });
+  const engine = mlRes.data;
+  if (!engine || engine.success === false) {
+    return { error: engine?.error || 'Calculator rejected the request', marketSource: priceResult.source };
+  }
+  return { engine, priceResult };
+}
+
+// Quantity parsing shared by the economics routes: 400 on non-positive or
+// non-numeric input (never silently default an explicitly invalid quantity).
+function requireQuantity(raw) {
+  const n = parseFloat(raw);
+  if (!Number.isFinite(n) || n <= 0) {
+    return { ok: false, error: 'quantity must be a positive number' };
+  }
+  return { ok: true, value: n };
+}
 
 // Bounded, coercible query params for every market route: strings capped,
 // numbers clamped. Prevents absurd pagination, oversized filters and NaN
@@ -124,7 +168,11 @@ router.get('/net-realization', async (req, res) => {
         error: 'crop and district query params are required (e.g. crop=Onion&district=Nashik&quantity=10)',
       });
     }
-    const qty = Math.max(parseFloat(quantity) || 10, 0.1);
+    const rawQty = parseFloat(quantity);
+    if (quantity !== undefined && (!Number.isFinite(rawQty) || rawQty <= 0)) {
+      return res.status(400).json({ success: false, error: 'quantity must be a positive number' });
+    }
+    const qty = Number.isFinite(rawQty) && rawQty > 0 ? rawQty : 10;
 
     const priceResult = await marketCache.getBestPrices({ crop, state: 'Maharashtra', limit: 500 });
     if (priceResult.rows.length === 0) {
@@ -252,7 +300,11 @@ router.get('/net-realization/explain', async (req, res) => {
     if (!crop || !district) {
       return res.status(400).json({ success: false, error: 'crop and district query params are required' });
     }
-    const qty = Math.max(parseFloat(quantity) || 10, 0.1);
+    const rawQty = parseFloat(quantity);
+    if (quantity !== undefined && (!Number.isFinite(rawQty) || rawQty <= 0)) {
+      return res.status(400).json({ success: false, error: 'quantity must be a positive number' });
+    }
+    const qty = Number.isFinite(rawQty) && rawQty > 0 ? rawQty : 10;
 
     const priceResult = await marketCache.getBestPrices({ crop, state: 'Maharashtra', limit: 500 });
     if (priceResult.rows.length === 0) {
@@ -342,7 +394,11 @@ router.get('/buyer-coverage', async (req, res) => {
     if (!crop || !district) {
       return res.status(400).json({ success: false, error: 'crop and district query params are required' });
     }
-    const qty = Math.max(parseFloat(quantity) || 10, 0.1);
+    const rawQty = parseFloat(quantity);
+    if (quantity !== undefined && (!Number.isFinite(rawQty) || rawQty <= 0)) {
+      return res.status(400).json({ success: false, error: 'quantity must be a positive number' });
+    }
+    const qty = Number.isFinite(rawQty) && rawQty > 0 ? rawQty : 10;
 
     // Reuse the engine path to get ranked mandis with canonicalMandi stamps.
     const priceResult = await marketCache.getBestPrices({ crop, state: 'Maharashtra', limit: 500 });
@@ -410,7 +466,11 @@ router.get('/pathways', async (req, res) => {
     if (!crop || !district) {
       return res.status(400).json({ success: false, error: 'crop and district query params are required' });
     }
-    const qty = Math.max(parseFloat(quantity) || 10, 0.1);
+    const rawQty = parseFloat(quantity);
+    if (quantity !== undefined && (!Number.isFinite(rawQty) || rawQty <= 0)) {
+      return res.status(400).json({ success: false, error: 'quantity must be a positive number' });
+    }
+    const qty = Number.isFinite(rawQty) && rawQty > 0 ? rawQty : 10;
     const quality = {
       grade: grade || null,
       size: size || null,
@@ -447,7 +507,10 @@ router.get('/pathways', async (req, res) => {
     if (bestMarket) {
       try {
         const history = priceHistory.loadHistory();
-        const todayRows = marketCache.getPrices({ crop, market: bestMarket, limit: 500 });
+        // getBestPrices (not getPrices) — same snapshot-fallback semantics as
+        // every other serving path, so a partial live pull can't poison the
+        // sale-window evidence with a market sliver.
+        const todayRows = marketCache.getBestPrices({ crop, market: bestMarket, limit: 500 });
         const days = priceHistory.appendRows(history.days, todayRows.rows, { retrievedAt: todayRows.retrievedAt });
         const series = priceHistory.trendSeries(days, { crop, market: bestMarket, window: 7 });
         const currentQuote = todayRows.rows.find(r => r.market === bestMarket) || todayRows.rows[0];
@@ -468,9 +531,77 @@ router.get('/pathways', async (req, res) => {
       crop, district, quantityQuintals: qty, quality, engineResult, trendData,
     });
 
+    // If the decision engine could not produce a decision, return 422
+    if (result.error && (!result.pathways || result.pathways.length === 0)) {
+      return res.status(422).json({
+        success: false,
+        error: result.error,
+        decisionBasis: 'INSUFFICIENT_EVIDENCE',
+      });
+    }
+
+    // ── Perishability enrichment (Phase 7) ───────────────────────────────
+    // Compute perishability separately — does NOT modify computePathways.
+    // Only enriches STORE_THEN_SELL pathway with a warning when risk is elevated.
+    const { harvestDate, storageDays: storageDaysParam } = req.query;
+    const perishabilityResult = perishability.assessPerishability({
+      crop,
+      harvestDate: harvestDate || null,
+      plannedStorageDays: storageDaysParam ? Number(storageDaysParam) : null,
+    });
+
+    // Enrich the STORE_THEN_SELL pathway if it exists and has perishability data
+    if (perishabilityResult.shelfLife && result.pathways) {
+      const storePathway = result.pathways.find(p => p.pathway === 'STORE_THEN_SELL' && p.available !== false);
+      if (storePathway) {
+        // Add perishability context to the pathway
+        storePathway.perishability = {
+          crop: perishabilityResult.crop,
+          shelfLife: perishabilityResult.shelfLife,
+          daysSinceHarvest: perishabilityResult.daysSinceHarvest,
+          plannedStorageDays: perishabilityResult.plannedStorageDays,
+          riskLevel: perishabilityResult.riskLevel,
+          riskReason: perishabilityResult.riskReason,
+          guidance: perishabilityResult.guidance,
+          provenance: perishabilityResult.provenance,
+          classification: perishabilityResult.classification,
+        };
+
+        // Add warning to the pathway's why[] and evidence[] if risk is elevated
+        if (['HIGH', 'CRITICAL'].includes(perishabilityResult.riskLevel)) {
+          storePathway.why.push(
+            `Perishability warning: ${perishabilityResult.riskReason}`
+          );
+          storePathway.evidence.push({
+            type: 'perishability_risk',
+            source: 'crop-specific shelf-life evidence',
+            riskLevel: perishabilityResult.riskLevel,
+            shelfLife: perishabilityResult.shelfLife,
+            classification: 'DERIVED',
+          });
+          storePathway.assumptions.push(
+            'Perishability risk is based on crop-specific shelf-life evidence (demo), not a spoilage prediction'
+          );
+        }
+      }
+
+      // Add perishability summary to the overall result if not already present
+      if (!result.perishability) {
+        result.perishability = {
+          crop: perishabilityResult.crop,
+          shelfLife: perishabilityResult.shelfLife,
+          riskLevel: perishabilityResult.riskLevel,
+          guidance: perishabilityResult.guidance,
+          provenance: perishabilityResult.provenance,
+          note: 'Perishability is an awareness layer — it does not modify pathway ranking or economic calculations.',
+        };
+      }
+    }
+
     res.json({
       success: true,
       marketSource: priceResult.source,
+      servingMode: priceResult.servingMode || (priceResult.fallback ? 'FALLBACK' : 'LIVE'),
       marketProvenance: priceResult.provenance,
       ...result,
     });
@@ -625,9 +756,7 @@ router.get('/soil-context', (req, res) => {
     logger.error('Soil context error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to get soil context' });
   }
-});
-
-// GET /api/market/crop-suitability?crop=Onion&district=Nashik
+});// GET /api/market/crop-suitability?crop=Onion&district=Nashik
 // Crop × district suitability using regional soil reference.
 router.get('/crop-suitability', (req, res) => {
   try {
@@ -643,5 +772,301 @@ router.get('/crop-suitability', (req, res) => {
     res.status(500).json({ success: false, error: 'Failed to check crop suitability' });
   }
 });
+
+// ═════════════════════════════════════════════════════════════════════════
+// FARMER ECONOMICS — production cost → break-even → profit → trend → scenario
+// Every number is FARMER_ENTERED, observed, or deterministically derived.
+// No price prediction. No forecast. No guaranteed returns.
+// ═════════════════════════════════════════════════════════════════════════
+
+// POST /api/market/economics
+// Body: { crop, district, quantity, costs: { seed, fertilizer, ... } }
+// Computes production cost/q, break-even, and per-market estimated profit over
+// the SAME ranked mandis the decision engine uses. Profit is DERIVED from
+// farmer-entered costs — never presented as verified or predicted.
+router.post('/economics', async (req, res) => {
+  try {
+    const { crop, district, quantity, costs } = req.body || {};
+    if (!crop || !district) {
+      return res.status(400).json({ success: false, error: 'crop and district are required in the request body' });
+    }
+    const qty = requireQuantity(quantity);
+    if (!qty.ok) return res.status(400).json({ success: false, error: qty.error });
+
+    const farmerEconomics = require('../services/farmerEconomics');
+    const parsed = farmerEconomics.parseProductionCosts(costs);
+    if (!parsed.ok) {
+      return res.status(400).json({ success: false, error: 'Invalid production costs', details: parsed.errors });
+    }
+    if (parsed.totalProductionCost <= 0) {
+      return res.status(400).json({ success: false, error: 'totalProductionCost must be greater than zero — enter at least one cost category' });
+    }
+
+    const composed = await composeEngineResult({ crop, district, quantity: qty.value });
+    if (composed.error) {
+      return res.status(422).json({ success: false, error: composed.error, marketSource: composed.marketSource, provenance: composed.provenance });
+    }
+
+    const result = farmerEconomics.computeEconomics({
+      totalProductionCost: parsed.totalProductionCost,
+      quantityQuintals: qty.value,
+      engineResult: composed.engine,
+    });
+    if (!result.ok) {
+      return res.status(422).json({ success: false, error: result.error });
+    }
+
+    res.json({
+      success: true,
+      marketSource: composed.priceResult.source,
+      servingMode: composed.priceResult.servingMode || (composed.priceResult.fallback ? 'FALLBACK' : 'LIVE'),
+      marketProvenance: composed.priceResult.provenance,
+      input: { ...result.input, crop, district, quantityQuintals: qty.value, costBreakdown: parsed.breakdown },
+      productionEconomics: result.productionEconomics,
+      marketEconomics: result.marketEconomics,
+      provenance: result.provenance,
+      semantics: {
+        netRealizationVsProfit: 'Net realization = what remains after selling costs. Profit = net realization − production cost. They are different numbers.',
+        negativeProfit: 'Negative profit means BELOW_BREAK_EVEN — reported honestly, never clamped or called savings.',
+      },
+    });
+  } catch (error) {
+    if (error.code === 'ECONNREFUSED') {
+      return res.status(503).json({ success: false, error: 'Net-realization service unavailable', serviceStatus: 'offline' });
+    }
+    logger.error('Economics error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to compute economics', details: error.message });
+  }
+});
+
+// GET /api/market/trends?crop=Onion&market=APMC Lasalgaon
+// Multi-window observed trend (7/14/30-day). Describes the past only.
+router.get('/trends', async (req, res) => {
+  try {
+    const { crop, market } = req.query;
+    if (!crop || !market) {
+      return res.status(400).json({ success: false, error: 'crop and market query params are required (e.g. crop=Onion&market=APMC Lasalgaon)' });
+    }
+    const observedTrend = require('../services/observedTrend');
+    const result = await observedTrend.computeTrends({ crop, market });
+    if (!result.ok) {
+      return res.status(400).json({ success: false, error: result.error });
+    }
+    res.json({
+      success: true,
+      crop,
+      market,
+      trends: result.trends,
+      source: result.source,
+      servingMode: result.servingMode,
+      forecast: false,
+      observationNote: result.observationNote,
+    });
+  } catch (error) {
+    logger.error('Trends error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to build trends' });
+  }
+});
+
+// POST /api/market/scenario
+// Body: { hypotheticalPricePerQuintal, quantity, distanceKm, costs: {...} ,
+//         scenarioQuantity?, scenarioCosts? }
+// Deterministic what-if. HYPOTHETICAL — never a forecast.
+router.post('/scenario', async (req, res) => {
+  try {
+    const body = req.body || {};
+    const { hypotheticalPricePerQuintal, quantity, distanceKm } = body;
+    if (hypotheticalPricePerQuintal === undefined) {
+      return res.status(400).json({ success: false, error: 'hypotheticalPricePerQuintal is required' });
+    }
+    const qty = requireQuantity(quantity);
+    if (!qty.ok) return res.status(400).json({ success: false, error: qty.error });
+
+    const scenario = require('../services/scenario');
+    const farmerEconomics = require('../services/farmerEconomics');
+
+    // Optional production cost: accept either a flat total or a breakdown.
+    let totalCost = 0;
+    if (body.totalProductionCost !== undefined) {
+      const t = scenario.parseScenarioNumber(body.totalProductionCost);
+      if (!t.ok || t.value < 0) return res.status(400).json({ success: false, error: 'totalProductionCost must be a non-negative number' });
+      totalCost = t.value;
+    } else if (body.costs) {
+      const parsed = farmerEconomics.parseProductionCosts(body.costs);
+      if (!parsed.ok) return res.status(400).json({ success: false, error: 'Invalid production costs', details: parsed.errors });
+      totalCost = parsed.totalProductionCost;
+    }
+
+    // Optional scenario overrides
+    let scenarioQuantity;
+    if (body.scenarioQuantity !== undefined) {
+      const sq = requireQuantity(body.scenarioQuantity);
+      if (!sq.ok) return res.status(400).json({ success: false, error: `scenarioQuantity: ${sq.error}` });
+      scenarioQuantity = sq.value;
+    }
+    let scenarioTotalProductionCost;
+    if (body.scenarioTotalProductionCost !== undefined) {
+      const sc = scenario.parseScenarioNumber(body.scenarioTotalProductionCost);
+      if (!sc.ok || sc.value < 0) return res.status(400).json({ success: false, error: 'scenarioTotalProductionCost must be a non-negative number' });
+      scenarioTotalProductionCost = sc.value;
+    }
+
+    // Optional reference: latest observed farmer net for a crop/district (the
+    // scenario price stays hypothetical; this only feeds the labeled delta).
+    let referenceNetPerQuintal;
+    if (body.crop && body.district) {
+      try {
+        const refComposed = await composeEngineResult({ crop: body.crop, district: body.district, quantity: qty.value });
+        if (!refComposed.error && Array.isArray(refComposed.engine.rankedMandis) && refComposed.engine.rankedMandis[0]) {
+          referenceNetPerQuintal = refComposed.engine.rankedMandis[0].farmerNetPerQuintal;
+        }
+      } catch (e) {
+        logger.warn('Scenario reference market unavailable:', e.message);
+      }
+    }
+
+    const result = scenario.computeScenario({
+      hypotheticalPricePerQuintal,
+      quantityQuintals: qty.value,
+      distanceKm: distanceKm !== undefined ? distanceKm : 0,
+      totalProductionCost: totalCost,
+      referenceNetPerQuintal,
+      scenarioQuantity,
+      scenarioTotalProductionCost,
+    });
+    if (!result.ok) {
+      return res.status(400).json({ success: false, error: result.error });
+    }
+    res.json({ success: true, ...result });
+  } catch (error) {
+    logger.error('Scenario error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to compute scenario' });
+  }
+});
+
+// GET /api/market/storage-threshold?crop=Onion&district=Nashik&quantity=10
+// The future net price (₹/q) above which storing then selling outperforms
+// selling now. A deterministic threshold from current assumptions — never a
+// claim that the price will reach it.
+// Optional: harvestDate (ISO date) and storageDays for perishability awareness.
+router.get('/storage-threshold', async (req, res) => {
+  try {
+    const { crop, district, quantity, harvestDate, storageDays } = req.query;
+    if (!crop || !district) {
+      return res.status(400).json({ success: false, error: 'crop and district query params are required' });
+    }
+    const qty = requireQuantity(quantity);
+    if (!qty.ok) return res.status(400).json({ success: false, error: qty.error });
+
+    const composed = await composeEngineResult({ crop, district, quantity: qty.value });
+    if (composed.error) {
+      return res.status(422).json({ success: false, error: composed.error, marketSource: composed.marketSource, provenance: composed.provenance });
+    }
+    const bestMandi = composed.engine.rankedMandis[0];
+
+    // Storage: demo dataset, cheapest facility mapped to the district or best mandi.
+    const storageData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'storageOptions.json'), 'utf8'));
+    const options = (storageData.options || []).filter(s => s.district === district || s.district === bestMandi.market);
+    if (options.length === 0) {
+      return res.status(422).json({ success: false, error: 'No storage option listed for this district in the Kisan360 demo dataset' });
+    }
+    const cheapest = options.reduce((min, s) => (s.costPerQuintalPerDay < min.costPerQuintalPerDay ? s : min));
+    const storageDaysMax = Math.min(cheapest.maxDurationDays, 7);
+    const storageCostPerQ = Math.round(cheapest.costPerQuintalPerDay * storageDaysMax * 100) / 100;
+
+    const scenario = require('../services/scenario');
+    const threshold = scenario.computeStorageThreshold({
+      currentNetPerQuintal: bestMandi.farmerNetPerQuintal,
+      storageCostPerQuintal: storageCostPerQ,
+      distanceKm: bestMandi.distanceKm || 0,
+      quantityQuintals: qty.value,
+    });
+    if (!threshold.ok) {
+      return res.status(400).json({ success: false, error: threshold.error });
+    }
+
+    // ── Perishability awareness (optional, backward-compatible) ──────────
+    // When harvestDate and/or storageDays are provided, enrich the response
+    // with crop-specific perishability assessment. Without these params, the
+    // response is identical to before.
+    const perishabilityAssessment = perishability.assessPerishability({
+      crop,
+      harvestDate: harvestDate || null,
+      plannedStorageDays: storageDays ? Number(storageDays) : null,
+    });
+
+    // Only include perishability when there is a profile for the crop
+    const hasProfile = perishabilityAssessment.shelfLife !== null;
+    const perishabilitySection = hasProfile ? {
+      crop: perishabilityAssessment.crop,
+      shelfLife: perishabilityAssessment.shelfLife,
+      daysSinceHarvest: perishabilityAssessment.daysSinceHarvest,
+      remainingShelfLife: perishabilityAssessment.remainingShelfLife,
+      plannedStorageDays: perishabilityAssessment.plannedStorageDays,
+      riskLevel: perishabilityAssessment.riskLevel,
+      riskReason: perishabilityAssessment.riskReason,
+      guidance: perishabilityAssessment.guidance,
+      storageConditions: perishabilityAssessment.storageConditions,
+      suitableStorageTypes: perishabilityAssessment.suitableStorageTypes,
+      provenance: perishabilityAssessment.provenance,
+      classification: perishabilityAssessment.classification,
+    } : null;
+
+    // Storage decision interpretation: combine economic + perishability
+    const storageDecision = hasProfile ? {
+      economicAssessment: {
+        breakEvenFuturePrice: threshold.breakEvenFuturePriceForStorage,
+        currentNet: bestMandi.farmerNetPerQuintal,
+        storageCostPerQuintal: storageCostPerQ,
+        statement: threshold.semantics?.statement || '',
+      },
+      perishabilityAssessment: perishabilitySection,
+      overallAssessment: perishabilitySection
+        ? (perishabilitySection.riskLevel === 'LOW' ? 'FAVORABLE'
+          : perishabilitySection.riskLevel === 'MODERATE' ? 'CAUTION'
+          : perishabilitySection.riskLevel === 'HIGH' ? 'CAUTION'
+          : perishabilitySection.riskLevel === 'CRITICAL' ? 'NOT_SUPPORTED'
+          : 'INSUFFICIENT_EVIDENCE')
+        : 'INSUFFICIENT_EVIDENCE',
+      reasons: [
+        perishabilitySection ? `Perishability risk: ${perishabilitySection.riskLevel}` : 'No perishability evidence for this crop',
+        `Economic threshold: ₹${threshold.breakEvenFuturePriceForStorage}/q`,
+      ],
+      note: 'Economic viability and perishability risk are assessed independently. A storage option can be economically attractive but perishability-risky, or vice versa.',
+    } : null;
+
+    res.json({
+      success: true,
+      marketSource: composed.priceResult.source,
+      servingMode: composed.priceResult.servingMode || (composed.priceResult.fallback ? 'FALLBACK' : 'LIVE'),
+      marketProvenance: composed.priceResult.provenance,
+      crop,
+      district,
+      quantityQuintals: qty.value,
+      referenceMarket: bestMandi.market,
+      currentNetPerQuintal: bestMandi.farmerNetPerQuintal,
+      storageOption: {
+        id: cheapest.id,
+        name: cheapest.name,
+        costPerQuintalPerDay: cheapest.costPerQuintalPerDay,
+        days: storageDaysMax,
+        availability: cheapest.availability,
+        label: cheapest.label,
+      },
+      storageCostPerQuintal: storageCostPerQ,
+      ...threshold,
+      perishability: perishabilitySection,
+      storageDecision,
+      dataBasis: 'Storage options are a static demo dataset (labeled) — not live facility availability. The threshold is derived arithmetic, not a prediction. Perishability assessment is crop-specific shelf-life evidence (demo), not a spoilage prediction.',
+    });
+  } catch (error) {
+    if (error.code === 'ECONNREFUSED') {
+      return res.status(503).json({ success: false, error: 'Net-realization service unavailable', serviceStatus: 'offline' });
+    }
+    logger.error('Storage-threshold error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to compute storage threshold' });
+  }
+});
+
 
 module.exports = router;

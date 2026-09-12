@@ -17,6 +17,23 @@ const lotSchema = new mongoose.Schema({
   photos: [{ type: String }],
   notes: { type: String, default: '' },
   expectedPricePerQuintal: { type: Number, default: null },
+  poolMetadata: {
+    type: {
+      isPooled: { type: Boolean, default: false },
+      memberCount: { type: Number, default: 0 },
+      members: [{
+        uid: String,
+        name: String,
+        village: String,
+        quantityQuintals: Number,
+        sharePct: Number,
+        netAmount: Number,
+      }],
+      pooledCrop: String,
+      pooledQuantity: Number,
+    },
+    default: null,
+  },
   status: {
     type: String,
     enum: ['OPEN', 'OFFERED', 'CLOSED', 'WITHDRAWN'],

@@ -69,6 +69,22 @@ const CROP_ALIAS_GROUPS = {
   soybean: ['soybean', 'soyabean', 'soyabeen', 'soyabeans', 'soya bean'],
   onion: ['onion', 'onions'],
   tomato: ['tomato', 'tomatoes'],
+  wheat: ['wheat', 'gehu'],
+  maize: ['maize', 'corn', 'makka'],
+  groundnut: ['groundnut', 'peanut', 'moongfali'],
+  grapes: ['grapes', 'draksha'],
+  pomegranate: ['pomegranate', 'anar', 'dalimb'],
+  jowar: ['jowar', 'jowarsorghum', 'sorghum', 'sorghumjowar'],
+  bajra: ['bajra', 'bajrapearlmilletcumbu', 'pearlmillet', 'bajari'],
+  tur: ['tur', 'redgramarharturwhole', 'arhar', 'pigeonpea', 'turdal', 'toordal'],
+  chilli: ['chilli', 'greenchilli', 'chili', 'mirchi', 'redchilli'],
+  cotton: ['cotton', 'cottonraw', 'kapas'],
+  sugarcane: ['sugarcane', 'ganna'],
+  ginger: ['ginger', 'gingergreen', 'greenginger'],
+  blackgram: ['blackgram', 'blackgramurdbeanswhole', 'urd', 'urdal'],
+  greengram: ['greengram', 'greengrammoongwhole', 'moong', 'moongdal'],
+  bengalgram: ['bengalgram', 'bengalgramgramwhole', 'chana', 'chanadal'],
+  greenpeas: ['greenpeas', 'matar'],
 };
 
 function norm(str) {
@@ -122,6 +138,21 @@ function loadSeed() {
   } catch (error) {
     logger.warn(`⚠️ Could not load price snapshot seed: ${error.message}`);
     seedRows = [];
+  }
+  return { meta: seedMeta, rows: seedRows };
+}
+
+/** Re-read the on-disk snapshot into memory. Called after the scheduler
+ *  writes a new snapshot so the running server picks up fresh data
+ *  without a full restart. */
+function reloadSeed() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf8'));
+    seedMeta = raw.meta || {};
+    seedRows = Array.isArray(raw.rows) ? raw.rows.map(normalizeRow) : [];
+    logger.info(`🔄 Price cache seed reloaded: ${seedRows.length} rows`);
+  } catch (error) {
+    logger.warn(`⚠️ Could not reload price snapshot seed: ${error.message}`);
   }
   return { meta: seedMeta, rows: seedRows };
 }
@@ -409,6 +440,7 @@ function cacheSummary() {
 
 module.exports = {
   loadSeed,
+  reloadSeed,
   recordLiveSuccess,
   isLiveFresh,
   getPrices,

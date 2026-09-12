@@ -28,17 +28,22 @@ const CROP_ALIASES = {
   Soybean: ['Soyabean', 'Soybean', 'Soyabeen'],
   Onion: ['Onion'],
   Tomato: ['Tomato'],
-  Cotton: ['Cotton', 'Kapas'],
-  'Jowar': ['Jowar', 'Sorghum', 'Sorghum (Jowar)'],
-  'Bajra': ['Bajra', 'Pearl Millet', 'Bajari'],
+  Cotton: ['Cotton (Raw)', 'Cotton', 'Kapas'],
+  'Jowar': ['Jowar(Sorghum)', 'Jowar', 'Sorghum', 'Sorghum (Jowar)'],
+  'Bajra': ['Bajra(Pearl Millet/Cumbu)', 'Bajra', 'Pearl Millet', 'Bajari'],
   Wheat: ['Wheat', 'Gehu'],
-  'Tur': ['Tur', 'Arhar', 'Pigeon Pea', 'Tur Dal', 'Toor Dal'],
-  Chilli: ['Chilli', 'Chili', 'Mirchi', 'Red Chilli'],
+  'Tur': ['Red gram/Arhar/Tur(whole)', 'Tur', 'Arhar', 'Pigeon Pea', 'Tur Dal', 'Toor Dal'],
+  Chilli: ['Green Chilli', 'Chilli', 'Chili', 'Mirchi', 'Red Chilli'],
   Maize: ['Maize', 'Corn', 'Makka'],
   Groundnut: ['Groundnut', 'Peanut', 'Moongfali'],
   'Sugarcane': ['Sugarcane', 'Ganna'],
   Grapes: ['Grapes', 'Draksha'],
   Pomegranate: ['Pomegranate', 'Anar', 'Dalimb'],
+  Ginger: ['Ginger(Green)', 'Ginger', 'Green Ginger'],
+  'Black Gram': ['Black Gram(Urd Beans)(Whole)', 'Black Gram', 'Urad', 'Urad Dal'],
+  'Green Gram': ['Green Gram(Moong)(Whole)', 'Green Gram', 'Moong', 'Moong Dal'],
+  'Bengal Gram': ['Bengal Gram(Gram)(Whole)', 'Bengal Gram', 'Chana', 'Chana Dal'],
+  'Green Peas': ['Green Peas', 'Matar'],
 };
 
 // ── Ingestion health tracking ──────────────────────────────────────────────
@@ -284,6 +289,10 @@ async function runRefreshPipeline({ limit = 500, dryRun = false } = {}) {
 
   // Update the in-memory cache so the running server sees fresh data immediately
   marketCache.recordLiveSuccess(rows);
+
+  // Also reload the on-disk seed so subsequent calls to loadSeed() (e.g. after
+  // a future server restart) pick up the latest snapshot without staleness.
+  marketCache.reloadSeed();
 
   // Update health
   const elapsed = Date.now() - startTime;

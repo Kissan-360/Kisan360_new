@@ -27,10 +27,12 @@ const actionability = require('./actionability');
 const { matchQuality, findCompatibleRequirements } = require('./qualityMatch');
 const { computeSaleWindow } = require('./saleWindow');
 const { summarizeArrivals } = require('./arrivalIntel');
+const { assessDemandCoverage, findCompatibleDemands } = require('./demandMatch');
 
 const BUYERS_FILE = path.join(__dirname, '..', 'data', 'buyers.json');
 const REQUIREMENTS_FILE = path.join(__dirname, '..', 'data', 'buyerRequirements.json');
 const STORAGE_FILE = path.join(__dirname, '..', 'data', 'storageOptions.json');
+const DEMAND_SIGNALS_FILE = path.join(__dirname, '..', 'data', 'demandSignals.json');
 
 function loadJson(file) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return null; }
@@ -69,7 +71,17 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
   const decisionTrace = [];
 
   if (!engineResult || !engineResult.rankedMandis || engineResult.rankedMandis.length === 0) {
-    return { pathways: [], unknowns: ['No engine result available'], assumptions: [], error: 'No market data to compute pathways', decisionTrace: [] };
+    return {
+      pathways: [],
+      recommendation: { pathway: 'INSUFFICIENT_EVIDENCE', reasonCodes: ['NO_VALID_MARKET_OBSERVATION'], why: ['No market data available for this crop and district'], confidence: 'INSUFFICIENT', evaluatedRules: [] },
+      nextAction: null,
+      economicSummary: null,
+      unknowns: ['No engine result available'],
+      assumptions: [],
+      error: 'No market data to compute pathways',
+      decisionTrace: [],
+      dataBasis: { marketPrices: 'None available', transportCosts: 'N/A', storageCosts: 'N/A', buyerDirectory: 'Static demo dataset (labeled)', buyerRequirements: 'Static demo dataset (labeled)', demandSignals: 'Demo demand directory (labeled)', storageOptions: 'Static demo dataset (labeled)', saleWindow: 'No history available', arrivals: 'No arrival data', activeDemand: 'No demand signal data' },
+    };
   }
 
   const bestMandi = engineResult.rankedMandis[0];
@@ -81,10 +93,12 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
   const buyerData = loadJson(BUYERS_FILE);
   const reqData = loadJson(REQUIREMENTS_FILE);
   const storageData = loadJson(STORAGE_FILE);
+  const demandData = loadJson(DEMAND_SIGNALS_FILE);
 
   const buyers = buyerData?.buyers || [];
   const requirements = reqData?.requirements || [];
   const storageOptions = storageData?.options || [];
+  const demandSignals = demandData?.demandSignals || [];
 
   // ── STEP 1: FEASIBILITY CHECK ──────────────────────────────────────────
   // Assess buyer coverage and quality compatibility
@@ -99,6 +113,18 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
 
   const strongReqs = compatibleReqs.filter(r => r.overallCompatibility === 'STRONG');
   const partialReqs = compatibleReqs.filter(r => r.overallCompatibility === 'PARTIAL');
+
+  // ── DEMAND SIGNAL ASSESSMENT ──────────────────────────────────────────
+  // Distinct from buyer requirements: demand signals are time-bounded buyer
+  // intent with freshness tracking. A requirement is not necessarily active demand.
+  const demandCoverage = assessDemandCoverage(demandSignals, {
+    crop, quantityQuintals, grade: quality?.grade, size: quality?.size,
+    moisturePct: quality?.moisturePct, damagePct: quality?.damagePct, district,
+  });
+
+  const strongDemandMatches = demandCoverage.matches.filter(m => m.matchLevel === 'MATCH');
+  const partialDemandMatches = demandCoverage.matches.filter(m => m.matchLevel === 'PARTIAL_MATCH');
+  const hasActiveDemand = demandCoverage.hasActiveDemand;
 
   // Sale window and arrivals
   const saleWindow = trendData
@@ -117,6 +143,7 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
   const hasPrice = bestNet > 0;
   const hasDistance = bestDistance > 0;
   const hasBuyerCompat = strongReqs.length > 0 || partialReqs.length > 0;
+  const hasActiveDemandSignal = hasActiveDemand;
   const hasSaleWindow = saleWindow && saleWindow.signal !== 'INSUFFICIENT_EVIDENCE';
 
   decisionTrace.push({
@@ -124,6 +151,7 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
       { check: 'Valid price data', pass: hasPrice, detail: hasPrice ? `₹${bestNet}/q at ${bestMandi.market}` : 'No valid price data' },
       { check: 'Distance available', pass: hasDistance, detail: hasDistance ? `${bestDistance} km` : 'No distance data' },
       { check: 'Buyer compatibility', pass: hasBuyerCompat, detail: hasBuyerCompat ? `${strongReqs.length} strong + ${partialReqs.length} partial` : 'No compatible buyers in directory' },
+      { check: 'Active demand signals', pass: hasActiveDemandSignal, detail: hasActiveDemandSignal ? `${strongDemandMatches.length} strong + ${partialDemandMatches.length} partial active demand(s)` : demandCoverage.actionability.reason },
     ],
   });
 
@@ -145,21 +173,40 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
       compatibleRequirements: strongReqs.length,
       totalCompatible: compatibleReqs.length,
     },
+    demandSignals: {
+      hasActiveDemand: hasActiveDemand,
+      strongMatches: strongDemandMatches.length,
+      partialMatches: partialDemandMatches.length,
+      actionability: demandCoverage.actionability,
+      matches: strongDemandMatches.map(m => ({
+        signalId: m.signalId,
+        buyerName: m.buyerName,
+        buyerTrustTier: m.buyerTrustTier,
+        quantityRange: m.quantityRange,
+        requiredGrade: m.requiredGrade,
+        freshness: m.freshness,
+      })),
+    },
     saleWindow,
     arrivals,
     why: [
       `Best estimated net: ₹${bestNet.toLocaleString('en-IN')}/q at ${bestMandi.market}`,
       `Transport: ₹${transportPerQ}/q for ${bestDistance} km`,
+      hasActiveDemand
+        ? `Active demand: ${strongDemandMatches.length} strong + ${partialDemandMatches.length} partial demand signal(s) from buyers`
+        : `Demand: ${demandCoverage.actionability.reason}`,
       `Buyer coverage: ${coverage.summary.actionableCount} mandi(s) with compatible buyers in directory`,
     ],
     evidence: [
       { type: 'net_realization', source: 'deterministic calculator', mandi: bestMandi.market, net: bestNet },
       { type: 'transport', source: 'documented assumption', rate: transportRate(quantityQuintals), distanceKm: bestDistance },
       { type: 'buyer_coverage', source: 'static demo directory', actionable: coverage.summary.actionableCount },
+      { type: 'demand_signals', source: 'demo demand directory', active: hasActiveDemand, strongMatches: strongDemandMatches.length, classification: 'DEMO_DEMAND' },
     ],
     assumptions: [
       'Transport cost uses documented rate (₹1.5/q/km small, ₹0.75/q/km bulk)',
       'Buyer directory is a static demo — production would verify against live buyer profiles',
+      'Demand signals are demo directory entries with time bounds — a MATCH does not guarantee a transaction',
     ],
   });
 
@@ -224,7 +271,7 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
       ],
     });
 
-    unknowns.push('Actual storage availability and real-time facility status');
+    unknowns.push('Actual storage availability and real-time facility status (demo-assumed)');
     unknowns.push('Whether storage conditions are suitable for this crop');
   } else {
     pathways.push({
@@ -345,17 +392,22 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
 
     const recommendation = {
       pathway: 'AGGREGATE_THROUGH_FPO',
+      reasonCodes: [
+        'AGGREGATION_AVAILABLE',
+        'LOT_SIZE_SUPPORTS_AGGREGATION',
+        'TRANSPORT_SAVING_THRESHOLD_MET',
+      ],
       why: [
         `Pooling with FPO members could save ₹${hasFPOUpside.transportSavingPerQuintal}/q on transport`,
         `This improves estimated net from ₹${bestNet.toLocaleString('en-IN')}/q to ₹${hasFPOUpside.pooledNetPerQuintal.toLocaleString('en-IN')}/q`,
-        `Total lot improvement: approximately ₹${Math.round(hasFPOUpside.transportSavingTotal).toLocaleString('en-IN')}`,
+        `Estimated total lot improvement: approximately ₹${Math.round(hasFPOUpside.transportSavingTotal).toLocaleString('en-IN')}`,
         !buyerAtBest ? 'No strong buyer match at the economic best mandi — aggregation may unlock buyer minimums' : 'Pooling improves logistics economics',
       ],
       confidence: buyerAtBest ? 'GOOD' : 'CAUTION',
       note: 'This is an estimate based on documented transport rates — actual savings depend on real member participation',
     };
 
-    return buildResult(crop, district, quantityQuintals, quality, pathways, recommendation, decisionTrace, unknowns, assumptions, coverage, compatibleReqs, saleWindow, arrivals);
+    return buildResult(crop, district, quantityQuintals, quality, pathways, recommendation, decisionTrace, unknowns, assumptions, coverage, compatibleReqs, saleWindow, arrivals, demandCoverage);
   }
 
   // Rule 2: Economic best has no buyer, but an alternative does with acceptable cost
@@ -372,6 +424,11 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
 
     const recommendation = {
       pathway: 'ALTERNATIVE_MARKET',
+      reasonCodes: [
+        'HIGHER_NET_REALIZATION_AVAILABLE',
+        'ACTIONABLE_BUYER_AT_ALTERNATIVE',
+        'ECONOMIC_COST_ACCEPTABLE',
+      ],
       why: [
         `${coverage.bestActionable.market} has ${coverage.bestActionable.buyerCount} compatible buyer(s) — the economic best (${bestMandi.market}) has no directory buyer`,
         `Economic cost of choosing the actionable path: only ₹${coverage.divergence.perQuintal}/q`,
@@ -381,7 +438,7 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
       note: 'Buyer directory is static demo data — production would verify real buyer availability',
     };
 
-    return buildResult(crop, district, quantityQuintals, quality, pathways, recommendation, decisionTrace, unknowns, assumptions, coverage, compatibleReqs, saleWindow, arrivals);
+    return buildResult(crop, district, quantityQuintals, quality, pathways, recommendation, decisionTrace, unknowns, assumptions, coverage, compatibleReqs, saleWindow, arrivals, demandCoverage);
   }
 
   // Rule 3: Storage is economically justified when sale window is weak AND breakeven is reachable
@@ -403,6 +460,11 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
 
       const recommendation = {
         pathway: 'STORE_THEN_SELL',
+        reasonCodes: [
+          'SALE_WINDOW_WEAK',
+          'STORAGE_OPTION_AVAILABLE',
+          'BREAKEVEN_WITHIN_OBSERVED_RANGE',
+        ],
         why: [
           `Current price is in the lower range of recent observations — market timing is not favorable`,
           `Storage cost: ₹${storagePathway.storageCostPerQuintal}/q for ${storagePathway.storageOption?.maxDurationDays || 7} days`,
@@ -413,7 +475,7 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
         note: 'Sale-window signal is evidence-based (observed history), not a forecast. Storage availability is demo-assumed.',
       };
 
-      return buildResult(crop, district, quantityQuintals, quality, pathways, recommendation, decisionTrace, unknowns, assumptions, coverage, compatibleReqs, saleWindow, arrivals);
+      return buildResult(crop, district, quantityQuintals, quality, pathways, recommendation, decisionTrace, unknowns, assumptions, coverage, compatibleReqs, saleWindow, arrivals, demandCoverage);
     }
   }
 
@@ -455,8 +517,17 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
   else if (confidenceSignals.length >= 2) confidence = 'GOOD';
   else if (confidenceSignals.length >= 1) confidence = 'CAUTION';
 
+  const reasonCodes = ['MARKET_NET_REALIZATION_FAVORABLE'];
+  if (hasPrice) reasonCodes.push('ACTIONABLE_MARKET_AVAILABLE');
+  if (isFreshQuote) reasonCodes.push('RECENT_OBSERVATION');
+  if (saleWindowSignal === 'FAVORABLE_NOW') reasonCodes.push('SALE_WINDOW_FAVORABLE');
+  if (saleWindowSignal === 'WEAK_RELATIVE_TO_HISTORY') reasonCodes.push('SALE_WINDOW_WEAK');
+  if (bestPathway?.buyerCoverage?.status === 'NO_BUYERS_IN_DIRECTORY') reasonCodes.push('NO_BUYER_AT_BEST_MARKET');
+  if (isStaleQuote) reasonCodes.push('EVIDENCE_STALE');
+
   const recommendation = {
     pathway: 'SELL_NOW',
+    reasonCodes,
     why: sellReasons,
     confidence,
   };
@@ -467,7 +538,7 @@ function computePathways({ crop, district, quantityQuintals, quality, engineResu
 /**
  * Build the final result object with all decision intelligence.
  */
-function buildResult(crop, district, quantityQuintals, quality, pathways, recommendation, decisionTrace, unknowns, assumptions, coverage, compatibleReqs, saleWindow, arrivals) {
+function buildResult(crop, district, quantityQuintals, quality, pathways, recommendation, decisionTrace, unknowns, assumptions, coverage, compatibleReqs, saleWindow, arrivals, demandCoverage) {
   const bestMandi = pathways.find(p => p.pathway === 'SELL_NOW');
   const hasFPOUpside = pathways.find(p => p.pathway === 'AGGREGATE_THROUGH_FPO');
   const storagePathway = pathways.find(p => p.pathway === 'STORE_THEN_SELL' && p.available !== false);
@@ -522,6 +593,37 @@ function buildResult(crop, district, quantityQuintals, quality, pathways, recomm
     note: 'These are estimated advantages of each pathway — not realized outcomes unless the underlying transaction is completed',
   };
 
+  // ── NEXT ACTION HANDOFF ──────────────────────────────────────────────
+  // Machine-readable next step for Connect/Sell stages.
+  let nextAction = null;
+  if (recommendation.pathway === 'SELL_NOW' || recommendation.pathway === 'AGGREGATE_THROUGH_FPO') {
+    const actionableMandi = recommendation.pathway === 'ALTERNATIVE_MARKET'
+      ? recommendedMarket : economicBestMarket;
+    const hasActionableBuyer = coverage?.bestActionable?.market === actionableMandi;
+    nextAction = {
+      type: hasActionableBuyer ? 'CONNECT_BUYER' : 'CREATE_LOT',
+      market: actionableMandi,
+      lotRequired: true,
+      reason: hasActionableBuyer
+        ? `Buyer directory has compatible buyers at ${actionableMandi}`
+        : 'The Kisan360 buyer directory does not currently list a compatible buyer for this market — create lot and monitor for new buyer listings',
+    };
+  } else if (recommendation.pathway === 'ALTERNATIVE_MARKET') {
+    nextAction = {
+      type: 'CONNECT_BUYER',
+      market: recommendedMarket,
+      lotRequired: true,
+      reason: `${recommendedMarket} has ${coverage?.bestActionable?.buyerCount || 0} compatible buyer(s) in the directory`,
+    };
+  } else if (recommendation.pathway === 'STORE_THEN_SELL') {
+    const storageOption = storagePathway?.storageOption;
+    nextAction = {
+      type: 'CONSIDER_STORAGE',
+      storageOptionIds: storageOption ? [storageOption.id] : [],
+      reason: 'Current sale-window signal is weak — storage may allow selling when timing improves',
+    };
+  }
+
   return {
     crop,
     district,
@@ -531,11 +633,13 @@ function buildResult(crop, district, quantityQuintals, quality, pathways, recomm
     recommendation,
     economicSummary,
     outcome,
+    nextAction,
     decisionTrace,
     unknowns,
     assumptions: [
       'All costs use documented assumptions (see /assumptions)',
       'Buyer directory is a static demo dataset',
+      'Demand signals are demo directory entries with time bounds — a MATCH does not guarantee a transaction',
       'No price forecasting — all signals describe the present or recent past',
       ...assumptions,
     ],
@@ -545,9 +649,13 @@ function buildResult(crop, district, quantityQuintals, quality, pathways, recomm
       storageCosts: 'Documented assumption (₹1/q/day)',
       buyerDirectory: 'Static demo dataset (labeled)',
       buyerRequirements: 'Static demo dataset (labeled)',
+      demandSignals: 'Demo demand directory with time bounds (labeled)',
       storageOptions: 'Static demo dataset (labeled)',
       saleWindow: saleWindow ? 'Observed historical price range' : 'No history available',
       arrivals: arrivals?.available ? 'Observed arrival counts' : 'No arrival data',
+      activeDemand: demandCoverage?.hasActiveDemand
+        ? `${demandCoverage.strongCount} strong + ${demandCoverage.partialCount} partial active demand signal(s)`
+        : demandCoverage?.actionability?.reason || 'No demand signal data',
     },
   };
 }
