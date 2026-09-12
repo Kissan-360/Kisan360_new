@@ -932,5 +932,16 @@
   "fpo.extraTransport": "average transport each member pays alone",
   "fpo.buyerCoverage": "Buyer coverage at pooled size ({quantity} q)",
   "fpo.createPooledLot": "Create pooled lot for {market} →",
-  "fpo.coverageNote": "Coverage = deterministic match on crop, service area and minimum quantity in the current directory. Not a demand estimate."
+  "fpo.coverageNote": "Coverage = deterministic match on crop, service area and minimum quantity in the current directory. Not a demand estimate.",
+  "fpo.forkTitle": "Your selling decision, two paths",
+  "fpo.pathADesc": "the decision you just made on the calculator",
+  "fpo.bestMandi": "Best mandi",
+  "fpo.estNet": "est. {net}/q net",
+  "fpo.attachRef": "Run the calculator to attach a best-mandi reference to this path.",
+  "fpo.pathASmall": "Small-lot transport tier; buyers with minimums above {q} q are out of reach.",
+  "fpo.pathBLine1": "Same crop · pooled lot (below) · {district}",
+  "fpo.pathBLine2": "Full-truck transport tier from 40 q pooled; processor minimums unlocked.",
+  "fpo.pathBLine3": "Compute below to see the pooled mandi, uplift and buyer coverage.",
+  "fpo.sameEngine": "Both paths use the same engine, the same quotes and the same directory. Kisan360 shows consequences — you choose the path.",
+  "trade.poolWhatIf": "What if I pool?"
 }

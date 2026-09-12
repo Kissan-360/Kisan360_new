@@ -764,23 +764,25 @@ const TradePage = () => {
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <GhostButton className="text-xs" onClick={() => navigate('/net-realization')}>
-                  <Scale size={14} /> Review decision
+                  <Scale size={14} /> {t('trade.reviewDecision')}
                 </GhostButton>
                 <GhostButton className="text-xs" onClick={() => navigate('/fpo')}>
-                  <Users size={14} /> What if I pool?
+                  <Users size={14} /> {t('trade.poolWhatIf')}
                 </GhostButton>
               </div>
             </div>
 
-            {/* Product journey indicator — SELL is the stage this screen executes */}
-            <div className="mt-3 flex items-center gap-1 overflow-x-auto pb-0.5">
+            {/* Product journey indicator — SELL is the stage this screen executes.
+                Wraps to two rows on phones (connectors hidden there); single
+                scroll-free strip on sm+. */}
+            <div className="mt-3 flex flex-wrap items-center gap-x-1 gap-y-1.5 sm:flex-nowrap sm:gap-1 sm:overflow-x-auto sm:pb-0.5">
               {JOURNEY.map((step, i) => {
                 const active = i === JOURNEY.length - 1;
                 const done = i < JOURNEY.length - 1;
                 return (
                   <React.Fragment key={step}>
-                    {i > 0 && <div className="flex-1 h-0.5 min-w-3 bg-emerald-300" />}
-                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${active ? 'bg-emerald-800 text-white shadow-sm' : done ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-400'}`}>
+                    {i > 0 && <div className="hidden sm:block flex-1 h-0.5 min-w-3 bg-emerald-300" aria-hidden="true" />}
+                    <span className={`shrink-0 rounded-full px-2 py-1 text-[9px] sm:px-2.5 sm:text-[10px] font-bold tracking-wide ${active ? 'bg-emerald-800 text-white shadow-sm' : done ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-400'}`}>
                       {step}
                     </span>
                   </React.Fragment>
@@ -1072,12 +1074,12 @@ const TradePage = () => {
                       aria-label={`Select buyer ${b.name}`}
                       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click(); } }}
                     >
-                      <div className="flex items-start justify-between gap-2">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0">
                           <p className="font-medium text-stone-900 text-sm">{b.name}</p>
                           <p className="text-xs text-stone-400">{b.category} · min {b.minQuantityQuintals} q</p>
                         </div>
-                        <span className="flex items-center gap-1 shrink-0">
+                        <span className="flex items-center gap-1 shrink-0 self-start">
                           <span className={`badge ${tier} inline-flex items-center gap-1.5`} title={b.tierDescription}>
                             <TierIcon size={12} /> {b.tierLabel}
                           </span>
@@ -1341,12 +1343,12 @@ const TradePage = () => {
               className="bg-white rounded-2xl shadow-xl border border-stone-200 w-full max-w-md p-5 animate-in fade-in slide-in-from-bottom-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
                   <p className="font-bold text-stone-900">{buyerDetail.name}</p>
                   <p className="text-xs text-stone-400">{buyerDetail.category}</p>
                 </div>
-                <div className="flex items-center gap-1 shrink-0">
+                <div className="flex items-center gap-1 shrink-0 self-start">
                   <span className={`badge ${TIER_CLS[buyerDetail.trustTier] || TIER_CLS.SELF_DECLARED} inline-flex items-center gap-1.5`}>
                     {(TIER_ICONS[buyerDetail.trustTier] || AlertTriangle) && React.createElement(TIER_ICONS[buyerDetail.trustTier] || AlertTriangle, { size: 12 })}
                     {buyerDetail.tierLabel}

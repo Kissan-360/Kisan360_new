@@ -132,7 +132,8 @@ const FpoPage = () => {
       </div>
 
       <form onSubmit={compute} className="card p-5">
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+        {/* 2×2 on tablets: 4-across at 768px clips the Compute button label */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
           <div>
             <label className="block text-xs font-medium text-stone-500 mb-1">{t('fpo.crop')}</label>
             <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
@@ -166,27 +167,27 @@ const FpoPage = () => {
           only — the human picks the path. Uses the carried decision context. */}
       {ctx && (
         <div className="card p-5">
-          <p className="text-[11px] uppercase tracking-wider text-stone-400">Your selling decision, two paths</p>
+          <p className="text-[11px] uppercase tracking-wider text-stone-400">{t('fpo.forkTitle')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2 text-sm">
             <div className="rounded-xl border border-stone-200 p-4">
               <span className="badge badge-blue">{t('fpo.pathA')}</span>
               <p className="text-stone-800 mt-2">{ctx.crop} · {(ctx.quantity ?? ctx.quantityQuintals) ?? 0} q · {ctx.district}</p>
-              <p className="text-[11px] text-stone-400 mt-0.5">the decision you just made on the calculator</p>
+              <p className="text-[11px] text-stone-400 mt-0.5">{t('fpo.pathADesc')}</p>
               {ctx.mandi || ctx.net != null ? (
-                <p className="text-stone-600 mt-1">Best mandi: {ctx.mandi || '—'}{ctx.net != null && ctx.net > 0 ? <> · est. {inr(ctx.net)}/q net</> : null}</p>
+                <p className="text-stone-600 mt-1">{t('fpo.bestMandi')}: {ctx.mandi || '—'}{ctx.net != null && ctx.net > 0 ? <> · {t('fpo.estNet', { net: inr(ctx.net) })}</> : null}</p>
               ) : (
-                <p className="text-stone-600 mt-1">Run the calculator to attach a best-mandi reference to this path.</p>
+                <p className="text-stone-600 mt-1">{t('fpo.attachRef')}</p>
               )}
-              <p className="text-xs text-stone-400 mt-1">Small-lot transport tier; buyers with minimums above {(ctx.quantity ?? ctx.quantityQuintals) ?? 0} q are out of reach.</p>
+              <p className="text-xs text-stone-400 mt-1">{t('fpo.pathASmall', { q: (ctx.quantity ?? ctx.quantityQuintals) ?? 0 })}</p>
             </div>
             <div className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
               <span className="badge badge-blue">{t('fpo.pathB')}</span>
-              <p className="text-stone-800 mt-2">Same crop · pooled lot (below) · {district}</p>
-              <p className="text-stone-600 mt-1">Full-truck transport tier from 40 q pooled; processor minimums unlocked.</p>
-              <p className="text-xs text-stone-400 mt-1">Compute below to see the pooled mandi, uplift and buyer coverage.</p>
+              <p className="text-stone-800 mt-2">{t('fpo.pathBLine1', { district })}</p>
+              <p className="text-stone-600 mt-1">{t('fpo.pathBLine2')}</p>
+              <p className="text-xs text-stone-400 mt-1">{t('fpo.pathBLine3')}</p>
             </div>
           </div>
-          <p className="text-[11px] text-stone-500 mt-3">Both paths use the same engine, the same quotes and the same directory. Kisan360 shows consequences — you choose the path.</p>
+          <p className="text-[11px] text-stone-500 mt-3">{t('fpo.sameEngine')}</p>
         </div>
       )}
 

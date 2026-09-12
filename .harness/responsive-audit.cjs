@@ -18,6 +18,7 @@ const VIEWPORTS = [
   { name: 'lap1440', width: 1440, height: 900 },
 ];
 const ROUTES = [
+  '/',
   '/dashboard',
   '/net-realization?crop=Onion&district=Nagpur&quantity=10',
   '/decision?crop=Onion&district=Nagpur&quantity=10',
@@ -47,7 +48,10 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const TOKEN = process.env.KISAN_TOKEN;
   const USER = process.env.KISAN_USER || '{}';
   if (!TOKEN) { console.error('KISAN_TOKEN env required'); process.exit(1); }
-  const LANG = process.env.KISAN_LANG || '';
+  // Default 'en' and ALWAYS seed: the chrome-profile persists across runs,
+  // so an unset KISAN_LANG would otherwise inherit whatever language a
+  // previous run left behind (EN audits silently running in Hindi).
+  const LANG = process.env.KISAN_LANG || 'en';
   try {
     await page.goto(BASE + '/login', { waitUntil: 'domcontentloaded', timeout: 20000 });
     await page.evaluate((t, u, lang) => {
@@ -72,7 +76,28 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         const m = await page.evaluate(() => {
           const de = document.documentElement;
           const vw = de.clientWidth;
-          const res = { vw, overflowX: de.scrollWidth - de.clientWidth, spill: [], squeezed: [], smallTaps: [], rawKeys: [] };
+          const res = { vw, overflowX: de.scrollWidth - de.clientWidth, spill: [], squeezed: [], smallTaps: [], rawKeys: [], overlaps: [] };
+          // Overlap detector (badge-vs-text class): a nowrap badge squeezed
+          // beside a wrapping name can visually collide instead of overflowing.
+          // For each badge, intersect it with text-carrying siblings/cousins
+          // inside the same card; ignore its own descendants.
+          const ixn = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+          for (const badge of document.querySelectorAll('main .badge')) {
+            const br = badge.getBoundingClientRect();
+            if (br.width === 0) continue;
+            const card = badge.closest('[class*="card"], [class*="rounded"]') || badge.parentElement;
+            if (!card) continue;
+            const kids = card.querySelectorAll('p, span, div, h1, h2, h3, li');
+            for (const el of kids) {
+              if (badge.contains(el) || el.contains(badge) || !(el.innerText || '').trim()) continue;
+              const r = el.getBoundingClientRect();
+              if (r.width === 0) continue;
+              if (ixn(br, r) > 120) {
+                if (res.overlaps.length < 5) res.overlaps.push({ badge: (badge.innerText || '').slice(0, 20), vs: el.tagName + '.' + (el.className || '').toString().split(' ').slice(0, 2).join('.'), area: Math.round(ixn(br, r)) });
+                break;
+              }
+            }
+          }
           const inScroller = (el) => !!el.closest('[class*="overflow-x"],[class*="overflow-auto"]');
           const truncates = (el) => {
             const c = (el.className || '').toString();
@@ -106,7 +131,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         if (m.squeezed.length) entry.issues.push(`squeezed:${m.squeezed.length}`);
         if (m.smallTaps.length) entry.issues.push(`smallTaps:${m.smallTaps.length}`);
         if (m.rawKeys.length) entry.issues.push(`rawKeys:${m.rawKeys.join(',')}`);
-        entry.detail = { spill: m.spill, squeezed: m.squeezed, smallTaps: m.smallTaps, rawKeys: m.rawKeys };
+        if (m.overlaps.length) entry.issues.push(`overlaps:${m.overlaps.length}`);
+        entry.detail = { spill: m.spill, squeezed: m.squeezed, smallTaps: m.smallTaps, rawKeys: m.rawKeys, overlaps: m.overlaps };
 
         const slug = route.split('?')[0].replace(/\//g, '_') || 'root';
         await page.screenshot({ path: `${process.cwd()}/.harness/shots/${vp.name}${slug}.png` });
@@ -119,7 +145,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   await browser.close();
   if (report.length === 0) {
-    console.log(`ALL CLEAN — ${VIEWPORTS.length * ROUTES.length} combos (${VIEWPORTS.length} viewports x ${ROUTES.length} routes${LANG ? ', lang=' + LANG : ''}), no overflow/spill/squeeze/tap/key issues`);
+    console.log(`ALL CLEAN — ${VIEWPORTS.length * ROUTES.length} combos (${VIEWPORTS.length} viewports x ${ROUTES.length} routes${LANG ? ', lang=' + LANG : ''}), no overflow/spill/squeeze/tap/key/overlap issues`);
   } else {
     console.log(JSON.stringify(report, null, 1));
   }
