@@ -410,6 +410,8 @@
   "decision.stages.decide": "निर्णय",
   "decision.stages.connect": "जोड़ाव",
   "decision.stages.sell": "बिक्री",
+  "decision.nav.continueTo": "आगे बढ़ें: {stage}",
+  "decision.nav.lockedHint": "यह चरण खोलने के लिए ऊपर अपने लॉट का विश्लेषण करें",
   "decision.welcome.title": "अपने लॉट का आज क्या करना चाहिए?",
   "decision.welcome.desc": "अपनी फसल, स्थान और मात्रा ऊपर दर्ज करें — फिर {strong}विश्लेषण{strongEnd} दबाएं बाज़ार प्रमाण, विकल्प तुलना और सरकारी मूल्य डेटा पर आधारित सिफ़ारिश देखने के लिए।",
   "decision.welcome.tryLabel": "आज़माएं:",

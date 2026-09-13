@@ -26,6 +26,15 @@ interface PaymentTimelineProps {
   amount?: number;
   /** Farmer name for the release card */
   farmerName?: string;
+  /** Label for the simulate button — describes the exact next simulated event.
+      Defaults to the generic translation. */
+  advanceLabel?: string;
+  /** When false the simulate button is replaced by advanceHint. Lets the page
+      hide a dead button (e.g. no offer sent yet) instead of a click that does
+      nothing. Defaults to true. */
+  showAdvance?: boolean;
+  /** Guidance shown in place of the simulate button when showAdvance is false. */
+  advanceHint?: string;
 }
 
 export default function PaymentTimeline({
@@ -34,6 +43,9 @@ export default function PaymentTimeline({
   onFail,
   amount,
   farmerName,
+  advanceLabel,
+  showAdvance = true,
+  advanceHint,
 }: PaymentTimelineProps) {
   const { t } = useTranslation();
   const [showBurst, setShowBurst] = useState(false);
@@ -130,15 +142,17 @@ export default function PaymentTimeline({
         })}
       </div>
 
-      {/* Simulate button */}
-      {currentStep < 7 && (
+      {/* Simulate button — hidden when there is nothing to simulate (the page
+          passes showAdvance=false with a next-step hint instead of a dead
+          button), and gone for good once the deal completes. */}
+      {currentStep < 7 && showAdvance && (
         <div className="mt-4 space-y-2">
           <button
             onClick={handleAdvance}
             className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 py-3 text-sm font-bold text-white shadow-md hover:bg-emerald-900 transition-colors"
           >
             <ArrowRight size={16} />
-            {t('payment.simulateNext')}
+            {advanceLabel || t('payment.simulateNext')}
           </button>
           {onFail && currentStep >= 5 && (
             <button
@@ -150,6 +164,11 @@ export default function PaymentTimeline({
             </button>
           )}
         </div>
+      )}
+      {currentStep < 7 && !showAdvance && advanceHint && (
+        <p className="mt-4 rounded-xl border border-dashed border-stone-200 bg-stone-50 px-4 py-3 text-xs text-stone-500 leading-relaxed">
+          {advanceHint}
+        </p>
       )}
 
       {/* Success burst */}

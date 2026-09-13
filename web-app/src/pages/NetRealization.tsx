@@ -317,7 +317,7 @@ const NetRealization = () => {
 
         {/* ── Inputs ── */}
         <form onSubmit={compute} className="card p-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 items-end [&>div]:min-w-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 items-start [&>div]:min-w-0">
             <div>
               <label className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.crop')}</label>
               <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
@@ -351,9 +351,15 @@ const NetRealization = () => {
               />
               <QuantityHint value={quantity} unit="quintals" note={UNIT_SCALE_NOTE} />
             </div>
-            <PrimaryButton type="submit" icon={Calculator} disabled={loading} className="!px-4 whitespace-nowrap">
-              {loading ? '…' : t('netRealization.compareCta')}
-            </PrimaryButton>
+            <div>
+              {/* Invisible spacer matching the field labels above, so the button
+                  top-aligns with the inputs (not the label row) now that the
+                  grid is items-start. */}
+              <span className="block text-xs font-medium mb-1 invisible select-none" aria-hidden="true">&nbsp;</span>
+              <PrimaryButton type="submit" icon={Calculator} disabled={loading} className="!px-4 whitespace-nowrap w-full">
+                {loading ? '…' : t('netRealization.compareCta')}
+              </PrimaryButton>
+            </div>
           </div>
         </form>
 

@@ -410,6 +410,8 @@
   "decision.stages.decide": "Decide",
   "decision.stages.connect": "Connect",
   "decision.stages.sell": "Sell",
+  "decision.nav.continueTo": "Continue to {stage}",
+  "decision.nav.lockedHint": "Analyze your lot above to unlock this step",
   "decision.welcome.title": "What should you do with your lot today?",
   "decision.welcome.desc": "Enter your crop, location and quantity above — then click {strong}Analyze{strongEnd} to see market evidence, compare options, and get a recommendation backed by real government price data.",
   "decision.welcome.tryLabel": "Try:",

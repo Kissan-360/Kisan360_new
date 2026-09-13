@@ -457,6 +457,11 @@ const TradePage = () => {
   // Refs for auto-scrolling to sections in flow mode
   const lotsRef = React.useRef<HTMLDivElement>(null);
   const buyersRef = React.useRef<HTMLDivElement>(null);
+  // The offer composer sits BELOW the buyer list inside the buyers section —
+  // scrolling to buyersRef after picking a buyer lands the farmer back on the
+  // same list with the composer hidden below the fold. This ref targets the
+  // composer itself so "Select this buyer" visibly advances the flow.
+  const offerRef = React.useRef<HTMLFormElement>(null);
   const paymentsRef = React.useRef<HTMLDivElement>(null);
 
   const [lots, setLots] = useState<Lot[]>([]);
@@ -663,6 +668,10 @@ const TradePage = () => {
         setOfferBuyer(null);
         setOfferPrice('');
         loadAll();
+        // The next step lives in the payment timeline (simulate the buyer's
+        // acceptance) — take the farmer there instead of leaving them on a
+        // cleared form wondering what happened.
+        setTimeout(() => paymentsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 600);
         // Auto-advance flow: offer sent → move to payment step
         if (inFlow && flowStep === 4) {
           setTimeout(() => setFlowStep(5), 800);
@@ -726,18 +735,51 @@ const TradePage = () => {
     }
   };
 
-  // Transaction phase derived from existing state — drives whether the
-  // DecisionReceipt is shown (a RELEASED payment closes the journey).
-  const decisionPhase = (() => {
-    if (payments.some(p => p.status === 'RELEASED')) return 'COMPLETED';
-    if (payments.some(p => p.status === 'HELD' || p.status === 'PENDING')) return 'DEAL ACCEPTED';
-    if (offers.some(o => o.status === 'SENT')) return 'OFFER RECEIVED';
-    if (offers.some(o => o.status === 'ACCEPTED')) return 'DEAL ACCEPTED';
-    if (lots.length > 0) return 'READY TO SELL';
-    return ctx ? 'READY TO SELL' : 'DISCOVERING';
-  })();
+  // ── Active deal: latest lot → its latest offer → its payment ─────────────
+  // The 7-step payment timeline, the receipt, and the demo simulation all
+  // follow the CURRENT deal — never `.some()` over all history. The old
+  // `.some()` logic pinned the timeline at 7/7 forever after the first
+  // completed sale, so "Simulate next step" never appeared again and repeat
+  // sales looked broken.
+  const byCreatedDesc = (a: { createdAt: string }, b: { createdAt: string }) =>
+    +new Date(b.createdAt || 0) - +new Date(a.createdAt || 0);
+  // lotId arrives POPULATED ({_id, crop, …}) from GET /offers and
+  // GET /payments — String() on that gives "[object Object]", so unwrap it.
+  const lotIdOf = (o: { lotId: any }) =>
+    o.lotId == null ? '' : typeof o.lotId === 'object' ? String(o.lotId._id || '') : String(o.lotId);
+  const activeLot = [...lots].sort(byCreatedDesc)[0] || null;
+  const activeLotOffers = activeLot
+    ? offers.filter(o => lotIdOf(o) !== '' && lotIdOf(o) === String(activeLot._id)).sort(byCreatedDesc)
+    : [];
+  const activeOffer = activeLotOffers[0] || null;
+  const activePayment = activeOffer
+    ? payments.find(p => String((p as any).offerId || '') === String(activeOffer._id)
+        || (lotIdOf(p) !== '' && lotIdOf(p) === lotIdOf(activeOffer))) || null
+    : null;
+  // A dead latest deal (offer withdrawn / rejected / expired, or its payment
+  // was cancelled) sends the farmer back to matching — step 2, not a stuck
+  // step with a dead Simulate button.
+  const activeDealDead = !!activeOffer
+    && (['WITHDRAWN', 'REJECTED', 'EXPIRED'].includes(activeOffer.status)
+      || activePayment?.status === 'CANCELLED');
+  const timelineStep = !activeLot ? 1
+    : !activeOffer || activeDealDead ? 2
+    : activePayment?.status === 'RELEASED' ? 7
+    : activePayment?.status === 'HELD' ? 6
+    : activePayment?.status === 'PENDING' ? 5
+    : activeOffer.status === 'ACCEPTED' ? 4
+    : activeOffer.status === 'SENT' ? 3
+    : 2;
+  // What the Simulate button can do RIGHT NOW on the active deal (null =
+  // nothing to simulate — the timeline shows a next-step hint instead of a
+  // dead button).
+  const simulateTarget = activePayment?.status === 'HELD' ? 'release'
+    : activeOffer?.status === 'SENT' ? 'accept'
+    : null;
   const releasedPayments = payments.filter(p => p.status === 'RELEASED');
-  const showReceipt = decisionPhase === 'COMPLETED' && ctx && releasedPayments.length > 0;
+  // The receipt celebrates the ACTIVE deal's completion, so starting a new
+  // lot retires the old receipt instead of showing stale figures forever.
+  const showReceipt = !!ctx && !!activePayment && activePayment.status === 'RELEASED';
 
   const activeOfferCount = offers.filter(o => !['REJECTED', 'WITHDRAWN', 'EXPIRED'].includes(o.status)).length;
 
@@ -1149,7 +1191,7 @@ const TradePage = () => {
 
         {/* ── Offer composer ───────────────────────────────────── */}
         {offerLot && (
-          <form onSubmit={sendOffer} className="card p-5 border-emerald-200">
+          <form ref={offerRef} onSubmit={sendOffer} className="card p-5 border-emerald-200 scroll-mt-6">
             <SectionLabel>{t('trade.offerSection')}</SectionLabel>
             <h2 className="font-semibold text-stone-900 mt-0.5 mb-3">
               Offer {offerLot.crop} ({offerLot.quantity} {offerLot.unit})
@@ -1256,31 +1298,42 @@ const TradePage = () => {
         </div>
 
         {/* ── Payment Timeline — 7-step journey from lot to money ── */}
-        <div ref={paymentsRef}>
+        <div ref={paymentsRef} className="scroll-mt-6">
         {!buyerView ? (
           <PaymentTimeline
-            currentStep={payments.some(p => p.status === 'RELEASED') ? 7
-              : payments.some(p => p.status === 'HELD') ? 6
-              : payments.some(p => p.status === 'PENDING') ? 5
-              : offers.some(o => o.status === 'ACCEPTED') ? 4
-              : offers.length > 0 ? 3
-              : lots.length > 0 ? 2
-              : 1}
+            currentStep={timelineStep}
+            advanceLabel={simulateTarget === 'release'
+              ? 'Simulate: buyer releases the payment'
+              : simulateTarget === 'accept'
+                ? 'Simulate: buyer accepts your offer'
+                : undefined}
+            showAdvance={simulateTarget !== null}
+            advanceHint={!activeLot
+              ? 'Create a lot above — then come back here and simulate the buyer accepting your offer, step by step to cash.'
+              : !activeOffer || activeDealDead
+                ? activeDealDead
+                  ? 'This deal ended. Create a new lot above to sell again — the simulation restarts with it.'
+                  : 'Send an offer to a buyer above — then come back here to simulate the acceptance.'
+                : 'Waiting on the latest update — give it a moment, then refresh.'}
             onAdvance={() => {
-              // Single-device demo ladder: no escrow yet → simulate buyer
-              // acceptance (offer SENT → ACCEPTED, payment HELD); escrow held →
-              // simulate settlement (HELD → RELEASED = the cash moment).
-              const held = payments.find(p => p.status === 'HELD');
+              // Single-device demo ladder, scoped to the ACTIVE deal: escrow
+              // held → simulate settlement (HELD → RELEASED = the cash
+              // moment); offer SENT → simulate buyer acceptance (ACCEPTED +
+              // payment HELD). Anything else gets an honest message instead
+              // of a silent no-op.
+              const held = activePayment?.status === 'HELD' ? activePayment : null;
               if (held) {
                 act(`/payments/${held._id}/simulate-release`, 'Funds released — the farmer has the cash (simulated).');
-              } else if (offers.some(o => o.status === 'SENT')) {
+              } else if (activeOffer?.status === 'SENT') {
                 act('/payments/simulate/accept-latest', 'Buyer accepted your offer — funds held in escrow (simulated).');
+              } else {
+                setNotice('Nothing to simulate yet — send an offer to a buyer first.');
               }
             }}
             onFail={() => {
               // Demo control: buyer never releases → payment CANCELLED →
               // farmer raises a grievance for authority handling.
-              const held = payments.find(p => p.status === 'HELD');
+              const held = activePayment?.status === 'HELD' ? activePayment : null;
               if (held) act(`/payments/${held._id}/simulate-failure`, 'Payment cancelled — buyer did not pay. Raise an issue below; the authority workflow takes over.');
             }}
             amount={releasedPayments.length > 0 ? releasedPayments.reduce((sum, p) => sum + (p.amount || 0), 0) : undefined}
@@ -1427,7 +1480,10 @@ const TradePage = () => {
                         const target = Number(expectedNet) > 0 ? Number(expectedNet) : (ctx && ctx.net != null && ctx.net > 0 ? ctx.net : 0);
                         setOfferPrice(target > 0 ? String(Math.round(target)) : '');
                         setBuyerDetail(null);
-                        setTimeout(() => buyersRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+                        // Scroll to the offer composer itself (it renders below
+                        // the buyer list) — not the buyers section top, which
+                        // just showed the same list back ("nothing happened").
+                        setTimeout(() => offerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
                       }}
                     >
                       Select this buyer & send offer
@@ -1448,7 +1504,7 @@ const TradePage = () => {
           </div>
         )}
 
-        {!buyerView && showReceipt && <DecisionReceipt ctx={ctx!} payments={releasedPayments} lots={lots} />}
+        {!buyerView && showReceipt && activePayment && <DecisionReceipt ctx={ctx!} payments={[activePayment]} lots={lots} />}
         {!buyerView && <DecisionHistory payments={payments} lots={lots} />}
 
         {/* ── Help & grievances (HLD P1: Raise → Open → Under Review → Resolved) ── */}

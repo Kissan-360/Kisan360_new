@@ -13,7 +13,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   BarChart3, Scale, Target, Handshake, Wallet, MapPin, Warehouse, Users,
-  Store, Lightbulb, AlertTriangle, CheckCircle2, ArrowRight, Info, BadgeCheck,
+  Store, Lightbulb, AlertTriangle, CheckCircle2, ArrowRight, ChevronLeft, Lock, Info, BadgeCheck,
   Check, Star,
 } from 'lucide-react';
 import { apiFetch, API_URL } from '../lib/api';
@@ -121,6 +121,48 @@ const STAGES: { key: Stage; labelKey: string; icon: React.ElementType }[] = [
   { key: 'connect', labelKey: 'decision.stages.connect', icon: Handshake },
   { key: 'sell', labelKey: 'decision.stages.sell', icon: Wallet },
 ];
+const STAGE_ORDER: Stage[] = ['inform', 'compare', 'decide', 'connect', 'sell'];
+
+// ── Guided step footer: Back / Continue — the linear spine of the workspace.
+// Every stage ends with an explicit next step, so the journey reads
+// Inform → Compare → Decide → Connect → Sell instead of five free tabs the
+// farmer must figure out. A locked Continue (data not ready yet) shows a
+// lock and explains what unlocks it.
+const StageNav: React.FC<{
+  active: Stage;
+  unlocked: Record<Stage, boolean>;
+  onGo: (s: Stage) => void;
+}> = ({ active, unlocked, onGo }) => {
+  const { t } = useTranslation();
+  const idx = STAGE_ORDER.indexOf(active);
+  const prev = idx > 0 ? STAGE_ORDER[idx - 1] : null;
+  const next = idx < STAGE_ORDER.length - 1 ? STAGE_ORDER[idx + 1] : null;
+  const nextLocked = next ? !unlocked[next] : false;
+  if (!prev && !next) return null;
+  const stageName = (s: Stage) => t(STAGES.find(x => x.key === s)!.labelKey);
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      {prev ? (
+        <GhostButton onClick={() => onGo(prev)}>
+          <ChevronLeft size={16} /> {t('common.back')}
+        </GhostButton>
+      ) : <span />}
+      {next && (
+        nextLocked ? (
+          <span title={t('decision.nav.lockedHint')}>
+            <PrimaryButton disabled icon={Lock} ariaLabel={t('decision.nav.lockedHint')}>
+              {t('decision.nav.continueTo', { stage: stageName(next) })}
+            </PrimaryButton>
+          </span>
+        ) : (
+          <PrimaryButton onClick={() => onGo(next)} icon={ArrowRight}>
+            {t('decision.nav.continueTo', { stage: stageName(next) })}
+          </PrimaryButton>
+        )
+      )}
+    </div>
+  );
+};
 
 // ══════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
@@ -283,6 +325,25 @@ const DecisionWorkspace = () => {
   const pathways = pathwayData?.pathways || [];
   const recommendation = pathwayData?.recommendation;
 
+  // ── Guided flow: a stage unlocks only when its data exists ─────────────
+  // Inform is always open (it IS the analysis); Compare and Sell need the
+  // ranked mandis; Decide and Connect need pathways. A locked tab shows a
+  // lock instead of opening onto an empty "open problem".
+  const stageUnlocked: Record<Stage, boolean> = {
+    inform: true,
+    compare: rankedMandis.length > 0,
+    decide: pathways.length > 0,
+    connect: pathways.length > 0,
+    sell: rankedMandis.length > 0,
+  };
+  // Anchor at the tabs: every guided move (tab click, Back, Continue) lands
+  // the farmer back at the stage header, never stranded mid-card.
+  const stageTopRef = React.useRef<HTMLDivElement>(null);
+  const goStage = useCallback((s: Stage) => {
+    setActiveStage(s);
+    requestAnimationFrame(() => stageTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }, [setActiveStage]);
+
   const analyzeAll = () => {
     setHasAnalyzed(true);
     fetchFarmContext();
@@ -310,7 +371,7 @@ const DecisionWorkspace = () => {
         {/* Escalates 2 → 3 → 5 columns: at lg (1024px) the sidebar leaves ~700px,
             so five 129px columns wrapped "Grade (your assessment)" onto two lines
             and left that one label sitting 16px higher than its row-mates. */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5 items-end">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5 items-start">
           <CropSelector value={crop} onChange={setCrop} />
           <DistrictSelector value={district} onChange={setDistrict} />
           <QuantityInput value={quantity} onChange={setQuantity} />
@@ -321,9 +382,14 @@ const DecisionWorkspace = () => {
               {['Unassessed', 'A', 'B', 'C'].map(g => <option key={g}>{g}</option>)}
             </select>
           </div>
-          <PrimaryButton onClick={analyzeAll} disabled={loading} icon={Target}>
-            {loading ? t('decision.analyzing') : t('decision.analyze')}
-          </PrimaryButton>
+          <div>
+            {/* Invisible spacer matching the field labels above, so Analyze
+                top-aligns with the inputs (not the label row). */}
+            <span className="block text-xs font-medium mb-1 invisible select-none" aria-hidden="true">&nbsp;</span>
+            <PrimaryButton onClick={analyzeAll} disabled={loading} icon={Target} className="w-full">
+              {loading ? t('decision.analyzing') : t('decision.analyze')}
+            </PrimaryButton>
+          </div>
           <button
             onClick={() => navigate('/grade-crop')}
             className="inline-flex items-center -my-2 py-2 text-xs font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-2"
@@ -334,10 +400,12 @@ const DecisionWorkspace = () => {
         {error && <div className="mt-3"><ErrorBanner message={error} onRetry={analyzeAll} /></div>}
       </Card>
 
-      {/* ── STAGE TABS ─────────────────────────────────────────────────── */}
-      <div className="flex gap-1 border-b border-stone-200 overflow-x-auto">
+      {/* ── STAGE TABS — guided and gated: a locked step cannot be opened
+          onto empty content; Analyze (or a finished fetch) unlocks it ── */}
+      <div ref={stageTopRef} className="flex gap-1 border-b border-stone-200 overflow-x-auto scroll-mt-6">
         {STAGES.map(s => {
           const Icon = s.icon;
+          const locked = !stageUnlocked[s.key];
           const hasData = (
             (s.key === 'inform' || s.key === 'compare' || s.key === 'decide') && rankedMandis.length > 0
           ) || (
@@ -347,14 +415,19 @@ const DecisionWorkspace = () => {
           );
           return (
             <button key={s.key}
-              onClick={() => setActiveStage(s.key)}
+              onClick={() => { if (!locked) goStage(s.key); }}
+              disabled={locked}
+              title={locked ? t('decision.nav.lockedHint') : undefined}
               aria-current={activeStage === s.key ? 'page' : undefined}
+              aria-disabled={locked || undefined}
               className={`px-3 py-2.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap min-h-[44px] ${
                 activeStage === s.key
                   ? 'border-emerald-500 text-emerald-700'
-                  : 'border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300'
+                  : locked
+                    ? 'border-transparent text-stone-300 cursor-not-allowed'
+                    : 'border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300'
               }`}>
-              <Icon size={15} />
+              {locked ? <Lock size={15} /> : <Icon size={15} />}
               <span>{t(s.labelKey)}</span>
               {hasData && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />}
             </button>
@@ -395,7 +468,7 @@ const DecisionWorkspace = () => {
           <DecideStage
             crop={crop} district={district} quantity={qty} grade={grade}
             pathwayData={pathwayData} loading={loading}
-            onFindBuyers={() => setActiveStage('connect')}
+            onFindBuyers={() => goStage('connect')}
           />
         )}
         {activeStage === 'connect' && (
@@ -411,6 +484,12 @@ const DecisionWorkspace = () => {
           />
         )}
       </div>
+
+      {/* ── Guided step footer: every analyzed stage ends with its explicit
+          next step (Back / Continue), so the journey reads as one line. ── */}
+      {(hasAnalyzed || marketData) && (
+        <StageNav active={activeStage} unlocked={stageUnlocked} onGo={goStage} />
+      )}
     </PageTransition>
   );
 };
@@ -1193,6 +1272,7 @@ const ConnectStage: React.FC<{
   const [buyers, setBuyers] = useState<any[]>([]);
   const [requirements, setRequirements] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const bestMandi = marketData?.rankedMandis?.[0];
 
   useEffect(() => {
     const load = async () => {
@@ -1287,6 +1367,10 @@ const ConnectStage: React.FC<{
                 prefill: '1', crop, district,
                 quantity: String(quantity), grade,
               });
+              // Carry the engine's recommendation so Trade opens on the same
+              // decision (mandi + net reference), not a blank context.
+              if (bestMandi?.market) params.set('mandi', bestMandi.market);
+              if (bestMandi?.farmerNetPerQuintal != null) params.set('net', String(bestMandi.farmerNetPerQuintal));
               navigate(`/trade?${params}`);
             }}
             icon={ArrowRight}

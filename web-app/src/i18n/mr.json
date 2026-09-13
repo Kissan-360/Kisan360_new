@@ -410,6 +410,8 @@
   "decision.stages.decide": "निर्णय",
   "decision.stages.connect": "जोडणी",
   "decision.stages.sell": "विक्री",
+  "decision.nav.continueTo": "पुढे जा: {stage}",
+  "decision.nav.lockedHint": "हे पाऊल उघडण्यासाठी वर तुमच्या लॉटचे विश्लेषण करा",
   "decision.welcome.title": "तुमच्या लॉटसोबत आज काय करावे?",
   "decision.welcome.desc": "तुमचे पीक, स्थान आणि प्रमाण वर प्रविष्ट करा — मग {strong}विश्लेषण{strongEnd} क्लिक करा बाजार पुरावे, पर्याय तुलना आणि शासकीय भाव डेटावर आधारित शिफारस पहायला.",
   "decision.welcome.tryLabel": "पहा:",
