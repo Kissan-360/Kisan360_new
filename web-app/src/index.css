@@ -297,6 +297,43 @@
     animation: glowPulse 3s ease-in-out infinite;
   }
 
+  /* Marquee row — the track must contain its content TWICE so the
+     translateX(-50%) loop is seamless. Wrap it in .marquee-wrap to get the
+     edge fade + hover-pause. */
+  .marquee-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+  .marquee-wrap::before,
+  .marquee-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 44px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .marquee-wrap::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--marquee-fade, #ffffff), transparent);
+  }
+  .marquee-wrap::after {
+    right: 0;
+    background: linear-gradient(270deg, var(--marquee-fade, #ffffff), transparent);
+  }
+  .marquee {
+    display: flex;
+    width: max-content;
+    animation: marqueeX 34s linear infinite;
+  }
+  .marquee-slow {
+    animation-duration: 52s;
+  }
+  .marquee-wrap:hover .marquee {
+    animation-play-state: paused;
+  }
+
   /* Skeleton shimmer */
   .skeleton {
     background: linear-gradient(90deg, #f0f2fc 25%, #e2e6f4 50%, #f0f2fc 75%);
@@ -549,6 +586,11 @@
 }
 @keyframes ringSpin {
   to { --angle: 360deg; }
+}
+
+@keyframes marqueeX {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 @keyframes fadeSlideIn {

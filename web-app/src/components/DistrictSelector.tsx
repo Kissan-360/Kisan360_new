@@ -6,6 +6,8 @@
 
 import React from 'react';
 import { MAHARASHTRA_DISTRICTS, MAHARASHTRA_CROPS, DISTRICT_COORDS, DEFAULT_DISTRICT, REGIONS } from '../lib/maharashtraData';
+import { QuantityHint } from './ui/kit';
+import { UNIT_SCALE_NOTE } from '../lib/units';
 
 // Re-export for backward compatibility
 export { MAHARASHTRA_DISTRICTS, DISTRICT_COORDS, DEFAULT_DISTRICT };
@@ -82,6 +84,9 @@ export const CropSelector: React.FC<{
   );
 };
 
+/* Quantity is asked in QUINTALS because that is the unit every mandi price is
+   quoted in — but the same weight in tonnes (how it travels) and kg (how it is
+   bagged) is shown live underneath, so nobody has to convert in their head. */
 export const QuantityInput: React.FC<{ value: string; onChange: (q: string) => void; className?: string }> = ({ value, onChange, className = '' }) => (
   <div>
     <label htmlFor="quantity-input" className="block text-xs font-medium text-stone-600 mb-1">Quantity (quintals)</label>
@@ -94,5 +99,6 @@ export const QuantityInput: React.FC<{ value: string; onChange: (q: string) => v
       onChange={(e) => onChange(e.target.value)}
       className={`input-field !min-h-[44px] ${className}`}
     />
+    <QuantityHint value={value} unit="quintals" note={UNIT_SCALE_NOTE} />
   </div>
 );

@@ -7,7 +7,8 @@ import {
 } from 'lucide-react';
 import { API_URL, apiFetch } from '../lib/api';
 import { MAHARASHTRA_DISTRICTS, MAHARASHTRA_CROPS, REGIONS } from '../lib/maharashtraData';
-import { Card, FreshBadge, SkeletonLines, PrimaryButton, GhostButton, PageTransition, CropIcon } from '../components/ui/kit';
+import { Card, FreshBadge, SkeletonLines, PrimaryButton, GhostButton, PageTransition, CropIcon, Quantity, QuantityHint } from '../components/ui/kit';
+import { UNIT_SCALE_NOTE } from '../lib/units';
 import { useAuth } from '../hooks/useAuth';
 import { loadDecisionContext } from '../lib/decisionContext';
 import { useTranslation } from '../i18n';
@@ -148,6 +149,8 @@ const SellHero = ({ top, pending, defaultCrop }: { top: PulseRow | null; pending
             />
             <span className="flex items-center bg-stone-100 border-l border-stone-200 px-3 text-[11px] font-bold text-stone-500">QTL</span>
           </div>
+          {/* Quintals are what a mandi quotes; tonnes are what a truck carries. */}
+          <QuantityHint value={quantity} unit="quintals" note={UNIT_SCALE_NOTE} />
         </div>
         <div className="col-span-2 lg:col-span-1 flex items-stretch">
           <button
@@ -381,7 +384,7 @@ const Dashboard = () => {
             <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-[0.12em] text-emerald-700 font-bold">{t('dashboard.yourLot.title')}</p>
               <p className="text-sm font-semibold text-stone-900 truncate">
-                {saved.crop} · {saved.quantityQuintals != null ? `${saved.quantityQuintals} q` : ''} · {saved.district}
+                {saved.crop} · {saved.quantityQuintals != null ? <Quantity value={saved.quantityQuintals} unit="quintals" /> : ''} · {saved.district}
               </p>
             </div>
           </div>
@@ -501,7 +504,7 @@ const Dashboard = () => {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[13px] font-semibold text-stone-900 truncate">
-                    {l.crop || '—'}{l.quantityQuintals != null ? ` · ${l.quantityQuintals} q` : ''}
+                    {l.crop || '—'}{l.quantityQuintals != null ? <> · <Quantity value={l.quantityQuintals} unit="quintals" /></> : ''}
                   </p>
                   <p className="text-[11px] text-stone-400">
                     {l.createdAt ? new Date(l.createdAt).toLocaleDateString('en-IN') : ''}

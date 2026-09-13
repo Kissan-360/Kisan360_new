@@ -94,11 +94,25 @@ try {
   }
 } catch { /* import.meta unavailable in some test environments — ignore */ }
 
+// Status codes that MUST NOT carry a body — wrapping one in a JSON envelope
+// would itself throw ("Response with null body status cannot have body").
+const NULL_BODY_STATUS = new Set([101, 204, 205, 304]);
+
 // Thin wrapper over fetch that:
 //  - injects Authorization (Firebase ID token preferred, demo token fallback),
 //  - applies a default timeout so no request can hang forever,
-//  - treats non-JSON responses as clean errors instead of a JSON-parse crash.
+//  - guarantees a PARSEABLE JSON body, so `res.json()` can never throw.
 // `url` is the full endpoint URL (e.g. `${API_URL}/farms`).
+//
+// Why the last one matters: the app has ~66 `(await apiFetch(...)).json()` call
+// sites and no shared parser, so ANY non-JSON reply used to surface to the user
+// as the useless message "Unexpected token 'T', \"Too many r\"... is not valid
+// JSON". That happens whenever the API is not the thing answering — the dev
+// proxy returning an HTML page while the backend is down, a gateway error page,
+// a rate-limit text body. Normalising here makes every one of those call sites
+// receive `{ success: false, error: <something readable> }` at the same status,
+// so existing `if (!res.ok)` and `if (data.success)` handling just works.
+// Nothing consumes a non-JSON body (no .blob()/.text()/.arrayBuffer() callers).
 export async function apiFetch(url: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers);
   const token = getFirebaseToken() || getDemoToken();
@@ -118,11 +132,52 @@ export async function apiFetch(url: string, init: RequestInit = {}): Promise<Res
     ? (typeof AbortSignal.any === 'function' ? AbortSignal.any([init.signal, timeoutController.signal]) : init.signal)
     : timeoutController.signal;
 
+  let res: Response;
   try {
-    return await fetch(url, { ...init, headers, signal: composedSignal });
+    res = await fetch(url, { ...init, headers, signal: composedSignal });
   } finally {
     clearTimeout(timer);
   }
+
+  if (NULL_BODY_STATUS.has(res.status)) return res;
+
+  const contentType = res.headers.get('content-type') || '';
+  if (contentType.includes('json')) {
+    // Surface failed calls. Pages legitimately branch on `success`, but a
+    // swallowed 4xx/5xx renders as an innocent empty state — which is exactly
+    // how the FPO's 403 stayed hidden on its selling screen. One log line here
+    // makes that class of bug visible from the console for every call site.
+    if (!res.ok) {
+      console.error(`[Kisan360] ${init.method || 'GET'} ${url} → ${res.status} ${res.statusText}`);
+    }
+    return res;
+  }
+
+  // Non-JSON reply — read it once and hand back an honest JSON error envelope.
+  const raw = await res.text().catch(() => '');
+  const snippet = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 240);
+  const offline = res.status === 0 || res.status >= 500;
+  const message = snippet
+    || (offline
+      ? `The API is not responding (${res.status || 'no response'}). Check that the backend is running.`
+      : `Unexpected ${res.status} response from the API.`);
+
+  console.error(`[Kisan360] Non-JSON response from ${url} (${res.status} ${res.statusText})`, snippet || '(empty body)');
+
+  return new Response(
+    JSON.stringify({
+      success: false,
+      nonJson: true,
+      status: res.status,
+      offline,
+      error: message,
+    }),
+    {
+      status: res.status === 0 ? 503 : res.status,
+      statusText: res.statusText,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
 }
 
 export { API_URL };

@@ -26,8 +26,9 @@ import {
 import { DataProvenance } from '../components/DataProvenance';
 import {
   PageHeader, Card, SectionLabel, DataTag, Chip, SkeletonLines,
-  PrimaryButton, GhostButton, EmptyState, PageTransition, CropIcon,
+  PrimaryButton, GhostButton, EmptyState, PageTransition, CropIcon, Quantity,
 } from '../components/ui/kit';
+import { quantityRangeQuintals } from '../lib/units';
 import { useTranslation } from '../i18n';
 import { useFlow } from '../components/FlowContext';
 
@@ -284,7 +285,10 @@ const DecisionWorkspace = () => {
       <Card className="relative overflow-hidden p-5 !border-emerald-200 bg-emerald-50/40">
         <div className="absolute left-0 top-0 bottom-0 w-2 bg-emerald-800" aria-hidden="true" />
         <SectionLabel tone="emerald" className="mb-3">{t('decision.yourLot')}</SectionLabel>
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+        {/* Escalates 2 → 3 → 5 columns: at lg (1024px) the sidebar leaves ~700px,
+            so five 129px columns wrapped "Grade (your assessment)" onto two lines
+            and left that one label sitting 16px higher than its row-mates. */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 items-end">
           <CropSelector value={crop} onChange={setCrop} />
           <DistrictSelector value={district} onChange={setDistrict} />
           <QuantityInput value={quantity} onChange={setQuantity} />
@@ -1211,7 +1215,7 @@ const ConnectStage: React.FC<{
                   </Chip>
                 </div>
                 <div className="text-[11px] text-stone-600 space-y-0.5">
-                  <p>Crop: {r.crop} · Quantity: {r.quantityRange?.min || 0}–{r.quantityRange?.max || '∞'}q</p>
+                  <p>Crop: {r.crop} · Quantity: {quantityRangeQuintals(r.quantityRange?.min || 0, r.quantityRange?.max ?? null)}</p>
                   <p>Service: {r.serviceDistricts?.join(', ')}</p>
                   {r.qualityMatch && <p>Quality: {r.qualityMatch.matchLevel === 'MATCH' ? 'SELF-DECLARED MATCH' : r.qualityMatch.matchLevel} — {r.qualityMatch.reasons?.join('; ')}{r.qualityMatch.matchLevel === 'MATCH' ? ' (based on your declared values, not independently verified)' : ''}</p>}
                   {r.paymentTerms && <p>Payment: {r.paymentTerms}</p>}
@@ -1317,7 +1321,9 @@ const SellStage: React.FC<{
           </div>
           <div>
             <p className="text-stone-500 text-xs">Quantity</p>
-            <p className="font-medium text-stone-800 tabular">{quantity}q</p>
+            <p className="font-medium text-stone-800">
+              <Quantity value={quantity} unit="quintals" stack />
+            </p>
           </div>
           <div>
             <p className="text-stone-500 text-xs">Grade</p>

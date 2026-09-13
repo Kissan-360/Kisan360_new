@@ -6,7 +6,9 @@ import { MAHARASHTRA_DISTRICTS, MAHARASHTRA_CROPS, REGIONS } from '../lib/mahara
 import {
   PageTransition, PageHeader, Card, SectionLabel, Chip, DataTag,
   SkeletonLines, StaggerList, StaggerItem, PrimaryButton, GhostButton, AnimatedCounter, CropIcon,
+  Quantity, QuantityHint,
 } from '../components/ui/kit';
+import { UNIT_SCALE_NOTE, otherUnits } from '../lib/units';
 import { useTranslation } from '../i18n';
 import {
   MapPin, Scale, Truck, Warehouse, Info, ArrowRight, AlertTriangle,
@@ -333,6 +335,7 @@ const NetRealization = () => {
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
               />
+              <QuantityHint value={quantity} unit="quintals" note={UNIT_SCALE_NOTE} />
             </div>
             <PrimaryButton type="submit" icon={Calculator} disabled={loading} className="!px-4 whitespace-nowrap">
               {loading ? '…' : t('netRealization.compareCta')}
@@ -365,7 +368,7 @@ const NetRealization = () => {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-emerald-100 text-sm flex items-center gap-1.5">
                   <CropIcon cropName={result.crop} size={14} className="text-emerald-100" />
-                  {t('netRealization.bestMandiFor')} {result.crop} · {result.district} ({result.quantityQuintals} q)
+                  {t('netRealization.bestMandiFor')} {result.crop} · {result.district} (<Quantity value={result.quantityQuintals} unit="quintals" />)
                 </p>
                 <div className="flex items-center gap-2 flex-wrap justify-end min-w-0">
                   {result?.decision?.robustness && (
@@ -399,7 +402,7 @@ const NetRealization = () => {
               <div className="mt-3 rounded-xl bg-white/10 border border-white/20 px-4 py-3 inline-block">
                 <p className="text-[11px] uppercase tracking-wider text-emerald-100">{t('netRealization.heroLotValue')}</p>
                 <p className="text-3xl font-bold mt-0.5">
-                  {result.quantityQuintals} q × {inr(best.farmerNetPerQuintal)}/q = {inr(best.farmerNetTotal)}
+                  <Quantity value={result.quantityQuintals} unit="quintals" /> × {inr(best.farmerNetPerQuintal)}/q = {inr(best.farmerNetTotal)}
                 </p>
               </div>
               {/* The decision chain — observed headline → farmer-borne costs → estimated net.
@@ -459,7 +462,7 @@ const NetRealization = () => {
               >
                 Sell at {best.market} — create lot
               </PrimaryButton>
-              <span className="text-xs text-stone-400">Pre-fills your lot with {result.crop} · {result.quantityQuintals} q · {result.district}</span>
+              <span className="text-xs text-stone-400">Pre-fills your lot with {result.crop} · <Quantity value={result.quantityQuintals} unit="quintals" /> · {result.district}</span>
             </div>
 
             {/* WITHOUT vs WITH Kisan360 — the impact of the decision, computed by
@@ -702,7 +705,7 @@ const NetRealization = () => {
               <div className="flex flex-wrap gap-2 mt-3">
                 {['50', '100'].map((q) => (
                   <GhostButton key={q} className={`text-xs ${whatIf?.qty === q ? '!border-emerald-400 !text-emerald-700' : ''}`} onClick={() => runWhatIf(q, `${result.crop} · ${q} q`)}>
-                    What if I sell {q} q instead of {result.quantityQuintals}?
+                    What if I sell <Quantity value={q} unit="quintals" /> instead of <Quantity value={result.quantityQuintals} unit="quintals" />?
                   </GhostButton>
                 ))}
               </div>
@@ -718,21 +721,21 @@ const NetRealization = () => {
                   <div className="mt-4 border-t border-stone-100 pt-3">
                     {flipped && (
                       <div className="flex flex-wrap items-center gap-2 text-sm mb-2">
-                        <Chip color="stone">Old recommendation · {result.quantityQuintals} q</Chip>
+                        <Chip color="stone">Old recommendation · {result.quantityQuintals} q ({otherUnits(result.quantityQuintals, 'quintals')})</Chip>
                         <span className="font-semibold text-stone-800">{base.market}</span>
                         <ArrowRight size={14} className="text-stone-400" />
-                        <Chip color="emerald">New recommendation · {whatIf.qty} q</Chip>
+                        <Chip color="emerald">New recommendation · {whatIf.qty} q ({otherUnits(whatIf.qty, 'quintals')})</Chip>
                         <span className="font-semibold text-stone-800">{wb.market}</span>
                       </div>
                     )}
                     <p className="text-sm text-stone-700">
-                      At <strong>{whatIf.qty} q</strong>, the best mandi is <strong>{wb.market}</strong> at <strong>{inr(wb.farmerNetPerQuintal)}/q net</strong>
+                      At <strong><Quantity value={whatIf.qty} unit="quintals" /></strong>, the best mandi is <strong>{wb.market}</strong> at <strong>{inr(wb.farmerNetPerQuintal)}/q net</strong>
                       {' '}({inr(wb.farmerNetTotal)} for the lot).
                       {flipped
                         ? ' The ranking changed with your quantity.'
                         : delta === 0
                           ? ' Net per quintal is unchanged — quantity alone does not move per-quintal costs below the bulk threshold.'
-                          : ` Net per quintal changed by ${inr(delta)}/q versus your current ${result.quantityQuintals} q plan.`}
+                          : ` Net per quintal changed by ${inr(delta)}/q versus your current ${result.quantityQuintals} q (${otherUnits(result.quantityQuintals, 'quintals')}) plan.`}
                     </p>
                     <p className="text-xs text-stone-500 mt-1.5">
                       {tierChanged

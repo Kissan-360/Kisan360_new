@@ -8,7 +8,11 @@ import { MAHARASHTRA_DISTRICTS, MAHARASHTRA_CROPS, REGIONS } from '../lib/mahara
 import {
   PageTransition, PageHeader, Card, SectionLabel, Chip, EmptyState,
   SkeletonLines, StaggerList, StaggerItem, PrimaryButton, GhostButton, StatCard, CropIcon,
+  Quantity, QuantityHint,
 } from '../components/ui/kit';
+import { quantityTriplet, otherUnits, UNIT_SCALE_NOTE } from '../lib/units';
+import { getBenchmark } from '../lib/benchmarkCache';
+import { isBuyerSideRole } from '../lib/roles';
 import { useTranslation } from '../i18n';
 import PaymentTimeline from '../components/PaymentTimeline';
 import { useFlow } from '../components/FlowContext';
@@ -69,6 +73,12 @@ interface Offer {
   amount: number;
   status: string;
   createdAt: string;
+  // 'FARMER_TO_BUYER' (this producer offered to a directory buyer) or
+  // 'BUYER_TO_FARMER' (a buyer offered on this producer's listed lot). The
+  // direction decides who may accept, reject or withdraw it.
+  direction?: string;
+  buyerUid?: string;
+  notes?: string;
   history?: { status: string; at: string; note?: string }[];
 }
 
@@ -131,7 +141,8 @@ function parsePrefillParams(sp: URLSearchParams) {
 
 const inr = (n: number) => `₹${(n ?? 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
 
-const isBuyerSide = (role?: string) => ['buyer', 'fpo', 'admin'].includes(role || '');
+/* Which side of the marketplace this login is on is decided by lib/roles.ts, so
+   navigation and page content can never disagree about it. */
 
 // Final outcome (WOW #3): after a payment is RELEASED, answer "what did the
 // farmer gain?" The deal ₹/q is an identity (amount ÷ quantity); the benchmark
@@ -145,30 +156,17 @@ const PaymentOutcome = ({ payment, lot }: { payment: Payment; lot?: Lot }) => {
 
   useEffect(() => {
     let alive = true;
-    const district = lot?.district;
-    if (!district || !payment.crop) {
-      // Fall back to the backend-populated lot reference before giving up —
-      // the district is the difference between a right and a wrong benchmark.
-      const refDistrict = payment.lotId && typeof payment.lotId === 'object' ? payment.lotId.district : undefined;
-      if (!refDistrict || !payment.crop) { setFailed(true); return; }
-      apiFetch(`${API_URL}/market/net-realization?crop=${encodeURIComponent(payment.crop)}&district=${encodeURIComponent(refDistrict)}&quantity=${payment.quantityQuintals}`)
-        .then(r => r.json())
-        .then(j => {
-          if (!alive) return;
-          if (j.success && j.rankedMandis?.length) setBench({ bestNet: j.rankedMandis[0].farmerNetPerQuintal, bestMandi: j.rankedMandis[0].market });
-          else setFailed(true);
-        })
-        .catch(() => { if (alive) setFailed(true); });
-      return () => { alive = false; };
-    }
-    apiFetch(`${API_URL}/market/net-realization?crop=${encodeURIComponent(payment.crop)}&district=${encodeURIComponent(district)}&quantity=${payment.quantityQuintals}`)
-      .then(r => r.json())
-      .then(j => {
-        if (!alive) return;
-        if (j.success && j.rankedMandis?.length) setBench({ bestNet: j.rankedMandis[0].farmerNetPerQuintal, bestMandi: j.rankedMandis[0].market });
-        else setFailed(true);
-      })
-      .catch(() => { if (alive) setFailed(true); });
+    // Fall back to the backend-populated lot reference before giving up —
+    // the district is the difference between a right and a wrong benchmark.
+    const district = lot?.district
+      || (payment.lotId && typeof payment.lotId === 'object' ? payment.lotId.district : undefined);
+    if (!district || !payment.crop) { setFailed(true); return; }
+    // Shared cache: rows for the same crop/district/quantity cost one request.
+    getBenchmark(payment.crop, district, payment.quantityQuintals).then(b => {
+      if (!alive) return;
+      if (b) setBench({ bestNet: b.net, bestMandi: b.mandi });
+      else setFailed(true);
+    });
     return () => { alive = false; };
   }, [payment._id]);
 
@@ -196,7 +194,7 @@ const PaymentOutcome = ({ payment, lot }: { payment: Payment; lot?: Lot }) => {
         <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
           <p className="text-[11px] uppercase tracking-wider text-emerald-600 flex items-center gap-1"><Banknote size={12} /> Locked deal</p>
           <p className="font-bold text-emerald-800 mt-0.5">{inr(payment.amount)}</p>
-          <p className="text-[11px] text-stone-400">for {payment.quantityQuintals} q of {payment.crop} — the transaction record</p>
+          <p className="text-[11px] text-stone-400">for <Quantity value={payment.quantityQuintals} unit="quintals" /> of {payment.crop} — the transaction record</p>
         </div>
       </div>
       {bench && delta != null && (
@@ -227,7 +225,7 @@ const OfferBenchmark = ({ offer, lot, buyer }: { offer: Offer; lot?: Lot; buyer?
   if (lot?.grade && lot.grade !== 'Unassessed') factors.push(`Lot grade: ${lot.grade} (declared)`);
   if (lot?.moisturePct != null) factors.push(`Lot moisture: ${lot.moisturePct}% (declared)`);
   if (lot?.damagePct != null) factors.push(`Visible damage: ${lot.damagePct}% (declared)`);
-  if (buyer && offer.quantityQuintals < buyer.minQuantityQuintals) factors.push(`Quantity ${offer.quantityQuintals} q is below ${buyer.name}'s usual ${buyer.minQuantityQuintals} q minimum`);
+  if (buyer && offer.quantityQuintals < buyer.minQuantityQuintals) factors.push(`Quantity ${offer.quantityQuintals} q (${otherUnits(offer.quantityQuintals, 'quintals')}) is below ${buyer.name}'s usual ${buyer.minQuantityQuintals} q minimum`);
   if (buyer?.paymentTermsLabel) factors.push(`Buyer's terms: ${buyer.paymentTermsLabel}`);
 
   useEffect(() => {
@@ -240,14 +238,12 @@ const OfferBenchmark = ({ offer, lot, buyer }: { offer: Offer; lot?: Lot; buyer?
     const district = lot?.district
       || (offer.lotId && typeof offer.lotId === 'object' ? offer.lotId.district : undefined);
     if (!district) { setFailed(true); return; }
-    apiFetch(`${API_URL}/market/net-realization?crop=${encodeURIComponent(offer.crop)}&district=${encodeURIComponent(district)}&quantity=${offer.quantityQuintals}`)
-      .then(r => r.json())
-      .then(j => {
-        if (!alive) return;
-        if (j.success && j.rankedMandis?.length) setBench({ net: j.rankedMandis[0].farmerNetPerQuintal, mandi: j.rankedMandis[0].market });
-        else setFailed(true);
-      })
-      .catch(() => { if (alive) setFailed(true); });
+    // Shared cache: rows for the same crop/district/quantity cost one request.
+    getBenchmark(offer.crop, district, offer.quantityQuintals).then(b => {
+      if (!alive) return;
+      if (b) setBench({ net: b.net, mandi: b.mandi });
+      else setFailed(true);
+    });
     return () => { alive = false; };
   }, [offer._id]);
 
@@ -295,14 +291,12 @@ const LotEconomics = ({ lot, offers }: { lot: Lot; offers: Offer[] }) => {
   useEffect(() => {
     let alive = true;
     if (!lot.district || !lot.crop) { setFailed(true); return; }
-    apiFetch(`${API_URL}/market/net-realization?crop=${encodeURIComponent(lot.crop)}&district=${encodeURIComponent(lot.district)}&quantity=${myQtyQ(lot)}`)
-      .then(r => r.json())
-      .then(j => {
-        if (!alive) return;
-        if (j.success && j.rankedMandis?.length) setBench({ net: j.rankedMandis[0].farmerNetPerQuintal, mandi: j.rankedMandis[0].market });
-        else setFailed(true);
-      })
-      .catch(() => { if (alive) setFailed(true); });
+    // Shared cache: rows for the same crop/district/quantity cost one request.
+    getBenchmark(lot.crop, lot.district, myQtyQ(lot)).then(b => {
+      if (!alive) return;
+      if (b) setBench({ net: b.net, mandi: b.mandi });
+      else setFailed(true);
+    });
     return () => { alive = false; };
   }, [lot._id]);
 
@@ -341,10 +335,12 @@ const DecisionReceipt = ({ ctx, payments, lots }: { ctx: DecisionContext; paymen
         </div>
         <Chip color="amber">simulated transaction</Chip>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-3 text-sm">
+      {/* One per row on phones: at 375px two columns left ~95px per cell, too
+          narrow for the single word "RECOMMENDATION" at this tracking. */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3 text-sm">
         <div className="rounded-lg border border-stone-200 bg-white p-3">
           <p className="text-[11px] uppercase tracking-wider text-stone-400">You told us</p>
-          <p className="text-stone-800 font-medium mt-0.5">{ctx.crop} · {ctx.quantity} q · {ctx.district}</p>
+          <p className="text-stone-800 font-medium mt-0.5">{ctx.crop} · <Quantity value={ctx.quantity} unit="quintals" /> · {ctx.district}</p>
         </div>
         <div className="rounded-lg border border-stone-200 bg-white p-3">
           <p className="text-[11px] uppercase tracking-wider text-stone-400">We recommended</p>
@@ -393,13 +389,15 @@ const DecisionHistory = ({ payments, lots }: { payments: Payment[]; lots: Lot[] 
         if (alive) setRefs((prev) => ({ ...prev, [p._id]: 'fail' }));
         return;
       }
-      apiFetch(`${API_URL}/market/net-realization?crop=${encodeURIComponent(p.crop)}&district=${encodeURIComponent(district)}&quantity=${p.quantityQuintals}`)
-        .then((r) => r.json())
-        .then((j) => {
-          if (!alive) return;
-          setRefs((prev) => ({ ...prev, [p._id]: j.success && j.rankedMandis?.length ? { ref: j.rankedMandis[0].farmerNetPerQuintal, mandi: j.rankedMandis[0].market } : 'fail' }));
-        })
-        .catch(() => { if (alive) setRefs((prev) => ({ ...prev, [p._id]: 'fail' })); });
+      // Shared cache — this is the fourth component on the page wanting the same
+      // reference, so it must not open its own request per row.
+      getBenchmark(p.crop, district, p.quantityQuintals).then((b) => {
+        if (!alive) return;
+        setRefs((prev) => ({
+          ...prev,
+          [p._id]: b ? { ref: b.net, mandi: b.mandi } : 'fail',
+        }));
+      });
     });
     return () => { alive = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -424,7 +422,7 @@ const DecisionHistory = ({ payments, lots }: { payments: Payment[]; lots: Lot[] 
             <StaggerItem key={p._id}>
               <div className="flex flex-wrap items-center justify-between gap-3 border border-stone-100 rounded-xl px-4 py-3 text-sm">
                 <div>
-                  <p className="font-medium text-stone-900">{p.crop} · {p.quantityQuintals} q → {p.buyerName}</p>
+                  <p className="font-medium text-stone-900">{p.crop} · <Quantity value={p.quantityQuintals} unit="quintals" /> → {p.buyerName}</p>
                   <p className="text-xs text-stone-400">{new Date(p.createdAt).toLocaleDateString('en-IN')} · accepted at {inr(dealPerQ)}/q</p>
                 </div>
                 <div className="text-right">
@@ -450,7 +448,7 @@ const DecisionHistory = ({ payments, lots }: { payments: Payment[]; lots: Lot[] 
 
 const TradePage = () => {
   const user = getDemoUser();
-  const buyerView = isBuyerSide(user?.role);
+  const buyerView = isBuyerSideRole(user?.role);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
@@ -626,7 +624,7 @@ const TradePage = () => {
       });
       const data = await res.json();
       if (data.success) {
-        setNotice(`Lot created for ${data.lot.quantity} ${data.lot.unit} of ${data.lot.crop}.`);
+        setNotice(`Lot created for ${quantityTriplet(data.lot.quantity, data.lot.unit)} of ${data.lot.crop}.`);
         setShowLotForm(false);
         setQuantity('');
         setVariety('');
@@ -660,7 +658,7 @@ const TradePage = () => {
       });
       const data = await res.json();
       if (data.success) {
-        setNotice(`Offer sent to ${offerBuyer.name}: ${inr(Number(offerPrice))}/q × ${myQuantityQuintals} q = ${inr(data.offer.amount)}.`);
+        setNotice(`Offer sent to ${offerBuyer.name}: ${inr(Number(offerPrice))}/q × ${quantityTriplet(myQuantityQuintals, 'quintals')} = ${inr(data.offer.amount)}.`);
         setOfferLot(null);
         setOfferBuyer(null);
         setOfferPrice('');
@@ -749,20 +747,22 @@ const TradePage = () => {
         {/* ── Decision context header — the SAME selling decision carried across pages ── */}
         {ctx && (
           <Card className="p-4 border-emerald-200 bg-emerald-50/60">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold flex items-center gap-1.5">
+            {/* Stacks on phones — the two action buttons are shrink-0, so at
+                375px they starved this row and the decision text overflowed. */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <div className="min-w-0 sm:flex-1 sm:min-w-[16rem]">
+                <p className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold flex flex-wrap items-center gap-1.5">
                   <Target size={12} /> Your current selling decision
                 </p>
                 <p className="text-sm text-stone-800 mt-1 flex flex-wrap items-center gap-x-1.5">
-                  <strong>{ctx.crop}</strong> · {(ctx.quantity ?? ctx.quantityQuintals) ?? 0} q · {ctx.district}
+                  <strong>{ctx.crop}</strong> · <Quantity value={(ctx.quantity ?? ctx.quantityQuintals) ?? 0} unit="quintals" /> · {ctx.district}
                   <ArrowRight size={12} className="text-stone-400" />
                   <strong>{ctx.mandi}</strong>
                   {ctx.net != null && ctx.net > 0 && <> · est. net <strong>{inr(ctx.net)}/q</strong></>}
                   {ctx.source && <> · <span className="text-stone-400">{ctx.source === 'agmarknet_live' ? 'live prices' : 'cached prices'}</span></>}
                 </p>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
                 <GhostButton className="text-xs" onClick={() => navigate('/net-realization')}>
                   <Scale size={14} /> {t('trade.reviewDecision')}
                 </GhostButton>
@@ -887,6 +887,9 @@ const TradePage = () => {
                 <div>
                   <label className="block text-xs font-medium text-stone-500 mb-1">Quantity</label>
                   <input className="input-field" type="number" min="0.1" step="0.1" value={quantity} onChange={(e) => setQuantity(e.target.value)} required placeholder="e.g. 10" />
+                  {/* Weight in the unit you picked AND the other two — a lot is
+                      quoted per quintal but carried per tonne. */}
+                  <QuantityHint value={quantity} unit={unit} note={UNIT_SCALE_NOTE} />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -975,7 +978,7 @@ const TradePage = () => {
                     <div className="min-w-0">
                       <p className="font-medium text-stone-900 text-sm flex items-center gap-1.5">
                         <CropIcon cropName={lot.crop} size={14} className="text-emerald-600" />
-                        {lot.crop}{lot.variety ? ` · ${lot.variety}` : ''} — {lot.quantity} {lot.unit}
+                        {lot.crop}{lot.variety ? ` · ${lot.variety}` : ''} — <Quantity value={lot.quantity} unit={lot.unit} />
                       </p>
                       <p className="text-xs text-stone-400 mt-0.5">
                         {lot.district || '—'} · grade {lot.grade || 'Unassessed'} (declared)
@@ -1040,7 +1043,10 @@ const TradePage = () => {
               description={t('trade.noBuyersDesc')}
             />
           ) : (
-            <StaggerList className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            // 2-across from lg, not md: with the 240px sidebar at 768px each
+            // card was ~158px wide, too narrow for the name row plus the trust
+            // badge and its info button.
+            <StaggerList className="grid grid-cols-1 lg:grid-cols-2 gap-3">
               {buyers.map((b) => {
                 const tier = TIER_CLS[b.trustTier] || TIER_CLS.SELF_DECLARED;
                 const TierIcon = TIER_ICONS[b.trustTier] || AlertTriangle;
@@ -1051,7 +1057,7 @@ const TradePage = () => {
                 if (offerLot) {
                   if (b.crops.some(c => c.toLowerCase() === offerLot.crop.toLowerCase())) reasons.push(`buys ${offerLot.crop}`);
                   if (b.districts.some(d => d.toLowerCase() === (offerLot.district || '').toLowerCase())) reasons.push(`serves ${offerLot.district}`);
-                  reasons.push(`accepts ${b.minQuantityQuintals} q+ lots`);
+                  reasons.push(`accepts ${b.minQuantityQuintals} q (${otherUnits(b.minQuantityQuintals, 'quintals')})+ lots`);
                 }
                 const selected = offerBuyer?.id === b.id;
                 return (
@@ -1074,10 +1080,14 @@ const TradePage = () => {
                       aria-label={`Select buyer ${b.name}`}
                       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click(); } }}
                     >
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                        <div className="min-w-0">
-                          <p className="font-medium text-stone-900 text-sm">{b.name}</p>
-                          <p className="text-xs text-stone-400">{b.category} · min {b.minQuantityQuintals} q</p>
+                      {/* The trust badge is wider in Marathi/Hindi, which used to
+                          crush this name column to ~68px and overflow it. The
+                          name keeps a floor width so the badge wraps instead,
+                          and long single words can break as a last resort. */}
+                      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-x-3">
+                        <div className="min-w-0 sm:flex-1 sm:min-w-[9rem]">
+                          <p className="font-medium text-stone-900 text-sm break-words">{b.name}</p>
+                          <p className="text-xs text-stone-400 break-words">{b.category} · min {b.minQuantityQuintals} q</p>
                         </div>
                         <span className="flex items-center gap-1 shrink-0 self-start">
                           <span className={`badge ${tier} inline-flex items-center gap-1.5`} title={b.tierDescription}>
@@ -1126,7 +1136,7 @@ const TradePage = () => {
                             setOfferPrice(target > 0 ? String(Math.round(target)) : '');
                           }}
                         >
-                          {tooSmall ? `Below ${b.minQuantityQuintals} q minimum` : (<><ArrowRight size={12} /> Offer to {b.name}</>)}
+                          {tooSmall ? `Below ${b.minQuantityQuintals} q (${otherUnits(b.minQuantityQuintals, 'quintals')}) minimum` : (<><ArrowRight size={12} /> Offer to {b.name}</>)}
                         </button>
                       )}
                     </div>
@@ -1152,8 +1162,8 @@ const TradePage = () => {
               </div>
               <p className="text-sm text-stone-500">
                 {offerPrice && Number(offerPrice) > 0
-                  ? <>Lot total: <span className="font-semibold text-stone-800">{inr(Number(offerPrice) * myQuantityQuintals)}</span> ({myQuantityQuintals} q)</>
-                  : `${myQuantityQuintals} q in this lot`}
+                  ? <>Lot total: <span className="font-semibold text-stone-800">{inr(Number(offerPrice) * myQuantityQuintals)}</span> (<Quantity value={myQuantityQuintals} unit="quintals" />)</>
+                  : <><Quantity value={myQuantityQuintals} unit="quintals" /> in this lot</>}
               </p>
               <PrimaryButton type="submit" icon={Send} disabled={!offerBuyer}>Send offer</PrimaryButton>
             </div>
@@ -1179,13 +1189,21 @@ const TradePage = () => {
                 <StaggerItem key={o._id}>
                   <div className="border border-stone-100 rounded-xl px-4 py-3 hover:border-stone-200 transition-colors">
                     <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-medium text-stone-900">
-                          {o.crop} · {o.quantityQuintals} q → {o.buyerName}
+                      <div className="min-w-0">
+                        {/* Direction is spelled out: "→ buyer" is an offer I
+                            sent, "← from buyer" is one waiting on my answer. */}
+                        <p className="text-sm font-medium text-stone-900 break-words">
+                          {o.crop} · <Quantity value={o.quantityQuintals} unit="quintals" />{' '}
+                          {o.direction === 'BUYER_TO_FARMER'
+                            ? `← from ${o.buyerName || 'a buyer'}`
+                            : `→ ${o.buyerName}`}
                         </p>
                         <p className="text-xs text-stone-400">
                           {inr(o.offeredPricePerQuintal)}/q · total {inr(o.amount)} · {new Date(o.createdAt).toLocaleDateString('en-IN')}
                         </p>
+                        {o.notes && (
+                          <p className="text-xs text-stone-500 mt-1 break-words italic">“{o.notes}”</p>
+                        )}
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
                         <Chip color={o.status === 'ACCEPTED' ? 'emerald' : o.status === 'SENT' ? 'amber' : o.status === 'WITHDRAWN' ? 'stone' : 'red'}>{o.status}</Chip>
@@ -1199,7 +1217,21 @@ const TradePage = () => {
                             </GhostButton>
                           </>
                         )}
-                        {!buyerView && o.status === 'SENT' && (
+                        {/* A buyer's purchase offer on MY lot is mine to decide —
+                            without this the buyer could send an offer the
+                            producer had no way to accept, and the flow died
+                            exactly where a judge would try it. */}
+                        {!buyerView && o.status === 'SENT' && o.direction === 'BUYER_TO_FARMER' && (
+                          <>
+                            <PrimaryButton className="text-xs !px-3 !py-1.5" icon={Check} onClick={() => act(`/offers/${o._id}/accept`, 'Purchase offer accepted — payment held (simulated escrow).')}>
+                              Accept
+                            </PrimaryButton>
+                            <GhostButton className="text-xs !px-3 !py-1.5" onClick={() => act(`/offers/${o._id}/reject`, 'Purchase offer declined — the lot is open to other buyers again.')}>
+                              Decline
+                            </GhostButton>
+                          </>
+                        )}
+                        {!buyerView && o.status === 'SENT' && o.direction !== 'BUYER_TO_FARMER' && (
                           <GhostButton className="text-xs !px-3 !py-1.5" onClick={() => act(`/offers/${o._id}/withdraw`, 'Offer withdrawn.')}>
                             <X size={14} /> Withdraw
                           </GhostButton>
@@ -1343,10 +1375,10 @@ const TradePage = () => {
               className="bg-white rounded-2xl shadow-xl border border-stone-200 w-full max-w-md p-5 animate-in fade-in slide-in-from-bottom-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0">
-                  <p className="font-bold text-stone-900">{buyerDetail.name}</p>
-                  <p className="text-xs text-stone-400">{buyerDetail.category}</p>
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-x-3">
+                <div className="min-w-0 sm:flex-1 sm:min-w-[9rem]">
+                  <p className="font-bold text-stone-900 break-words">{buyerDetail.name}</p>
+                  <p className="text-xs text-stone-400 break-words">{buyerDetail.category}</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0 self-start">
                   <span className={`badge ${TIER_CLS[buyerDetail.trustTier] || TIER_CLS.SELF_DECLARED} inline-flex items-center gap-1.5`}>

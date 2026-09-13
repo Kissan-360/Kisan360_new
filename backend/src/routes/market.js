@@ -72,6 +72,7 @@ function boundedQuery(req) {
     state: cap(req.query.state, 60),
     market: cap(req.query.market, 80),
     search: cap(req.query.search, 80),
+    category: cap(req.query.category, 40),
     limit,
     offset,
   };
@@ -88,15 +89,52 @@ priceHistory.loadHistory();
 // number came from and how fresh it is.
 router.get('/prices', async (req, res) => {
   try {
-    const { crop, state, market, search, limit, offset } = boundedQuery(req);
+    const { crop, state, market, search, limit, offset, category } = boundedQuery(req);
     const result = await marketCache.getBestPrices({ crop, state, market, search, limit, offset });
+    let rows = result.rows;
+    let { source, fallback, provenance } = result;
+
+    if (category) {
+      const { getCropsInCategory, getCropCategory } = require('../data/cropCatalog');
+      const names = getCropsInCategory(category);
+      if (names.length === 0) {
+        return res.status(400).json({ success: false, error: `Unknown crop category "${category}"` });
+      }
+      // Upstream paginates BEFORE we can filter, so narrowing one default page by
+      // category reported "no cereals" while cereals were genuinely on sale. Ask
+      // for each crop in the category instead (≤4), merge, and keep only rows
+      // that really belong to it — the same alias-tolerant catalog test the rest
+      // of the app already trusts (so "Soyabean" still counts as an oilseed).
+      const perCrop = await Promise.all(
+        names.map((name) => marketCache.getBestPrices({ crop: name, state, market, search, limit, offset }))
+      );
+      const seen = new Set();
+      rows = perCrop
+        .flatMap((r) => r.rows)
+        .filter((row) => {
+          const key = `${row.market}|${row.crop}|${row.variety || ''}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .filter((row) => getCropCategory(row.crop) === category)
+        .slice(0, limit);
+      fallback = perCrop.some((r) => r.fallback);
+      source = fallback ? 'agmarknet_snapshot' : 'agmarknet_live';
+      provenance = {
+        ...(perCrop.find((r) => r.provenance)?.provenance || {}),
+        note: `Category "${category}" resolved to ${names.length} crop(s) and queried individually, because the upstream feed paginates before filtering.`,
+      };
+    }
+
     res.json({
       success: true,
-      count: result.rows.length,
-      prices: result.rows,
-      source: result.source,
-      fallback: result.fallback,
-      provenance: result.provenance,
+      count: rows.length,
+      prices: rows,
+      category: category || null,
+      source,
+      fallback,
+      provenance,
     });
   } catch (error) {
     console.error('Market price error:', error.message);
@@ -627,6 +665,31 @@ router.get('/pathways', async (req, res) => {
 // GET /api/market/coverage — district × crop coverage diagnostic.
 // Reports which districts and crops actually have AGMARKNET observations.
 // A district existing in the selector does NOT mean market data exists.
+// GET /api/market/crop-categories — the crop groupings a filter UI needs
+// (cereal, pulse, oilseed...). Public reference data, so the market and search
+// filters can offer "show me the cereals" without the frontend keeping a
+// second copy of the taxonomy that would drift from the catalog.
+router.get('/crop-categories', (req, res) => {
+  try {
+    const { CROPS, CROP_CATEGORIES } = require('../data/cropCatalog');
+    const categories = CROP_CATEGORIES
+      .map((cat) => {
+        const crops = CROPS.filter((c) => c.category === cat.id);
+        return {
+          id: cat.id,
+          label: cat.label,
+          cropCount: crops.length,
+          crops: crops.map((c) => ({ id: c.id, name: c.name, marketCoverage: c.marketCoverage })),
+        };
+      })
+      .filter((cat) => cat.cropCount > 0);
+    res.json({ success: true, count: categories.length, categories });
+  } catch (error) {
+    logger.error('Crop categories error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to load crop categories' });
+  }
+});
+
 router.get('/coverage', (req, res) => {
   try {
     const { getCoverageMatrix } = require('../data/marketCoverage');

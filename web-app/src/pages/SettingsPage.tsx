@@ -66,12 +66,20 @@ const SettingsPage = () => {
     {
       label: t('settings.notifications'),
       desc: t('settings.notificationsDesc'),
+      // The track stays 24px for the right look, but the button carries a
+      // 44px-tall hit area (padding + matching negative margin, so the row
+      // height is unchanged).
       control: (
         <button
           onClick={() => update('notifications', !settings.notifications)}
-          className={`relative w-11 h-6 rounded-full transition-colors ${settings.notifications ? 'bg-emerald-500' : 'bg-stone-300'}`}
+          role="switch"
+          aria-checked={settings.notifications}
+          aria-label={t('settings.notifications')}
+          className="-my-2.5 py-2.5 flex items-center justify-end"
         >
-          <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.notifications ? 'translate-x-5' : ''}`} />
+          <span className={`relative block w-11 h-6 rounded-full transition-colors ${settings.notifications ? 'bg-emerald-500' : 'bg-stone-300'}`}>
+            <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${settings.notifications ? 'translate-x-5' : ''}`} />
+          </span>
         </button>
       ),
     },

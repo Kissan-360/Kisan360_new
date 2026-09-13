@@ -53,6 +53,13 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     try { localStorage.setItem(STORAGE_KEY, lang); } catch { /* ignore */ }
   }, []);
 
+  /* Keep <html lang> honest. It was hard-coded to "en" in index.html, so a
+     screen reader announced Marathi and Hindi content with English phonetics
+     and the browser picked Latin font fallbacks for Devanagari text. */
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
   const t = useCallback((key: string, params?: Record<string, string | number>): string => {
     const dict = translations[language] || translations.en;
     let value = dict[key] || translations.en[key] || key;

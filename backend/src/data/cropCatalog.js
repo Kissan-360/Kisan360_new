@@ -29,6 +29,7 @@ const CROPS = [
   // ── Strong AGMARKNET coverage (10+ mandis) ───────────────────────
   {
     id: 'onion',
+    category: 'vegetable',
     name: 'Onion',
     aliases: ['Onion'],
     season: 'rabi',
@@ -42,6 +43,7 @@ const CROPS = [
   },
   {
     id: 'soybean',
+    category: 'oilseed',
     name: 'Soybean',
     aliases: ['Soyabean', 'Soybean', 'Soyabeen'],
     season: 'kharif',
@@ -55,6 +57,7 @@ const CROPS = [
   },
   {
     id: 'tomato',
+    category: 'vegetable',
     name: 'Tomato',
     aliases: ['Tomato'],
     season: 'both',
@@ -70,6 +73,7 @@ const CROPS = [
   // ── Moderate AGMARKNET coverage (1–9 mandis) ────────────────────
   {
     id: 'cotton',
+    category: 'fibre',
     name: 'Cotton',
     aliases: ['Cotton (Raw)', 'Cotton', 'Kapas'],
     season: 'kharif',
@@ -83,6 +87,7 @@ const CROPS = [
   },
   {
     id: 'jowar',
+    category: 'cereal',
     name: 'Jowar (Sorghum)',
     aliases: ['Jowar(Sorghum)', 'Jowar', 'Sorghum', 'Sorghum (Jowar)'],
     season: 'kharif',
@@ -96,6 +101,7 @@ const CROPS = [
   },
   {
     id: 'bajra',
+    category: 'cereal',
     name: 'Bajra (Pearl Millet)',
     aliases: ['Bajra(Pearl Millet/Cumbu)', 'Bajra', 'Pearl Millet', 'Bajari'],
     season: 'kharif',
@@ -109,6 +115,7 @@ const CROPS = [
   },
   {
     id: 'wheat',
+    category: 'cereal',
     name: 'Wheat',
     aliases: ['Wheat', 'Gehu'],
     season: 'rabi',
@@ -122,6 +129,7 @@ const CROPS = [
   },
   {
     id: 'tur-dal',
+    category: 'pulse',
     name: 'Tur Dal (Pigeon Pea)',
     aliases: ['Red gram/Arhar/Tur(whole)', 'Tur', 'Arhar', 'Pigeon Pea', 'Tur Dal', 'Toor Dal'],
     season: 'kharif',
@@ -135,6 +143,7 @@ const CROPS = [
   },
   {
     id: 'chilli',
+    category: 'spice',
     name: 'Chilli',
     aliases: ['Green Chilli', 'Chilli', 'Chili', 'Mirchi', 'Red Chilli'],
     season: 'kharif',
@@ -148,6 +157,7 @@ const CROPS = [
   },
   {
     id: 'maize',
+    category: 'cereal',
     name: 'Maize',
     aliases: ['Maize', 'Corn', 'Makka'],
     season: 'kharif',
@@ -161,6 +171,7 @@ const CROPS = [
   },
   {
     id: 'groundnut',
+    category: 'oilseed',
     name: 'Groundnut',
     aliases: ['Groundnut', 'Peanut', 'Moongfali'],
     season: 'kharif',
@@ -174,6 +185,7 @@ const CROPS = [
   },
   {
     id: 'sugarcane',
+    category: 'cash',
     name: 'Sugarcane',
     aliases: ['Sugarcane', 'Ganna'],
     season: 'annual',
@@ -187,6 +199,7 @@ const CROPS = [
   },
   {
     id: 'grapes',
+    category: 'fruit',
     name: 'Grapes',
     aliases: ['Grapes', 'Draksha'],
     season: 'rabi',
@@ -200,6 +213,7 @@ const CROPS = [
   },
   {
     id: 'pomegranate',
+    category: 'fruit',
     name: 'Pomegranate',
     aliases: ['Pomegranate', 'Anar', 'Dalimb'],
     season: 'rabi',
@@ -215,6 +229,7 @@ const CROPS = [
   // ── Additional crops with AGMARKNET observations ─────────────────
   {
     id: 'ginger',
+    category: 'spice',
     name: 'Ginger',
     aliases: ['Ginger(Green)', 'Ginger', 'Green Ginger'],
     season: 'kharif',
@@ -228,6 +243,7 @@ const CROPS = [
   },
   {
     id: 'black-gram',
+    category: 'pulse',
     name: 'Black Gram (Urad)',
     aliases: ['Black Gram(Urd Beans)(Whole)', 'Black Gram', 'Urad', 'Urad Dal'],
     season: 'kharif',
@@ -241,6 +257,7 @@ const CROPS = [
   },
   {
     id: 'green-gram',
+    category: 'pulse',
     name: 'Green Gram (Moong)',
     aliases: ['Green Gram(Moong)(Whole)', 'Green Gram', 'Moong', 'Moong Dal'],
     season: 'kharif',
@@ -254,6 +271,7 @@ const CROPS = [
   },
   {
     id: 'bengal-gram',
+    category: 'pulse',
     name: 'Bengal Gram (Chana)',
     aliases: ['Bengal Gram(Gram)(Whole)', 'Bengal Gram', 'Chana', 'Chana Dal'],
     season: 'rabi',
@@ -267,6 +285,7 @@ const CROPS = [
   },
   {
     id: 'green-peas',
+    category: 'vegetable',
     name: 'Green Peas',
     aliases: ['Green Peas', 'Matar'],
     season: 'rabi',
@@ -347,10 +366,45 @@ function cropAliasMatch(inputCrop, targetCrop) {
   return input.id === target.id;
 }
 
+/**
+ * Crop categories — the groupings a buyer or a filter UI actually thinks in
+ * ("show me the cereals"), not an agronomic taxonomy. Display order runs
+ * staples first. Every crop in CROPS must carry exactly one of these ids;
+ * `tests/unit/cropCatalog.test.js` enforces that, so a new crop can never
+ * silently ship without a category.
+ */
+const CROP_CATEGORIES = [
+  { id: 'cereal', label: 'Cereals & Millets' },
+  { id: 'pulse', label: 'Pulses' },
+  { id: 'oilseed', label: 'Oilseeds' },
+  { id: 'vegetable', label: 'Vegetables' },
+  { id: 'fruit', label: 'Fruits' },
+  { id: 'spice', label: 'Spices' },
+  { id: 'fibre', label: 'Fibre' },
+  { id: 'cash', label: 'Cash Crops' },
+];
+
+/**
+ * Category id for a crop name or alias, or null when the crop is unknown.
+ * Accepts exactly what normalizeCrop accepts (id, display name, or alias).
+ */
+function getCropCategory(cropName) {
+  const crop = normalizeCrop(cropName);
+  return crop ? crop.category || null : null;
+}
+
+/** Every crop that belongs to a category id, as a flat name list. */
+function getCropsInCategory(categoryId) {
+  return CROPS.filter((c) => c.category === categoryId).map((c) => c.name);
+}
+
 module.exports = {
   CROPS,
+  CROP_CATEGORIES,
   normalizeCrop,
   getCrop,
+  getCropCategory,
+  getCropsInCategory,
   getActiveMarketCrops,
   enrichCropWithCoverage,
   cropAliasMatch,

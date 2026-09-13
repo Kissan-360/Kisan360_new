@@ -17,11 +17,13 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const getFreePort = require('../helpers/freePort');
 
 jest.setTimeout(120000);
 
-const PORT = 5297;
-const BASE = `http://127.0.0.1:${PORT}`;
+// Allocated per run so no two suites can collide — see tests/helpers/freePort.js.
+let PORT;
+let BASE;
 
 let mem;
 let server;
@@ -59,6 +61,8 @@ async function login(role) {
 }
 
 beforeAll(async () => {
+  PORT = await getFreePort();
+  BASE = `http://127.0.0.1:${PORT}`;
   mem = await MongoMemoryServer.create();
   server = spawn(process.execPath, ['src/server.js'], {
     cwd: path.join(__dirname, '..', '..'),
@@ -91,9 +95,23 @@ describe('seed idempotency', () => {
     expect(res.data.reused).toBe(true);
     expect(res.data.pooledLotId).toBeTruthy();
     const lots = await call('GET', '/api/lots', { token: farmerToken });
-    // canonical lot + pooled FPO lot — still two, not four
-    expect(lots.data.count).toBe(2);
+    // canonical (10q Onion) + buy-side OPEN lot + pooled FPO lot — three, not six.
+    expect(lots.data.count).toBe(3);
     expect(lots.data.lots.filter(l => l.poolMetadata && l.poolMetadata.isPooled)).toHaveLength(1);
+  });
+
+  // The buy side is only demoable if a producer's OPEN, priced lot is browsable
+  // by someone else. This pins that contract: without it a buyer logged into an
+  // empty workspace, which is the bug this lot exists to prevent.
+  test('seed leaves a browsable OPEN lot with a stated ask for buyers', async () => {
+    const buyerToken = await login('buyer');
+    const available = await call('GET', '/api/lots/available', { token: buyerToken });
+    expect(available.status).toBe(200);
+    const priced = available.data.lots.filter(l => Number(l.expectedPricePerQuintal) > 0);
+    expect(priced.length).toBeGreaterThan(0);
+    expect(priced[0].status).toBe('OPEN');
+    // The producer's uid must never reach a buyer.
+    expect(priced[0].farmerUid).toBeUndefined();
   });
 });
 
@@ -103,10 +121,13 @@ describe('financial integrity', () => {
 
   beforeAll(async () => {
     farmerToken = await login('farmer');
-    // Create a lot via seed, then extract the CANONICAL (non-pooled) lot ID
+    // Create a lot via seed, then extract the CANONICAL lot ID. Select it by
+    // identity (10 q Onion) rather than "the first non-pooled lot" — the seed
+    // also creates a 20 q buy-side lot, and picking that one would silently
+    // change the quantity this suite asserts against.
     await call('POST', '/api/auth/demo/seed', { token: farmerToken, body: {} });
     const lots = await call('GET', '/api/lots', { token: farmerToken });
-    lotId = lots.data.lots.find(l => !(l.poolMetadata && l.poolMetadata.isPooled))._id;
+    lotId = lots.data.lots.find(l => !(l.poolMetadata && l.poolMetadata.isPooled) && l.crop === 'Onion' && l.quantity === 10)._id;
   });
 
   test('server ignores client-supplied amount; computes from price × quantity', async () => {
@@ -141,8 +162,9 @@ describe('duplicate prevention', () => {
     buyerToken = await login('buyer');
     await call('POST', '/api/auth/demo/seed', { token: farmerToken, body: {} });
     const lots = await call('GET', '/api/lots', { token: farmerToken });
-    // canonical (non-pooled) lot — the seed's SENT offer to b7 lives here
-    lotId = lots.data.lots.find(l => !(l.poolMetadata && l.poolMetadata.isPooled))._id;
+    // canonical 10 q lot — the seed's SENT offer to b7 lives here, not on the
+    // 20 q buy-side lot the seed also creates.
+    lotId = lots.data.lots.find(l => !(l.poolMetadata && l.poolMetadata.isPooled) && l.crop === 'Onion' && l.quantity === 10)._id;
   });
 
   test('duplicate offer to same buyer is rejected (409)', async () => {

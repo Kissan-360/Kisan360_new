@@ -3,44 +3,73 @@ import { NavLink, useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard, Target, TrendingUp, Calculator, Route, Handshake, ShoppingCart,
   CloudSun, Microscope, Sprout, Home, User, Settings, X, LogOut, Landmark, Users,
-  PanelLeftClose, PanelLeftOpen, Award,
+  PanelLeftClose, PanelLeftOpen, Award, Store,
   type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation, LANGUAGES } from '../i18n';
 import { Logo, MandiDirect } from './brand';
+import { isBuyerSideRole } from '../lib/roles';
+
+/* `audience` answers a real usability bug a phone tester hit: a buyer demo-login
+   landed on the producer's workspace (`/trade` manages YOUR lots and offer
+   inbox) so "Sell My Crop" showed a buyer a page where nothing was buyable.
+   Producer-only entries are now hidden from buyer-side roles, and the buy-side
+   entry is hidden from producers, so the two workspaces read differently.
+   Anything genuinely useful to both (mandi prices, community) stays 'both'.
+   `farmer` here means "producer side" — it includes the FPO role, which is a
+   producer group (see lib/roles.ts). */
+export type NavAudience = 'farmer' | 'buyer' | 'both';
 
 export interface NavEntry {
   to: string;
   label: string;
   icon: LucideIcon;
-  group: 'sell' | 'market' | 'farm' | 'account';
+  group: 'buy' | 'sell' | 'market' | 'farm' | 'account';
+  audience: NavAudience;
+  /** Optional explicit i18n key when the derived one does not match. */
+  labelKey?: string;
 }
 
 export const NAV: NavEntry[] = [
-  { to: '/decision', label: 'Sell My Crop', icon: Target, group: 'sell' },
-  { to: '/grade-crop', label: 'Grade My Crop', icon: Award, group: 'sell' },
-  { to: '/net-realization', label: 'Net Realization', icon: Calculator, group: 'sell' },
-  { to: '/trade', label: 'My Lots', icon: Handshake, group: 'sell' },
-  { to: '/fpo', label: 'Sell as Group', icon: ShoppingCart, group: 'sell' },
-  { to: '/market', label: 'Mandi Prices', icon: TrendingUp, group: 'market' },
-  { to: '/pathways', label: 'Selling Guide', icon: Route, group: 'market' },
-  { to: '/farms', label: 'My Land', icon: Home, group: 'farm' },
-  { to: '/weather', label: 'Weather', icon: CloudSun, group: 'farm' },
-  { to: '/disease-detection', label: 'Check My Crop', icon: Microscope, group: 'farm' },
-  { to: '/advisory', label: 'Advice', icon: Sprout, group: 'farm' },
-  { to: '/schemes', label: 'Govt Help', icon: Landmark, group: 'farm' },
-  { to: '/community', label: 'Ask Farmers', icon: Users, group: 'farm' },
-  { to: '/profile', label: 'Profile', icon: User, group: 'account' },
-  { to: '/settings', label: 'Settings', icon: Settings, group: 'account' },
+  { to: '/buy', label: 'Buy Crops', icon: Store, group: 'buy', audience: 'buyer' },
+  { to: '/decision', label: 'Sell My Crop', icon: Target, group: 'sell', audience: 'farmer' },
+  { to: '/grade-crop', label: 'Grade My Crop', icon: Award, group: 'sell', audience: 'farmer' },
+  { to: '/net-realization', label: 'Net Realization', icon: Calculator, group: 'sell', audience: 'farmer' },
+  { to: '/trade', label: 'My Lots', icon: Handshake, group: 'sell', audience: 'farmer' },
+  { to: '/fpo', label: 'Sell as Group', icon: ShoppingCart, group: 'sell', audience: 'farmer' },
+  { to: '/market', label: 'Mandi Prices', icon: TrendingUp, group: 'market', audience: 'both' },
+  { to: '/pathways', label: 'Selling Guide', icon: Route, group: 'market', audience: 'farmer' },
+  { to: '/farms', label: 'My Land', icon: Home, group: 'farm', audience: 'farmer' },
+  { to: '/weather', label: 'Weather', icon: CloudSun, group: 'farm', audience: 'both' },
+  { to: '/disease-detection', label: 'Check My Crop', icon: Microscope, group: 'farm', audience: 'farmer' },
+  { to: '/advisory', label: 'Advice', icon: Sprout, group: 'farm', audience: 'farmer' },
+  { to: '/schemes', label: 'Govt Help', icon: Landmark, group: 'farm', audience: 'farmer' },
+  { to: '/community', label: 'Ask Farmers', icon: Users, group: 'farm', audience: 'both' },
+  { to: '/profile', label: 'Profile', icon: User, group: 'account', audience: 'both' },
+  { to: '/settings', label: 'Settings', icon: Settings, group: 'account', audience: 'both' },
 ];
 
-const GROUPS: { key: NavEntry['group']; title: string }[] = [
-  { key: 'sell', title: 'Sell' },
-  { key: 'market', title: 'Market' },
-  { key: 'farm', title: 'Farm' },
-  { key: 'account', title: '' },
-];
+const GROUP_ORDER: NavEntry['group'][] = ['buy', 'sell', 'market', 'farm', 'account'];
+
+/* Per-audience section headings — "Sell" is meaningless in a buyer's sidebar. */
+const GROUP_TITLES: Record<NavEntry['group'], { farmer: string; buyer: string }> = {
+  buy: { farmer: 'Buy', buyer: 'Buy' },
+  sell: { farmer: 'Sell', buyer: 'Sell' },
+  market: { farmer: 'Market', buyer: 'Market' },
+  farm: { farmer: 'Farm', buyer: 'Farm' },
+  account: { farmer: '', buyer: '' },
+};
+
+/* Re-exported so existing imports keep working; the mapping itself lives in
+   lib/roles.ts so every screen agrees on which side a role is on. */
+export { isBuyerSideRole as isBuyerRole, isFpoRole } from '../lib/roles';
+
+/** Entries visible to a role. Buyers never see the producer's workspace. */
+export function navForRole(role?: string): NavEntry[] {
+  const buyer = isBuyerSideRole(role);
+  return NAV.filter((e) => e.audience === 'both' || e.audience === (buyer ? 'buyer' : 'farmer'));
+}
 
 /* Hover tooltip for the collapsed rail — CSS-only, no portal needed. */
 function RailTooltip({ label }: { label: string }) {
@@ -57,7 +86,7 @@ function RailTooltip({ label }: { label: string }) {
 function NavItem({ entry, onNavigate, collapsed }: { entry: NavEntry; onNavigate?: () => void; collapsed: boolean }) {
   const Icon = entry.icon;
   const { t } = useTranslation();
-  const labelKey = `nav.${entry.to.replace('/', '').replace(/-/g, '')}`;
+  const labelKey = entry.labelKey || `nav.${entry.to.replace('/', '').replace(/-/g, '')}`;
   // t() returns the key itself when a translation is missing (truthy), so a
   // plain `||` fallback never fires — compare explicitly to keep raw `nav.*`
   // keys off screen in every language, now and for future entries.
@@ -111,9 +140,19 @@ function NavItem({ entry, onNavigate, collapsed }: { entry: NavEntry; onNavigate
 }
 
 function NavList({ onNavigate, collapsed }: { onNavigate?: () => void; collapsed: boolean }) {
+  const { user } = useAuth();
+  const buyer = isBuyerSideRole(user?.role);
+  const entries = navForRole(user?.role);
+
   return (
     <nav className="flex-1 px-2.5 py-3 space-y-1 overflow-y-auto k-scroll" aria-label="Main navigation">
-      {GROUPS.map((group, gi) => (
+      {GROUP_ORDER.map((key, gi) => {
+        const group = { key, title: GROUP_TITLES[key][buyer ? 'buyer' : 'farmer'] };
+        const items = entries.filter((e) => e.group === key);
+        // A producer has no buy-side entries and a buyer no sell-side ones —
+        // rendering the divider alone would leave an empty band in the rail.
+        if (items.length === 0) return null;
+        return (
         <div key={group.key}>
           {gi > 0 && (
             collapsed
@@ -126,12 +165,13 @@ function NavList({ onNavigate, collapsed }: { onNavigate?: () => void; collapsed
             </div>
           )}
           <div className="space-y-0.5">
-            {NAV.filter((e) => e.group === group.key).map((entry) => (
+            {items.map((entry) => (
               <NavItem key={entry.to} entry={entry} onNavigate={onNavigate} collapsed={collapsed} />
             ))}
           </div>
         </div>
-      ))}
+        );
+      })}
     </nav>
   );
 }
@@ -158,7 +198,7 @@ function UserFooter({ collapsed }: { collapsed: boolean }) {
         </div>
         <button
           onClick={handleLogout}
-          className="text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg p-2 transition-colors"
+          className="text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg p-2.5 transition-colors"
           title={t('topbar.signOut')}
           aria-label={t('topbar.signOut')}
         >
@@ -183,17 +223,25 @@ function UserFooter({ collapsed }: { collapsed: boolean }) {
         </div>
         <button
           onClick={handleLogout}
-          className="text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg p-2 transition-colors shrink-0"
+          className="text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg p-2.5 transition-colors shrink-0"
           title={t('topbar.signOut')}
           aria-label={t('topbar.signOut')}
         >
           <LogOut size={16} />
         </button>
       </div>
-      {/* Language selector */}
+      {/* Language selector — 36px tall so the three chips are comfortable taps
+          (they were 25px, the smallest controls in the app). */}
       <div className="flex items-center gap-1 px-1">
         {LANGUAGES.map((l) => (
-          <button key={l.code} onClick={() => setLanguage(l.code)} className={`flex-1 text-center py-1 rounded-md text-[11px] transition-colors ${language === l.code ? 'bg-emerald-100 text-emerald-700 font-semibold' : 'text-stone-400 hover:text-stone-600 hover:bg-stone-50'}`}>{l.native}</button>
+          <button
+            key={l.code}
+            onClick={() => setLanguage(l.code)}
+            aria-pressed={language === l.code}
+            className={`flex-1 min-h-[36px] flex items-center justify-center text-center rounded-md text-[11px] transition-colors ${language === l.code ? 'bg-emerald-100 text-emerald-700 font-semibold' : 'text-stone-400 hover:text-stone-600 hover:bg-stone-50'}`}
+          >
+            {l.native}
+          </button>
         ))}
       </div>
     </div>
@@ -210,7 +258,7 @@ export default function Sidebar({ collapsed = false, onToggleCollapse }: { colla
       aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       aria-expanded={!collapsed}
       title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-      className="text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-lg p-1.5 transition-colors shrink-0"
+      className="text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-lg p-2.5 transition-colors shrink-0"
     >
       {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
     </button>

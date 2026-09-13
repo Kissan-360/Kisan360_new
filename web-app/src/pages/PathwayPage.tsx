@@ -6,7 +6,7 @@ import { getDecisionContext } from '../lib/decisionContext';
 import { MAHARASHTRA_DISTRICTS, MAHARASHTRA_CROPS, REGIONS } from '../lib/maharashtraData';
 import {
   PageTransition, PageHeader, Card, SectionLabel, Chip, DataTag,
-  SkeletonLines, StaggerList, StaggerItem, PrimaryButton, GhostButton, CropIcon,
+  SkeletonLines, StaggerList, StaggerItem, PrimaryButton, GhostButton, CropIcon, Quantity,
 } from '../components/ui/kit';
 import { useTranslation } from '../i18n';
 import {
@@ -424,7 +424,7 @@ export default function PathwayPage() {
                 </div>
               )}
               {p.arrivals && p.arrivals.quantity && (
-                <p className="text-[11px] text-stone-500 mb-1.5">Arrivals: {p.arrivals.quantity} q observed</p>
+                <p className="text-[11px] text-stone-500 mb-1.5">Arrivals: <Quantity value={p.arrivals.quantity} unit="quintals" /> observed</p>
               )}
             </>
           )}

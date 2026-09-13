@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const lotSchema = new mongoose.Schema({
   farmerUid: { type: String, required: true, index: true },
+  // Display name snapshot so a buyer browsing listed lots sees who is selling
+  // without ever receiving the producer's uid. Older rows may be empty — the
+  // buyer-facing route falls back to a district label rather than inventing one.
+  farmerName: { type: String, default: '', trim: true },
   crop: { type: String, required: true, trim: true },
   variety: { type: String, default: '', trim: true },
   // Structured quality fields only — no vision model (see scope discipline).

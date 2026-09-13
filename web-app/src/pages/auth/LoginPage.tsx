@@ -31,7 +31,9 @@ const LoginPage = () => {
     setDemoLoadingRole(role);
     try {
       await demoSignIn(role);
-      navigate('/dashboard');
+      // Buyers get their own workspace: /trade is the producer's lot manager,
+      // so sending a buyer there was the "buyers page leads to seller" bug.
+      navigate(role === 'buyer' ? '/buy' : role === 'fpo' ? '/fpo' : '/dashboard');
     } catch (err: any) {
       setDemoError(err.message || t('login.error.demoFailed'));
     } finally {

@@ -24,6 +24,7 @@ import DecisionWorkspace from './pages/DecisionWorkspace';
 import SchemesPage from './pages/SchemesPage';
 import CommunityPage from './pages/CommunityPage';
 import GradeCrop from './pages/GradeCrop';
+import BuyCrops from './pages/BuyCrops';
 
 const ProtectedRoute = () => {
   const { user, loading } = useAuth();
@@ -58,6 +59,7 @@ function App() {
             <Route path="/net-realization" element={<NetRealization />} />
             <Route path="/pathways" element={<PathwayPage />} />
             <Route path="/trade" element={<TradePage />} />
+            <Route path="/buy" element={<BuyCrops />} />
             <Route path="/fpo" element={<FpoPage />} />
             <Route path="/schemes" element={<SchemesPage />} />
             <Route path="/community" element={<CommunityPage />} />

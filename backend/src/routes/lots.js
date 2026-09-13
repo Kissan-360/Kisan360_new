@@ -3,8 +3,25 @@ const { authenticateUser } = require('../middleware/auth');
 const requireDb = require('../middleware/requireDb');
 const Lot = require('../models/Lot');
 
+const { CROPS } = require('../data/cropCatalog');
+
 const router = express.Router();
 router.use(authenticateUser, requireDb);
+
+// Buy-side helpers. Lots store `crop` as free text, so a category filter has to
+// expand to every spelling the catalog knows (display name, id, and aliases) or
+// a lot created from an AGMARKNET spelling would silently vanish from results.
+const escapeRegex = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function cropCandidatesForCategory(categoryId) {
+  const out = new Set();
+  for (const c of CROPS) {
+    if (c.category !== categoryId) continue;
+    out.add(c.name);
+    out.add(c.id);
+    for (const a of c.aliases || []) out.add(a);
+  }
+  return [...out].filter(Boolean);
+}
 
 // Request-safety helpers: bounded strings and sane numerics. The Lot schema
 // validates enums/ranges at save-time, but raw infinite/NaN/huge values and
@@ -72,6 +89,69 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/lots/available — the BUY side of the market: OPEN lots listed by
+// OTHER producers, so a buyer-side login has something it can actually buy.
+// Read-only and additive; the seller flow is untouched.
+//
+// The producer's uid is never returned — buyers get the name snapshot (or a
+// district label for rows created before that field existed) alongside the
+// lot's own quality fields, which is what they need to decide.
+router.get('/available', async (req, res) => {
+  try {
+    const str = (v, n) => (typeof v === 'string' ? v.trim().slice(0, n) : '');
+    const crop = str(req.query.crop, 120);
+    const category = str(req.query.category, 40);
+    const district = str(req.query.district, 60);
+    const grade = str(req.query.grade, 20);
+    const minQty = boundedNumber(req.query.minQty, { min: 0, max: 100000 });
+    if (minQty === null) {
+      return res.status(400).json({ success: false, error: 'minQty must be a number between 0 and 100000' });
+    }
+
+    const filter = { status: 'OPEN', farmerUid: { $ne: req.user.uid } };
+    if (district) filter.district = new RegExp(`^${escapeRegex(district)}$`, 'i');
+    if (grade) filter.grade = grade;
+
+    // An explicit crop is more specific than a category, so it wins.
+    if (crop) {
+      filter.crop = new RegExp(`^${escapeRegex(crop)}$`, 'i');
+    } else if (category) {
+      const candidates = cropCandidatesForCategory(category);
+      if (candidates.length === 0) {
+        return res.status(400).json({ success: false, error: `Unknown crop category "${category}"` });
+      }
+      filter.crop = { $in: candidates.map((v) => new RegExp(`^${escapeRegex(v)}$`, 'i')) };
+    }
+
+    // Quantities are stored in the lot's own unit, so a quintal minimum has to
+    // be converted per-unit rather than compared raw.
+    if (minQty !== undefined && minQty > 0) {
+      filter.$or = [
+        { unit: 'quintals', quantity: { $gte: minQty } },
+        { unit: 'kg', quantity: { $gte: minQty * 100 } },
+        { unit: 'tonnes', quantity: { $gte: minQty / 10 } },
+      ];
+    }
+
+    const lots = await Lot.find(filter).sort({ createdAt: -1 }).limit(100).lean();
+    const listed = lots.map(({ farmerUid, ...rest }) => ({
+      ...rest,
+      producer: rest.farmerName || (rest.district ? `Producer · ${rest.district}` : 'Producer'),
+    }));
+
+    res.json({
+      success: true,
+      count: listed.length,
+      lots: listed,
+      view: 'market',
+      note: 'Open lots listed by other producers. Producer identity verification is not implemented in this demo.',
+    });
+  } catch (error) {
+    console.error('List available lots error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to list available lots' });
+  }
+});
+
 // GET /api/lots/:id
 router.get('/:id', async (req, res) => {
   try {
@@ -98,6 +178,7 @@ router.post('/', async (req, res) => {
 
     const lot = await Lot.create({
       farmerUid: req.user.uid,
+      farmerName: typeof req.user.name === 'string' ? req.user.name.slice(0, 80) : '',
       crop: clean.crop,
       variety: clean.variety || '',
       quantity: clean.quantity,

@@ -16,11 +16,13 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const getFreePort = require('../helpers/freePort');
 
 jest.setTimeout(120000);
 
-const PORT = 5298;
-const BASE = `http://127.0.0.1:${PORT}`;
+// Allocated per run so no two suites can collide — see tests/helpers/freePort.js.
+let PORT;
+let BASE;
 
 let mem;
 let server;
@@ -66,6 +68,8 @@ async function login(role) {
 }
 
 beforeAll(async () => {
+  PORT = await getFreePort();
+  BASE = `http://127.0.0.1:${PORT}`;
   mem = await MongoMemoryServer.create();
   server = spawn(process.execPath, ['src/server.js'], {
     cwd: path.join(__dirname, '..', '..'),

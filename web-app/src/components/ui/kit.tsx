@@ -8,6 +8,8 @@
 import React, { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { MOTION } from '../../tokens';
+import { otherUnits, quantityTriplet, trimNumber, unitSymbol } from '../../lib/units';
+import { useTranslation } from '../../i18n';
 
 /* Accepts lucide icons, inline SVGs, or any component taking size/className. */
 type IconType = React.ElementType;
@@ -62,7 +64,12 @@ export function SectionLabel({ children, tone = 'emerald', className = '' }: { c
 }
 
 /* ------------------------------------------------------- PageHeader ---- */
-/* Consistent screen header: eyebrow + display title + subtitle + actions. */
+/* Consistent screen header: eyebrow + display title + subtitle + actions.
+   Stacks on phones: a shrink-0 action group beside a min-w-0 title let the title
+   be crushed to an unreadable column (and long button rows spill off the right
+   edge) on narrow screens. The title keeps a minimum width so the actions wrap
+   beneath it instead of squeezing it, and the action group wraps internally
+   rather than overflowing. */
 export function PageHeader({
   eyebrow,
   title,
@@ -81,14 +88,14 @@ export function PageHeader({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={MOTION.base}
-      className={`flex flex-wrap items-end justify-between gap-4 mb-6 ${className}`}
+      className={`flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-4 mb-6 ${className}`}
     >
-      <div className="min-w-0">
+      <div className="min-w-0 sm:flex-1 sm:min-w-[18rem]">
         {eyebrow && <SectionLabel className="mb-1">{eyebrow}</SectionLabel>}
         <h1 className="font-display text-2xl md:text-[28px] font-bold text-stone-900 tracking-tight">{title}</h1>
         {subtitle && <p className="text-sm text-stone-500 mt-1 max-w-2xl">{subtitle}</p>}
       </div>
-      {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+      {actions && <div className="flex flex-wrap items-center gap-2 sm:shrink-0">{actions}</div>}
     </motion.div>
   );
 }
@@ -267,12 +274,22 @@ export function Skeleton({ className = '' }: { className?: string }) {
 }
 
 export function SkeletonLines({ rows = 4, className = '' }: { rows?: number; className?: string }) {
+  const { t } = useTranslation();
   return (
-    <div className="space-y-3" aria-hidden="true">
+    // Two deliberate details here, both previously wrong:
+    //   • `aria-hidden` used to sit on this wrapper. A hidden subtree hides its
+    //     sr-only children too, so the "loading" announcement below was dead
+    //     code — assistive tech never heard it. The bars carry their own
+    //     aria-hidden, so the wrapper must NOT.
+    //   • `className` was accepted but never applied, silently dropping the
+    //     layout classes callers pass (e.g. `!space-y-2`, `w-full`).
+    <div className={`space-y-3 ${className}`}>
       {Array.from({ length: rows }).map((_, i) => (
         <Skeleton key={i} className={`h-4 ${i === rows - 1 ? 'w-2/3' : 'w-full'}`} />
       ))}
-      <div className="sr-only">Loading…</div>
+      <div className="sr-only" role="status" aria-live="polite">
+        {t('common.loading')}
+      </div>
     </div>
   );
 }
@@ -323,11 +340,12 @@ export function StaggerItem({ children, className = '' }: { children: React.Reac
 }
 
 /* ------------------------------------------------------- Buttons ------- */
-export function PrimaryButton({ children, onClick, icon: Icon, className = '', type = 'button', disabled = false }: { children: React.ReactNode; onClick?: () => void; icon?: IconType; className?: string; type?: 'button' | 'submit'; disabled?: boolean }) {
+export function PrimaryButton({ children, onClick, icon: Icon, className = '', type = 'button', disabled = false, ariaLabel }: { children: React.ReactNode; onClick?: () => void; icon?: IconType; className?: string; type?: 'button' | 'submit'; disabled?: boolean; ariaLabel?: string }) {
   return (
     <motion.button
       type={type}
       disabled={disabled}
+      aria-label={ariaLabel}
       whileHover={disabled ? undefined : { scale: 1.02 }}
       whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
@@ -340,11 +358,12 @@ export function PrimaryButton({ children, onClick, icon: Icon, className = '', t
   );
 }
 
-export function GhostButton({ children, onClick, className = '', type = 'button', disabled = false }: { children: React.ReactNode; onClick?: () => void; className?: string; type?: 'button' | 'submit'; disabled?: boolean }) {
+export function GhostButton({ children, onClick, className = '', type = 'button', disabled = false, ariaLabel }: { children: React.ReactNode; onClick?: () => void; className?: string; type?: 'button' | 'submit'; disabled?: boolean; ariaLabel?: string }) {
   return (
     <motion.button
       type={type}
       disabled={disabled}
+      aria-label={ariaLabel}
       whileHover={disabled ? undefined : { scale: 1.02 }}
       whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
@@ -550,6 +569,76 @@ export function CropIcon({ cropName, size = 16, className = '' }: { cropName: st
     >
       {key ? CROP_PATHS[key] : LeafGlyph}
     </svg>
+  );
+}
+
+/* ---------------------------------------------------------- Quantity -- */
+/* A weight, always with its equivalents in the other units.
+
+   Maharashtra prices are quoted per QUINTAL, transport is charged per TONNE
+   and seed/retail is per KG — so "20 q" on its own forces the reader to do
+   arithmetic before they can compare it to anything. `Quantity` renders the
+   primary figure and, in muted text beside it, the same weight in the other
+   two units. Symbols stay Latin (q/t/kg) because that is what a mandi slip
+   says; `label` carries the spelled-out unit for screen readers. */
+export function Quantity({
+  value,
+  unit = 'quintals',
+  className = '',
+  stack = false,
+  showPrimaryUnit = true,
+}: {
+  value: number | string | null | undefined;
+  unit?: string;
+  className?: string;
+  /** Put the equivalents on their own line (narrow cards, table cells). */
+  stack?: boolean;
+  showPrimaryUnit?: boolean;
+}) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return <span className={className}>—</span>;
+  const aside = otherUnits(n, unit);
+  return (
+    <span className={className}>
+      <span className="tabular">
+        {trimNumber(n)}
+        {showPrimaryUnit ? ` ${unitSymbol(unit)}` : ''}
+      </span>
+      {aside && (
+        <span className={stack ? 'block text-[11px] font-normal text-stone-400 mt-0.5' : 'ml-1.5 text-[11px] font-normal text-stone-400'}>
+          {stack ? aside : `· ${aside}`}
+        </span>
+      )}
+    </span>
+  );
+}
+
+/* ------------------------------------------------------ QuantityHint -- */
+/* Sits under a quantity INPUT and says what the typed number means in the
+   other units, live. Only meaningful while the user is still choosing a
+   figure, so it hides itself on an empty/invalid box rather than showing "0". */
+export function QuantityHint({
+  value,
+  unit = 'quintals',
+  className = '',
+  note,
+}: {
+  /** The input's value, in `unit` (the unit picker's current selection). */
+  value: number | string | null | undefined;
+  unit?: string;
+  className?: string;
+  /** Optional one-line scale reminder, e.g. "1 quintal = 100 kg". */
+  note?: string;
+}) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) {
+    return note ? <p className={`text-[11px] text-stone-400 mt-1 ${className}`}>{note}</p> : null;
+  }
+  return (
+    <p className={`text-[11px] text-stone-500 mt-1 ${className}`}>
+      <span className="text-stone-400">=</span> {quantityTriplet(n, unit)}
+      {note ? <span className="text-stone-400"> · {note}</span> : null}
+    </p>
   );
 }
 

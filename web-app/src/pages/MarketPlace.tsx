@@ -220,7 +220,10 @@ const MarketIntelligence = () => {
 
       {/* Discovery inputs */}
       <div className="card p-5">
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+        {/* 4-across only from lg: at tablet the 4 columns were ~98px, which
+            wrapped "What are you selling?" onto two lines and left the
+            "Search" label sitting 16px lower than its row-mates. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
           <div>
             <label className="block text-xs font-medium text-stone-500 mb-1">{t('market.whatSelling')}</label>
             <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>

@@ -73,5 +73,10 @@ Kisan360_HLD (2).pdf
 # Never commit: installed browser driver, chrome profile, screenshots, run results.
 .harness/node_modules/
 .harness/chrome-profile/
+.harness/chrome-profile*/
 .harness/shots/
 .harness/*.json
+.harness/.tok
+
+# Scratch curl output from harness runs (holds a demo JWT)
+/demo.json

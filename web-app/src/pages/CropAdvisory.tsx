@@ -85,7 +85,10 @@ const CropAdvisory = () => {
             {/* Crop selector */}
             <div className="card p-6 lg:p-8">
               <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-4">{t('advisory.selectCrop')}</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              {/* 5-across only from lg: at the md breakpoint (768px, with the
+                  sidebar taking 240px) five columns squeezed each crop card to
+                  ~76px and clipped the labels. */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                 {COMMON_CROPS.map((crop) => (
                   <button
                     key={crop}

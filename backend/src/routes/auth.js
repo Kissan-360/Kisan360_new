@@ -75,10 +75,30 @@ router.post('/demo/seed', authenticateUser, async (req, res) => {
     if (!lot) {
       lot = await Lot.create({
         farmerUid,
+        farmerName: (req.user.name || '').slice(0, 80),
         crop: 'Onion', variety: 'Local', quantity: 10, unit: 'quintals',
         district: 'Nashik', grade: 'Unassessed', status: 'OPEN',
+        // Stated ask, so the buy-side list never shows "Not stated" and the
+        // sell side and buy side quote the same anchor.
+        expectedPricePerQuintal: 4600,
       });
       isNewLot = true;
+    }
+
+    // Buy-side lot: OPEN with a stated ask so the buyer workspace always has
+    // something priced to make a purchase offer on. Find-or-create keeps the
+    // reset idempotent.
+    let marketLot = await Lot.findOne({
+      farmerUid, crop: 'Onion', variety: 'Gavran Red', status: 'OPEN',
+    });
+    if (!marketLot) {
+      marketLot = await Lot.create({
+        farmerUid,
+        farmerName: (req.user.name || '').slice(0, 80),
+        crop: 'Onion', variety: 'Gavran Red', quantity: 20, unit: 'quintals',
+        district: 'Nashik', grade: 'A', status: 'OPEN',
+        expectedPricePerQuintal: 4600,
+      });
     }
 
     let offer = await Offer.findOne({ lotId: lot._id, buyerId: buyer.id, status: 'SENT' });
@@ -115,9 +135,10 @@ router.post('/demo/seed', authenticateUser, async (req, res) => {
       success: true,
       note: reused
         ? 'Canonical scenario already seeded for this session — reusing existing lot and offer.'
-        : 'Demo state seeded: 1 canonical Onion lot (10 q, Nashik) + 1 SENT offer to Dehydrated Onion Exports (b7) + 1 pooled FPO lot.',
+        : 'Demo state seeded: 1 canonical Onion lot (10 q, Nashik) + 1 SENT offer to Dehydrated Onion Exports (b7) + 1 open buy-side lot (Onion 20 q Grade A, ₹4,600/q) + 1 pooled FPO lot.',
       lotId: lot._id,
       offerId: offer._id,
+      marketLotId: marketLot._id,
       pooledLotId: pooledLot._id,
       reused,
     });

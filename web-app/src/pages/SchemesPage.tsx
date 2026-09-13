@@ -110,7 +110,9 @@ const SchemesPage: React.FC = () => {
         }
       />
 
-      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      {/* 4-across only from lg: at md (768px) the sidebar leaves ~448px for
+          content, so four stat cards got ~71px each and clipped "₹12,000". */}
+      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <Card className="p-4">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone-400">{t('schemes.statTotal')}</p>
           <p className="mt-1 font-display text-2xl font-extrabold text-stone-900 tabular">{loading ? '—' : stats.total}</p>

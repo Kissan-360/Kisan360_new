@@ -6,7 +6,8 @@
  *      so a backend restart can never leave the demo journey broken.
  *
  * Canonical scenario (judge opening): Onion · 10 q · Nashik, with a Soybean
- * alt-crop lot and one offer in flight (SENT) the buyer can accept live.
+ * alt-crop lot, one offer in flight (SENT) the buyer can accept live, and one
+ * OPEN priced lot a buyer can make their own purchase offer on.
  *
  * Idempotence contract: the auto-seed only runs when the demo farmer has zero
  * lots; the manual script intentionally ADDS a fresh scenario each run without
@@ -41,19 +42,31 @@ async function seedDemoScenario({ baseUrl = DEFAULT_BASE, log = () => {} } = {})
   const token = login.token;
   log('farmer session ready (demo-farmer)');
 
-  // 2. Canonical lot — the hero scenario of the whole demo (Onion · 10 q · Nashik)
+  // 2. Canonical lot — the hero scenario of the whole demo (Onion · 10 q · Nashik).
+  //    The asking price anchors to the offer below so the sell side and the buy
+  //    side quote the same number; a lot with no ask shows "Not stated" on the
+  //    buyer's screen, which reads as unfinished in front of a judge.
   const lotA = (await api('/lots', {
     method: 'POST',
     token,
-    body: { crop: 'Onion', variety: 'Local', quantity: 10, unit: 'quintals', district: 'Nashik', grade: 'Unassessed' },
+    body: { crop: 'Onion', variety: 'Local', quantity: 10, unit: 'quintals', district: 'Nashik', grade: 'Unassessed', expectedPricePerQuintal: 4600 },
   })).lot;
   // Secondary lot for the alt-crop proof (Soybean · Akola · 12)
   const lotB = (await api('/lots', {
     method: 'POST',
     token,
-    body: { crop: 'Soybean', variety: 'JS-335', quantity: 12, unit: 'quintals', district: 'Akola', grade: 'A' },
+    body: { crop: 'Soybean', variety: 'JS-335', quantity: 12, unit: 'quintals', district: 'Akola', grade: 'A', expectedPricePerQuintal: 4400 },
   })).lot;
-  log(`lots ready — ${lotA._id} (Onion 10q Nashik, canonical) + ${lotB._id} (Soybean 12q Akola, alt-crop proof)`);
+  // Buy-side lot: stays OPEN with a stated ask so the buyer workspace always has
+  // something priced to make a purchase offer on. Without it the only OPEN lot
+  // carried no ask and the canonical lot was already OFFERED (a farmer→buyer
+  // offer locks it), leaving a buyer nothing realistic to act on.
+  const lotC = (await api('/lots', {
+    method: 'POST',
+    token,
+    body: { crop: 'Onion', variety: 'Gavran Red', quantity: 20, unit: 'quintals', district: 'Nashik', grade: 'A', expectedPricePerQuintal: 4600 },
+  })).lot;
+  log(`lots ready — ${lotA._id} (Onion 10q Nashik, canonical) + ${lotB._id} (Soybean 12q Akola, alt-crop proof) + ${lotC._id} (Onion 20q Nashik Grade A, open for buyer purchase offers)`);
 
   // 3. An offer in flight on the CANONICAL lot (SENT — buyer can accept it
   //    live during the demo). Price anchors to the calculator decision target.
@@ -85,7 +98,7 @@ async function seedDemoScenario({ baseUrl = DEFAULT_BASE, log = () => {} } = {})
     log(`fpo pool skipped (${e.message}) — /fpo still computes on demand`);
   }
 
-  return { token, lotA, lotB, offer, pooled };
+  return { token, lotA, lotB, lotC, offer, pooled };
 }
 
 module.exports = { seedDemoScenario, DEFAULT_BASE };
