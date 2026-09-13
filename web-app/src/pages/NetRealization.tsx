@@ -167,14 +167,23 @@ const NetRealization = () => {
     return () => { alive = false; };
   }, [result?.crop, result?.district, result?.quantityQuintals]);
 
-  const compute = async (e?: React.FormEvent) => {
+  const compute = async (e?: React.FormEvent, _retryCount = 0) => {
     e?.preventDefault();
-    setLoading(true);
-    setError('');
-    setDrawerFor(null);
+    if (_retryCount === 0) {
+      setLoading(true);
+      setError('');
+      setDrawerFor(null);
+    }
     try {
       const params = new URLSearchParams({ crop, district, quantity });
       const res = await apiFetch(`${API_URL}/market/net-realization?${params}`);
+      // Calculator cold-start returns 503 — retry with backoff (max 2 retries).
+      if (res.status === 503 && _retryCount < 2) {
+        const delay = 3000 * (_retryCount + 1);
+        console.log(`[Kisan360] Net-realization 503 (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
+        await new Promise(r => setTimeout(r, delay));
+        return compute(undefined, _retryCount + 1);
+      }
       const data = await res.json();
       if (data.success) {
         setResult(data);
@@ -197,6 +206,11 @@ const NetRealization = () => {
         setError(data.error || data.message || 'Calculator could not produce a result');
       }
     } catch {
+      if (_retryCount < 1) {
+        console.log('[Kisan360] Net-realization network error, retrying in 3s...');
+        await new Promise(r => setTimeout(r, 3000));
+        return compute(undefined, _retryCount + 1);
+      }
       setError('Could not reach the backend — check the API connection and try again.');
     } finally {
       setLoading(false);

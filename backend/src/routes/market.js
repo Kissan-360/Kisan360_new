@@ -426,6 +426,9 @@ router.get('/net-realization/explain', async (req, res) => {
     if (error.code === 'ECONNREFUSED') {
       return res.status(503).json({ success: false, error: 'Net-realization service unavailable', serviceStatus: 'offline' });
     }
+    if (isColdStart(error)) {
+      return res.status(503).json({ success: false, error: coldStartMessage(), serviceStatus: 'waking' });
+    }
     logger.error('Explain error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to explain net realization', details: error.message });
   }
@@ -498,6 +501,9 @@ router.get('/buyer-coverage', async (req, res) => {
   } catch (error) {
     if (error.code === 'ECONNREFUSED') {
       return res.status(503).json({ success: false, error: 'Net-realization service unavailable', serviceStatus: 'offline' });
+    }
+    if (isColdStart(error)) {
+      return res.status(503).json({ success: false, error: coldStartMessage(), serviceStatus: 'waking' });
     }
     logger.error('Buyer-coverage error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to assess buyer coverage', details: error.message });
@@ -656,6 +662,9 @@ router.get('/pathways', async (req, res) => {
   } catch (error) {
     if (error.code === 'ECONNREFUSED') {
       return res.status(503).json({ success: false, error: 'Net-realization service unavailable', serviceStatus: 'offline' });
+    }
+    if (isColdStart(error)) {
+      return res.status(503).json({ success: false, error: coldStartMessage(), serviceStatus: 'waking' });
     }
     logger.error('Pathways error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to compute pathways', details: error.message });

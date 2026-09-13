@@ -196,35 +196,57 @@ const DecisionWorkspace = () => {
   }, [paramCrop, paramDistrict, paramQty]);
 
   // Fetch market data (net-realization)
-  const fetchMarketData = useCallback(async (override?: { crop?: string; district?: string; qty?: number }) => {
+  const fetchMarketData = useCallback(async (override?: { crop?: string; district?: string; qty?: number }, _retryCount = 0) => {
     const c = override?.crop ?? crop;
     const d = override?.district ?? district;
     const q = override?.qty ?? qty;
-    setLoading(true); setError('');
+    if (_retryCount === 0) { setLoading(true); setError(''); }
     try {
       const res = await apiFetch(`${API_URL}/market/net-realization?crop=${encodeURIComponent(c)}&district=${encodeURIComponent(d)}&quantity=${q}`);
+      if (res.status === 503 && _retryCount < 2) {
+        const delay = 3000 * (_retryCount + 1);
+        console.log(`[Kisan360] DecisionWorkspace net-realization 503, retry ${_retryCount + 1}/2 in ${delay}ms`);
+        await new Promise(r => setTimeout(r, delay));
+        return fetchMarketData(override, _retryCount + 1);
+      }
       const data = await res.json();
       if (data.success) setMarketData(data);
       else setError(data.error || 'Failed to fetch market data');
     } catch (e: any) {
+      if (_retryCount < 1) {
+        console.log('[Kisan360] DecisionWorkspace net-realization error, retrying in 3s...');
+        await new Promise(r => setTimeout(r, 3000));
+        return fetchMarketData(override, _retryCount + 1);
+      }
       setError('Market data unavailable — check backend connection');
     } finally { setLoading(false); }
   }, [crop, district, qty]);
 
   // Fetch pathway data
-  const fetchPathwayData = useCallback(async (override?: { crop?: string; district?: string; qty?: number; grade?: string }) => {
+  const fetchPathwayData = useCallback(async (override?: { crop?: string; district?: string; qty?: number; grade?: string }, _retryCount = 0) => {
     const c = override?.crop ?? crop;
     const d = override?.district ?? district;
     const q = override?.qty ?? qty;
     const g = override?.grade ?? grade;
-    setLoading(true); setError('');
+    if (_retryCount === 0) { setLoading(true); setError(''); }
     try {
       const params = new URLSearchParams({ crop: c, district: d, quantity: String(q), grade: g });
       const res = await apiFetch(`${API_URL}/market/pathways?${params}`);
+      if (res.status === 503 && _retryCount < 2) {
+        const delay = 3000 * (_retryCount + 1);
+        console.log(`[Kisan360] DecisionWorkspace pathways 503, retry ${_retryCount + 1}/2 in ${delay}ms`);
+        await new Promise(r => setTimeout(r, delay));
+        return fetchPathwayData(override, _retryCount + 1);
+      }
       const data = await res.json();
       if (data.success) setPathwayData(data);
       else setError(data.error || 'Failed to fetch pathway data');
     } catch (e: any) {
+      if (_retryCount < 1) {
+        console.log('[Kisan360] DecisionWorkspace pathways error, retrying in 3s...');
+        await new Promise(r => setTimeout(r, 3000));
+        return fetchPathwayData(override, _retryCount + 1);
+      }
       setError('Pathway data unavailable');
     } finally { setLoading(false); }
   }, [crop, district, qty, grade]);

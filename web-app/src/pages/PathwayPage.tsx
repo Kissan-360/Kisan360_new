@@ -218,17 +218,31 @@ export default function PathwayPage() {
 
   const activeCrops = MAHARASHTRA_CROPS.filter(c => c.marketCoverage === 'active' || c.marketCoverage === 'limited').map(c => c.name);
 
-  const compute = async () => {
-    setLoading(true);
-    setError('');
+  const compute = async (_retryCount = 0) => {
+    if (_retryCount === 0) {
+      setLoading(true);
+      setError('');
+    }
     try {
       const params = new URLSearchParams({ crop, district, quantity });
       if (grade) params.set('grade', grade);
       const res = await apiFetch(`${API_URL}/market/pathways?${params}`);
+      // Calculator cold-start returns 503 — retry with backoff (max 2 retries).
+      if (res.status === 503 && _retryCount < 2) {
+        const delay = 3000 * (_retryCount + 1);
+        console.log(`[Kisan360] Pathways 503 (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
+        await new Promise(r => setTimeout(r, delay));
+        return compute(_retryCount + 1);
+      }
       const data = await res.json();
       if (!data.success) throw new Error(data.error || 'Failed to compute pathways');
       setResult(data);
     } catch (e: any) {
+      if (_retryCount < 1) {
+        console.log('[Kisan360] Pathways network error, retrying in 3s...');
+        await new Promise(r => setTimeout(r, 3000));
+        return compute(_retryCount + 1);
+      }
       setError(e.message || 'Failed to compute pathways');
     } finally {
       setLoading(false);
