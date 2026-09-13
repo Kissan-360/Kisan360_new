@@ -882,6 +882,15 @@ const TradePage = () => {
   // lot retires the old receipt instead of showing stale figures forever.
   const showReceipt = !!ctx && !!activePayment && activePayment.status === 'RELEASED';
 
+  // Opens the lot form and takes the farmer to it. Declared BEFORE the
+  // next-action block below: `run: openLotForm` reads the binding at render
+  // time (not lazily), so declaring it later throws a TDZ ReferenceError and
+  // whitescreens /trade — exactly the crash this comment guards against.
+  const openLotForm = () => {
+    setShowLotForm(true);
+    setTimeout(() => lotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  };
+
   // ── "What do I do now?" — exactly ONE next action, derived from the same
   // active-deal state as the timeline. The kisan never has to read the page
   // to know the next step: the banner names it and its button takes them
@@ -974,10 +983,6 @@ const TradePage = () => {
     };
   }, []);
 
-  const openLotForm = () => {
-    setShowLotForm(true);
-    setTimeout(() => lotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-  };
   const startNewSale = () => {
     setReceiptModal(null);
     openLotForm();

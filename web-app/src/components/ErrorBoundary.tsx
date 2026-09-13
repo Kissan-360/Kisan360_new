@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 // Top-level error boundary: a render crash must never white-screen the demo.
 // Shows a human message with a way back into the product.
-class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { error: Error | null; detail: string }> {
   constructor(props: { children: React.ReactNode }) {
     super(props);
-    this.state = { error: null };
+    this.state = { error: null, detail: '' };
   }
 
   static getDerivedStateFromError(error: Error) {
@@ -15,6 +15,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { err
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     console.error('Kisan360 render error:', error.message, info.componentStack);
+    this.setState({ detail: info.componentStack || '' });
   }
 
   render() {
@@ -22,7 +23,8 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { err
       return (
         <ErrorFallback
           message={this.state.error.message}
-          onRetry={() => this.setState({ error: null })}
+          detail={this.state.detail}
+          onRetry={() => this.setState({ error: null, detail: '' })}
         />
       );
     }
@@ -33,7 +35,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { err
 // The fallback needs routing ("Go to Dashboard" must actually reset the
 // crashing route, not re-mount the same broken tree), so it lives as a
 // function component inside the Router context.
-function ErrorFallback({ message, onRetry }: { message: string; onRetry: () => void }) {
+function ErrorFallback({ message, detail, onRetry }: { message: string; detail: string; onRetry: () => void }) {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
@@ -52,6 +54,13 @@ function ErrorFallback({ message, onRetry }: { message: string; onRetry: () => v
             Go to Dashboard
           </button>
         </div>
+        {/* Collapsed diagnostics — invisible unless opened. Lets support read
+            the exact failure from a screenshot or DOM dump. */}
+        <details className="mt-4 text-left">
+          <summary className="text-[11px] text-stone-400 cursor-pointer hover:text-stone-600">Error details</summary>
+          <p className="text-[11px] text-stone-500 mt-1 break-words" data-testid="error-message">{message}</p>
+          {detail && <p className="text-[10px] text-stone-400 mt-1 break-words whitespace-pre-wrap" data-testid="error-stack">{detail}</p>}
+        </details>
       </div>
     </div>
   );
