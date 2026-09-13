@@ -137,13 +137,15 @@ const FpoPage = () => {
       .catch(() => { /* static list stands */ });
   }, []);
 
-  const compute = async (e?: React.FormEvent) => {
+  const compute = async (e?: React.FormEvent, _retryCount = 0) => {
     e?.preventDefault();
-    setLoading(true);
-    setError('');
-    setCoverage(null);
-    setCreated(null);
-    setCreateError('');
+    if (_retryCount === 0) {
+      setLoading(true);
+      setError('');
+      setCoverage(null);
+      setCreated(null);
+      setCreateError('');
+    }
     // Never send a crop the price cache cannot price (e.g. Cotton carried in
     // from another screen's decision context). That path always 422s — snap to
     // the first priced crop instead of showing a red card.
@@ -156,6 +158,13 @@ const FpoPage = () => {
         method: 'POST',
         body: JSON.stringify({ district, crop: effectiveCrop }),
       });
+      // Calculator cold-start returns 503 — retry with backoff (max 2 retries).
+      if (res.status === 503 && _retryCount < 2) {
+        const delay = 3000 * (_retryCount + 1);
+        console.log(`[Kisan360] FPO pool 503 (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
+        await new Promise(r => setTimeout(r, delay));
+        return compute(undefined, _retryCount + 1);
+      }
       const data: PoolResponse = await res.json();
       if (data.success) {
         setResult(data);
@@ -169,6 +178,12 @@ const FpoPage = () => {
         setError(data.error || t('fpo.errorTitle'));
       }
     } catch {
+      // Network error — retry once if calculator might be waking up
+      if (_retryCount < 1) {
+        console.log('[Kisan360] FPO pool network error, retrying in 3s...');
+        await new Promise(r => setTimeout(r, 3000));
+        return compute(undefined, _retryCount + 1);
+      }
       setError(t('fpo.errorDesc'));
     } finally {
       setLoading(false);
@@ -178,7 +193,9 @@ const FpoPage = () => {
   /* Auto-compute once the priced-crop list has resolved, so the comparison is
      on screen without a click. Guarded with a ref: React StrictMode invokes
      effects twice in dev, and two pool computations would be two calculator
-     round-trips for the same answer. */
+     round-trips for the same answer. Also guarded against re-fires: if the
+     API returns 503 (calculator waking up), the retry logic handles it —
+     the effect must not re-trigger on remount. */
   const didAutoCompute = useRef(false);
   useEffect(() => {
     if (didAutoCompute.current || cropOptions.length === 0) return;
