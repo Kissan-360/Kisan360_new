@@ -367,7 +367,7 @@ const ReceiptDoc = ({ ctx, payments, lots }: { ctx: DecisionContext; payments: P
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3 text-sm">
         <div className="rounded-lg border border-stone-200 bg-white p-3">
           <p className="text-[11px] uppercase tracking-wider text-stone-400">You told us</p>
-          <p className="text-stone-800 font-medium mt-0.5">{ctx.crop} · <Quantity value={ctx.quantity} unit="quintals" /> · {ctx.district}</p>
+          <p className="text-stone-800 font-medium mt-0.5">{ctx.crop} · <Quantity value={(ctx.quantity ?? ctx.quantityQuintals) ?? 0} unit="quintals" /> · {ctx.district}</p>
         </div>
         <div className="rounded-lg border border-stone-200 bg-white p-3">
           <p className="text-[11px] uppercase tracking-wider text-stone-400">We recommended</p>

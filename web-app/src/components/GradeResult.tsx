@@ -80,11 +80,11 @@ export default function GradeResult({ assessment, onCreateLot, onSubmitFpo, fpoS
               Price range: <span className="font-semibold text-stone-600">{inr(assessment.priceRange.min)}–{inr(assessment.priceRange.max)}/q</span>
             </span>
           </div>
-          {/* ML verification badge */}
+          {/* ML freshness check — photo-based, not a lab certificate */}
           {assessment.mlVerified && (
             <div className="flex items-center gap-2 mt-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-1.5 w-fit">
               <Brain size={14} className="text-emerald-600" />
-              <span className="text-xs font-semibold text-emerald-700">AI-Verified Grade</span>
+              <span className="text-xs font-semibold text-emerald-700">AI-assessed · freshness only</span>
               <span className="text-[10px] text-emerald-500">{assessment.mlConfidence}% confidence</span>
               {assessment.mlInferenceTimeMs != null && (
                 <span className="text-[10px] text-emerald-400 flex items-center gap-0.5">

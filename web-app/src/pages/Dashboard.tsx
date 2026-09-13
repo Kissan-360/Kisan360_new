@@ -67,7 +67,7 @@ const inr = (n?: number) => (n != null ? n.toLocaleString('en-IN') : '—');
 
 /* ── Instant net-realization calculator — the farmer states what they're
    selling and lands in the Decision Workspace comparison. ──────────────── */
-const SellHero = ({ top, pending, defaultCrop }: { top: PulseRow | null; pending: boolean; defaultCrop?: string }) => {
+const SellHero = ({ top, pending, defaultCrop, feedFallback }: { top: PulseRow | null; pending: boolean; defaultCrop?: string; feedFallback?: boolean }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [crop, setCrop] = useState(defaultCrop || 'Onion');
@@ -167,7 +167,9 @@ const SellHero = ({ top, pending, defaultCrop }: { top: PulseRow | null; pending
         <p className="text-xs text-emerald-950 leading-relaxed">
           {top ? (
             <>
-              {t('dashboard.calc.advisory', { qty, market: top.market, price: inr(top.modalPrice) })}
+              {feedFallback
+                ? t('dashboard.calc.advisoryCached', { qty, market: top.market, price: inr(top.modalPrice) })
+                : t('dashboard.calc.advisory', { qty, market: top.market, price: inr(top.modalPrice) })}
             </>
           ) : (
             t('dashboard.calc.advisoryPending')
@@ -226,6 +228,11 @@ const MarketPulse = ({ rows, meta, error, reload }: PulseFeed) => {
                 {r.market} <span className="text-stone-500 max-w-full inline-block truncate align-bottom">({r.variety || r.district || ''})</span>
               </p>
               <p className="text-sm font-extrabold text-white tabular mt-0.5">₹{r.modalPrice?.toLocaleString('en-IN') ?? '—'}/q</p>
+              {r.arrivalDate && (
+                <p className="text-[10px] text-stone-500 mt-0.5">
+                  {new Date(r.arrivalDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -254,7 +261,12 @@ const Dashboard = () => {
     }
   };
   const rawName = user?.displayName || '';
-  const firstName = rawName && rawName !== 'Demo Farmer' ? rawName.split(' ')[0] : 'Farmer';
+  // Real first name only — never the role word ("Farmer") and never the
+  // demo account label. No name at all beats a wrong one.
+  const firstName = rawName && rawName !== 'Demo Farmer' ? rawName.split(' ')[0] : '';
+  // Time-aware greeting — "Good morning" at 9pm is a small lie a judge notices.
+  const hour = new Date().getHours();
+  const dayPart = hour >= 5 && hour < 12 ? 'morning' : hour >= 12 && hour < 17 ? 'afternoon' : 'evening';
   const districtName = user?.district || 'Nashik';
 
   const saved = loadDecisionContext();
@@ -320,7 +332,7 @@ const Dashboard = () => {
             </span>
           </div>
           <h1 className="font-display text-2xl md:text-3xl font-extrabold text-stone-900 tracking-tight mt-2.5">
-            {t('dashboard.greeting')}, {firstName} <span aria-hidden="true">🌱</span>
+            {t(`dashboard.greeting.${dayPart}`)}{firstName ? `, ${firstName}` : ''} <span aria-hidden="true">🌱</span>
           </h1>
           <p className="text-sm text-stone-500 mt-1 max-w-xl">{t('dashboard.subtitle')}</p>
         </div>
@@ -351,6 +363,9 @@ const Dashboard = () => {
               {top ? top.market : '—'} Mandi:{' '}
               <span className="text-amber-700 tabular">₹{inr(top?.modalPrice)}</span>
               <span className="text-[11px] font-medium text-stone-400"> {t('dashboard.activeTrading.modal')}</span>
+              {pulse.meta?.fallback && (
+                <span className="text-[11px] font-medium text-amber-600"> · {t('netRealization.cached')}</span>
+              )}
             </p>
           </div>
         </div>
@@ -395,7 +410,7 @@ const Dashboard = () => {
       )}
 
       {/* ── instant net-realization calculator ──────────────────────────── */}
-      <SellHero top={top} pending={!pulse.rows && !pulse.error} defaultCrop={pulseCrop} />
+      <SellHero top={top} pending={!pulse.rows && !pulse.error} defaultCrop={pulseCrop} feedFallback={!!pulse.meta?.fallback} />
 
       {/* ── quick actions — compact discovery strip ────────────────────── */}
       <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">

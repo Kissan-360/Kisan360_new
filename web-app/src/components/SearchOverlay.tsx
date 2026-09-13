@@ -149,7 +149,9 @@ const SearchOverlay = ({ open, onClose }: { open: boolean; onClose: () => void }
               group: 'market',
               icon: TrendingUp,
               title: `${p.market} · ${p.crop}`,
-              sub: p.modalPrice != null ? `₹${p.modalPrice.toLocaleString('en-IN')}/q${p.district ? ` · ${p.district}` : ''}` : p.district || '',
+              // Source-attributed: the full quote (with freshness) lives on
+              // /market — a search hit is a pointer, never a bare number.
+              sub: p.modalPrice != null ? `₹${p.modalPrice.toLocaleString('en-IN')}/q${p.district ? ` · ${p.district}` : ''} · AGMARKNET` : `${p.district || ''} · AGMARKNET`,
               to: '/market',
             });
           });

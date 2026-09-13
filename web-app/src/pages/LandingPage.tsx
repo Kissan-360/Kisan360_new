@@ -247,7 +247,7 @@ function parseResult(j: any, crop: string, district: string, quantity: number): 
 
 const LandingPage: React.FC = () => {
   const { t, language, setLanguage } = useTranslation();
-  const { user } = useAuth();
+  const { user, demoSignIn } = useAuth();
   const navigate = useNavigate();
 
   /* ── The one piece of live state on this page ─────────────────────────── */
@@ -308,6 +308,24 @@ const LandingPage: React.FC = () => {
   }, []);
 
   const enter = () => navigate(user ? '/dashboard' : '/login');
+  // One-tap demo entry — a logged-out judge goes straight into the farmer
+  // workspace with zero form-filling. Already logged in → just go home.
+  const [demoBusy, setDemoBusy] = useState(false);
+  const [demoErr, setDemoErr] = useState('');
+  const tryDemoFarmer = async () => {
+    if (user) { navigate('/dashboard'); return; }
+    if (demoBusy) return;
+    setDemoErr('');
+    setDemoBusy(true);
+    try {
+      await demoSignIn('farmer');
+      navigate('/dashboard');
+    } catch (e: any) {
+      setDemoErr(e?.message || t('login.error.demoFailed'));
+    } finally {
+      setDemoBusy(false);
+    }
+  };
   const scrollTo = (id: string) => () => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -490,6 +508,21 @@ const LandingPage: React.FC = () => {
                 </p>
 
                 <div className="mt-7 flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={tryDemoFarmer}
+                    disabled={demoBusy}
+                    className="inline-flex min-h-[52px] items-center gap-2 rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-stone-900 shadow-xl shadow-black/20 transition-all hover:bg-emerald-50 active:scale-95 disabled:opacity-70"
+                  >
+                    {demoBusy ? (
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    ) : (
+                      <Sprout size={16} />
+                    )}
+                    {demoBusy ? t('login.signingIn') : t('landing.hero.demoFarmer')}
+                  </button>
                   <PrimaryButton onClick={scrollTo('calculator')} icon={Calculator} className="!px-7 !py-3.5">
                     {t('landing.hero.tryNow')}
                   </PrimaryButton>
@@ -500,6 +533,9 @@ const LandingPage: React.FC = () => {
                     {t('landing.hero.cta')}
                   </GhostButton>
                 </div>
+                {demoErr && (
+                  <p className="mt-3 text-sm text-red-300" role="alert">{demoErr}</p>
+                )}
 
                 <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-emerald-200/75">
                   {[t('landing.hero.trust1'), t('landing.hero.trust2'), t('landing.hero.trust3')].map(

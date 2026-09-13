@@ -427,6 +427,7 @@ const FpoPage = () => {
                 <div className="mt-4 pt-4 border-t border-white/20">
                   <p className="text-4xl font-bold">+{inr(result.totals.upliftTotal)}</p>
                   <p className="text-emerald-100 text-xs mt-1">+{result.totals.upliftPct}% vs selling separately</p>
+                  <p className="text-emerald-100/70 text-[11px] mt-1.5">Estimated pooled difference — not an income guarantee.</p>
                 </div>
               </div>
 

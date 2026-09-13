@@ -26,9 +26,9 @@ export function Logo({ small = false }: { small?: boolean }) {
 }
 
 /* AGMARKNET feed status — the reference topbar's signature green pill.
-   Wording stays truthful: the backend serves prices sourced from AGMARKNET
-   pulls; live/cached state per request is labeled by <FreshBadge/> on the
-   screens themselves, never claimed statically here. */
+   Wording attributes the SOURCE without claiming a live connection: the pill
+   says where prices come from; live/cached state per request is labeled by
+   <FreshBadge/> on the screens themselves, never claimed statically here. */
 export function AgmarkPill() {
   return (
     <span
@@ -36,8 +36,7 @@ export function AgmarkPill() {
       className="hidden lg:inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5"
     >
       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 pulse-dot" />
-      <span className="text-xs font-semibold text-emerald-900">AGMARKNET Connected</span>
-      <span className="text-xs text-emerald-700/70">· Maharashtra</span>
+      <span className="text-xs font-semibold text-emerald-900">AGMARKNET · Maharashtra</span>
     </span>
   );
 }
@@ -69,7 +68,7 @@ export function MandiDirect() {
         <Shield size={12} /> MANDI DIRECT
       </p>
       <p className="text-[10px] text-stone-500 mt-1 leading-relaxed">
-        Zero intermediaries · Verified APMC auction rates across Maharashtra
+        Fewer intermediaries · APMC auction rates via AGMARKNET
       </p>
     </div>
   );

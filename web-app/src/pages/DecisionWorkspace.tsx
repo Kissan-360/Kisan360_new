@@ -753,15 +753,18 @@ const CompareStage: React.FC<{
       {/* WITHOUT vs WITH Kisan360 */}
       {withoutWith && (
         <Card className="p-5 !border-emerald-200">
-          <SectionLabel tone="emerald" className="mb-3">
-            {withoutWith.differencePerQuintal === 0 ? 'Confirms the obvious choice with evidence' : 'The highest headline price is NOT the best net'}
-          </SectionLabel>
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <SectionLabel tone="emerald">
+              {withoutWith.differencePerQuintal === 0 ? 'Confirms the obvious choice with evidence' : 'The highest headline price is NOT the best net'}
+            </SectionLabel>
+            <Chip color="sky">{t('netRealization.decisionDifference')}</Chip>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className={`p-4 rounded-xl border ${withoutWith.differencePerQuintal === 0 ? 'bg-stone-50 border-stone-200' : 'bg-red-50/60 border-red-200'}`}>
               <p className="text-[10px] uppercase text-stone-500 font-semibold">Without Kisan360</p>
               <p className="text-base font-bold text-stone-800 mt-1">{withoutWith.naive.market}</p>
               <p className="text-xs text-stone-600 mt-1">Headline: <span className="tabular">{inr(withoutWith.naive.headlinePerQuintal)}/q</span></p>
-              <p className="text-xs text-stone-600">You take home: <span className="tabular">{inr(withoutWith.naive.netTotal)}</span></p>
+              <p className="text-xs text-stone-600">Estimated take-home: <span className="tabular">{inr(withoutWith.naive.netTotal)}</span></p>
               <p className="text-[10px] text-stone-400 mt-1">choice: {withoutWith.naive.basis}</p>
             </div>
             <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/70">

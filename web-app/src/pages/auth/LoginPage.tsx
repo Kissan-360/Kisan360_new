@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { auth, firebaseReady } from '../../firebaseConfig';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useAuth } from '../../hooks/useAuth';
 import { PageTransition, PrimaryButton, Card } from '../../components/ui/kit';
 import { Logo } from '../../components/brand';
 import { Sprout, ShoppingBag, Users, AlertTriangle, ArrowRight } from 'lucide-react';
-import { useTranslation } from '../../i18n';
+import { useTranslation, LANGUAGES } from '../../i18n';
 
 const LoginPage = () => {
-  const { t } = useTranslation();
+  const { t, language, setLanguage } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { demoSignIn } = useAuth();
+  // Bounced here from a protected deep link (e.g. a shared calculator URL)?
+  // Say so, and resume there after ANY successful login — not /dashboard.
+  const rawFrom = (location.state as { from?: unknown } | null)?.from;
+  const resumeTo = typeof rawFrom === 'string' && rawFrom.startsWith('/') && !rawFrom.startsWith('//') ? rawFrom : null;
   const [demoError, setDemoError] = useState('');
   const [demoLoadingRole, setDemoLoadingRole] = useState<string | null>(null);
 
@@ -33,7 +38,7 @@ const LoginPage = () => {
       await demoSignIn(role);
       // Buyers get their own workspace: /trade is the producer's lot manager,
       // so sending a buyer there was the "buyers page leads to seller" bug.
-      navigate(role === 'buyer' ? '/buy' : role === 'fpo' ? '/fpo' : '/dashboard');
+      navigate(resumeTo || (role === 'buyer' ? '/buy' : role === 'fpo' ? '/fpo' : '/dashboard'));
     } catch (err: any) {
       setDemoError(err.message || t('login.error.demoFailed'));
     } finally {
@@ -50,7 +55,7 @@ const LoginPage = () => {
     setLoading(true);
     try {
       await signInWithPopup(auth, new GoogleAuthProvider());
-      navigate('/dashboard');
+      navigate(resumeTo || '/dashboard');
     } catch (err: any) {
       if (err?.code !== 'auth/popup-closed-by-user') {
         setError(err.message);
@@ -70,7 +75,7 @@ const LoginPage = () => {
         return;
       }
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
+      navigate(resumeTo || '/dashboard');
     } catch (err: any) {
       const code = err?.code || '';
       const friendlyMessages: Record<string, string> = {
@@ -91,14 +96,31 @@ const LoginPage = () => {
     <PageTransition className="min-h-screen bg-gradient-to-br from-stone-50 via-emerald-50/30 to-stone-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Brand header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
             <Logo />
           </div>
           <p className="text-stone-500 mt-1 text-sm">{t('login.subtitle')}</p>
+          <div className="flex justify-center gap-2 mt-4" role="group" aria-label="Language">
+            {LANGUAGES.map((l) => (
+              <button
+                key={l.code}
+                onClick={() => setLanguage(l.code)}
+                aria-pressed={language === l.code}
+                className={`min-h-[36px] px-3.5 rounded-full text-xs font-semibold transition-colors ${language === l.code ? 'bg-emerald-800 text-white' : 'border border-stone-200 text-stone-500 hover:border-emerald-300 hover:text-stone-700'}`}
+              >
+                {l.native}
+              </button>
+            ))}
+          </div>
         </div>
 
         <Card className="p-8">
+          {resumeTo && (
+            <p className="mb-5 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-800 text-center">
+              {t('login.loginRequired')}
+            </p>
+          )}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm flex items-start gap-2">
               <AlertTriangle size={16} className="shrink-0 mt-0.5 text-red-500" />
@@ -172,9 +194,12 @@ const LoginPage = () => {
               {t('login.demoNote')}
             </p>
 
-            {/* Role buttons */}
+            {/* Role buttons — the busy one spins in place so the tap is
+                visibly acknowledged instead of three grey cards */}
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {DEMO_ROLES.map(({ role, label, Icon, desc }) => (
+              {DEMO_ROLES.map(({ role, label, Icon, desc }) => {
+                const busy = demoLoadingRole === role;
+                return (
                 <button
                   key={role}
                   onClick={() => handleDemoSignIn(role)}
@@ -183,12 +208,20 @@ const LoginPage = () => {
                   aria-label={`Sign in as ${label}`}
                 >
                   <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center mx-auto group-hover:bg-emerald-100 transition-colors">
-                    <Icon size={18} className="text-emerald-600" />
+                    {busy ? (
+                      <svg className="animate-spin h-4 w-4 text-emerald-600" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    ) : (
+                      <Icon size={18} className="text-emerald-600" />
+                    )}
                   </div>
                   <div className="text-sm font-medium text-stone-800 mt-2">{label}</div>
                   <div className="text-[11px] text-stone-400 leading-tight mt-0.5">{desc}</div>
                 </button>
-              ))}
+                );
+              })}
             </div>
 
             {demoError && (

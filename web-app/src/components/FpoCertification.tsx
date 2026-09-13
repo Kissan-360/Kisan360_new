@@ -12,7 +12,7 @@ interface FpoCertificationProps {
 const STATUS_CONFIG: Record<string, { icon: React.ElementType; label: string; color: string; bg: string }> = {
   AI_GRADED: { icon: Clock, label: 'AI Graded — Ready for FPO', color: 'text-stone-500', bg: 'bg-stone-100' },
   SUBMITTED_TO_FPO: { icon: Clock, label: 'Submitted to FPO — Awaiting Review', color: 'text-amber-600', bg: 'bg-amber-100' },
-  FPO_VERIFIED: { icon: CheckCircle2, label: 'FPO Verified — Grade Certified', color: 'text-emerald-600', bg: 'bg-emerald-100' },
+  FPO_VERIFIED: { icon: CheckCircle2, label: 'Demo FPO noted — not lab-certified', color: 'text-emerald-600', bg: 'bg-emerald-100' },
   FPO_REJECTED: { icon: XCircle, label: 'FPO Rejected — Re-grade Recommended', color: 'text-red-500', bg: 'bg-red-100' },
 };
 
@@ -44,7 +44,7 @@ export default function FpoCertification({ fpoStatus, fpoName, fpoVerifiedAt, fp
 
       {fpoStatus === 'AI_GRADED' && (
         <p className="text-[11px] text-stone-400 mt-2">
-          FPO verification adds a trusted layer — buyers see "Verified by {fpoName || 'FPO'}" on your grade.
+          Demo FPO noting adds context for the demo — buyers would see "Noted by {fpoName || 'FPO'}" on your grade. Not a lab certificate.
         </p>
       )}
     </div>

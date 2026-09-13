@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
@@ -28,8 +28,11 @@ import BuyCrops from './pages/BuyCrops';
 
 const ProtectedRoute = () => {
   const { user, loading } = useAuth();
+  const location = useLocation();
   if (loading) return <div className="flex items-center justify-center h-screen text-stone-400">Loading...</div>; // Note: This is outside I18nProvider, so it stays English
-  if (!user) return <Navigate to="/login" replace />;
+  // Remember where the judge was headed (e.g. a shared /net-realization link)
+  // so Login can explain the bounce and send them straight there after login.
+  if (!user) return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
   return (
     <Layout>
       <Outlet />

@@ -14,6 +14,9 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
   const { user } = useAuth();
   const { language, setLanguage, t } = useTranslation();
   const [searchOpen, setSearchOpen] = useState(false);
+  // Click-to-open language menu — the old hover-only menu was unreachable on
+  // touch screens. Hover still works on desktop via group-hover below.
+  const [langOpen, setLangOpen] = useState(false);
   const displayName = user?.displayName || user?.email?.split('@')[0] || 'Farmer';
 
   // Cmd/Ctrl+K opens global search from anywhere inside the app shell.
@@ -56,14 +59,20 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-        <div className="relative group">
-          <button className="flex items-center gap-1 text-xs font-medium text-stone-600 hover:text-stone-900 border border-stone-200 rounded-lg px-2.5 min-h-[36px] hover:bg-stone-50 transition-colors" aria-label="Change language" aria-haspopup="menu">
+        <div className="relative group" onMouseLeave={() => setLangOpen(false)}>
+          <button
+            onClick={() => setLangOpen((v) => !v)}
+            className="flex items-center gap-1 text-xs font-medium text-stone-600 hover:text-stone-900 border border-stone-200 rounded-lg px-2.5 min-h-[36px] hover:bg-stone-50 transition-colors"
+            aria-label="Change language"
+            aria-haspopup="menu"
+            aria-expanded={langOpen}
+          >
             <Globe size={14} className="shrink-0" />
             <span>{LANGUAGES.find(l => l.code === language)?.native || 'EN'}</span>
           </button>
-          <div className="absolute right-0 top-full mt-1 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50 hidden group-hover:block min-w-[110px]">
+          <div className={`absolute right-0 top-full mt-1 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50 min-w-[110px] ${langOpen ? 'block' : 'hidden'} group-hover:block`}>
             {LANGUAGES.map((l) => (
-              <button key={l.code} onClick={() => setLanguage(l.code)} className={`w-full text-left px-3 py-2.5 text-sm hover:bg-stone-50 transition-colors ${language === l.code ? 'text-emerald-700 font-semibold' : 'text-stone-600'}`}>{l.native}</button>
+              <button key={l.code} onClick={() => { setLanguage(l.code); setLangOpen(false); }} className={`w-full text-left px-3 py-2.5 text-sm hover:bg-stone-50 transition-colors ${language === l.code ? 'text-emerald-700 font-semibold' : 'text-stone-600'}`}>{l.native}</button>
             ))}
           </div>
         </div>

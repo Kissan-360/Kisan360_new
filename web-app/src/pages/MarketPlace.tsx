@@ -212,7 +212,7 @@ const MarketIntelligence = () => {
         {filtered.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-stone-100 border border-stone-200 px-3 py-1 text-[11px] font-bold text-stone-600">{t('market.trackedMandis')} <span className="text-emerald-700">{filtered.length} {t('market.active')}</span></span>
-            <span className="rounded-full bg-stone-100 border border-stone-200 px-3 py-1 text-[11px] font-bold text-stone-600">{t('market.liveQuotes')} <span className="text-emerald-700">{rows.length}</span></span>
+            <span className="rounded-full bg-stone-100 border border-stone-200 px-3 py-1 text-[11px] font-bold text-stone-600">{data?.fallback ? t('market.cachedQuotes') : t('market.liveQuotes')} <span className="text-emerald-700">{rows.length}</span></span>
             <span className="rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-[11px] font-bold text-stone-600">{t('market.regionalBenchmark')} <span className="text-emerald-700">{inr(maxPrice)}/q</span></span>
           </div>
         )}

@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const router = express.Router();
 const logger = require('../utils/logger');
 const { authenticateUser } = require('../middleware/auth');
@@ -28,6 +29,7 @@ const LogisticsRequest = require('../models/LogisticsRequest');
 const Grievance = require('../models/Grievance');
 
 const NET_REALIZATION_URL = process.env.NET_REALIZATION_URL || 'http://localhost:8002';
+const { CALC_TIMEOUT_MS, isColdStart, coldStartMessage } = require('../lib/calculator');
 
 router.get('/transaction-cost', authenticateUser, async (req, res) => {
   try {
@@ -88,44 +90,73 @@ router.get('/transaction-cost', authenticateUser, async (req, res) => {
       source: r.source,
     }));
 
-    let netResult = null;
+    // Real engine call — POST /net-realization is the only compute endpoint
+    // the calculator serves (there is no /api/calculate; the old call could
+    // never succeed). A sleeping engine gets an honest 503 here, never
+    // hollow success:true numbers downstream.
+    let engineResult;
     try {
-      const calcRes = await fetch(`${NET_REALIZATION_URL}/api/calculate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ crop, district, quantity: quantityQuintals, distanceKm: distance, storageDays: storage }),
-        signal: AbortSignal.timeout(5000),
-      });
-      if (calcRes.ok) {
-        netResult = await calcRes.json();
+      const mlRes = await axios.post(`${NET_REALIZATION_URL}/net-realization`, {
+        crop,
+        district,
+        quantity: quantityQuintals,
+        prices: deduped.map(r => ({
+          market: r.market,
+          variety: r.variety,
+          minPrice: r.minPrice,
+          maxPrice: r.maxPrice,
+          modalPrice: r.modalPrice,
+          arrivalDate: r.arrivalDate,
+          district: r.district,
+          source: priceResult.provenance.source,
+          retrievedAt: priceResult.provenance.retrievedAt,
+        })),
+      }, { timeout: CALC_TIMEOUT_MS });
+      engineResult = mlRes.data;
+      if (!engineResult || engineResult.success === false) {
+        return res.status(502).json({ success: false, error: engineResult?.error || 'Calculator rejected the request' });
       }
-    } catch {
-      // Calculator unavailable — use fallback
+    } catch (error) {
+      if (error.code === 'ECONNREFUSED') {
+        return res.status(503).json({ success: false, error: 'Net-realization service unavailable', serviceStatus: 'offline' });
+      }
+      if (isColdStart(error)) {
+        return res.status(503).json({ success: false, error: coldStartMessage(), serviceStatus: 'waking' });
+      }
+      throw error;
     }
 
-    const rankedMarkets = netResult?.rankedMandis || [];
+    const rankedMarkets = engineResult.rankedMandis || [];
 
-    const actionabilityResult = actionability.classifyBuyers({ crop, district, quantityQuintals, rankedMarkets });
+    // Buyer coverage from the real directory (the old classifyBuyers call
+    // never existed — it threw on every request). ACTIONABLE matches,
+    // flattened across mandis and deduped by buyer.
+    const directoryBuyers = (require('../data/buyers.json').buyers) || [];
+    const coverageResult = actionability.assessCoverage(rankedMarkets, directoryBuyers, {
+      crop,
+      quantityQuintals,
+      qualityGrade: lot.grade || null,
+    });
+    const buyerMatches = Object.values(coverageResult.coverage || {})
+      .flatMap((c) => c.buyers || [])
+      .filter((b, i, arr) => arr.findIndex(x => x.id === b.id) === i);
+    const demandSignals = [];
 
     const pathwayResult = computePathways({
       crop,
       district,
       quantityQuintals,
-      distanceKm: distance,
-      rankedMarkis: rankedMarkets,
-      actionabilityResult,
-      buyers: [],
+      quality: { grade: lot.grade || null, size: null, moisturePct: null, damagePct: null },
+      engineResult,
+      trendData: null,
     });
-
-    const buyerMatches = actionabilityResult?.rankedBuyers || [];
-    const demandSignals = actionabilityResult?.demandSignals || [];
 
     let economics = null;
     if (rankedMarkets.length > 0) {
       economics = computeEconomics({
-        productionCost: 0,
+        totalProductionCost: 0,
         quantityQuintals,
-        farmerNetPerQuintal: rankedMarkets[0].farmerNetPerQuintal || 0,
+        engineResult,
       });
     }
 
@@ -192,6 +223,12 @@ router.get('/transaction-cost', authenticateUser, async (req, res) => {
       },
     });
   } catch (error) {
+    if (error.code === 'ECONNREFUSED') {
+      return res.status(503).json({ success: false, error: 'Net-realization service unavailable', serviceStatus: 'offline' });
+    }
+    if (isColdStart(error)) {
+      return res.status(503).json({ success: false, error: coldStartMessage(), serviceStatus: 'waking' });
+    }
     logger.error('Transaction-cost error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to compute transaction cost summary' });
   }

@@ -192,7 +192,7 @@ export default function GradeCrop() {
     try {
       const res = await apiFetch(`${API_URL}/grade-assessment/${certificate.id}/fpo-verify`, {
         method: 'POST',
-        body: JSON.stringify({ status: 'FPO_VERIFIED', fpoName: 'Kisan360 Demo FPO', notes: 'Verified based on AI assessment and farmer declaration.' }),
+        body: JSON.stringify({ status: 'FPO_VERIFIED', fpoName: 'Kisan360 Demo FPO', notes: 'Noted by demo FPO from AI freshness check + farmer declaration (not lab-tested).' }),
       });
       const data = await res.json();
       if (data.success) {
