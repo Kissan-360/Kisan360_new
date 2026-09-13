@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   API_URL, apiFetch, getDemoUser,
@@ -19,7 +20,8 @@ import { useFlow } from '../components/FlowContext';
 import {
   Package, Users, Send, Wallet, BadgeCheck, Search, FlaskConical, AlertTriangle,
   Target, Plus, X, Check, ArrowRight, MapPin, FileText, LifeBuoy, TrendingUp,
-  CheckCircle2, AlertCircle, Banknote, Receipt, Clock, Scale, Info,
+  CheckCircle2, AlertCircle, Banknote, Receipt, Clock, Scale, Info, Download,
+  History,
 } from 'lucide-react';
 
 // Trade page — HLD P0.3/P0.4 screens: create a lot, see matched buyers with
@@ -321,20 +323,45 @@ const LotEconomics = ({ lot, offers }: { lot: Lot; offers: Offer[] }) => {
 // Decision receipt (Phase 15): one compact answer to "what exactly did
 // Kisan360 recommend, and what actually happened?" Every row is real data —
 // the context object, the transaction record, the engine's reference.
-const DecisionReceipt = ({ ctx, payments, lots }: { ctx: DecisionContext; payments: Payment[]; lots: Lot[] }) => {
+const DecisionReceipt = ({ ctx, payments, lots, onDownload, onNewSale }: { ctx: DecisionContext; payments: Payment[]; lots: Lot[]; onDownload?: () => void; onNewSale?: () => void }) => {
+  return (
+  <Card spotlight className="p-5 border-emerald-300 bg-emerald-50/50">
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex items-center gap-2">
+        <Receipt size={18} className="text-emerald-700" />
+        <p className="font-semibold text-stone-900">Kisan360 selling decision — receipt</p>
+      </div>
+      <Chip color="amber">simulated transaction</Chip>
+    </div>
+    <ReceiptDoc ctx={ctx} payments={payments} lots={lots} />
+    {(onDownload || onNewSale) && (
+      <div className="flex flex-wrap gap-2 mt-4">
+        {onDownload && (
+          <PrimaryButton className="text-xs !px-3.5 !py-2" icon={Download} onClick={onDownload}>
+            Save receipt as PDF
+          </PrimaryButton>
+        )}
+        {onNewSale && (
+          <GhostButton className="text-xs !px-3.5 !py-2" onClick={onNewSale}>
+            <Plus size={14} /> Sell another lot
+          </GhostButton>
+        )}
+      </div>
+    )}
+  </Card>
+  );
+};
+
+// ── Receipt document — the printable selling record, shared by the inline
+// card, the celebration modal, and the print sheet. Pure presentational: the
+// same figures everywhere, single source of truth.
+const ReceiptDoc = ({ ctx, payments, lots }: { ctx: DecisionContext; payments: Payment[]; lots: Lot[] }) => {
   const p = payments[0];
   const lot = lots.find(l => l._id === String(p.lotId));
   const dealPerQ = p.quantityQuintals && p.quantityQuintals > 0 ? Math.round((p.amount / p.quantityQuintals) * 100) / 100 : 0;
   const diff = ctx.net != null && ctx.net > 0 ? Math.round((dealPerQ - ctx.net) * 100) / 100 : null;
   return (
-    <Card spotlight className="p-5 border-emerald-300 bg-emerald-50/50">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <Receipt size={18} className="text-emerald-700" />
-          <p className="font-semibold text-stone-900">Kisan360 selling decision — receipt</p>
-        </div>
-        <Chip color="amber">simulated transaction</Chip>
-      </div>
+    <>
       {/* One per row on phones: at 375px two columns left ~95px per cell, too
           narrow for the single word "RECOMMENDATION" at this tracking. */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3 text-sm">
@@ -360,7 +387,80 @@ const DecisionReceipt = ({ ctx, payments, lots }: { ctx: DecisionContext; paymen
       <p className="text-[11px] text-stone-500 mt-3">
         Price source: {ctx.source === 'agmarknet_live' ? 'live AGMARKNET pull' : 'cached AGMARKNET snapshot'} at decision time · lot {lot ? lot._id.slice(-6) : (p.lotId && typeof p.lotId === 'object' ? String(p.lotId._id) : String(p.lotId ?? 'unknown')).slice(-6)} · recorded {new Date(p.createdAt).toLocaleDateString('en-IN')}. The estimate was a market observation — the deal is the outcome.
       </p>
-    </Card>
+    </>
+  );
+};
+
+const RECEIPT_WATERMARK = 'KISAN360 · SIMULATED · ';
+
+// ── Receipt celebration modal — pops the moment the active deal's payment
+// releases (once per deal; every repeat sale pops again). The receipt becomes
+// usable here: download it watermarked, start the next sale, or jump to the
+// history. Re-openable any time from a RELEASED payment row.
+const ReceiptModal = ({ ctx, payment, lots, onDownload, onNewSale, onHistory, onClose }: {
+  ctx: DecisionContext; payment: Payment; lots: Lot[];
+  onDownload: () => void; onNewSale: () => void; onHistory: () => void; onClose: () => void;
+}) => {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-stone-900/50 backdrop-blur-sm p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Sale receipt"
+    >
+      <div
+        className="relative bg-white rounded-2xl shadow-xl border border-emerald-200 w-full max-w-lg p-5 sm:p-6 overflow-hidden animate-in fade-in slide-in-from-bottom-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Watermark — honest demo labeling, printed on the PDF too */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden select-none">
+          <div className="absolute inset-[-40%] flex flex-col justify-around -rotate-[24deg] opacity-[0.05]">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <p key={i} className="whitespace-nowrap text-center text-2xl font-extrabold text-emerald-900 leading-[3.5rem]">
+                {RECEIPT_WATERMARK.repeat(4)}
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className="relative">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                <CheckCircle2 size={20} />
+              </span>
+              <div>
+                <p className="font-bold text-stone-900">Payment received!</p>
+                <p className="text-xs text-stone-500">Your sale is complete — here is the record.</p>
+              </div>
+            </div>
+            <button className="p-1.5 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 shrink-0" onClick={onClose} aria-label="Close receipt">
+              <X size={16} />
+            </button>
+          </div>
+          <div className="mt-4">
+            <ReceiptDoc ctx={ctx} payments={[payment]} lots={lots} />
+          </div>
+          <div className="flex flex-wrap gap-2 mt-5">
+            <PrimaryButton className="text-xs !px-3.5 !py-2" icon={Download} onClick={onDownload}>
+              Save receipt as PDF
+            </PrimaryButton>
+            <GhostButton className="text-xs !px-3.5 !py-2" onClick={onNewSale}>
+              <Plus size={14} /> Sell another lot
+            </GhostButton>
+            <GhostButton className="text-xs !px-3.5 !py-2" onClick={onHistory}>
+              <History size={14} /> View in history
+            </GhostButton>
+          </div>
+          <p className="text-[10px] text-stone-400 mt-3">Demo record — no real money moved. The PDF carries the same watermark.</p>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -463,6 +563,7 @@ const TradePage = () => {
   // composer itself so "Select this buyer" visibly advances the flow.
   const offerRef = React.useRef<HTMLFormElement>(null);
   const paymentsRef = React.useRef<HTMLDivElement>(null);
+  const historyRef = React.useRef<HTMLDivElement>(null);
 
   const [lots, setLots] = useState<Lot[]>([]);
   const [buyers, setBuyers] = useState<Buyer[]>([]);
@@ -781,6 +882,52 @@ const TradePage = () => {
   // lot retires the old receipt instead of showing stale figures forever.
   const showReceipt = !!ctx && !!activePayment && activePayment.status === 'RELEASED';
 
+  // ── Receipt celebration modal: pops the moment the active deal's payment
+  // releases — once per deal id, so every repeat sale pops again, and
+  // re-openable any time from a RELEASED payment row.
+  const [receiptModal, setReceiptModal] = useState<Payment | null>(null);
+  const shownReceiptIds = React.useRef<Set<string>>(new Set());
+  const prevDealKey = React.useRef<string | null>(null);
+  useEffect(() => {
+    const key = activePayment ? `${activePayment._id}:${activePayment.status}` : null;
+    const was = prevDealKey.current;
+    prevDealKey.current = key;
+    const ap = activePayment;
+    // Pop only on a TRANSITION into RELEASED observed while on this page:
+    // deals completed before this load (was === null) never pop stale cards.
+    if (ap && ap.status === 'RELEASED' && !shownReceiptIds.current.has(ap._id) && was !== null && was !== key) {
+      shownReceiptIds.current.add(ap._id);
+      setReceiptModal(ap);
+    }
+  }, [activePayment]);
+
+  // ── Receipt PDF: zero-dependency print-to-PDF. The printable sheet is
+  // portaled outside #root; print CSS hides the app and shows only the
+  // watermarked sheet, so the farmer picks "Save as PDF" (or a printer).
+  const printReceipt = () => {
+    document.body.classList.add('printing-receipt');
+    // Let the print-only sheet mount before opening the dialog.
+    setTimeout(() => { window.print(); }, 80);
+  };
+  useEffect(() => {
+    const done = () => document.body.classList.remove('printing-receipt');
+    window.addEventListener('afterprint', done);
+    return () => {
+      window.removeEventListener('afterprint', done);
+      document.body.classList.remove('printing-receipt');
+    };
+  }, []);
+
+  const startNewSale = () => {
+    setReceiptModal(null);
+    setShowLotForm(true);
+    setTimeout(() => lotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  };
+  const viewReceiptHistory = () => {
+    setReceiptModal(null);
+    setTimeout(() => historyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  };
+
   const activeOfferCount = offers.filter(o => !['REJECTED', 'WITHDRAWN', 'EXPIRED'].includes(o.status)).length;
 
   return (
@@ -1037,7 +1184,14 @@ const TradePage = () => {
                         <>
                           <GhostButton
                             className="text-xs"
-                            onClick={() => { setOfferLot(lot); setOfferBuyer(null); setOfferPrice(''); }}
+                            onClick={() => {
+                              setOfferLot(lot); setOfferBuyer(null); setOfferPrice('');
+                              // The composer renders below the buyer list — take
+                              // the farmer to the buyers so the next click
+                              // (pick a buyer) is in front of them, with the
+                              // armed-lot hint explaining exactly that.
+                              setTimeout(() => buyersRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+                            }}
                           >
                             <Send size={14} /> Send offer
                           </GhostButton>
@@ -1068,6 +1222,12 @@ const TradePage = () => {
               <p className="text-xs text-stone-400 mt-0.5">Trust badges are simulated for the demo — production verifies FSSAI/GST registries.</p>
               {!buyerView && !offerLot && lots.some(l => l.status === 'OPEN' || l.status === 'OFFERED') && (
                 <p className="text-xs text-emerald-700 mt-1">Pick "Send offer" on one of your lots — matching reasons then appear against that exact lot (crop · service area · quantity).</p>
+              )}
+              {!buyerView && offerLot && (
+                <p className="text-xs text-emerald-700 mt-1">
+                  Offering <strong>{offerLot.crop} · <Quantity value={Number(offerLot.quantity)} unit={offerLot.unit} /></strong>
+                  {offerBuyer ? <> to <strong>{offerBuyer.name}</strong> — review the price below and send.</> : ' — now pick a buyer; matching reasons appear per buyer.'}
+                </p>
               )}
             </div>
             <select className="input-field w-auto text-sm" value={cropFilter} onChange={(e) => setCropFilter(e.target.value)} aria-label="Filter buyers by crop">
@@ -1176,6 +1336,9 @@ const TradePage = () => {
                               ? Number(expectedNet)
                               : (ctx && ctx.net != null && ctx.net > 0 ? ctx.net : 0);
                             setOfferPrice(target > 0 ? String(Math.round(target)) : '');
+                            // The composer sits below this list — scroll to it so
+                            // the prefilled price and Send button are seen.
+                            setTimeout(() => offerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
                           }}
                         >
                           {tooSmall ? `Below ${b.minQuantityQuintals} q (${otherUnits(b.minQuantityQuintals, 'quintals')}) minimum` : (<><ArrowRight size={12} /> Offer to {b.name}</>)}
@@ -1195,7 +1358,9 @@ const TradePage = () => {
             <SectionLabel>{t('trade.offerSection')}</SectionLabel>
             <h2 className="font-semibold text-stone-900 mt-0.5 mb-3">
               Offer {offerLot.crop} ({offerLot.quantity} {offerLot.unit})
-              {offerBuyer ? ` to ${offerBuyer.name}` : ' — pick a buyer above'}
+              {offerBuyer ? ` to ${offerBuyer.name}` : (
+                <> — <button type="button" className="text-emerald-700 underline underline-offset-2 hover:text-emerald-800" onClick={() => buyersRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>pick a buyer above</button></>
+              )}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
               <div>
@@ -1377,6 +1542,13 @@ const TradePage = () => {
                               Release funds
                             </PrimaryButton>
                           )}
+                          {/* Every completed deal's receipt stays re-openable —
+                              the celebration modal is not the only copy. */}
+                          {!buyerView && p.status === 'RELEASED' && (
+                            <GhostButton className="text-xs !px-3 !py-1.5" onClick={() => setReceiptModal(p)}>
+                              <Receipt size={13} /> Receipt
+                            </GhostButton>
+                          )}
                         </div>
                       </div>
                       {/* Timeline */}
@@ -1504,8 +1676,46 @@ const TradePage = () => {
           </div>
         )}
 
-        {!buyerView && showReceipt && activePayment && <DecisionReceipt ctx={ctx!} payments={[activePayment]} lots={lots} />}
-        {!buyerView && <DecisionHistory payments={payments} lots={lots} />}
+        {/* ── Receipt celebration — pops on every completed deal ── */}
+        {!buyerView && receiptModal && ctx && (
+          <ReceiptModal
+            ctx={ctx}
+            payment={receiptModal}
+            lots={lots}
+            onDownload={printReceipt}
+            onNewSale={startNewSale}
+            onHistory={viewReceiptHistory}
+            onClose={() => setReceiptModal(null)}
+          />
+        )}
+
+        {/* ── Print-only receipt sheet (watermarked PDF via Save-as-PDF).
+            Portaled outside #root so print CSS can hide the app and show
+            only this sheet. Hidden on screen at all times. */}
+        {!buyerView && receiptModal && ctx && createPortal(
+          <div className="receipt-print-sheet" aria-hidden="true">
+            <div style={{ position: 'relative', overflow: 'hidden', background: '#fff', color: '#000', padding: 24, fontFamily: 'sans-serif' }}>
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+                <div style={{ position: 'absolute', inset: '-40%', display: 'flex', flexDirection: 'column', justifyContent: 'space-around', transform: 'rotate(-24deg)' }}>
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <p key={i} style={{ whiteSpace: 'nowrap', textAlign: 'center', fontSize: 28, fontWeight: 800, lineHeight: '4rem', color: '#d6d3d1' }}>
+                      {(RECEIPT_WATERMARK.repeat(4))}
+                    </p>
+                  ))}
+                </div>
+              </div>
+              <div style={{ position: 'relative' }}>
+                <p style={{ fontSize: 11, letterSpacing: 2, fontWeight: 700 }}>KISAN360 · SELLING RECEIPT (SIMULATED — NO REAL MONEY MOVED)</p>
+                <h1 style={{ fontSize: 22, fontWeight: 800, margin: '4px 0 12px' }}>Payment received — {inr(receiptModal.amount)}</h1>
+                <ReceiptDoc ctx={ctx} payments={[receiptModal]} lots={lots} />
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+        {!buyerView && showReceipt && activePayment && <DecisionReceipt ctx={ctx!} payments={[activePayment]} lots={lots} onDownload={printReceipt} onNewSale={startNewSale} />}
+        {!buyerView && <div ref={historyRef} className="scroll-mt-6"><DecisionHistory payments={payments} lots={lots} /></div>}
 
         {/* ── Help & grievances (HLD P1: Raise → Open → Under Review → Resolved) ── */}
         <Card className="p-5">

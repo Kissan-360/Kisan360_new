@@ -608,3 +608,31 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================================
+   RECEIPT PRINTING — watermarked PDF via the browser's Save-as-PDF.
+   The printable sheet is portaled outside #root and hidden on screen at all
+   times. While body.printing-receipt is set (only for the duration of the
+   print dialog), the app is hidden and just the watermarked sheet prints.
+   ============================================================================ */
+.receipt-print-sheet {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body.printing-receipt #root {
+    display: none !important;
+  }
+
+  body.printing-receipt .receipt-print-sheet {
+    display: block !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
