@@ -147,7 +147,7 @@ const SellHero = ({ top, pending, defaultCrop, feedFallback }: { top: PulseRow |
               onChange={(e) => setQuantity(e.target.value)}
               className="w-full px-3.5 py-3 text-sm font-semibold text-stone-900 outline-none min-h-[48px] tabular"
             />
-            <span className="flex items-center bg-stone-100 border-l border-stone-200 px-3 text-[11px] font-bold text-stone-500">QTL</span>
+            <span className="flex items-center bg-stone-100 border-l border-stone-200 px-3 text-[11px] font-bold text-stone-500">q</span>
           </div>
           {/* Quintals are what a mandi quotes; tonnes are what a truck carries. */}
           <QuantityHint value={quantity} unit="quintals" note={UNIT_SCALE_NOTE} />
@@ -182,7 +182,7 @@ const SellHero = ({ top, pending, defaultCrop, feedFallback }: { top: PulseRow |
 };
 
 /* ── Market Pulse ticker — dark strip, honest freshness labeling. ──────── */
-const MarketPulse = ({ rows, meta, error, reload }: PulseFeed) => {
+const MarketPulse = ({ rows, meta, error, reload, crop }: PulseFeed & { crop?: string }) => {
   const { t } = useTranslation();
 
   return (
@@ -194,7 +194,7 @@ const MarketPulse = ({ rows, meta, error, reload }: PulseFeed) => {
             <p className="text-xs font-extrabold tracking-wide text-emerald-400 uppercase">{t('dashboard.pulse.brand')}</p>
           </div>
           <p className="text-[10px] text-stone-400 mt-0.5">
-            {t('dashboard.pulse.sync')} · {t('dashboard.marketPulse.title')}
+            {t('dashboard.pulse.sync')} · {t('dashboard.marketPulse.title', { crop: crop || '' })}
             {meta && <> · {meta.fallback ? t('dashboard.marketPulse.cachedSnapshot') : meta.source || 'AGMARKNET'}</>}
           </p>
         </div>
@@ -267,6 +267,10 @@ const Dashboard = () => {
   // Time-aware greeting — "Good morning" at 9pm is a small lie a judge notices.
   const hour = new Date().getHours();
   const dayPart = hour >= 5 && hour < 12 ? 'morning' : hour >= 12 && hour < 17 ? 'afternoon' : 'evening';
+  // Season chip from the calendar, not a hardcoded string — Kharif Jun–Sep,
+  // Rabi Oct–Mar, Summer (Zaid) Apr–May; year always current.
+  const month = new Date().getMonth();
+  const seasonKey = month >= 5 && month <= 8 ? 'kharif' : month === 3 || month === 4 ? 'summer' : 'rabi';
   const districtName = user?.district || 'Nashik';
 
   const saved = loadDecisionContext();
@@ -328,7 +332,7 @@ const Dashboard = () => {
               {t('dashboard.chip.location', { district: districtName })}
             </span>
             <span className="rounded-full border border-stone-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-stone-500">
-              {t('dashboard.chip.season')}
+              {t('dashboard.chip.season', { season: t(`dashboard.season.${seasonKey}`), year: String(new Date().getFullYear()) })}
             </span>
           </div>
           <h1 className="font-display text-2xl md:text-3xl font-extrabold text-stone-900 tracking-tight mt-2.5">
@@ -538,7 +542,7 @@ const Dashboard = () => {
       </div>
 
       {/* ── Maharashtra mandi pulse — real feed, honest freshness ───────── */}
-      <MarketPulse {...pulse} />
+      <MarketPulse {...pulse} crop={pulseCrop} />
     </PageTransition>
   );
 };

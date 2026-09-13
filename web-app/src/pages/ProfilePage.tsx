@@ -5,6 +5,7 @@ import { auth } from '../firebaseConfig';
 import { updateProfile } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n';
+import FarmerAvatar from '../components/FarmerAvatar';
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -77,8 +78,6 @@ const ProfilePage = () => {
     { label: t('profile.userId'), value: user.uid.slice(0, 16) + '...', mono: true },
   ];
 
-  const initials = (user.displayName || user.email || 'F').slice(0, 2).toUpperCase();
-
   return (
     <div className="p-6 lg:p-8 space-y-6">
       <div>
@@ -88,11 +87,9 @@ const ProfilePage = () => {
 
       <div className="card p-6 lg:p-8">
         <div className="flex items-center gap-5 mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-md shadow-emerald-200/50">
-            {initials}
-          </div>
+          <FarmerAvatar size={64} square className="shadow-md shadow-emerald-200/50" />
           <div className="min-w-0 flex-1">
-            <h2 className="text-xl font-bold text-stone-900">{user.displayName || 'Farmer'}</h2>
+            <h2 className="text-xl font-bold text-stone-900">{user.displayName || user.email?.split('@')[0] || '—'}</h2>
             <p className="text-sm text-stone-500">{user.email}</p>
             {!isDemo && !editing && (
               <button onClick={startEdit} className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 mt-1">

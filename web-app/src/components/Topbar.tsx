@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useTranslation, LANGUAGES, type Lang } from '../i18n';
 import NotificationBell from './NotificationBell';
 import SearchOverlay from './SearchOverlay';
+import FarmerAvatar from './FarmerAvatar';
 import { AgmarkPill, DemoBadge } from './brand';
 
 /* Enterprise topbar — reference: AGMARKNET status pill, demo badge, bell,
@@ -17,7 +18,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
   // Click-to-open language menu — the old hover-only menu was unreachable on
   // touch screens. Hover still works on desktop via group-hover below.
   const [langOpen, setLangOpen] = useState(false);
-  const displayName = user?.displayName || user?.email?.split('@')[0] || 'Farmer';
+  const displayName = user?.displayName || user?.email?.split('@')[0] || t('topbar.farmerAccount');
 
   // Cmd/Ctrl+K opens global search from anywhere inside the app shell.
   useEffect(() => {
@@ -89,7 +90,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
               {user?.district ? `${user.district} District` : t('topbar.farmerAccount')}
             </p>
           </div>
-          <span className="h-9 w-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold ring-2 ring-emerald-200 shrink-0 select-none">{(displayName || 'F')[0].toUpperCase()}</span>
+          <FarmerAvatar size={36} className="ring-2 ring-emerald-200" />
         </Link>
       </div>
 
