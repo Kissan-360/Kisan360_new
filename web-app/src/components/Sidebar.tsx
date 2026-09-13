@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation, LANGUAGES } from '../i18n';
+import { useFlow } from './FlowContext';
 import { Logo, MandiDirect } from './brand';
 import { isBuyerSideRole } from '../lib/roles';
 
@@ -86,18 +87,26 @@ function RailTooltip({ label }: { label: string }) {
 function NavItem({ entry, onNavigate, collapsed }: { entry: NavEntry; onNavigate?: () => void; collapsed: boolean }) {
   const Icon = entry.icon;
   const { t } = useTranslation();
+  const { startFlow } = useFlow();
   const labelKey = entry.labelKey || `nav.${entry.to.replace('/', '').replace(/-/g, '')}`;
   // t() returns the key itself when a translation is missing (truthy), so a
   // plain `||` fallback never fires — compare explicitly to keep raw `nav.*`
   // keys off screen in every language, now and for future entries.
   const translated = t(labelKey);
   const label = translated === labelKey ? entry.label : translated;
+  // ONE front door: the sidebar "Sell My Crop" behaves exactly like the
+  // floating button — guided flow from step 1, every tap. Without this the
+  // same label opened a different (free-tab, stepper-less) mode.
+  const handleClick = () => {
+    if (entry.to === '/decision') startFlow();
+    onNavigate?.();
+  };
 
   if (collapsed) {
     return (
       <NavLink
         to={entry.to}
-        onClick={onNavigate}
+        onClick={handleClick}
         title={label}
         className={({ isActive }) =>
           `group relative flex h-[42px] w-full items-center justify-center rounded-lg transition-colors ${
@@ -120,7 +129,7 @@ function NavItem({ entry, onNavigate, collapsed }: { entry: NavEntry; onNavigate
   return (
     <NavLink
       to={entry.to}
-      onClick={onNavigate}
+      onClick={handleClick}
       className={({ isActive }) =>
         `w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[13px] transition-colors min-h-[42px] ${
           isActive

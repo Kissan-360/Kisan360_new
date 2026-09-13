@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import {
-  Package, Users, Send, CheckCircle2, Clock, Lock, Banknote,
+  Send, CheckCircle2, Clock, Lock, Banknote,
   ArrowRight, Sparkles,
 } from 'lucide-react';
 import { useTranslation } from '../i18n';
 
+// 3 farmer states, not 7 engine states. PENDING vs HELD is an escrow
+// distinction a kisan rightly ignores — both mean "not yet in my hand".
+// The backend's 7-step machine is untouched; only the presentation folds.
 const TIMELINE_STEPS = [
-  { key: 'lot', icon: Package, labelKey: 'payment.step1' },
-  { key: 'matched', icon: Users, labelKey: 'payment.step2' },
-  { key: 'offer', icon: Send, labelKey: 'payment.step3' },
-  { key: 'accepted', icon: CheckCircle2, labelKey: 'payment.step4' },
-  { key: 'pending', icon: Clock, labelKey: 'payment.step5' },
-  { key: 'escrow', icon: Lock, labelKey: 'payment.step6' },
-  { key: 'released', icon: Banknote, labelKey: 'payment.step7' },
+  { key: 'offer', icon: Send, labelKey: 'payment.simple.offer' },
+  { key: 'held', icon: Lock, labelKey: 'payment.simple.held' },
+  { key: 'done', icon: Banknote, labelKey: 'payment.simple.done' },
 ];
 
 interface PaymentTimelineProps {
@@ -50,10 +49,18 @@ export default function PaymentTimeline({
   const { t } = useTranslation();
   const [showBurst, setShowBurst] = useState(false);
 
+  // Fold the 7 engine states onto the 3 farmer states: an offer out means
+  // "waiting" (3), anything accepted-or-held means "safe" (4–6), released
+  // means "cash" (7). Below "waiting" the deal hasn't started (0).
+  const simpleStep = currentStep >= 7 ? 3 : currentStep >= 4 ? 2 : currentStep >= 3 ? 1 : 0;
+  const isDone = simpleStep >= 3;
+
   const handleAdvance = () => {
-    if (currentStep < 7) {
+    if (!isDone) {
       onAdvance();
-      if (currentStep + 1 === 7) {
+      // This click collects the money (held → released), so celebrate now —
+      // the parent reloads a beat later and the timeline lands on "cash".
+      if (simpleStep === 2) {
         setShowBurst(true);
         setTimeout(() => setShowBurst(false), 3000);
       }
@@ -75,7 +82,7 @@ export default function PaymentTimeline({
           )}
         </div>
         <span className="rounded-full bg-stone-100 px-2.5 py-0.5 text-[10px] font-bold text-stone-500">
-          {currentStep}/7
+          {simpleStep}/3
         </span>
       </div>
 
@@ -90,8 +97,8 @@ export default function PaymentTimeline({
       <div className="relative">
         {TIMELINE_STEPS.map((step, idx) => {
           const num = idx + 1;
-          const done = num <= currentStep;
-          const active = num === currentStep + 1 && currentStep < 7;
+          const done = num <= simpleStep;
+          const active = num === simpleStep + 1 && !isDone;
           const Icon = step.icon;
 
           return (
@@ -131,7 +138,7 @@ export default function PaymentTimeline({
                     {t('payment.inProgress')}
                   </span>
                 )}
-                {done && num === 7 && (
+                {done && num === 3 && (
                   <p className="text-[11px] text-emerald-700 font-semibold mt-0.5">
                     {t('payment.releasedTo', { name: farmerName || t('payment.farmer') })}
                   </p>
@@ -145,7 +152,7 @@ export default function PaymentTimeline({
       {/* Simulate button — hidden when there is nothing to simulate (the page
           passes showAdvance=false with a next-step hint instead of a dead
           button), and gone for good once the deal completes. */}
-      {currentStep < 7 && showAdvance && (
+      {simpleStep < 3 && showAdvance && (
         <div className="mt-4 space-y-2">
           <button
             onClick={handleAdvance}
@@ -154,18 +161,18 @@ export default function PaymentTimeline({
             <ArrowRight size={16} />
             {advanceLabel || t('payment.simulateNext')}
           </button>
-          {onFail && currentStep >= 5 && (
+          {onFail && simpleStep === 2 && (
             <button
               onClick={onFail}
               className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-amber-300 bg-amber-50 px-5 py-2.5 text-xs font-semibold text-amber-800 hover:bg-amber-100 transition-colors"
             >
               <Clock size={14} />
-              Simulate: buyer doesn't pay → raise an issue
+              {t('payment.simple.simulateFail')}
             </button>
           )}
         </div>
       )}
-      {currentStep < 7 && !showAdvance && advanceHint && (
+      {simpleStep < 3 && !showAdvance && advanceHint && (
         <p className="mt-4 rounded-xl border border-dashed border-stone-200 bg-stone-50 px-4 py-3 text-xs text-stone-500 leading-relaxed">
           {advanceHint}
         </p>

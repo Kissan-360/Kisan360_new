@@ -882,6 +882,62 @@ const TradePage = () => {
   // lot retires the old receipt instead of showing stale figures forever.
   const showReceipt = !!ctx && !!activePayment && activePayment.status === 'RELEASED';
 
+  // ── "What do I do now?" — exactly ONE next action, derived from the same
+  // active-deal state as the timeline. The kisan never has to read the page
+  // to know the next step: the banner names it and its button takes them
+  // there. Buyer workspace never sees this (different job).
+  type NextAction = { icon: React.ElementType; title: string; desc: string; cta: string; run: () => void };
+  const scrollDownTo = (ref: React.RefObject<HTMLDivElement | null>) =>
+    setTimeout(() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  const nextAction: NextAction | null = buyerView ? null
+    : !activeLot
+      ? {
+          icon: Package,
+          title: t('trade.next.noLot.title'),
+          desc: t('trade.next.noLot.desc'),
+          cta: t('trade.next.noLot.cta'),
+          run: openLotForm,
+        }
+      : !activeOffer || activeDealDead
+        ? activeDealDead
+          ? {
+              icon: Plus,
+              title: t('trade.next.dead.title'),
+              desc: t('trade.next.dead.desc'),
+              cta: t('trade.next.dead.cta'),
+              run: openLotForm,
+            }
+          : {
+              icon: Users,
+              title: t('trade.next.pickBuyer.title', { crop: activeLot.crop }),
+              desc: t('trade.next.pickBuyer.desc'),
+              cta: t('trade.next.pickBuyer.cta'),
+              run: () => scrollDownTo(buyersRef),
+            }
+        : activeOffer.status === 'SENT'
+          ? {
+              icon: Send,
+              title: t('trade.next.waitReply.title'),
+              desc: t('trade.next.waitReply.desc', { buyer: activeOffer.buyerName || 'the buyer' }),
+              cta: t('trade.next.waitReply.cta'),
+              run: () => scrollDownTo(paymentsRef),
+            }
+          : activePayment?.status === 'RELEASED'
+            ? {
+                icon: CheckCircle2,
+                title: t('trade.next.done.title'),
+                desc: t('trade.next.done.desc', { amount: inr(activePayment.amount) }),
+                cta: t('trade.next.done.cta'),
+                run: () => { if (activePayment) setReceiptModal(activePayment); },
+              }
+            : {
+                icon: Banknote,
+                title: t('trade.next.collect.title'),
+                desc: t('trade.next.collect.desc', { amount: inr(activePayment?.amount || activeOffer.amount) }),
+                cta: t('trade.next.collect.cta'),
+                run: () => scrollDownTo(paymentsRef),
+              };
+
   // ── Receipt celebration modal: pops the moment the active deal's payment
   // releases — once per deal id, so every repeat sale pops again, and
   // re-openable any time from a RELEASED payment row.
@@ -918,10 +974,13 @@ const TradePage = () => {
     };
   }, []);
 
-  const startNewSale = () => {
-    setReceiptModal(null);
+  const openLotForm = () => {
     setShowLotForm(true);
     setTimeout(() => lotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  };
+  const startNewSale = () => {
+    setReceiptModal(null);
+    openLotForm();
   };
   const viewReceiptHistory = () => {
     setReceiptModal(null);
@@ -1027,6 +1086,32 @@ const TradePage = () => {
             {error}
           </div>
         )}
+
+        {/* ── "What do I do now?" — one next action, always visible ── */}
+        {nextAction && (() => {
+          const ActionIcon = nextAction.icon;
+          return (
+            <div className="rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-700 text-white p-5 shadow-lg shadow-emerald-600/20">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="h-11 w-11 rounded-full bg-white/15 flex items-center justify-center shrink-0" aria-hidden="true">
+                    <ActionIcon size={20} />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="font-bold leading-tight">{nextAction.title}</p>
+                    <p className="text-sm text-emerald-50/90 mt-0.5 leading-snug">{nextAction.desc}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={nextAction.run}
+                  className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-emerald-800 shadow hover:bg-emerald-50 active:scale-95 transition-all min-h-[48px] shrink-0"
+                >
+                  {nextAction.cta} <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* ── Lots ─────────────────────────────────────────────── */}
         <div ref={lotsRef}>
@@ -1468,18 +1553,18 @@ const TradePage = () => {
           <PaymentTimeline
             currentStep={timelineStep}
             advanceLabel={simulateTarget === 'release'
-              ? 'Simulate: buyer releases the payment'
+              ? t('payment.simple.simulateRelease')
               : simulateTarget === 'accept'
-                ? 'Simulate: buyer accepts your offer'
+                ? t('payment.simple.simulateAccept')
                 : undefined}
             showAdvance={simulateTarget !== null}
             advanceHint={!activeLot
-              ? 'Create a lot above — then come back here and simulate the buyer accepting your offer, step by step to cash.'
+              ? t('trade.next.noLot.desc')
               : !activeOffer || activeDealDead
                 ? activeDealDead
-                  ? 'This deal ended. Create a new lot above to sell again — the simulation restarts with it.'
-                  : 'Send an offer to a buyer above — then come back here to simulate the acceptance.'
-                : 'Waiting on the latest update — give it a moment, then refresh.'}
+                  ? t('trade.next.dead.desc')
+                  : t('trade.next.pickBuyer.desc')
+                : t('trade.next.waiting.desc')}
             onAdvance={() => {
               // Single-device demo ladder, scoped to the ACTIVE deal: escrow
               // held → simulate settlement (HELD → RELEASED = the cash
