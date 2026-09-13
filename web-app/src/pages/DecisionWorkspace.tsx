@@ -245,9 +245,9 @@ const DecisionWorkspace = () => {
     if (_retryCount === 0) { setLoading(true); setError(''); }
     try {
       const res = await apiFetch(`${API_URL}/market/net-realization?crop=${encodeURIComponent(c)}&district=${encodeURIComponent(d)}&quantity=${q}`);
-      if (res.status === 503 && _retryCount < 2) {
+      if ((res.status === 503 || res.status === 502) && _retryCount < 2) {
         const delay = 3000 * (_retryCount + 1);
-        console.log(`[Kisan360] DecisionWorkspace net-realization 503, retry ${_retryCount + 1}/2 in ${delay}ms`);
+        console.log(`[Kisan360] DecisionWorkspace net-realization ${res.status}, retry ${_retryCount + 1}/2 in ${delay}ms`);
         await new Promise(r => setTimeout(r, delay));
         return fetchMarketData(override, _retryCount + 1);
       }
@@ -274,9 +274,9 @@ const DecisionWorkspace = () => {
     try {
       const params = new URLSearchParams({ crop: c, district: d, quantity: String(q), grade: g });
       const res = await apiFetch(`${API_URL}/market/pathways?${params}`);
-      if (res.status === 503 && _retryCount < 2) {
+      if ((res.status === 503 || res.status === 502) && _retryCount < 2) {
         const delay = 3000 * (_retryCount + 1);
-        console.log(`[Kisan360] DecisionWorkspace pathways 503, retry ${_retryCount + 1}/2 in ${delay}ms`);
+        console.log(`[Kisan360] DecisionWorkspace pathways ${res.status}, retry ${_retryCount + 1}/2 in ${delay}ms`);
         await new Promise(r => setTimeout(r, delay));
         return fetchPathwayData(override, _retryCount + 1);
       }

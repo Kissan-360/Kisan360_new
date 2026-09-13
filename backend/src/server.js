@@ -107,20 +107,44 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 // systems as healthy.
 const { getHealth: getSchedulerHealth } = require('./services/scheduler');
 
-// Calculator (net-realization) readiness: probed with a short timeout and
-// cached so /health stays fast even when the service is down. Not claiming
-// any external API is healthy just because this process is alive.
+// Calculator (net-realization) readiness: Render free-tier sleeps the calc
+// after ~15 min idle and a wake takes 30–60 s, so the old 1.5 s probe could
+// never succeed after idle and /health cried DEGRADED forever. The probe now
+// allows 10 s, reports ready|waking|offline honestly (timeout = waking,
+// refused = offline), and a boot warmup loop starts the wake the moment this
+// process boots instead of at the first farmer click.
 const NET_REALIZATION_URL = process.env.NET_REALIZATION_URL || 'http://localhost:8002';
-let mlProbe = { ready: false, checkedAt: 0 };
-async function probeMlService() {
-  if (Date.now() - mlProbe.checkedAt < 30000) return mlProbe; // 30s cache
+const ML_PROBE_TIMEOUT_MS = 10000;
+const ML_PROBE_CACHE_MS = 30000;
+let mlProbe = { ready: false, status: 'offline', checkedAt: 0 };
+async function probeMlService(force = false) {
+  if (!force && Date.now() - mlProbe.checkedAt < ML_PROBE_CACHE_MS) return mlProbe;
   try {
-    const res = await fetch(`${NET_REALIZATION_URL}/health`, { signal: AbortSignal.timeout(1500) });
-    mlProbe = { ready: res.ok, checkedAt: Date.now() };
-  } catch {
-    mlProbe = { ready: false, checkedAt: Date.now() };
+    const res = await fetch(`${NET_REALIZATION_URL}/health`, { signal: AbortSignal.timeout(ML_PROBE_TIMEOUT_MS) });
+    mlProbe = { ready: res.ok, status: res.ok ? 'ready' : 'offline', checkedAt: Date.now() };
+  } catch (e) {
+    // AbortSignal.timeout → waking (the proxy holds the connection while the
+    // service boots); refused/DNS → the service is down, not waking.
+    const waking = e && (e.name === 'TimeoutError' || e.name === 'AbortError');
+    mlProbe = { ready: false, status: waking ? 'waking' : 'offline', checkedAt: Date.now() };
   }
   return mlProbe;
+}
+// Boot warmup (skipped in tests): start waking the calculator immediately so
+// it is ideally already up when the first farmer request arrives. Bounded:
+// 6 attempts × 20 s, then stops touching it.
+if (process.env.NODE_ENV !== 'test') {
+  let warmAttempts = 0;
+  const warmTimer = setInterval(async () => {
+    warmAttempts += 1;
+    try {
+      const ml = await probeMlService(true);
+      if (ml.ready || warmAttempts >= 6) clearInterval(warmTimer);
+    } catch {
+      if (warmAttempts >= 6) clearInterval(warmTimer);
+    }
+  }, 20000);
+  if (typeof warmTimer.unref === 'function') warmTimer.unref();
 }
 app.get('/health', async (req, res) => {
   const dbMode = getDbMode(); // 'connected' | 'memory' | 'offline'
@@ -134,6 +158,7 @@ app.get('/health', async (req, res) => {
     db: dbMode,
     dbReady,
     mlServiceReady: ml.ready,
+    mlServiceStatus: ml.status,
     mlServiceUrl: NET_REALIZATION_URL,
     scheduler,
     timestamp: new Date().toISOString(),

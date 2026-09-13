@@ -14,5 +14,9 @@ export default defineConfig({
   },
   define: {
     'process.env.REACT_APP_API_URL': JSON.stringify(process.env.VITE_API_URL || '/api'),
+    // Build stamp: lets anyone verify which bundle a deployment serves
+    // (Settings → About). Render rebuilds on every push; a stale page means
+    // the deploy hasn't landed or the browser cached the old bundle.
+    __BUILD_ID__: JSON.stringify(new Date().toISOString()),
   },
 });

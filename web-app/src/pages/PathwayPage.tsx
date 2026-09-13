@@ -227,10 +227,11 @@ export default function PathwayPage() {
       const params = new URLSearchParams({ crop, district, quantity });
       if (grade) params.set('grade', grade);
       const res = await apiFetch(`${API_URL}/market/pathways?${params}`);
-      // Calculator cold-start returns 503 — retry with backoff (max 2 retries).
-      if (res.status === 503 && _retryCount < 2) {
+      // Calculator cold-start returns 503 — and Render's gateway returns 502
+      // while the calc is waking. Retry both with backoff (max 2 retries).
+      if ((res.status === 503 || res.status === 502) && _retryCount < 2) {
         const delay = 3000 * (_retryCount + 1);
-        console.log(`[Kisan360] Pathways 503 (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
+        console.log(`[Kisan360] Pathways ${res.status} (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
         await new Promise(r => setTimeout(r, delay));
         return compute(_retryCount + 1);
       }

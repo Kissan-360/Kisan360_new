@@ -156,6 +156,9 @@ const SettingsPage = () => {
         <p className="text-sm text-stone-500 leading-relaxed">
           {t('settings.aboutDesc')}
         </p>
+        <p className="text-[11px] text-stone-400 mt-2">
+          Build {new Date(__BUILD_ID__).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+        </p>
       </div>
     </div>
   );
