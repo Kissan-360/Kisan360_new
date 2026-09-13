@@ -310,7 +310,7 @@ const DecisionWorkspace = () => {
         {/* Escalates 2 → 3 → 5 columns: at lg (1024px) the sidebar leaves ~700px,
             so five 129px columns wrapped "Grade (your assessment)" onto two lines
             and left that one label sitting 16px higher than its row-mates. */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 items-end">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 xl:gap-4 items-end">
           <CropSelector value={crop} onChange={setCrop} />
           <DistrictSelector value={district} onChange={setDistrict} />
           <QuantityInput value={quantity} onChange={setQuantity} />

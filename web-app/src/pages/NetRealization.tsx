@@ -422,7 +422,7 @@ const NetRealization = () => {
               {/* The decision chain — observed headline → farmer-borne costs → estimated net.
                   The three figures are the engine's own returned values, shown in order;
                   no client-side arithmetic. Distance keeps its honest method label. */}
-              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
                 <span className="flex items-center gap-1.5">{t('netRealization.headlinePrice')}: <strong className="text-white">{inr(best.grossPricePerQuintal)}/q</strong></span>
                 <ArrowRight size={14} className="text-emerald-200/70 shrink-0" />
                 <span className="flex items-center gap-1.5">{t('netRealization.yourCosts')}: <strong className="text-amber-200">−{inr(best.farmerCosts.totalCostsPerQuintal)}/q</strong></span>
@@ -624,7 +624,7 @@ const NetRealization = () => {
                                 <DataTag label="no directory buyer" tone="stone" />
                               )}
                             </div>
-                            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-1 text-sm min-w-0 [&>span]:truncate">
+                            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1.5 text-sm min-w-0 [&>span]:truncate">
                               <span className="text-stone-500">{t('netRealization.headlinePrice')}: <span className="text-stone-800 font-medium">{inr(m.grossPricePerQuintal)}/q</span></span>
                               <span className="text-stone-500">{t('netRealization.yourCosts')}: <span className="text-amber-700 font-medium">−{inr(m.farmerCosts.totalCostsPerQuintal)}/q</span></span>
                               <span className="text-stone-500">{t('netRealization.estimatedNet')}: <span className="text-emerald-700 font-semibold">{inr(m.farmerNetPerQuintal)}/q</span></span>
