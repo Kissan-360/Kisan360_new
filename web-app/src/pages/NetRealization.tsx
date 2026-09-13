@@ -317,7 +317,7 @@ const NetRealization = () => {
 
         {/* ── Inputs ── */}
         <form onSubmit={compute} className="card p-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 items-end [&>div]:min-w-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 items-end [&>div]:min-w-0">
             <div>
               <label className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.crop')}</label>
               <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
@@ -423,12 +423,13 @@ const NetRealization = () => {
                   The three figures are the engine's own returned values, shown in order;
                   no client-side arithmetic. Distance keeps its honest method label. */}
               <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
-                <span className="flex items-center gap-1.5">{t('netRealization.headlinePrice')}: <strong className="text-white">{inr(best.grossPricePerQuintal)}/q</strong></span>
+                <span className="flex items-center gap-1.5 whitespace-nowrap">{t('netRealization.headlinePrice')}: <strong className="text-white">{inr(best.grossPricePerQuintal)}/q</strong></span>
                 <ArrowRight size={14} className="text-emerald-200/70 shrink-0" />
-                <span className="flex items-center gap-1.5">{t('netRealization.yourCosts')}: <strong className="text-amber-200">−{inr(best.farmerCosts.totalCostsPerQuintal)}/q</strong></span>
+                <span className="flex items-center gap-1.5 whitespace-nowrap">{t('netRealization.yourCosts')}: <strong className="text-amber-200">−{inr(best.farmerCosts.totalCostsPerQuintal)}/q</strong></span>
                 <ArrowRight size={14} className="text-emerald-200/70 shrink-0" />
-                <span className="flex items-center gap-1.5">{t('netRealization.estimatedNet')}: <strong className="text-white">{inr(best.farmerNetPerQuintal)}/q</strong></span>
-                <span className="flex items-center gap-1.5 text-emerald-100">
+                <span className="flex items-center gap-1.5 whitespace-nowrap">{t('netRealization.estimatedNet')}: <strong className="text-white">{inr(best.farmerNetPerQuintal)}/q</strong></span>
+                <span className="hidden sm:inline text-emerald-200/40">|</span>
+                <span className="flex items-center gap-1.5 text-emerald-100 whitespace-nowrap">
                   <MapPin size={12} /> {best.distanceKm} km · {distanceLabel(best.distanceSource, t).label}
                 </span>
               </div>
@@ -624,11 +625,14 @@ const NetRealization = () => {
                                 <DataTag label="no directory buyer" tone="stone" />
                               )}
                             </div>
-                            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1.5 text-sm min-w-0 [&>span]:truncate">
-                              <span className="text-stone-500">{t('netRealization.headlinePrice')}: <span className="text-stone-800 font-medium">{inr(m.grossPricePerQuintal)}/q</span></span>
-                              <span className="text-stone-500">{t('netRealization.yourCosts')}: <span className="text-amber-700 font-medium">−{inr(m.farmerCosts.totalCostsPerQuintal)}/q</span></span>
-                              <span className="text-stone-500">{t('netRealization.estimatedNet')}: <span className="text-emerald-700 font-semibold">{inr(m.farmerNetPerQuintal)}/q</span></span>
-                              <span className="text-stone-500">{t('netRealization.lotTotal')}: <span className="text-stone-800 font-medium">{inr(m.farmerNetTotal)}</span></span>
+                            <div className="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm min-w-0">
+                              <span className="text-stone-500 whitespace-nowrap">{t('netRealization.headlinePrice')}: <span className="text-stone-800 font-medium">{inr(m.grossPricePerQuintal)}/q</span></span>
+                              <span className="text-stone-200">|</span>
+                              <span className="text-stone-500 whitespace-nowrap">{t('netRealization.yourCosts')}: <span className="text-amber-700 font-medium">−{inr(m.farmerCosts.totalCostsPerQuintal)}/q</span></span>
+                              <span className="text-stone-200">|</span>
+                              <span className="text-stone-500 whitespace-nowrap">{t('netRealization.estimatedNet')}: <span className="text-emerald-700 font-semibold">{inr(m.farmerNetPerQuintal)}/q</span></span>
+                              <span className="text-stone-200">|</span>
+                              <span className="text-stone-500 whitespace-nowrap">{t('netRealization.lotTotal')}: <span className="text-stone-800 font-medium">{inr(m.farmerNetTotal)}</span></span>
                             </div>
                             {!isBest && gap > 0 && (
                               <p className="text-xs text-stone-400 mt-1.5">
