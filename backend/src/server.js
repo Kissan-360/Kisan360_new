@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+
 require('dotenv').config();
 
 // Import routes
@@ -40,9 +40,17 @@ const connectDB = require('./config/mongodb');
 const { getDbMode } = require('./config/mongodb');
 connectDB().catch(err => console.error('❌ MongoDB connection failed:', err.message));
 
-// Start automated market-data refresh scheduler
-const { startScheduler, stopScheduler } = require('./services/scheduler');
+// Start automated market-data refresh scheduler + one-shot boot refresh.
+// On Render free-tier the process dies between cron fires, so the snapshot can
+// go stale. Running the pipeline once at boot ensures the first request always
+// sees fresh (or at least freshest-possible) AGMARKNET data.
+const { startScheduler, stopScheduler, runRefreshPipeline } = require('./services/scheduler');
 startScheduler(); // daily at 09:00 IST
+if (process.env.NODE_ENV !== 'test') {
+  runRefreshPipeline({ limit: 500 }).catch(err => {
+    console.error(`[Boot] AGMARKNET refresh failed (non-fatal, using cached snapshot): ${err.message}`);
+  });
+}
 
 const app = express();
 // Port contract: an explicitly invalid PORT (0, negative, non-numeric) must
@@ -58,8 +66,8 @@ if (RAW_PORT !== undefined && (!Number.isInteger(PORT) || PORT <= 0 || PORT > 65
 const EFFECTIVE_PORT = Number.isInteger(PORT) && PORT > 0 ? PORT : 5000;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
-// Behind a reverse proxy (nginx etc.) this makes req.ip the real client IP —
-// required for the auth rate limiter to count per-caller rather than per-proxy.
+// Behind a reverse proxy (nginx etc.) this makes req.ip the real client IP
+// rather than the proxy's, so request logs attribute traffic correctly.
 app.set('trust proxy', 1);
 
 // Security middleware
@@ -78,26 +86,6 @@ app.use((req, res, next) => {
   });
   next();
 });
-
-// Rate limiting — global generous cap (live demos do image uploads and refreshes)
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 300,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use(limiter);
-
-// Tighter limiter on token minting: /demo-login has no real credentials by
-// design, so it must never be an unlimited key-generation service.
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 30,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { success: false, error: 'Too many login attempts — try again in a few minutes' },
-});
-app.use('/api/auth/demo-login', authLimiter);
 
 // CORS configuration
 // In production the single trusted FRONTEND_URL is enforced (reflecting only

@@ -32,7 +32,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-stone-200 px-4 md:px-6 py-2.5 flex items-center justify-between gap-3 shrink-0">
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <button
-          className="md:hidden text-stone-500 p-1"
+          className="md:hidden text-stone-500 p-2 rounded-lg hover:bg-stone-100 transition-colors"
           onClick={onMenu}
           aria-label="Open navigation menu"
         >
@@ -57,13 +57,13 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
 
       <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
         <div className="relative group">
-          <button className="flex items-center gap-1 text-xs font-medium text-stone-600 hover:text-stone-900 border border-stone-200 rounded-lg px-2 py-1.5 hover:bg-stone-50 transition-colors" aria-label="Change language">
-            <Globe size={13} />
+          <button className="flex items-center gap-1 text-xs font-medium text-stone-600 hover:text-stone-900 border border-stone-200 rounded-lg px-2.5 min-h-[36px] hover:bg-stone-50 transition-colors" aria-label="Change language" aria-haspopup="menu">
+            <Globe size={14} className="shrink-0" />
             <span>{LANGUAGES.find(l => l.code === language)?.native || 'EN'}</span>
           </button>
-          <div className="absolute right-0 top-full mt-1 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50 hidden group-hover:block min-w-[100px]">
+          <div className="absolute right-0 top-full mt-1 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50 hidden group-hover:block min-w-[110px]">
             {LANGUAGES.map((l) => (
-              <button key={l.code} onClick={() => setLanguage(l.code)} className={`w-full text-left px-3 py-1.5 text-sm hover:bg-stone-50 transition-colors ${language === l.code ? 'text-emerald-700 font-semibold' : 'text-stone-600'}`}>{l.native}</button>
+              <button key={l.code} onClick={() => setLanguage(l.code)} className={`w-full text-left px-3 py-2.5 text-sm hover:bg-stone-50 transition-colors ${language === l.code ? 'text-emerald-700 font-semibold' : 'text-stone-600'}`}>{l.native}</button>
             ))}
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
               {user?.district ? `${user.district} District` : t('topbar.farmerAccount')}
             </p>
           </div>
-          <img src="/farmer-ramesh.png" alt="" className="h-9 w-9 rounded-full object-cover ring-2 ring-emerald-100 shrink-0" />
+          <span className="h-9 w-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold ring-2 ring-emerald-200 shrink-0 select-none">{(displayName || 'F')[0].toUpperCase()}</span>
         </Link>
       </div>
 
