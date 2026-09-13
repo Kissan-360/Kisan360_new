@@ -938,7 +938,7 @@ const DecideStage: React.FC<{
 
       {/* ── PATHWAY OPTIONS ───────────────────────────────────────────── */}
       {pathways.length > 0 && (
-        <>
+        <div className="space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-bold text-stone-900">Pathway options</p>
             <span className="text-[11px] text-stone-400">All options are evidence-graded, not guaranteed outcomes</span>
@@ -1073,7 +1073,7 @@ const DecideStage: React.FC<{
               );
             })}
           </div>
-        </>
+        </div>
       )}
 
       {/* ── PERISHABILITY AWARENESS (STORE) — separate from economics ─── */}

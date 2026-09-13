@@ -565,7 +565,7 @@ export default function PathwayPage() {
         {loading && !result && <SkeletonLines rows={5} />}
 
         {result && recommendation && (
-          <>
+          <div className="space-y-6">
             {/* ── Recommended pathway — the decision hero ── */}
             <Card spotlight className="p-5 border-emerald-300 bg-emerald-50/50">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -729,7 +729,7 @@ export default function PathwayPage() {
                 ))}
               </ul>
             </Card>
-          </>
+          </div>
         )}
       </PageTransition>
     </div>

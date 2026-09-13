@@ -376,7 +376,7 @@ const NetRealization = () => {
         {loading && !result && <SkeletonLines rows={5} />}
 
         {result && best && (
-          <>
+          <div className="space-y-6">
             {/* ── Best-mandi hero ── */}
             <div className="bg-gradient-to-br from-emerald-500 via-emerald-600 to-green-700 rounded-2xl p-6 text-white shadow-lg shadow-emerald-200/50">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -839,7 +839,7 @@ const NetRealization = () => {
               </Card>
             )}
 
-          </>
+          </div>
         )}
       </PageTransition>
     </div>
