@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import { API_URL, apiFetch } from '../lib/api';
 import { PrimaryButton } from '../components/ui/kit';
+import { DistrictSelector, DEFAULT_DISTRICT } from '../components/DistrictSelector';
+import { MAHARASHTRA_DISTRICTS } from '../lib/maharashtraData';
+import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from '../i18n';
 const COMMON_CROPS = [
   'Rice', 'Wheat', 'Maize', 'Sugarcane', 'Cotton',
@@ -15,9 +18,15 @@ const cropEmoji: Record<string, string> = {
 
 const CropAdvisory = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const [step, setStep] = useState<'select' | 'result'>('select');
   const [selectedCrop, setSelectedCrop] = useState('');
-  const [location, setLocation] = useState('');
+  // District picker, not free text: the farmer taps instead of typing, and
+  // the backend always receives a real Maharashtra district. Defaults to the
+  // farmer's own district; GPS can only snap to the list, never inject text.
+  const [location, setLocation] = useState(
+    (user as any)?.district || DEFAULT_DISTRICT
+  );
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState<any>(null);
   const [advisory, setAdvisory] = useState<any>(null);
@@ -33,12 +42,19 @@ const CropAdvisory = () => {
           );
           const data = await resp.json();
           if (data.current) setWeather(data.current);
-          if (data.location?.name) setLocation(data.location.name);
+          const gpsName = data.location?.name || '';
+          const match = gpsName && MAHARASHTRA_DISTRICTS.find(
+            (d) => d.name.toLowerCase() === gpsName.toLowerCase()
+              || gpsName.toLowerCase().includes(d.name.toLowerCase())
+              || d.name.toLowerCase().includes(gpsName.toLowerCase())
+          );
+          if (match) setLocation(match.name);
         } catch {}
       },
       () => {},
       { timeout: 5000 }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getAdvisory = async () => {
@@ -108,16 +124,11 @@ const CropAdvisory = () => {
 
             {/* Form */}
             <div className="card p-6 lg:p-8 space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-1.5">{t('advisory.yourLocation')}</label>
-                <input
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder={t('advisory.locationPlaceholder')}
-                  className="input-field"
-                />
-              </div>
+              <DistrictSelector
+                value={location}
+                onChange={setLocation}
+                label={t('advisory.yourLocation')}
+              />
 
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-1.5">

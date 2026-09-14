@@ -191,6 +191,11 @@ const DiseaseDetection = () => {
           {/* Results */}
           {result && (
             <div className="space-y-4">
+              {result.source === 'groq-vision' && (
+                <p className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-2.5 text-xs text-sky-800">
+                  {t('disease.cloudFallback')}
+                </p>
+              )}
               <div className="border border-emerald-200 rounded-2xl p-5 bg-emerald-50/60">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">

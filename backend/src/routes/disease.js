@@ -61,6 +61,63 @@ function stripBase64Prefix(data) {
   return data.replace(/^data:image\/\w+;base64,/, '');
 }
 
+// Cloud fallback: when the dedicated disease CNN (:8000, torch — too heavy
+// for free-tier hosting, deliberately not deployed) is unreachable, ask a
+// vision LLM to read the leaf photo instead. Same response contract, flagged
+// with source:'groq-vision' so the UI can label it honestly. Returns null
+// when no key is configured or the call fails — the caller then keeps its
+// existing honest 503.
+const GROQ_VISION_MODELS = ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.2-90b-vision-preview'];
+async function groqVisionDetect(imageBuffer, cropType) {
+  const groqKey = process.env.GROQ_API_KEY;
+  if (!groqKey) return null;
+  const labels = Object.keys(DISEASE_INFO).join(' | ');
+  const prompt = [
+    'You are a plant pathologist examining a farmer\'s leaf photo.',
+    `The farmer grows: ${cropType || 'unknown'}.`,
+    'If the image is NOT a plant/leaf photo, respond {"isPlant": false}.',
+    `Otherwise pick EXACTLY ONE label from this list (copy it verbatim): ${labels}.`,
+    'Prefer labels matching the farmer\'s crop. Respond with ONLY valid JSON, no other text:',
+    '{"isPlant": true, "label": "<exact label>", "confidence": 0-100}',
+  ].join(' ');
+  const b64 = imageBuffer.toString('base64');
+  for (const model of GROQ_VISION_MODELS) {
+    try {
+      const res = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
+        model,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${b64}` } },
+          ],
+        }],
+        max_tokens: 256,
+        temperature: 0.1,
+        response_format: { type: 'json_object' },
+      }, {
+        headers: { 'Authorization': `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
+        timeout: 25000,
+      });
+      const raw = res.data?.choices?.[0]?.message?.content?.trim();
+      if (!raw) continue;
+      const parsed = JSON.parse(raw);
+      if (parsed.isPlant === false) return { notPlant: true };
+      const label = typeof parsed.label === 'string' ? parsed.label.trim() : '';
+      if (!label || !DISEASE_INFO[label]) continue;
+      // The CNN contract is a 0–1 fraction (the page multiplies by 100), so
+      // the fallback speaks the same scale — never 1–99 integers.
+      let confidence = Math.round(Number(parsed.confidence)) / 100;
+      if (!Number.isFinite(confidence)) confidence = 0.7;
+      confidence = Math.max(0.01, Math.min(0.99, confidence));
+      return { disease: label, confidence };
+    } catch {
+      // Try the next model, else fall through to the honest 503.
+    }
+  }
+  return null;
+}
+
 // POST /api/disease/detect - Analyze crop image for disease detection
 // Accepts either: multipart file upload OR JSON with base64 imageData
 router.post('/detect', authenticateUser, upload.single('image'), async (req, res) => {
@@ -97,20 +154,45 @@ router.post('/detect', authenticateUser, upload.single('image'), async (req, res
     });
 
     let mlResponse;
+    let source = 'disease-cnn';
     try {
       mlResponse = await axios.post(`${ML_SERVICE_URL}/predict`, form, {
         headers: form.getHeaders(),
         timeout: 30000,
       });
     } catch (mlErr) {
-      if (mlErr.code === 'ECONNREFUSED') {
+      const deadService = mlErr.code === 'ECONNREFUSED'
+        || (typeof mlErr.message === 'string' && /timeout/i.test(mlErr.message))
+        || mlErr.response?.status === 502;
+      if (!deadService) throw mlErr;
+      // The dedicated CNN isn't deployed — try cloud vision before admitting
+      // defeat. Same contract, flagged source so the UI stays honest.
+      const fallback = await groqVisionDetect(imageBuffer, req.body?.cropType);
+      if (!fallback) {
         return res.status(503).json({
           error: 'ML service unavailable',
           message: 'The disease detection service is not running. Start it with: cd ml-service && python -m uvicorn main:app --port 8000',
           mlServiceStatus: 'offline',
         });
       }
-      throw mlErr;
+      if (fallback.notPlant) {
+        return res.status(422).json({
+          error: 'not_a_plant',
+          message: 'This image does not appear to be a plant leaf. Please upload a clear photo of the affected crop leaf (leaf surface, well-lit, centered).',
+          source: 'groq-vision',
+        });
+      }
+      mlResponse = {
+        data: {
+          disease: fallback.disease,
+          confidence: fallback.confidence,
+          likely_plant: true,
+          entropy: null,
+          top5_predictions: null,
+          latency_seconds: null,
+        },
+      };
+      source = 'groq-vision';
     }
 
     const { disease, confidence, likely_plant, entropy, top5_predictions, latency_seconds } = mlResponse.data;
@@ -162,6 +244,7 @@ router.post('/detect', authenticateUser, upload.single('image'), async (req, res
       top5Predictions: top5_predictions,
       mlLatency: latency_seconds,
       timestamp: new Date().toISOString(),
+      source,
     });
   } catch (error) {
     console.error('Disease detection error:', error.message);
