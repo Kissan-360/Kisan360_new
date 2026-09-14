@@ -308,6 +308,7 @@
   "login.fpoDesc": "Pool members' produce, sell as one lot",
   "login.noAccount": "Don't have an account?",
   "login.loginRequired": "Please log in to continue — we'll open the page you asked for.",
+  "login.sessionExpired": "Your session ended — please log in again. Your data is safe.",
   "login.createOne": "Create one",
   "login.firebaseNotConfigured": "Firebase is not configured. Use the demo sign-in below.",
   "login.error.invalidCredential": "Email or password is incorrect. Try the demo sign-in below.",

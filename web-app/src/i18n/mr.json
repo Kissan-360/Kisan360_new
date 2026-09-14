@@ -308,6 +308,7 @@
   "login.fpoDesc": "सदस्यांचे उत्पादन एकत्र करून एकच लॉट विका",
   "login.noAccount": "खाते नाही?",
   "login.loginRequired": "पुढे जाण्यासाठी कृपया लॉग इन करा — तुम्ही मागितलेले पान उघडू.",
+  "login.sessionExpired": "तुमचे सत्र संपले — कृपया पुन्हा लॉग इन करा. तुमचा डेटा सुरक्षित आहे.",
   "login.createOne": "तयार करा",
   "login.firebaseNotConfigured": "Firebase कॉन्फिगर केलेले नाही. खालील डेमो साइन-इन वापरा.",
   "login.error.invalidCredential": "ईमेल किंवा पासवर्ड चुकीचा आहे. खालील डेमो साइन-इन वापरून पहा.",

@@ -38,7 +38,7 @@ function signDemoToken({ uid, role = 'farmer', name, district }) {
     district: district || profile.district,
     demo: true,
   };
-  return jwt.sign(payload, secret, { issuer: ISSUER, audience: AUDIENCE, expiresIn: '12h' });
+  return jwt.sign(payload, secret, { issuer: ISSUER, audience: AUDIENCE, expiresIn: '7d' });
 }
 
 function verifyDemoToken(token) {

@@ -6,6 +6,7 @@ import { PageTransition, PrimaryButton, Card } from '../../components/ui/kit';
 import { Logo } from '../../components/brand';
 import { useTranslation, LANGUAGES } from '../../i18n';
 import { useAuth } from '../../hooks/useAuth';
+import { clearSessionExpired } from '../../lib/api';
 import { Sprout, ShoppingBag, Users } from 'lucide-react';
 
 const RegisterPage = () => {
@@ -34,6 +35,7 @@ const RegisterPage = () => {
     setDemoLoadingRole(role);
     try {
       await demoSignIn(role);
+      clearSessionExpired();
       navigate(role === 'buyer' ? '/buy' : role === 'fpo' ? '/fpo' : '/dashboard');
     } catch (err: any) {
       setDemoError(err.message || t('login.error.demoFailed'));
@@ -66,6 +68,7 @@ const RegisterPage = () => {
         }
       }
       navigate('/dashboard');
+      clearSessionExpired();
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -160,6 +163,7 @@ const RegisterPage = () => {
               setLoading(true);
               try {
                 await signInWithPopup(auth, new GoogleAuthProvider());
+                clearSessionExpired();
                 navigate('/dashboard');
               } catch (err: any) {
                 if (err?.code !== 'auth/popup-closed-by-user') {

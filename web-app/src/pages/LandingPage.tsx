@@ -32,7 +32,7 @@ import { UNIT_SCALE_NOTE } from '../lib/units';
 import { Logo, DemoBadge } from '../components/brand';
 import { useTranslation, LANGUAGES } from '../i18n';
 import { useAuth } from '../hooks/useAuth';
-import { apiFetch, API_URL } from '../lib/api';
+import { apiFetch, API_URL, clearSessionExpired } from '../lib/api';
 import { MAHARASHTRA_DISTRICTS, MAHARASHTRA_CROPS } from '../lib/maharashtraData';
 
 /* ============================================================================
@@ -319,6 +319,7 @@ const LandingPage: React.FC = () => {
     setDemoBusy(true);
     try {
       await demoSignIn('farmer');
+      clearSessionExpired();
       navigate('/dashboard');
     } catch (e: any) {
       setDemoErr(e?.message || t('login.error.demoFailed'));

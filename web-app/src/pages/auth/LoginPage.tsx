@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { auth, firebaseReady } from '../../firebaseConfig';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useAuth } from '../../hooks/useAuth';
+import { hasSessionExpired, clearSessionExpired } from '../../lib/api';
 import { PageTransition, PrimaryButton, Card } from '../../components/ui/kit';
 import { Logo } from '../../components/brand';
 import { Sprout, ShoppingBag, Users, AlertTriangle, ArrowRight } from 'lucide-react';
@@ -19,8 +20,15 @@ const LoginPage = () => {
   const { demoSignIn } = useAuth();
   // Bounced here from a protected deep link (e.g. a shared calculator URL)?
   // Say so, and resume there after ANY successful login — not /dashboard.
-  const rawFrom = (location.state as { from?: unknown } | null)?.from;
+  const rawFrom = (location.state as { from?: unknown; sessionExpired?: unknown } | null)?.from;
   const resumeTo = typeof rawFrom === 'string' && rawFrom.startsWith('/') && !rawFrom.startsWith('//') ? rawFrom : null;
+  // sessionExpired arrives via navigation state — plus the sessionStorage
+  // marker as backup (ProtectedRoute's own redirect can land last with only
+  // {from}). The marker is read WITHOUT consuming: StrictMode double-mounts
+  // in dev and consume-on-read would vanish on the simulated unmount. It is
+  // cleared explicitly on the next successful login below.
+  const [expiredMarker] = useState<boolean>(() => hasSessionExpired());
+  const sessionExpired = ((location.state as { sessionExpired?: unknown } | null)?.sessionExpired === true) || expiredMarker;
   const [demoError, setDemoError] = useState('');
   const [demoLoadingRole, setDemoLoadingRole] = useState<string | null>(null);
 
@@ -36,6 +44,7 @@ const LoginPage = () => {
     setDemoLoadingRole(role);
     try {
       await demoSignIn(role);
+      clearSessionExpired();
       // Buyers get their own workspace: /trade is the producer's lot manager,
       // so sending a buyer there was the "buyers page leads to seller" bug.
       navigate(resumeTo || (role === 'buyer' ? '/buy' : role === 'fpo' ? '/fpo' : '/dashboard'));
@@ -55,6 +64,7 @@ const LoginPage = () => {
     setLoading(true);
     try {
       await signInWithPopup(auth, new GoogleAuthProvider());
+      clearSessionExpired();
       navigate(resumeTo || '/dashboard');
     } catch (err: any) {
       if (err?.code !== 'auth/popup-closed-by-user') {
@@ -75,6 +85,7 @@ const LoginPage = () => {
         return;
       }
       await signInWithEmailAndPassword(auth, email, password);
+      clearSessionExpired();
       navigate(resumeTo || '/dashboard');
     } catch (err: any) {
       const code = err?.code || '';
@@ -116,7 +127,12 @@ const LoginPage = () => {
         </div>
 
         <Card className="p-8">
-          {resumeTo && (
+          {sessionExpired && (
+            <p className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 text-center">
+              {t('login.sessionExpired')}
+            </p>
+          )}
+          {resumeTo && !sessionExpired && (
             <p className="mb-5 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-800 text-center">
               {t('login.loginRequired')}
             </p>

@@ -141,6 +141,18 @@ export async function apiFetch(url: string, init: RequestInit = {}): Promise<Res
 
   if (NULL_BODY_STATUS.has(res.status)) return res;
 
+  // Dead session signal: we sent a token and the API says it is invalid or
+  // expired (stale localStorage identity after expiry/secret rotation passes
+  // ProtectedRoute but fails every call). Notify once per response — the
+  // AuthProvider listens and routes to /login instead of letting the user
+  // hammer buttons into 401 storms. Kept as a DOM event so this data-layer
+  // module never imports navigation.
+  if (res.status === 401 && token) {
+    try {
+      window.dispatchEvent(new CustomEvent('kisan360:unauthorized'));
+    } catch { /* non-DOM environment (tests) — ignore */ }
+  }
+
   const contentType = res.headers.get('content-type') || '';
   if (contentType.includes('json')) {
     // Surface failed calls. Pages legitimately branch on `success`, but a
@@ -181,3 +193,20 @@ export async function apiFetch(url: string, init: RequestInit = {}): Promise<Res
 }
 
 export { API_URL };
+
+// ── Dead-session marker: set synchronously when a 401 kills the session
+// (navigation state can lose a race with ProtectedRoute's own redirect, so
+// the marker is the source of truth). Read WITHOUT consuming — React
+// StrictMode double-mounts in dev and a consume-on-read would vanish on the
+// simulated unmount. Cleared explicitly on the next successful login.
+const SESSION_EXPIRED_KEY = 'kisan360-session-expired';
+export function markSessionExpired(): void {
+  try { sessionStorage.setItem(SESSION_EXPIRED_KEY, '1'); } catch { /* ignore */ }
+}
+export function hasSessionExpired(): boolean {
+  try { return sessionStorage.getItem(SESSION_EXPIRED_KEY) === '1'; }
+  catch { return false; }
+}
+export function clearSessionExpired(): void {
+  try { sessionStorage.removeItem(SESSION_EXPIRED_KEY); } catch { /* ignore */ }
+}

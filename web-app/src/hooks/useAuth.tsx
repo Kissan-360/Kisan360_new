@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
+import { useState, useEffect, useContext, createContext, ReactNode, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth, firebaseReady } from '../firebaseConfig';
 import { User, onAuthStateChanged, signOut as fbSignOut } from 'firebase/auth';
-import { API_URL, DemoUser, DemoRole, getDemoToken, getDemoUser, setDemoAuth, clearDemoAuth, isDemoSession, setFirebaseToken, clearFirebaseToken } from '../lib/api';
+import { API_URL, DemoUser, DemoRole, getDemoToken, getDemoUser, setDemoAuth, clearDemoAuth, isDemoSession, getFirebaseToken, setFirebaseToken, clearFirebaseToken, markSessionExpired } from '../lib/api';
 
 type AuthUser = (User & { demo?: boolean; role?: string; district?: string }) | DemoUser | null;
 
@@ -44,6 +45,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [firebaseLoading, setFirebaseLoading] = useState(true);
   const [demoUser, setDemoUser] = useState<DemoUser | null>(() => getDemoUser());
+  const navigate = useNavigate();
+  // Guards the unauthorized redirect: one dead session → one redirect, never
+  // a loop (the login page itself must not bounce).
+  const redirectingRef = useRef(false);
+
+  const handleUnauthorized = useCallback(() => {
+    if (redirectingRef.current) return;
+    // Only act when we actually hold a session: a token-less 401 (public
+    // calls, logged-out pages) is normal and must not kick anyone.
+    if (!getDemoToken() && !getFirebaseToken()) return;
+    const path = window.location.pathname;
+    if (path === '/login' || path === '/register' || path === '/') return;
+    redirectingRef.current = true;
+    try {
+      clearFirebaseToken();
+      clearDemoAuth();
+    } catch { /* ignore */ }
+    setDemoUser(null);
+    // Belt and suspenders: the navigation state below can lose a race with
+    // ProtectedRoute's own redirect (the cleared user re-renders mid-flight
+    // and its {from} replace lands last, dropping sessionExpired). The
+    // sessionStorage marker is synchronous, so it always survives.
+    markSessionExpired();
+    // Carry both flags: the notice AND where to resume after re-login.
+    navigate('/login', { replace: true, state: { sessionExpired: true, from: path } });
+  }, [navigate]);
+
+  useEffect(() => {
+    window.addEventListener('kisan360:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('kisan360:unauthorized', handleUnauthorized);
+  }, [handleUnauthorized]);
+
+  // A fresh login re-arms the guard: a later expiry must redirect again.
+  // (Covers demo sign-in AND Firebase sign-in — any non-null user.)
+  useEffect(() => {
+    if (demoUser || firebaseUser) redirectingRef.current = false;
+  }, [demoUser, firebaseUser]);
 
   useEffect(() => {
     // If Firebase didn't initialize (missing config, network error), skip
