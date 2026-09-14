@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { API_URL, apiFetch } from '../lib/api';
 import { PrimaryButton } from '../components/ui/kit';
 import { useTranslation } from '../i18n';
@@ -13,6 +14,7 @@ const CROP_OPTIONS = [
 
 const DiseaseDetection = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [cropType, setCropType] = useState('');
@@ -20,6 +22,14 @@ const DiseaseDetection = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Advisory crop vocabulary differs ('Maize' vs 'Corn (Maize)'): map what
+  // overlaps, omit the rest — advisory works fine with no preset.
+  const advisoryLink = () => {
+    const map: Record<string, string> = { 'Corn (Maize)': 'Maize', Tomato: 'Tomato' };
+    const c = map[cropType];
+    return c ? `/advisory?crop=${encodeURIComponent(c)}` : '/advisory';
+  };
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -183,7 +193,25 @@ const DiseaseDetection = () => {
                 <span>{error}</span>
               </div>
               {/unavailable|offline|not running|Failed to detect/i.test(error) && (
-                <p className="mt-1.5 text-xs text-amber-700">{t('disease.offlineNote')}</p>
+                <>
+                  <p className="mt-1.5 text-xs text-amber-700">{t('disease.offlineNote')}</p>
+                  {/* The detector is down — but the photo and crop still have
+                      somewhere useful to go. Every button below works today. */}
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      onClick={() => navigate('/grade-crop')}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-800 px-4 py-2.5 text-xs font-bold text-white hover:bg-emerald-900 transition-colors min-h-[44px]"
+                    >
+                      {t('disease.gradeInstead')}
+                    </button>
+                    <button
+                      onClick={() => navigate(advisoryLink())}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-white px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition-colors min-h-[44px]"
+                    >
+                      {t('disease.askAdvice')}
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           )}
@@ -191,11 +219,6 @@ const DiseaseDetection = () => {
           {/* Results */}
           {result && (
             <div className="space-y-4">
-              {result.source === 'groq-vision' && (
-                <p className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-2.5 text-xs text-sky-800">
-                  {t('disease.cloudFallback')}
-                </p>
-              )}
               <div className="border border-emerald-200 rounded-2xl p-5 bg-emerald-50/60">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">

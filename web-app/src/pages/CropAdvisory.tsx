@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { API_URL, apiFetch } from '../lib/api';
 import { PrimaryButton } from '../components/ui/kit';
@@ -19,8 +20,14 @@ const cropEmoji: Record<string, string> = {
 const CropAdvisory = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState<'select' | 'result'>('select');
-  const [selectedCrop, setSelectedCrop] = useState('');
+  // Deep link (e.g. from disease detection): ?crop=Maize preselects when it
+  // matches a known pill, otherwise ignored — never a broken state.
+  const [selectedCrop, setSelectedCrop] = useState(() => {
+    const q = searchParams.get('crop') || '';
+    return COMMON_CROPS.includes(q) ? q : '';
+  });
   // District picker, not free text: the farmer taps instead of typing, and
   // the backend always receives a real Maharashtra district. Defaults to the
   // farmer's own district; GPS can only snap to the list, never inject text.
