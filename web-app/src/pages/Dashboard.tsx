@@ -51,7 +51,9 @@ const useMarketPulse = (crop: string): PulseFeed => {
     } catch (e: any) {
       setError(e?.message || 'Could not reach the market feed. Is the backend running?');
     }
-  }, []);
+    // crop in deps: without it the first crop sticks forever (the effect
+    // below re-runs on crop change but would call this stale closure).
+  }, [crop]);
 
   useEffect(() => { load(); }, [load, crop]);
 

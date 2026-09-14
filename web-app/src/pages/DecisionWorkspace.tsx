@@ -1023,7 +1023,7 @@ const DecideStage: React.FC<{
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-bold text-stone-900">Pathway options</p>
-            <span className="text-[11px] text-stone-400">All options are evidence-graded, not guaranteed outcomes</span>
+            <span className="text-[11px] text-stone-400">{t('decision.evidenceNote')}</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {pathways.map((p: any) => {

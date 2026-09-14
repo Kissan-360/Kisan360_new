@@ -495,7 +495,7 @@ const NetRealization = () => {
               <Card className={`p-5 ${result.decision.withoutWith.differencePerQuintal > 0 ? 'border-amber-300 bg-amber-50/60' : 'border-emerald-200 bg-emerald-50/40'}`}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="font-semibold text-stone-900">What if you just chased the highest price?</p>
-                  <Chip color="sky">estimated decision difference — not an income guarantee</Chip>
+                  <Chip color="sky">{t('netRealization.decisionDifference')}</Chip>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3 text-sm">
                   <div className="rounded-xl border border-amber-200 bg-white p-4">
@@ -575,10 +575,9 @@ const NetRealization = () => {
                 anomalies can leave one usable mandi). No fake comparison. */}
             {result.rankedMandis.length < 2 && (
               <Card className="p-4 border-amber-300 bg-amber-50/70">
-                <p className="text-sm font-semibold text-amber-900 flex items-center gap-2"><Info size={16} className="shrink-0" />Only one mandi has usable price evidence right now.</p>
+                <p className="text-sm font-semibold text-amber-900 flex items-center gap-2"><Info size={16} className="shrink-0" />{t('netRealization.onlyOneMandi')}</p>
                 <p className="text-sm text-amber-800 mt-1">
-                  A comparison — and the best-market recommendation — needs at least two costed mandis.
-                  The economics above are correct for this market alone; the ranking data may be limited today (live feed anomaly or cache gap).
+                  {t('netRealization.onlyOneMandiDesc')}
                 </p>
               </Card>
             )}
@@ -825,11 +824,11 @@ const NetRealization = () => {
 
             {/* Phase 6 companion: which assumptions actually matter for THIS
                 recommendation — read off the stress-test results, no generic filler. */}
-            {result && result.decision && result.decision.robustness && result.decision.robustness.scenarios.length > 0 && (
+            {result && result.decision && result.decision.robustness && (result.decision.robustness.scenarios || []).length > 0 && (
               <Card className="p-5">
                 <p className="font-semibold text-stone-900 text-sm">Stress test — which assumptions matter</p>
                 <ul className="text-sm text-stone-600 mt-2 space-y-1.5">
-                  {result.decision.robustness.scenarios.map((s) => {
+                  {(result.decision.robustness.scenarios || []).map((s) => {
                     const label = s.scenario === 'quantity_doubled' ? `Selling double the quantity (${result.quantityQuintals * 2} q)`
                       : s.scenario === 'transport_cost_+50pct' ? 'Transport costing 50% more'
                       : s.scenario === 'mandi_prices_fall_5pct' ? 'Mandi prices slipping 5%'

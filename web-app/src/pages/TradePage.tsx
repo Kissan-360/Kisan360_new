@@ -151,6 +151,7 @@ const inr = (n: number) => `₹${(n ?? 0).toLocaleString('en-IN', { maximumFract
 // comes from the deterministic engine for the lot's crop+district. No
 // fabricated uplift — if the engine is unreachable we show the deal only.
 const PaymentOutcome = ({ payment, lot }: { payment: Payment; lot?: Lot }) => {
+  const { t } = useTranslation();
   const dealPerQ = payment.quantityQuintals && payment.quantityQuintals > 0
     ? Math.round((payment.amount / payment.quantityQuintals) * 100) / 100 : 0;
   const [bench, setBench] = useState<{ bestNet: number; bestMandi: string } | null>(null);
@@ -184,7 +185,7 @@ const PaymentOutcome = ({ payment, lot }: { payment: Payment; lot?: Lot }) => {
           {bench ? (
             <>
               <p className="font-semibold text-stone-800 mt-0.5">{inr(bench.bestNet)}/q</p>
-              <p className="text-[11px] text-stone-400">engine's estimated best net today ({bench.bestMandi}) — an observation, not a guaranteed price</p>
+              <p className="text-[11px] text-stone-400">{t('trade.engineEstimated', { mandi: bench.bestMandi })}</p>
             </>
           ) : <p className="text-xs text-stone-400 mt-0.5">unavailable</p>}
         </div>
@@ -202,8 +203,8 @@ const PaymentOutcome = ({ payment, lot }: { payment: Payment; lot?: Lot }) => {
       {bench && delta != null && (
         <p className={`text-sm mt-3 ${beat ? 'text-emerald-800' : 'text-amber-800'}`}>
           {beat
-            ? <>The accepted offer landed <strong>{inr(delta)}/q above</strong> today's market reference.</>
-            : <>The accepted offer is <strong>{inr(Math.abs(delta))}/q below</strong> today's market reference. References are market observations, not guaranteed transaction prices — offers can sit below reference for many honest reasons, and prices move.</>}
+            ? t('trade.aboveReference', { delta: Math.abs(delta) })
+            : t('trade.belowReference', { delta: Math.abs(delta) })}
         </p>
       )}
       {failed && <p className="text-xs text-stone-400 mt-1">Benchmark context unavailable right now — the deal figures above are the transaction record.</p>}
@@ -218,6 +219,7 @@ const PaymentOutcome = ({ payment, lot }: { payment: Payment; lot?: Lot }) => {
 // Kisan360 supplies the reference; the farmer makes the decision.
 const OFFER_BAND_PCT = 3;
 const OfferBenchmark = ({ offer, lot, buyer }: { offer: Offer; lot?: Lot; buyer?: Buyer }) => {
+  const { t } = useTranslation();
   const [bench, setBench] = useState<{ net: number; mandi: string } | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -266,7 +268,7 @@ const OfferBenchmark = ({ offer, lot, buyer }: { offer: Offer; lot?: Lot; buyer?
         </span>
       </div>
       <p className="text-[11px] text-stone-500 mt-1.5">
-        Reference = estimated farmer net at the best mandi today, after farmer-borne costs — a market observation, not a guaranteed transaction price.
+        {t('trade.referenceNote')}
       </p>
       {status === 'BELOW REFERENCE' && factors.length === 0 && (
         <p className="text-[11px] text-stone-500 mt-1">Not enough structured information on this lot or buyer to explain the difference — ask the buyer directly.</p>
@@ -305,7 +307,7 @@ const LotEconomics = ({ lot, offers }: { lot: Lot; offers: Offer[] }) => {
   if (failed || !bench) return null;
   const qty = myQtyQ(lot);
   const benchmarkTotal = Math.round(bench.net * qty * 100) / 100;
-  const lotOffers = offers.filter(o => String(o.lotId) === String(lot._id) && !['REJECTED', 'WITHDRAWN', 'EXPIRED'].includes(o.status));
+  const lotOffers = offers.filter(o => lotIdOf(o) !== '' && lotIdOf(o) === String(lot._id) && !['REJECTED', 'WITHDRAWN', 'EXPIRED'].includes(o.status));
   const bestOfferQ = lotOffers.length ? Math.max(...lotOffers.map(o => o.offeredPricePerQuintal)) : null;
   const gap = bestOfferQ != null ? Math.round((bestOfferQ - bench.net) * 100) / 100 : null;
   return (
@@ -357,7 +359,7 @@ const DecisionReceipt = ({ ctx, payments, lots, onDownload, onNewSale }: { ctx: 
 // same figures everywhere, single source of truth.
 const ReceiptDoc = ({ ctx, payments, lots }: { ctx: DecisionContext; payments: Payment[]; lots: Lot[] }) => {
   const p = payments[0];
-  const lot = lots.find(l => l._id === String(p.lotId));
+  const lot = lots.find(l => l._id === lotIdOf(p));
   const dealPerQ = p.quantityQuintals && p.quantityQuintals > 0 ? Math.round((p.amount / p.quantityQuintals) * 100) / 100 : 0;
   const diff = ctx.net != null && ctx.net > 0 ? Math.round((dealPerQ - ctx.net) * 100) / 100 : null;
   return (
@@ -385,7 +387,7 @@ const ReceiptDoc = ({ ctx, payments, lots }: { ctx: DecisionContext; payments: P
         </div>
       </div>
       <p className="text-[11px] text-stone-500 mt-3">
-        Price source: {ctx.source === 'agmarknet_live' ? 'live AGMARKNET pull' : 'cached AGMARKNET snapshot'} at decision time · lot {lot ? lot._id.slice(-6) : (p.lotId && typeof p.lotId === 'object' ? String(p.lotId._id) : String(p.lotId ?? 'unknown')).slice(-6)} · recorded {new Date(p.createdAt).toLocaleDateString('en-IN')}. The estimate was a market observation — the deal is the outcome.
+        Price source: {ctx.source === 'agmarknet_live' ? 'live AGMARKNET pull' : 'cached AGMARKNET snapshot'} at decision time · lot {lot ? lot._id.slice(-6) : (p.lotId && typeof p.lotId === 'object' ? String(p.lotId._id) : String(p.lotId ?? 'unknown')).slice(-6)} · recorded {fmtDate(p.createdAt)}. The estimate was a market observation — the deal is the outcome.
       </p>
     </>
   );
@@ -472,17 +474,38 @@ function myQtyQ(lot: Lot): number {
   return q;
 }
 
+// Lot id, unwrapped: GET /offers and GET /payments return lotId POPULATED
+// ({_id, crop, ...}), so String() on it gives "[object Object]" and never
+// matches. Every lot-lookup in this file must go through here.
+function lotIdOf(o: { lotId: any }): string {
+  if (o.lotId == null) return '';
+  if (typeof o.lotId === 'object') return String(o.lotId._id || '');
+  return String(o.lotId);
+}
+
+// Never render "Invalid Date": a missing or malformed timestamp shows a dash.
+function fmtDate(iso: any): string {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return Number.isNaN(+d) ? '—' : d.toLocaleDateString('en-IN');
+}
+function fmtDateTime(iso: any): string {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return Number.isNaN(+d) ? '—' : d.toLocaleString('en-IN');
+}
+
 // Decision history (Phase 12): what previous deals landed vs the market
 // reference at that time. Turns the one-time calculator into a continuous
 // intelligence loop. No invented rows — only actual transaction records.
-const DecisionHistory = ({ payments, lots }: { payments: Payment[]; lots: Lot[] }) => {
+const DecisionHistory = ({ payments, lots, onReceipt }: { payments: Payment[]; lots: Lot[]; onReceipt?: (p: Payment) => void }) => {
   const settled = payments.filter((p) => p.status === 'RELEASED');
   const [refs, setRefs] = useState<Record<string, { ref: number; mandi: string } | 'fail'>>({});
 
   useEffect(() => {
     let alive = true;
     settled.forEach((p) => {
-      const lot = lots.find((l) => l._id === String(p.lotId));
+      const lot = lots.find((l) => l._id === lotIdOf(p));
       const district = lot?.district
         || (p.lotId && typeof p.lotId === 'object' ? p.lotId.district : undefined);
       if (!district) {
@@ -500,8 +523,11 @@ const DecisionHistory = ({ payments, lots }: { payments: Payment[]; lots: Lot[] 
       });
     });
     return () => { alive = false; };
+    // Re-run when the SET of settled deals changes (ids + statuses), not just
+    // the payment count: HELD→RELEASED keeps the count but adds a settled
+    // deal, and the reference must appear immediately after collecting money.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [payments.length]);
+  }, [payments.map((p) => `${p._id}:${p.status}`).join('|')]);
 
   if (settled.length === 0) return null;
   return (
@@ -523,7 +549,7 @@ const DecisionHistory = ({ payments, lots }: { payments: Payment[]; lots: Lot[] 
               <div className="flex flex-wrap items-center justify-between gap-3 border border-stone-100 rounded-xl px-4 py-3 text-sm">
                 <div>
                   <p className="font-medium text-stone-900">{p.crop} · <Quantity value={p.quantityQuintals} unit="quintals" /> → {p.buyerName}</p>
-                  <p className="text-xs text-stone-400">{new Date(p.createdAt).toLocaleDateString('en-IN')} · accepted at {inr(dealPerQ)}/q</p>
+                  <p className="text-xs text-stone-400">{fmtDate(p.createdAt)} · accepted at {inr(dealPerQ)}/q</p>
                 </div>
                 <div className="text-right">
                   {ref != null && diff != null ? (
@@ -535,6 +561,14 @@ const DecisionHistory = ({ payments, lots }: { payments: Payment[]; lots: Lot[] 
                     </>
                   ) : (
                     <p className="text-xs text-stone-400">reference unavailable right now</p>
+                  )}
+                  {onReceipt && (
+                    <button
+                      onClick={() => onReceipt(p)}
+                      className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 min-h-[32px]"
+                    >
+                      <Receipt size={12} /> Receipt
+                    </button>
                   )}
                 </div>
               </div>
@@ -844,10 +878,6 @@ const TradePage = () => {
   // sales looked broken.
   const byCreatedDesc = (a: { createdAt: string }, b: { createdAt: string }) =>
     +new Date(b.createdAt || 0) - +new Date(a.createdAt || 0);
-  // lotId arrives POPULATED ({_id, crop, …}) from GET /offers and
-  // GET /payments — String() on that gives "[object Object]", so unwrap it.
-  const lotIdOf = (o: { lotId: any }) =>
-    o.lotId == null ? '' : typeof o.lotId === 'object' ? String(o.lotId._id || '') : String(o.lotId);
   const activeLot = [...lots].sort(byCreatedDesc)[0] || null;
   const activeLotOffers = activeLot
     ? offers.filter(o => lotIdOf(o) !== '' && lotIdOf(o) === String(activeLot._id)).sort(byCreatedDesc)
@@ -1264,7 +1294,7 @@ const TradePage = () => {
                         {lot.moisturePct != null ? ` · moisture ${lot.moisturePct}% (declared)` : ''}
                         {lot.damagePct != null ? ` · damage ${lot.damagePct}% (declared)` : ''}
                         · assay {lot.assayStatus || 'pending'}
-                        · {new Date(lot.createdAt).toLocaleDateString('en-IN')}
+                        · {fmtDate(lot.createdAt)}
                       </p>
                       <LotEconomics lot={lot} offers={offers} />
                     </div>
@@ -1347,8 +1377,8 @@ const TradePage = () => {
                 // never an opaque score.
                 const reasons: string[] = [];
                 if (offerLot) {
-                  if (b.crops.some(c => c.toLowerCase() === offerLot.crop.toLowerCase())) reasons.push(`buys ${offerLot.crop}`);
-                  if (b.districts.some(d => d.toLowerCase() === (offerLot.district || '').toLowerCase())) reasons.push(`serves ${offerLot.district}`);
+                  if ((b.crops || []).some(c => c.toLowerCase() === offerLot.crop.toLowerCase())) reasons.push(`buys ${offerLot.crop}`);
+                  if ((b.districts || []).some(d => d.toLowerCase() === (offerLot.district || '').toLowerCase())) reasons.push(`serves ${offerLot.district}`);
                   reasons.push(`accepts ${b.minQuantityQuintals} q (${otherUnits(b.minQuantityQuintals, 'quintals')})+ lots`);
                 }
                 const selected = offerBuyer?.id === b.id;
@@ -1409,7 +1439,7 @@ const TradePage = () => {
                       )}
                       <p className="text-[11px] text-stone-400 mt-1.5 flex items-start gap-1">
                         <MapPin size={11} className="mt-0.5 shrink-0" />
-                        <span>Serves: {b.districts.join(', ')} · crops: {b.crops.join(', ')} · {b.paymentTermsLabel}</span>
+                        <span>Serves: {(b.districts || []).join(', ')} · crops: {(b.crops || []).join(', ')} · {b.paymentTermsLabel}</span>
                       </p>
                       {!buyerView && offerLot && (
                         <button
@@ -1465,7 +1495,7 @@ const TradePage = () => {
               <PrimaryButton type="submit" icon={Send} disabled={!offerBuyer}>Send offer</PrimaryButton>
             </div>
             {ctx && ctx.net != null && ctx.net > 0 && (
-              <p className="text-[11px] text-stone-400 mt-2">Engine benchmark from your decision: est. {inr(ctx.net)}/q net at {ctx.mandi} — an observation, not a guaranteed price.</p>
+              <p className="text-[11px] text-stone-400 mt-2">{t('trade.engineBenchmarkNote', { net: inr(ctx.net), mandi: ctx.mandi })}</p>
             )}
           </form>
         )}
@@ -1496,7 +1526,7 @@ const TradePage = () => {
                             : `→ ${o.buyerName}`}
                         </p>
                         <p className="text-xs text-stone-400">
-                          {inr(o.offeredPricePerQuintal)}/q · total {inr(o.amount)} · {new Date(o.createdAt).toLocaleDateString('en-IN')}
+                          {inr(o.offeredPricePerQuintal)}/q · total {inr(o.amount)} · {fmtDate(o.createdAt)}
                         </p>
                         {o.notes && (
                           <p className="text-xs text-stone-500 mt-1 break-words italic">“{o.notes}”</p>
@@ -1540,7 +1570,7 @@ const TradePage = () => {
                     {o.history && o.history.length > 0 && (
                       <p className="text-[11px] text-stone-400 mt-2">
                         {o.history.map((h, i) => (
-                          <span key={i}>{i > 0 && ' → '}{h.status}{h.at ? ` (${new Date(h.at).toLocaleDateString('en-IN')})` : ''}</span>
+                          <span key={i}>{i > 0 && ' → '}{h.status}{h.at ? ` (${fmtDate(h.at)})` : ''}</span>
                         ))}
                       </p>
                     )}
@@ -1623,7 +1653,7 @@ const TradePage = () => {
                             <Wallet size={14} className="text-emerald-600 shrink-0" />
                             {p.crop} → {p.buyerName} · <span className="font-semibold text-emerald-700">{inr(p.amount)}</span>
                           </p>
-                          <p className="text-xs text-stone-400">{new Date(p.createdAt).toLocaleString('en-IN')}</p>
+                          <p className="text-xs text-stone-400">{fmtDateTime(p.createdAt)}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <Chip color={p.status === 'RELEASED' ? 'emerald' : cancelled ? 'red' : p.status === 'HELD' ? 'amber' : 'stone'}>{p.status}</Chip>
@@ -1657,12 +1687,12 @@ const TradePage = () => {
                         })}
                         {cancelled && <span className="ml-2 text-[11px] text-red-500 font-medium">cancelled</span>}
                       </div>
-                      {p.status === 'RELEASED' && <PaymentOutcome payment={p} lot={lots.find(l => l._id === String(p.lotId))} />}
+                      {p.status === 'RELEASED' && <PaymentOutcome payment={p} lot={lots.find(l => l._id === lotIdOf(p))} />}
                       {p.history && p.history.length > 0 && (
                         <ul className="mt-3 space-y-0.5">
                           {p.history.map((h, i) => (
                             <li key={i} className="text-[11px] text-stone-400">
-                              {h.to} · {new Date(h.at).toLocaleString('en-IN')}{h.note ? ` — ${h.note}` : ''}
+                              {h.to} · {fmtDateTime(h.at)}{h.note ? ` — ${h.note}` : ''}
                             </li>
                           ))}
                         </ul>
@@ -1722,11 +1752,11 @@ const TradePage = () => {
                 </div>
                 <div className="flex items-start gap-2 border border-stone-100 rounded-lg px-3 py-2">
                   <MapPin size={14} className="text-emerald-600 mt-0.5 shrink-0" />
-                  <span className="text-stone-600"><span className="font-medium text-stone-800">Serves:</span> {buyerDetail.districts.join(', ')}</span>
+                  <span className="text-stone-600"><span className="font-medium text-stone-800">Serves:</span> {(buyerDetail.districts || []).join(', ')}</span>
                 </div>
                 <div className="flex items-start gap-2 border border-stone-100 rounded-lg px-3 py-2">
-                  <CropIcon cropName={buyerDetail.crops[0] || ''} size={14} className="text-emerald-600 mt-0.5 shrink-0" />
-                  <span className="text-stone-600"><span className="font-medium text-stone-800">Buys:</span> {buyerDetail.crops.join(', ')}</span>
+                  <CropIcon cropName={(buyerDetail.crops || [])[0] || ''} size={14} className="text-emerald-600 mt-0.5 shrink-0" />
+                  <span className="text-stone-600"><span className="font-medium text-stone-800">Buys:</span> {(buyerDetail.crops || []).join(', ')}</span>
                 </div>
               </div>
               {!buyerView && (
@@ -1805,7 +1835,7 @@ const TradePage = () => {
         )}
 
         {!buyerView && showReceipt && activePayment && <DecisionReceipt ctx={ctx!} payments={[activePayment]} lots={lots} onDownload={printReceipt} onNewSale={startNewSale} />}
-        {!buyerView && <div ref={historyRef} className="scroll-mt-6"><DecisionHistory payments={payments} lots={lots} /></div>}
+        {!buyerView && <div ref={historyRef} className="scroll-mt-6"><DecisionHistory payments={payments} lots={lots} onReceipt={(p) => setReceiptModal(p)} /></div>}
 
         {/* ── Help & grievances (HLD P1: Raise → Open → Under Review → Resolved) ── */}
         <Card className="p-5">

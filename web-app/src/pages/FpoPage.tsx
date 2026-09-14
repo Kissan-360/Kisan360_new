@@ -428,7 +428,7 @@ const FpoPage = () => {
                 <div className="mt-4 pt-4 border-t border-white/20">
                   <p className="text-4xl font-bold">+{inr(result.totals.upliftTotal)}</p>
                   <p className="text-emerald-100 text-xs mt-1">+{result.totals.upliftPct}% vs selling separately</p>
-                  <p className="text-emerald-100/70 text-[11px] mt-1.5">Estimated pooled difference — not an income guarantee.</p>
+                  <p className="text-emerald-100/70 text-[11px] mt-1.5">{t('fpo.upliftNote')}</p>
                 </div>
               </div>
 
@@ -624,6 +624,26 @@ const FpoPage = () => {
                 )}
               </PrimaryButton>
             </div>
+          </div>
+        )}
+
+        {/* ── No pooled buyer? Never a dead end: carry the pooled size to Trade ── */}
+        {result && !coverage?.bestActionable && (
+          <div className="sticky bottom-4 z-30 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-stone-200 bg-white/95 backdrop-blur shadow-xl px-3 sm:px-4 py-2.5">
+            <p className="text-xs font-semibold text-stone-600">
+              {t('fpo.noActionable')}
+            </p>
+            <PrimaryButton
+              onClick={() => navigate(
+                `/trade?prefill=1&crop=${encodeURIComponent(crop)}&district=${encodeURIComponent(district)}` +
+                `&quantity=${result.pool.pooledQuantity}`
+              )}
+              icon={ArrowRight}
+              className="text-xs"
+              ariaLabel={t('fpo.continueTrade')}
+            >
+              {t('fpo.continueTrade')}
+            </PrimaryButton>
           </div>
         )}
       </div>
