@@ -1865,7 +1865,7 @@ const TradePage = () => {
               <div>
                 <label className="block text-xs font-medium text-stone-500 mb-1">Issue type</label>
                 <select className="input-field" value={gCategory} onChange={(e) => setGCategory(e.target.value)}>
-                  {GRIEVANCE_CATEGORIES.map((c) => <option key={c}>{c.replace(/_/g, ' ')}</option>)}
+                  {GRIEVANCE_CATEGORIES.map((c) => <option key={c} value={c}>{c.replace(/_/g, ' ')}</option>)}
                 </select>
               </div>
               <div>
