@@ -5,7 +5,7 @@ import { auth } from '../firebaseConfig';
 import { updateProfile } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n';
-import FarmerAvatar from '../components/FarmerAvatar';
+import { FarmerPhoto } from '../components/FarmerAvatar';
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -87,7 +87,7 @@ const ProfilePage = () => {
 
       <div className="card p-6 lg:p-8">
         <div className="flex items-center gap-5 mb-8">
-          <FarmerAvatar size={64} square className="shadow-md shadow-emerald-200/50" />
+          <FarmerPhoto size={64} square className="shadow-md shadow-emerald-200/50" />
           <div className="min-w-0 flex-1">
             <h2 className="text-xl font-bold text-stone-900">{user.displayName || user.email?.split('@')[0] || '—'}</h2>
             <p className="text-sm text-stone-500">{user.email}</p>

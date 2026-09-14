@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useTranslation, LANGUAGES, type Lang } from '../i18n';
 import NotificationBell from './NotificationBell';
 import SearchOverlay from './SearchOverlay';
-import FarmerAvatar from './FarmerAvatar';
+import { FarmerPhoto } from './FarmerAvatar';
 import { AgmarkPill, DemoBadge } from './brand';
 
 /* Enterprise topbar — reference: AGMARKNET status pill, demo badge, bell,
@@ -90,7 +90,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
               {user?.district ? `${user.district} District` : t('topbar.farmerAccount')}
             </p>
           </div>
-          <FarmerAvatar size={36} className="ring-2 ring-emerald-200" />
+          <FarmerPhoto size={36} className="ring-2 ring-emerald-200" />
         </Link>
       </div>
 

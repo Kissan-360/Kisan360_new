@@ -48,3 +48,30 @@ const FarmerAvatar: React.FC<{ size?: number; square?: boolean; className?: stri
 );
 
 export default FarmerAvatar;
+
+// FarmerPhoto — the ORIGINAL demo-farmer photo (public/farmer-ramesh-256.png,
+// downscaled from the 1024px original) layered over the SVG fallback. If the
+// photo ever fails to load, the <img> removes itself and the illustration
+// beneath shows — the avatar slot never renders broken.
+export const FarmerPhoto: React.FC<{ size?: number; square?: boolean; className?: string }> = ({
+  size = 36,
+  square = false,
+  className = '',
+}) => (
+  <span
+    className={`relative inline-flex shrink-0 select-none ${square ? 'rounded-2xl' : 'rounded-full'} ${className}`}
+    style={{ width: size, height: size }}
+  >
+    <FarmerAvatar size={size} square={square} />
+    <img
+      src="/farmer-ramesh-256.png"
+      alt="Demo farmer"
+      width={size}
+      height={size}
+      className={`absolute inset-0 h-full w-full object-cover ${square ? 'rounded-2xl' : 'rounded-full'}`}
+      onError={(e) => {
+        e.currentTarget.remove();
+      }}
+    />
+  </span>
+);
