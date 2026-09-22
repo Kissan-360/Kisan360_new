@@ -32,7 +32,18 @@ const ProtectedRoute = () => {
   if (loading) return <div className="flex items-center justify-center h-screen text-stone-400">Loading...</div>; // Note: This is outside I18nProvider, so it stays English
   // Remember where the judge was headed (e.g. a shared /net-realization link)
   // so Login can explain the bounce and send them straight there after login.
-  if (!user) return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
+  // Existing state (e.g. sessionExpired from a dead-session redirect) is
+  // preserved — otherwise the guard's own redirect would overwrite it and the
+  // notice would never show (the cleared user re-renders mid-navigation).
+  if (!user) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ ...((location.state as Record<string, unknown> | null) || {}), from: location.pathname + location.search }}
+      />
+    );
+  }
   return (
     <Layout>
       <Outlet />

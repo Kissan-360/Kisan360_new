@@ -11,6 +11,7 @@ import {
 } from '../components/ui/kit';
 import ThreadedComments, { type CommentNode } from '../components/ThreadedComments';
 import { useTranslation } from '../i18n';
+import { useAuth } from '../hooks/useAuth';
 import { apiFetch, API_URL } from '../lib/api';
 
 interface Topic {
@@ -90,15 +91,13 @@ const CommunityPage: React.FC = () => {
   const [selectedData, setSelectedData] = useState<{ topic: Topic | null; comments: CommentNode[] }>({ topic: null, comments: [] });
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailVersion, setDetailVersion] = useState(0);
-  const [userId] = useState<string>(() => {
-    try {
-      const stored = localStorage.getItem('kisan360-uid');
-      if (stored) return stored;
-    } catch { /* ignore */ }
-    const id = `u-${Math.random().toString(36).slice(2, 8)}`;
-    try { localStorage.setItem('kisan360-uid', id); } catch { /* ignore */ }
-    return id;
-  });
+  // Ownership must come from the verified session, exactly as the server
+  // derives it. The old browser-local `kisan360-uid` was a random `u-xxxxxx`
+  // that could never equal the token uid (demo-farmer / Firebase uid), so
+  // edit + delete controls would never appear on posts the user had just
+  // written — and any userId sent in the body is now ignored by the API.
+  const { user } = useAuth();
+  const userId = user?.uid ?? '';
 
   const [formTitle, setFormTitle] = useState('');
   const [formCategory, setFormCategory] = useState<Topic['category']>('general_farming');

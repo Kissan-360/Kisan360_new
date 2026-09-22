@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const intentsConfig = require('../data/chatIntents.json');
 const marketCache = require('../services/marketCache');
+const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || 'http://localhost:8001';
@@ -541,7 +542,9 @@ async function executeIntent({ message, language, context = {}, classification, 
   }
 }
 
-router.post('/', async (req, res) => {
+// Requires a verified token: this route spends a metered GROQ_API_KEY on
+// every request, and was previously an open proxy to anyone who could reach it.
+router.post('/', authenticateUser, async (req, res) => {
   try {
     const language = normalizeLanguage(req.body?.language);
     const mode = normalizeMode(req.body?.mode);
