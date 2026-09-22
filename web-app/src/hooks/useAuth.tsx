@@ -4,7 +4,25 @@ import { auth, firebaseReady } from '../firebaseConfig';
 import { User, onAuthStateChanged, signOut as fbSignOut } from 'firebase/auth';
 import { API_URL, DemoUser, DemoRole, getDemoToken, getDemoUser, setDemoAuth, clearDemoAuth, isDemoSession, getFirebaseToken, setFirebaseToken, clearFirebaseToken, markSessionExpired } from '../lib/api';
 
-type AuthUser = (User & { demo?: boolean; role?: string; district?: string }) | DemoUser | null;
+/**
+ * Profile fields screens read off `user` no matter which side produced it.
+ *
+ * `AuthUser` is a union of Firebase's `User` and our persisted `DemoUser`, and
+ * for a long time only the Firebase member carried `displayName`/`email` — so
+ * every read of those off the union was an error (18 of them). In practice
+ * `normalizeDemoUser` has always supplied `displayName` + `email` for demo
+ * logins ("Keep existing UI reads working"), while demo sessions genuinely
+ * have no `emailVerified`/`metadata`. Declaring the union this way describes
+ * what is actually on screen instead of forcing casts at each call site.
+ */
+type ProfileFields = {
+  displayName?: string | null;
+  email?: string | null;
+  emailVerified?: boolean;
+  metadata?: { creationTime?: string; lastSignInTime?: string };
+};
+
+type AuthUser = ((User & { demo?: boolean; role?: string; district?: string }) | DemoUser) & ProfileFields | null;
 
 type AuthContextType = {
   user: AuthUser;
@@ -129,7 +147,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       getToken
         .call(firebaseUser)
         .then((t: string) => { if (!cancelled) setFirebaseToken(t); })
-        .catch(() => {});
+        .catch((err: any) => console.warn('[Kisan360] Firebase ID token refresh failed — API may use a stale token:', err?.message || err));
     };
     sync();
     const timer = setInterval(sync, 50 * 60 * 1000);

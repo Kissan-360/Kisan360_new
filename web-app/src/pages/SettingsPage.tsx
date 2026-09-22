@@ -135,7 +135,7 @@ const SettingsPage = () => {
       <div className="card p-6 lg:p-8">
         <h2 className="font-semibold text-stone-800 mb-3">{t('settings.account')}</h2>
         <p className="text-sm text-stone-600 mb-4">
-          {user ? t('settings.signedInAs', { email: user.email }) : t('settings.notSignedIn')}
+          {user ? t('settings.signedInAs', { email: user.email || '—' }) : t('settings.notSignedIn')}
         </p>
         <div className="flex flex-wrap gap-3">
           <button

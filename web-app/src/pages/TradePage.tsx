@@ -477,7 +477,7 @@ function myQtyQ(lot: Lot): number {
 // Lot id, unwrapped: GET /offers and GET /payments return lotId POPULATED
 // ({_id, crop, ...}), so String() on it gives "[object Object]" and never
 // matches. Every lot-lookup in this file must go through here.
-function lotIdOf(o: { lotId: any }): string {
+function lotIdOf(o: { lotId?: any }): string {
   if (o.lotId == null) return '';
   if (typeof o.lotId === 'object') return String(o.lotId._id || '');
   return String(o.lotId);
@@ -565,7 +565,7 @@ const DecisionHistory = ({ payments, lots, onReceipt }: { payments: Payment[]; l
                   {onReceipt && (
                     <button
                       onClick={() => onReceipt(p)}
-                      className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 min-h-[32px]"
+                      className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 min-h-[36px]"
                     >
                       <Receipt size={12} /> Receipt
                     </button>
@@ -1495,7 +1495,7 @@ const TradePage = () => {
               <PrimaryButton type="submit" icon={Send} disabled={!offerBuyer}>Send offer</PrimaryButton>
             </div>
             {ctx && ctx.net != null && ctx.net > 0 && (
-              <p className="text-[11px] text-stone-400 mt-2">{t('trade.engineBenchmarkNote', { net: inr(ctx.net), mandi: ctx.mandi })}</p>
+              <p className="text-[11px] text-stone-400 mt-2">{t('trade.engineBenchmarkNote', { net: inr(ctx.net), mandi: ctx.mandi ?? '' })}</p>
             )}
           </form>
         )}
@@ -1622,7 +1622,7 @@ const TradePage = () => {
               if (held) act(`/payments/${held._id}/simulate-failure`, 'Payment cancelled — buyer did not pay. Raise an issue below; the authority workflow takes over.');
             }}
             amount={releasedPayments.length > 0 ? releasedPayments.reduce((sum, p) => sum + (p.amount || 0), 0) : undefined}
-            farmerName={user?.displayName}
+            farmerName={user?.name}
           />
         ) : (
         /* ── Buyer view: Payments with release controls ── */
@@ -1727,7 +1727,7 @@ const TradePage = () => {
                 </div>
                 <div className="flex items-center gap-1 shrink-0 self-start">
                   <span className={`badge ${TIER_CLS[buyerDetail.trustTier] || TIER_CLS.SELF_DECLARED} inline-flex items-center gap-1.5`}>
-                    {(TIER_ICONS[buyerDetail.trustTier] || AlertTriangle) && React.createElement(TIER_ICONS[buyerDetail.trustTier] || AlertTriangle, { size: 12 })}
+                    {React.createElement(TIER_ICONS[buyerDetail.trustTier] || AlertTriangle, { size: 12 })}
                     {buyerDetail.tierLabel}
                   </span>
                   <button className="p-1.5 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100" onClick={() => setBuyerDetail(null)} aria-label="Close buyer details">

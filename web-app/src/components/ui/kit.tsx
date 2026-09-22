@@ -325,9 +325,10 @@ export function StaggerList({ children, className = '', delay = 0 }: { children:
   );
 }
 
-export function StaggerItem({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+export function StaggerItem({ children, className = '', id }: { children: React.ReactNode; className?: string; id?: string }) {
   return (
     <motion.div
+      id={id}
       variants={{
         hidden: { opacity: 0, y: 16, scale: 0.97 },
         visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 300, damping: 24 } },
@@ -358,7 +359,7 @@ export function PrimaryButton({ children, onClick, icon: Icon, className = '', t
   );
 }
 
-export function GhostButton({ children, onClick, className = '', type = 'button', disabled = false, ariaLabel }: { children: React.ReactNode; onClick?: () => void; className?: string; type?: 'button' | 'submit'; disabled?: boolean; ariaLabel?: string }) {
+export function GhostButton({ children, onClick, icon: Icon, className = '', type = 'button', disabled = false, ariaLabel }: { children: React.ReactNode; onClick?: () => void; icon?: IconType; className?: string; type?: 'button' | 'submit'; disabled?: boolean; ariaLabel?: string }) {
   return (
     <motion.button
       type={type}
@@ -370,6 +371,7 @@ export function GhostButton({ children, onClick, className = '', type = 'button'
       onClick={onClick}
       className={`inline-flex items-center gap-2 rounded-xl border border-stone-300 bg-white text-stone-700 font-semibold px-5 py-2.5 hover:bg-stone-50 transition-colors min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
     >
+      {Icon && <Icon size={18} />}
       {children}
     </motion.button>
   );
