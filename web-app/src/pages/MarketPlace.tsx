@@ -300,7 +300,7 @@ const MarketIntelligence = () => {
               const open = trendFor === r.market;
               return (
                 <div key={r.market} className={`card p-5 border-t-[3px] ${isTop ? 'border-t-amber-500 border-emerald-300 ring-1 ring-emerald-200' : 'border-t-emerald-500'}`}>
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1.5">
                     <div className="min-w-0">
                       <p className="font-semibold text-stone-900 truncate">{r.market}</p>
                       <p className="text-xs text-stone-400">{r.district || r.state} · {r.variety || r.crop}</p>

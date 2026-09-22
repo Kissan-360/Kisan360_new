@@ -368,9 +368,14 @@ const Dashboard = () => {
             <p className="text-sm font-bold text-stone-900 mt-0.5 truncate">
               {top ? top.market : '—'} Mandi:{' '}
               <span className="text-amber-700 tabular">₹{inr(top?.modalPrice)}</span>
-              <span className="text-[11px] font-medium text-stone-400"> {t('dashboard.activeTrading.modal')}</span>
+            </p>
+            {/* Units + provenance live on their own line: inline after the price
+                they ran past the card edge on laptop (ellipsis ate the whole
+                “/q · Cached” hint — the alignment probe caught it as spill). */}
+            <p className="text-[11px] font-medium text-stone-400 mt-0.5 truncate">
+              {t('dashboard.activeTrading.modal')}
               {pulse.meta?.fallback && (
-                <span className="text-[11px] font-medium text-amber-600"> · {t('netRealization.cached')}</span>
+                <span className="text-amber-600"> · {t('netRealization.cached')}</span>
               )}
             </p>
           </div>
