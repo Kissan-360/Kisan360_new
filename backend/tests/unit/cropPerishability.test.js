@@ -3,6 +3,12 @@ const perishability = require('../../src/services/cropPerishability');
 // ── Reference dates for deterministic testing ─────────────────────────────
 const TODAY = new Date('2026-09-10T12:00:00Z');
 
+// parseHarvestDate's future-date guard reads the REAL clock (it accepts no
+// reference date), so a future fixture cannot be a constant. Hardcoding one was
+// a time bomb: '2026-09-15' really was in the future when written, and the day
+// that date passed, both tests below silently began failing.
+const FUTURE_ISO = new Date(Date.now() + 48 * 3600 * 1000).toISOString().slice(0, 10);
+
 describe('cropPerishability', () => {
   // ── Profile lookup ─────────────────────────────────────────────────────
 
@@ -61,7 +67,7 @@ describe('cropPerishability', () => {
     });
 
     test('rejects future date', () => {
-      const r = perishability.parseHarvestDate('2026-09-15');
+      const r = perishability.parseHarvestDate(FUTURE_ISO);
       expect(r.ok).toBe(false);
       expect(r.error).toBe('future_date');
     });
@@ -261,7 +267,7 @@ describe('cropPerishability', () => {
     test('rejects future harvest date', () => {
       const r = perishability.assessPerishability({
         crop: 'Onion',
-        harvestDate: '2026-09-15',
+        harvestDate: FUTURE_ISO,
         plannedStorageDays: 5,
       });
       expect(r.harvestDateValid).toBe(false);

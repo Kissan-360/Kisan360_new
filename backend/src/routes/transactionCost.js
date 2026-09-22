@@ -160,16 +160,21 @@ router.get('/transaction-cost', authenticateUser, async (req, res) => {
       });
     }
 
+    // These three datasets are WRAPPED objects ({ meta, requirements|options|
+    // providers }) — only buyers.json was unwrapped here. So buyerRequirements
+    // was an object where an array was expected, and `.filter` threw on every
+    // request (500), while the two below silently reported their capability as
+    // absent because an object has no `.length`. Unwrap all three, matching the
+    // convention already used in services/pathwayDecision.js.
     let qualityMatches = [];
-    const buyerRequirements = require('../data/buyerRequirements.json');
-    const reqs = buyerRequirements.filter(r => r.crop === crop);
-    for (const req of reqs) {
+    const reqs = (require('../data/buyerRequirements.json').requirements) || [];
+    for (const req of reqs.filter(r => r.crop === crop)) {
       const matches = !req.minGrade || (lot.grade && lot.grade !== 'Unassessed' && lot.grade <= req.minGrade);
       qualityMatches.push({ requirement: req, matches });
     }
 
-    const storageOptions = require('../data/storageOptions.json');
-    const logisticsProviders = require('../data/transportProviders.json');
+    const storageOptions = (require('../data/storageOptions.json').options) || [];
+    const logisticsProviders = (require('../data/transportProviders.json').providers) || [];
     const trendAvailable = deduped.length > 0;
 
     const marketObservation = rankedMarkets.length > 0 ? {
