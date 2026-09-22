@@ -162,7 +162,7 @@ const FpoPage = () => {
       // while the calc is waking. Retry both with backoff (max 2 retries).
       if ((res.status === 503 || res.status === 502) && _retryCount < 2) {
         const delay = 3000 * (_retryCount + 1);
-        console.log(`[Kisan360] FPO pool ${res.status} (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
+        console.warn(`[Kisan360] FPO pool ${res.status} (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
         await new Promise(r => setTimeout(r, delay));
         return compute(undefined, _retryCount + 1);
       }
@@ -181,7 +181,7 @@ const FpoPage = () => {
     } catch {
       // Network error — retry once if calculator might be waking up
       if (_retryCount < 1) {
-        console.log('[Kisan360] FPO pool network error, retrying in 3s...');
+        console.warn('[Kisan360] FPO pool network error, retrying in 3s...');
         await new Promise(r => setTimeout(r, 3000));
         return compute(undefined, _retryCount + 1);
       }

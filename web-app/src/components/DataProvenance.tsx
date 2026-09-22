@@ -44,7 +44,7 @@ export const DataProvenance: React.FC<ProvenanceProps> = ({ crop, district, quan
     apiFetch(`${API_URL}/market/coverage`)
       .then(r => r.json())
       .then(j => { if (alive && j.success) setCoverage(j); })
-      .catch(() => {})
+      .catch((err) => console.warn('[Kisan360] Market coverage fetch failed — provenance chip hidden:', err?.message || err))
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
   }, []);
