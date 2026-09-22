@@ -70,6 +70,6 @@ Both payment outcomes are demoable from a single device, and a backend restart s
 
 ## E. Suite status
 
-- **Backend: 546/546 tests, 22/22 suites** (jest) — includes the 8 trading-channel contract tests.
+- **Backend: 607/607 tests, 26/26 suites** (jest) — includes the 8 trading-channel contract tests and the 30 auth-guard/ownership tests (`authGuards.test.js`).
 - **Frontend:** `npm run build` clean (TypeScript + Vite).
 - **ML model:** trained locally (TF 2.20 CPU), exported to TF.js, browser-verified (`loadGraphModel` → `[1,18]` softmax); reproducible via `backend/scripts/train_freshness.py`.

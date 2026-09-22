@@ -15,10 +15,10 @@
 
 | Suite | Tests | Status |
 |-------|-------|--------|
-| Node (Jest) — 19 unit + 3 integration | 546 | PASS |
+| Node (Jest) — 20 unit + 6 integration | 607 | PASS |
 | Python (pytest) — net_realization | 29 | PASS |
 | Frontend build (Vite) | 1 build | PASS |
-| Total | **575** | **ALL GREEN** |
+| Total | **636** | **ALL GREEN** |
 
 ## Core Journey
 
@@ -94,7 +94,7 @@ bash scripts/demo-reset.sh
 
 **READY FOR DEMO.**
 
-All 575 tests pass (546 backend + 29 calculator). All fallback paths verified. All documentation complete.
+All 636 tests pass (607 backend + 29 calculator). All fallback paths verified. All documentation complete.
 
 **Number legend (why counts differ across docs):** the on-disk snapshot is the FULL pull
 (250 rows · 33 crops · 71 markets, 2026-09-11); per-crop slices are smaller

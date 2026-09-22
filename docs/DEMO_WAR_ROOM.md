@@ -289,8 +289,9 @@ rendering. Backend 44/44 tests green, web production build green.
 
 Min-TRL-6 sweep — every claim below was verified live, not inferred:
 
-1. **Test recount:** backend **546/546 (22/22 suites)** + calculator **29/29** = 575 total.
-   `DEMO_READINESS.md` (said 538) synced; `SIH26132_COVERAGE.md` (546) was already right.
+1. **Test recount (re-verified 2026-09-22):** backend **607/607 (26/26 suites)** + calculator **29/29** = 636 total.
+   `DEMO_READINESS.md`, `SIH26132_COVERAGE.md` and `README.md` all synced to this number.
+   Earlier sprints: 546 (2026-09-12) → 577 (logger/transaction-cost fixes) → 607 (+30 auth-guard tests).
 2. **Snapshot re-stamp:** on-disk pull is **250 rows · 33 crops · 71 markets, retrieved
    2026-09-11**, serving **LIVE** (`/cache-status`). Docs saying "85 rows / 2026-09-08"
    updated; number legend added to READINESS (snapshot total vs per-crop slice vs
