@@ -46,11 +46,30 @@ the three services above.
   50s+. **Warm all three** (hit each `/health`) before the demo starts, and
   don't let the tab idle out mid-event. A local `dev-up.sh` stack stays the
   zero-risk primary; the cloud URL is for "can I open this now?" questions.
-- **Rate limits:** global 300 req/15min per IP, 30 demo-logins/15min. Fine for
-  a judge clicking around — don't script-loop logins from stage Wi-Fi.
+- **Rate limits:** global 300 req/15min per IP, 30 demo-logins/15min —
+  **on automatically in production**, off locally so the demo, the browser
+  harness and load tests stay unthrottled. Fine for a judge clicking around;
+  don't script-loop logins from stage Wi-Fi. Setting `KISAN_RATE_LIMIT=off`
+  disables it (the only legitimate use is a pilot day behind one shared hotspot
+  — set it back afterwards). `trust proxy` is enabled, so the limit is per
+  client, not per proxy.
 - **Secrets:** never commit `.env`. Atlas SRV goes only into Render's vault.
   `DEMO_JWT_SECRET` is auto-generated once and persists (sessions survive
   redeploys).
+
+## Optional environment switches
+
+Set these in Render → service → Environment, then redeploy (they are read at
+boot, not at build).
+
+| Variable | Default | What it does |
+|---|---|---|
+| `KISAN_RATE_LIMIT` | on in production | `off` disables the per-IP limiter. See the note above before using it. |
+| `KISAN_RATE_LIMIT_MAX` / `KISAN_RATE_LIMIT_AUTH_MAX` | 300 / 30 per 15 min | Tighten or relax the two budgets. |
+| `KISAN_TELEMETRY` | **off** | `on` records pilot milestones (session, decision, lot, offer, settlement, grievance, pool) and exposes them at `GET /api/ops/metrics` (admin token). Identity-free by construction — no uid, name, phone, price or free text, ever. **Nothing is collected while this is off.** |
+
+Using telemetry for real sessions: see **`docs/PILOT_KIT.md`** (consent script,
+session script, ledger) and `docs/PILOT_RESULTS.md` (where the numbers go).
 
 ## Troubleshooting
 
@@ -61,3 +80,4 @@ the three services above.
 | "same-origin /api" console warning | `VITE_API_URL` unset at build | Set env var → manual deploy (it's baked at build time) |
 | Lots/payments vanish on API restart | Mongo unreachable | Check `MONGODB_URI` + Atlas network access; app boots degraded without it by design |
 | Calculator `/health` times out | Requirements drift | Must use `requirements-calc.txt` (torch stack will not fit free tier) |
+| `429` on every request from different people | `trust proxy` lost or the fleet sits behind another hop | `app.set('trust proxy', 1)` must stay in `server.js`; without it every visitor shares one bucket |
