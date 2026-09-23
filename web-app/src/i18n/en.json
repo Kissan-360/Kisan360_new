@@ -1293,5 +1293,8 @@
   "cropCategory.fruit": "Fruits",
   "cropCategory.spice": "Spices",
   "cropCategory.fibre": "Fibre",
-  "cropCategory.cash": "Cash Crops"
+  "cropCategory.cash": "Cash Crops",
+  "offline.title": "You're offline.",
+  "offline.detail": "Showing the last market prices your phone saved.",
+  "offline.asOf": "As of"
 }

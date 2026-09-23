@@ -1293,5 +1293,8 @@
   "cropCategory.fruit": "फल",
   "cropCategory.spice": "मसाले",
   "cropCategory.fibre": "रेशा फसलें",
-  "cropCategory.cash": "नकदी फसलें"
+  "cropCategory.cash": "नकदी फसलें",
+  "offline.title": "आप ऑफ़लाइन हैं।",
+  "offline.detail": "आपके फ़ोन में सहेजे गए पिछले बाज़ार भाव दिखा रहे हैं।",
+  "offline.asOf": "अंतिम अपडेट:"
 }

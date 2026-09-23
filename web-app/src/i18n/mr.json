@@ -1293,5 +1293,8 @@
   "cropCategory.fruit": "फळे",
   "cropCategory.spice": "मसाले",
   "cropCategory.fibre": "तंतूमय पिके",
-  "cropCategory.cash": "नगदी पिके"
+  "cropCategory.cash": "नगदी पिके",
+  "offline.title": "तुम्ही ऑफलाइन आहात.",
+  "offline.detail": "तुमच्या फोनमध्ये साठवलेले शेवटचे बाजार भाव दाखवत आहोत.",
+  "offline.asOf": "शेवटचे अद्ययावत:"
 }
