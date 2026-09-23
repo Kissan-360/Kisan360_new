@@ -36,6 +36,7 @@ appears.
 | The deployed frontend calls the deployed API | same probe → `frontendWiring` check (a stale build pointing at localhost is a classic trap) |
 | Cold-start reality is measured, not hoped away | probe distinguishes `live` / `cold-start` / `sleeping-or-failed` / `not-deployed`; `.github/workflows/keepalive.yml` warms the two judge-facing services on a quota-aware schedule (two always-warm services would exceed Render's 750 free hours) |
 | It stays working | `.github/workflows/deployed-smoke.yml` runs the journey daily at 09:35 IST and uploads the artifact |
+| The **screens** work, not just the API | `docs/evidence/journey-smoke.json` — `scripts/journey-smoke.cjs` drives real Chrome through the farmer's UI: login → decision (it reads the ₹ figure off the screen) → creates a lot through the form → shows the buyer controls, and fails on any console error or page exception. 7/7 steps |
 
 **Gap:** free-tier cold starts are inherent. The keepalive reduces them for the
 two services a judge touches; the calculator is warmed on demand rather than kept

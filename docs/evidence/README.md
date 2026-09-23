@@ -12,6 +12,7 @@ names the target it observed and when.
 | `security-audit.md` | hand-written summary of `npm audit` runs | Which advisories are the request path and which are transitive — with the deliberate decision not to force major upgrades before a demo |
 | `pilot-metrics.json` | `curl …/api/ops/metrics` (see `docs/PILOT_KIT.md` §6) | What real participants actually did: sessions, devices, districts, completed steps. **Only exists after a real pilot** — telemetry is off by default |
 | `a11y-<lang>.json` | `node scripts/a11y.cjs --lang <lang>` | WCAG 2.1 A/AA sweep of every route with axe-core in headless Chrome — rule, impact and element selectors per route, in en/mr/hi |
+| `journey-smoke.json` | `node scripts/journey-smoke.cjs` | The **UI** half of the sale journey driven like a farmer: login → decision (the ₹ figure is read off the screen) → lot created through the form → buyer controls present, with any console error or page exception recorded |
 
 ## Regenerate
 
@@ -21,7 +22,12 @@ node scripts/smoke-deployed.cjs --timeout 150
 node scripts/loadtest.cjs                 # ~90 s; writes one file per target
 node scripts/a11y.cjs                     # needs the dev server on :3000
 node scripts/a11y.cjs --lang mr && node scripts/a11y.cjs --lang hi
+node scripts/journey-smoke.cjs            # drives the UI end to end; needs :3000 + :5000
 ```
+
+`journey-smoke` creates a real lot through the farmer's form, so re-seed after
+running it (`POST /api/auth/demo/seed` against a live backend, or
+`bash scripts/demo-reset.sh`).
 
 After a deploy, the sweep is worth re-running against the public URL, because a
 build can ship a regression the local run never sees:
@@ -30,8 +36,9 @@ build can ship a regression the local run never sees:
 node scripts/a11y.cjs --base https://kisan360-web.onrender.com --fail-on serious
 ```
 
-Both write here and exit non-zero on a finding. `.github/workflows/deployed-smoke.yml`
-runs them daily at 09:35 IST and uploads the same files as build artifacts.
+Every script here writes its file and exits non-zero on a finding.
+`.github/workflows/deployed-smoke.yml` runs the two deploy scripts daily at
+09:35 IST and uploads the same files as build artifacts.
 
 ## Reading a cold start
 
