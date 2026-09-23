@@ -375,7 +375,7 @@ const Dashboard = () => {
             <p className="text-[11px] font-medium text-stone-400 mt-0.5 truncate">
               {t('dashboard.activeTrading.modal')}
               {pulse.meta?.fallback && (
-                <span className="text-amber-600"> · {t('netRealization.cached')}</span>
+                <span className="text-amber-700"> · {t('netRealization.cached')}</span>
               )}
             </p>
           </div>

@@ -55,7 +55,7 @@ export function Card({
 /* ------------------------------------------------------- SectionLabel - */
 /* The signature [10-11px uppercase tracking] eyebrow label. */
 export function SectionLabel({ children, tone = 'emerald', className = '' }: { children: React.ReactNode; tone?: 'emerald' | 'stone' | 'amber'; className?: string }) {
-  const tones = { emerald: 'text-emerald-700', stone: 'text-stone-400', amber: 'text-amber-700' };
+  const tones = { emerald: 'text-emerald-700', stone: 'text-stone-500', amber: 'text-amber-700' };
   return (
     <p className={`text-[11px] font-bold uppercase tracking-[0.14em] ${tones[tone]} ${className}`}>
       {children}

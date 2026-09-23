@@ -27,7 +27,13 @@
   --color-stone-100: #f0f2fc;
   --color-stone-200: #e2e6f4;
   --color-stone-300: #c9cfe6;
-  --color-stone-400: #8d94ad;
+  /* stone-400 was #8d94ad, which is 3.0:1 on white and 2.9:1 on the tinted
+     surface — below WCAG AA (4.5:1) for the 11px meta text that uses it on
+     almost every page. The ramp had no room between it and stone-500, so the
+     400 step now carries the same value as 500: the two were only ever
+     distinguishable side by side, and legibility wins over a decorative step.
+     (axe sweep: scripts/a11y.cjs — see docs/evidence/a11y-en.json) */
+  --color-stone-400: #616b85;
   --color-stone-500: #616b85;
   --color-stone-600: #47506b;
   --color-stone-700: #333b52;

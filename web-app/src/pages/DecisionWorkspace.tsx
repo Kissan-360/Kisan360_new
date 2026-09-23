@@ -392,7 +392,7 @@ const DecisionWorkspace = () => {
           </div>
           <button
             onClick={() => navigate('/grade-crop')}
-            className="inline-flex items-center -my-2 py-2 text-xs font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-2"
+            className="inline-flex items-center -my-2 py-2 text-xs font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
           >
             Or grade with AGMARK standards first →
           </button>

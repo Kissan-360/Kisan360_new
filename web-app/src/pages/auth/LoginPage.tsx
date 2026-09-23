@@ -203,7 +203,7 @@ const LoginPage = () => {
           <div className="mt-6">
             <div className="flex items-center gap-3">
               <div className="h-px bg-stone-200 flex-1" />
-              <span className="text-xs text-stone-400 uppercase tracking-wider font-medium">{t('login.divider')}</span>
+              <span className="text-xs text-stone-500 uppercase tracking-wider font-medium">{t('login.divider')}</span>
               <div className="h-px bg-stone-200 flex-1" />
             </div>
             <p className="text-xs text-stone-400 text-center mt-3">
@@ -234,7 +234,7 @@ const LoginPage = () => {
                     )}
                   </div>
                   <div className="text-sm font-medium text-stone-800 mt-2">{label}</div>
-                  <div className="text-[11px] text-stone-400 leading-tight mt-0.5">{desc}</div>
+                  <div className="text-[11px] text-stone-500 leading-tight mt-0.5">{desc}</div>
                 </button>
                 );
               })}

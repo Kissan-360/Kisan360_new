@@ -518,14 +518,14 @@ export default function PathwayPage() {
           <SectionLabel>{t('pathways.yourLot')}</SectionLabel>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3 items-end">
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">{t('pathways.crop')}</label>
-              <select className="input-field" value={crop} onChange={e => setCrop(e.target.value)}>
+              <label htmlFor="pw-crop" className="block text-xs font-medium text-stone-500 mb-1">{t('pathways.crop')}</label>
+              <select id="pw-crop" className="input-field" value={crop} onChange={e => setCrop(e.target.value)}>
                 {activeCrops.map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">{t('pathways.district')}</label>
-              <select className="input-field" value={district} onChange={e => setDistrict(e.target.value)}>
+              <label htmlFor="pw-district" className="block text-xs font-medium text-stone-500 mb-1">{t('pathways.district')}</label>
+              <select id="pw-district" className="input-field" value={district} onChange={e => setDistrict(e.target.value)}>
                 {REGIONS.map(region => {
                   const regionDistricts = MAHARASHTRA_DISTRICTS.filter(d => d.region === region);
                   return (
@@ -539,12 +539,12 @@ export default function PathwayPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">{t('pathways.quantity')}</label>
-              <input className="input-field" type="number" value={quantity} onChange={e => setQuantity(e.target.value)} min="0.1" step="1" />
+              <label htmlFor="pw-quantity" className="block text-xs font-medium text-stone-500 mb-1">{t('pathways.quantity')}</label>
+              <input id="pw-quantity" className="input-field" type="number" value={quantity} onChange={e => setQuantity(e.target.value)} min="0.1" step="1" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">{t('pathways.grade')}</label>
-              <select className="input-field" value={grade} onChange={e => setGrade(e.target.value)}>
+              <label htmlFor="pw-grade" className="block text-xs font-medium text-stone-500 mb-1">{t('pathways.grade')}</label>
+              <select id="pw-grade" className="input-field" value={grade} onChange={e => setGrade(e.target.value)}>
                 <option value="">Unassessed</option>
                 <option value="A">A</option>
                 <option value="B">B</option>

@@ -11,6 +11,7 @@ names the target it observed and when.
 | `loadtest*.json` | `node scripts/loadtest.cjs` | Capacity under concurrent load, one file per target: the API alone (`loadtest-health`), the calculator alone (`loadtest-net-realization`), and the mixed journey (`loadtest`) |
 | `security-audit.md` | hand-written summary of `npm audit` runs | Which advisories are the request path and which are transitive — with the deliberate decision not to force major upgrades before a demo |
 | `pilot-metrics.json` | `curl …/api/ops/metrics` (see `docs/PILOT_KIT.md` §6) | What real participants actually did: sessions, devices, districts, completed steps. **Only exists after a real pilot** — telemetry is off by default |
+| `a11y-<lang>.json` | `node scripts/a11y.cjs --lang <lang>` | WCAG 2.1 A/AA sweep of every route with axe-core in headless Chrome — rule, impact and element selectors per route, in en/mr/hi |
 
 ## Regenerate
 
@@ -18,6 +19,15 @@ names the target it observed and when.
 node scripts/probe-deploy.cjs --timeout 150
 node scripts/smoke-deployed.cjs --timeout 150
 node scripts/loadtest.cjs                 # ~90 s; writes one file per target
+node scripts/a11y.cjs                     # needs the dev server on :3000
+node scripts/a11y.cjs --lang mr && node scripts/a11y.cjs --lang hi
+```
+
+After a deploy, the sweep is worth re-running against the public URL, because a
+build can ship a regression the local run never sees:
+
+```bash
+node scripts/a11y.cjs --base https://kisan360-web.onrender.com --fail-on serious
 ```
 
 Both write here and exit non-zero on a finding. `.github/workflows/deployed-smoke.yml`

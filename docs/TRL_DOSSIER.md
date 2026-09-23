@@ -52,14 +52,15 @@ awake, so its first call can still take 30–60 s.
 | Security posture is known | `docs/evidence/security-audit.md`: `npm audit` 17 → 10 by clearing the request-path advisories (express, body-parser, qs); the remainder are transitive through `firebase-admin` and need a breaking major — deliberately not forced before a demo |
 | Exposure checked | anonymous `/api/diagnostics` no longer reveals the Atlas cluster host (regression-tested); write routes require auth (community/grade/chat gap closed); rate limiting is env-gated by deployment, with `trust proxy` on so limits are per-client |
 | Works offline | service worker caches the shell (3.85 MB; model and TF.js deliberately excluded) with an honest offline banner |
+| Accessibility is measured, not assumed | `docs/evidence/a11y-{en,mr,hi}.json` — axe-core (WCAG 2.1 A/AA) over all 20 routes in three languages: **20/20 routes clean in each**. The first sweep found 28 violations (missing accessible names on 15 selects and 2 inputs, a widget role wrapped around buttons on the trade cards, and a grey that could not reach 4.5:1); all are fixed and re-measured |
 | Docs cannot drift from the machine | `node scripts/evidence.cjs --check`, wired into CI |
 
 **Gaps, stated plainly:**
 
 - No third-party uptime or error tracking — monitoring is our own probe plus
   GitHub Actions schedules, so an alert reaches a maintainer, not an on-call.
-- Accessibility is automated (axe across the route table), not yet validated with
-  users of assistive technology.
+- Accessibility is automated (axe, 20/20 routes clean in en/mr/hi) — a moving
+  baseline, not a substitute for testing with users of assistive technology.
 - The load test ran against a **local** stack. The free-tier deployment is a
   single worker, so deployed throughput is what one instance gives — the
   measured numbers are an upper-bound shape, not a deployed guarantee.
@@ -114,6 +115,7 @@ node scripts/probe-deploy.cjs --timeout 150   # three services live? how fresh?
 node scripts/smoke-deployed.cjs --timeout 150 # sell a crop on the public URL, both outcomes
 cd backend && npx jest --runInBand       # 638 tests
 node scripts/preflight.cjs --fast        # the project's own gate
+node scripts/a11y.cjs                    # WCAG A/AA sweep, every route (needs :3000)
 ```
 
 Then open `https://kisan360-web.onrender.com` and run the flagship scenario

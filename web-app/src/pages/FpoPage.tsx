@@ -263,7 +263,7 @@ const FpoPage = () => {
           }
         />
 
-        <p className="text-xs text-amber-600 flex items-start gap-1.5">
+        <p className="text-xs text-amber-700 flex items-start gap-1.5">
           <Info size={13} className="mt-0.5 shrink-0" />
           {t('fpo.demoNote')}
         </p>
@@ -535,7 +535,7 @@ const FpoPage = () => {
                     <p className="text-[11px] text-stone-400">{t('fpo.fartherAtBulkRate', { market: result.pooledBestMandi })}</p>
                   </div>
                   <div className="rounded-lg border border-amber-200 bg-white p-3">
-                    <p className="text-[11px] uppercase tracking-wider text-amber-600">{t('fpo.extraTransport')}</p>
+                    <p className="text-[11px] uppercase tracking-wider text-amber-700">{t('fpo.extraTransport')}</p>
                     <p className="text-lg font-bold text-amber-700 mt-0.5">{inr(Math.abs(result.logistics.savedPerQuintal), 2)}/q</p>
                     <p className="text-[11px] text-stone-400">
                       {t('fpo.worthItBecause', {

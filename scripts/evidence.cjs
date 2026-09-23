@@ -214,8 +214,11 @@ function scanDocs(facts) {
           if (!raw) continue;
           const sliceExtra = check.allowSlice ? check.allowSlice(line) : [];
           const allowed = check.dateField || check.oneOf || [check.expected];
-          const value = check.dateField ? raw : num(raw);
-          if (!check.dateField && sliceExtra.includes(value)) continue;
+          // Dates compare as strings, counts as numbers. Coercing a date to a
+          // number yields NaN, which matches nothing — a checker that silently
+          // cannot fail is worse than no checker.
+          const value = typeof check.expected === 'number' ? num(raw) : raw;
+          if (typeof value === 'number' && sliceExtra.includes(value)) continue;
           if (allowed.includes(value)) continue;
           findings.push({ file, line: i + 1, check: check.label, word: raw.trim(), text: line.trim().slice(0, 140) });
         }

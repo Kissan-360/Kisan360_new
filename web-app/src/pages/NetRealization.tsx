@@ -320,14 +320,14 @@ const NetRealization = () => {
         <form onSubmit={compute} className="card p-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 items-start [&>div]:min-w-0">
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.crop')}</label>
-              <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
+              <label htmlFor="nr-crop" className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.crop')}</label>
+              <select id="nr-crop" className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
                 {cropOptions.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.district')}</label>
-              <select className="input-field" value={district} onChange={(e) => setDistrict(e.target.value)}>
+              <label htmlFor="nr-district" className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.district')}</label>
+              <select id="nr-district" className="input-field" value={district} onChange={(e) => setDistrict(e.target.value)}>
                 {REGIONS.map(region => {
                   const regionDistricts = MAHARASHTRA_DISTRICTS.filter(d => d.region === region);
                   return (
@@ -341,8 +341,9 @@ const NetRealization = () => {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.quantity')}</label>
+              <label htmlFor="nr-quantity" className="block text-xs font-medium text-stone-500 mb-1">{t('netRealization.quantity')}</label>
               <input
+                id="nr-quantity"
                 className="input-field"
                 type="number"
                 min="0.1"

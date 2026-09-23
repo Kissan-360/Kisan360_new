@@ -42,7 +42,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
         >
           <Menu size={20} />
         </button>
-        <span className="hidden xl:block text-sm text-stone-400 tabular">
+        <span className="hidden xl:block text-sm text-stone-500 tabular">
           {new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
         </span>
         {/* Global search — opens the SearchOverlay command palette */}
@@ -53,9 +53,9 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
           aria-label={t('topbar.searchPlaceholder')}
           aria-haspopup="dialog"
         >
-          <Search size={15} className="text-stone-400 flex-shrink-0" />
-          <span className="text-[13px] text-stone-400 truncate flex-1 min-w-0">{t('topbar.searchPlaceholder')}</span>
-          <kbd className="hidden lg:inline-flex shrink-0 items-center rounded-md border border-stone-200 bg-white px-1.5 py-0.5 text-[10px] font-bold text-stone-400">Ctrl K</kbd>
+          <Search size={15} className="text-stone-500 flex-shrink-0" />
+          <span className="text-[13px] text-stone-500 truncate flex-1 min-w-0">{t('topbar.searchPlaceholder')}</span>
+          <kbd className="hidden lg:inline-flex shrink-0 items-center rounded-md border border-stone-200 bg-white px-1.5 py-0.5 text-[10px] font-bold text-stone-500">Ctrl K</kbd>
         </button>
       </div>
 

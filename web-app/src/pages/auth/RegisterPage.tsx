@@ -184,7 +184,7 @@ const RegisterPage = () => {
           <div className="mt-6">
             <div className="flex items-center gap-3">
               <div className="h-px bg-stone-200 flex-1" />
-              <span className="text-xs text-stone-400 uppercase tracking-wider font-medium">{t('login.divider')}</span>
+              <span className="text-xs text-stone-500 uppercase tracking-wider font-medium">{t('login.divider')}</span>
               <div className="h-px bg-stone-200 flex-1" />
             </div>
             <p className="text-xs text-stone-400 text-center mt-3">
