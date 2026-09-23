@@ -83,5 +83,5 @@ One policy per concern, defined once, imported by every consumer:
   them from the token (pinned by tests in `authGuards.test.js`, including the
   spoofed-`authorName` case).
 
-Behavior preserved: 608/608 backend tests, typecheck clean, build clean,
+Behavior preserved: 638/638 backend tests, typecheck clean, build clean,
 preflight DEMO-READY with live contract green.

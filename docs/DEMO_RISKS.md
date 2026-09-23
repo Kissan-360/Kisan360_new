@@ -39,7 +39,7 @@
 ### R4: AGMARKNET API down
 - **Probability:** Medium (external government API)
 - **Impact:** Live prices unavailable — falls back to cached snapshot
-- **Mitigation:** Cached snapshot has 85 rows from 2026-09-08. Labeled "cached" in UI.
+- **Mitigation:** Cached snapshot has 388 rows from 2026-09-23. Labeled "cached" in UI.
 - **Recovery:** None needed — cached data serves the demo. Manual refresh when API recovers.
 - **Verification:** `curl http://localhost:5000/api/market/cache-status`
 
@@ -72,7 +72,7 @@
 - **Recovery:** None needed — templates work fine for demo
 
 ### R9: Market snapshot stale (>24h old)
-- **Probability:** Low (snapshot from 2026-09-11; 250 rows · 33 crops · 71 markets)
+- **Probability:** Low (snapshot from 2026-09-23; 388 rows · 33 crops · 105 markets)
 - **Impact:** Prices labeled "STALE" in UI
 - **Mitigation:** Snapshot is real data. "STALE" label is honest — not a bug.
 - **Recovery:** Run `node scripts/refresh-prices.js` when AGMARKNET is available
@@ -121,7 +121,7 @@
 4. ✅ `/health` returns `OK` or `DEGRADED` (not `DOWN`)
 5. ✅ Net-realization returns ranked mandis
 6. ✅ Demo seed creates canonical fixtures
-7. ✅ Cached snapshot loaded (250 rows · 33 crops · 71 markets, 2026-09-11)
+7. ✅ Cached snapshot loaded (388 rows · 33 crops · 105 markets, 2026-09-23)
 8. ✅ Farmer login works
 9. ✅ Buyer login works
 10. ✅ Offer flow works (create → accept → payment)

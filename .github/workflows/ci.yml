@@ -8,8 +8,11 @@ name: ci
 # you can make about tests that ran by hand on one laptop, so this makes every
 # push answer for itself.
 #
-#   backend    jest — 617 tests, 27 suites (spawns a real server on a free port
-#              against mongodb-memory-server; needs no external database)
+#   backend    jest — the full suite (spawns a real server on a free port
+#              against mongodb-memory-server; needs no external database). The
+#              count is a measurement, not a memory: this job writes
+#              docs/evidence/test-count.json, and scripts/evidence.cjs --check
+#              then fails the build if any doc states a different number.
 #   web        tsc --noEmit + vite build (typecheck became a real gate when
 #              typescript was installed; before that it silently did nothing)
 #   calculator python -m unittest — stdlib only, so no pytest dependency is
@@ -59,7 +62,25 @@ jobs:
         run: npm ci
 
       - name: Test
-        run: npm test
+        run: npx jest --runInBand --json --outputFile=../docs/evidence/test-count.raw.json
+
+      # The docs quote this number. Recording it here is what makes
+      # `evidence.cjs --check` (below) able to catch a stale claim instead of a
+      # reviewer having to notice one.
+      - name: Record the test count
+        run: node ../scripts/evidence.cjs --record-tests ../docs/evidence/test-count.raw.json
+
+      - name: Docs must agree with the artifacts
+        run: node ../scripts/evidence.cjs --check
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-backend
+          path: |
+            docs/evidence/test-count.json
+            docs/evidence/facts.json
+          if-no-files-found: warn
 
   web:
     name: web (typecheck + build)
@@ -141,10 +162,13 @@ jobs:
       - name: Run the project's own fast gate
         run: node scripts/preflight.cjs --fast
 
+      - name: Docs must agree with the artifacts
+        run: node scripts/evidence.cjs --check
+
       - name: Summarise
         run: |
           {
             echo "### ci — all green"
             echo ""
-            echo "backend jest · web typecheck + build · calculator unittest · preflight --fast"
+            echo "backend jest · web typecheck + build · calculator unittest · preflight --fast · evidence --check"
           } >> "$GITHUB_STEP_SUMMARY"

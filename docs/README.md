@@ -28,7 +28,7 @@ Sixteen docs live in `docs/`. This is the order to read them in, by role.
 ## Rules the docs follow
 
 - Prices are **never** hardcoded in scripts — read live values from the screen.
-- Test counts quote the current suite (**607 backend tests, 26 suites**; re-verified 2026-09-22).
+- Never hand-type a count: run `node scripts/evidence.cjs` (it derives rows, markets, test counts, model accuracy and capacity from the artifacts, and CI runs `--check` so a stale number fails the build).
 - The calculator starts with `python -m uvicorn net_realization:app --port 8002` (a bare `python net_realization.py` does nothing — the module has no `__main__` runner).
 - `DEMO_WAR_ROOM.md` wins on run-of-show conflicts.
 - **Out of demo scope:** `Frontend-kisan-360/` is a legacy prototype (ignore it);

@@ -192,7 +192,7 @@ Everything below the hero is progressive disclosure: it answers interrupts witho
 ## 13. Demo failure plan (primary → fallback → backup)
 
 1. **Primary:** live AGMARKNET pull; if it fails/rate-limits, `marketCache.getBestPrices`
-   serves the **stamped snapshot** (85 real rows, Onion 30 / Soyabean 29 / Tomato 26) and every
+   serves the **stamped snapshot** (388 real rows · 33 crops · 105 markets) and every
    surface labels CACHED with retrievedAt (unit-tested).
    **Upstream filter anomaly (observed live 2026-09-09):** data.gov.in can ignore
    `filters[state]` and return an arbitrary all-India page that survives local filtering as a
@@ -289,13 +289,14 @@ rendering. Backend 44/44 tests green, web production build green.
 
 Min-TRL-6 sweep — every claim below was verified live, not inferred:
 
-1. **Test recount (re-verified 2026-09-22):** backend **607/607 (26/26 suites)** + calculator **29/29** = 636 total.
-   `DEMO_READINESS.md`, `SIH26132_COVERAGE.md` and `README.md` all synced to this number.
-   Earlier sprints: 546 (2026-09-12) → 577 (logger/transaction-cost fixes) → 607 (+30 auth-guard tests).
-2. **Snapshot re-stamp:** on-disk pull is **250 rows · 33 crops · 71 markets, retrieved
-   2026-09-11**, serving **LIVE** (`/cache-status`). Docs saying "85 rows / 2026-09-08"
-   updated; number legend added to READINESS (snapshot total vs per-crop slice vs
-   ranked mandis — e.g. Onion ≈ 36 rows / 31 markets).
+1. **Test count:** backend **638/638 (29/29 suites)** + calculator **29/29** = 667 total, and
+   no longer typed by hand — `node scripts/evidence.cjs` derives it from the artifact CI writes
+   (`docs/evidence/test-count.json`), and `--check` fails the build when a doc disagrees.
+   Earlier sprints: 546 (2026-09-12) → 577 → 607 → 617 → 626 → 638 (auth guards, observed-date
+   parsing, rate limiting, pilot telemetry).
+2. **Snapshot re-stamp:** on-disk pull is **388 rows · 33 crops · 105 markets · 30 districts,
+   retrieved 2026-09-23**, serving **LIVE** (`/cache-status`); number legend in READINESS
+   (snapshot total vs per-crop slice vs ranked mandis — e.g. Onion ≈ 49 rows / 43 markets).
 3. **Disease model boots:** HF MobileNetV2 (38 classes) loads in ~24 s on CPU, first
    predict 0.3 s — hence the `dev-up.sh` warmup step (tomato test image → expect HTTP
    200). Frontend crop list is Maharashtra-first; service-offline shows the
