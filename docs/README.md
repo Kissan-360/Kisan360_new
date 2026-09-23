@@ -36,5 +36,7 @@ These docs live in `docs/`. This is the order to read them in, by role.
 - The calculator starts with `python -m uvicorn net_realization:app --port 8002` (a bare `python net_realization.py` does nothing — the module has no `__main__` runner).
 - `DEMO_WAR_ROOM.md` wins on run-of-show conflicts.
 - **Out of demo scope:** `Frontend-kisan-360/` is a legacy prototype (ignore it);
-  `mobile-app/` is exploratory and not part of the judged demo. The demo is
-  `web-app` + `backend` + `ml-service` only.
+  `mobile-app/` is a **skeleton** (empty `App.tsx`, no API client) — its README
+  says exactly what exists and what wiring it would cost; it is not part of the
+  judged demo. The installable mobile path today is the **PWA** (`web-app`,
+  manifest + service worker). The demo is `web-app` + `backend` + `ml-service` only.

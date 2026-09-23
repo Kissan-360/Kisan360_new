@@ -80,3 +80,6 @@ Kisan360_HLD (2).pdf
 
 # Scratch curl output from harness runs (holds a demo JWT)
 /demo.json
+
+# Expo local state (device cache + CLI readme) — regenerated on every run.
+mobile-app/.expo/
