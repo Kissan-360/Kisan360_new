@@ -38,6 +38,33 @@ const authenticateUser = async (req, res, next) => {
 };
 
 /**
+ * Best-effort identity for a request, without rejecting anything.
+ *
+ * Some recorded milestones sit on PUBLIC routes (net-realization, market
+ * prices) that never run auth middleware — so a farmer's decision was landing in
+ * the pilot report as `anonymous`, which made the role and district breakdown
+ * useless. This decodes the token when one is present and otherwise returns
+ * null; it is called AFTER the response has been sent, so a Firebase round-trip
+ * here costs the user nothing.
+ *
+ * Never use this for authorization — it does not reject.
+ */
+async function peekUser(req) {
+  if (req.user) return req.user;
+  const token = readBearer(req);
+  if (!token) return null;
+  const demo = verifyDemoToken(token);
+  if (demo) return toDemoUser(demo);
+  if (!isFirebaseReady()) return null;
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    return { uid: decodedToken.uid, email: decodedToken.email || '', name: decodedToken.name || '', auth: 'firebase' };
+  } catch {
+    return null;
+  }
+}
+
+/**
  * The one identity policy for authenticated writes.
  *
  * Who the actor is comes ONLY from the verified token — never from the request
@@ -78,4 +105,4 @@ const optionalAuth = async (req, res, next) => {
   return next();
 };
 
-module.exports = { authenticateUser, optionalAuth, identityOf };
+module.exports = { authenticateUser, optionalAuth, identityOf, peekUser, readBearer };

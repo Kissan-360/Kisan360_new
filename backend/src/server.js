@@ -109,6 +109,51 @@ app.use((req, res, next) => {
   next();
 });
 
+// Pilot usage telemetry — OFF unless KISAN_TELEMETRY=on.
+//
+// Records milestone completions (a decision run, a lot created, an offer
+// accepted, a settlement simulated, a grievance raised) so a real pilot can be
+// reported from evidence rather than memory. Identity-free by construction: the
+// record carries a coarse role, district, locale and a random browser install id
+// — never a uid, name, phone, price or free text. See lib/usageEvents.js.
+//
+// Recorded on response finish and never awaited: telemetry must not be able to
+// slow down or fail a farmer's request.
+const { milestoneFor, isTelemetryEnabled, buildRecord, sessionIdentityFromBody } = require('./lib/usageEvents');
+const TELEMETRY_ON = isTelemetryEnabled();
+if (TELEMETRY_ON) {
+  const UsageEvent = require('./models/UsageEvent');
+  const { peekUser } = require('./middleware/auth');
+  app.use((req, res, next) => {
+    res.on('finish', async () => {
+      try {
+        if (res.statusCode >= 400) return; // only completed milestones
+        // Machine-generated traffic is not user activity: the boot auto-seed
+        // calls this same API over HTTP and would otherwise add phantom lots,
+        // offers and logins to every pilot report.
+        if (req.headers['x-kisan-internal']) return;
+        const event = milestoneFor(req.method, req.originalUrl);
+        if (!event) return;
+        // Some milestones are public routes, so decode the token here rather
+        // than reporting every real farmer as `anonymous`. Safe because this
+        // runs after the response has been sent. The session milestone has no
+        // token at all (it is the login), so it falls back to the role the
+        // server is about to mint into that session's token.
+        const user = (await peekUser(req)) || (event === 'session_started' ? sessionIdentityFromBody(req) : null);
+        const record = buildRecord({
+          event,
+          user,
+          locale: req.headers['accept-language'],
+          installId: req.headers['x-kisan-install'],
+        });
+        if (record) UsageEvent.create(record).catch(() => { /* telemetry is never critical */ });
+      } catch { /* never let instrumentation fail a request */ }
+    });
+    next();
+  });
+  console.log('📈 Pilot telemetry ON (KISAN_TELEMETRY) — milestones only, no identifiers');
+}
+
 // CORS configuration
 // In production the single trusted FRONTEND_URL is enforced (reflecting only
 // that origin, never arbitrary origins). In development we keep the reflective
@@ -225,6 +270,7 @@ app.use('/api/schemes', schemeRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/grade-assessment', gradeAssessmentRoutes);
 app.use('/api/trading-channels', tradingChannelsRoutes);
+app.use('/api/ops', require('./routes/ops'));
 
 // 404 handler
 app.use('*', (req, res) => {
