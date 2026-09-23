@@ -23,7 +23,15 @@ node scripts/loadtest.cjs                 # ~90 s; writes one file per target
 node scripts/a11y.cjs                     # needs the dev server on :3000
 node scripts/a11y.cjs --lang mr && node scripts/a11y.cjs --lang hi
 node scripts/journey-smoke.cjs            # drives the UI end to end; needs :3000 + :5000
+node scripts/evidence.cjs --check         # do the docs still match the artifacts?
+node scripts/evidence.cjs --write --yes   # rewrite the numbers a refresh moved
 ```
+
+The nightly ingest workflow (`ingest.yml`) runs `--write` in the same commit that
+restamps the snapshot, because a refresh legitimately changes rows, markets and
+crops — a gate that goes red every night for a mechanical reason is a gate people
+learn to ignore. Only values the checker already flagged are rewritten, and each
+substitution is printed.
 
 `journey-smoke` creates a real lot through the farmer's form, so re-seed after
 running it (`POST /api/auth/demo/seed` against a live backend, or

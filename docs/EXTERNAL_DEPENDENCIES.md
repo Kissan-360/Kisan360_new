@@ -15,7 +15,7 @@
 
 | API | Used By | Required | Fallback | Status Check |
 |-----|---------|----------|----------|--------------|
-| AGMARKNET | scheduler.js | No | Cached snapshot (388 rows) | `GET /api/market/cache-status` |
+| AGMARKNET | scheduler.js | No | Cached snapshot (421 rows) | `GET /api/market/cache-status` |
 | OpenWeather | weather route | No | Weather unavailable | `GET /api/weather?lat=...&lon=...` |
 | Groq (LLM) | RAG service | No | Template explanations | `GET :8001/health` |
 | Firebase Auth | auth middleware | No | Demo JWT auth works | `GET /api/auth/demo-login` |
@@ -37,7 +37,7 @@
 
 | File | Rows | Source | Purpose |
 |------|------|--------|---------|
-| priceSnapshots.json | 388 | AGMARKNET cache | Market prices (33 crops, 105 markets) |
+| priceSnapshots.json | 421 | AGMARKNET cache | Market prices (34 crops, 114 markets) |
 | priceHistory.json | varies | Historical | Trend computation |
 | buyers.json | 10 | Static | Demo buyer directory |
 | buyerRequirements.json | 8 | Static | Quality matching |

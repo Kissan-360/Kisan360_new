@@ -17,7 +17,14 @@
  *
  *   node scripts/evidence.cjs                     print facts, write facts.json, list drift
  *   node scripts/evidence.cjs --check             fail on any doc/artifact disagreement
+ *   node scripts/evidence.cjs --write             rewrite flagged numbers (dry run unless --yes)
  *   node scripts/evidence.cjs --record-tests FILE reduce a jest --json report to test-count.json
+ *
+ * --write exists because the numbers legitimately move: the nightly AGMARKNET
+ * refresh changes rows, markets and crops, and a gate that turns red every night
+ * for a mechanical reason trains people to ignore it. The refresh workflow runs
+ * --write, so the docs stay true without anyone remembering — and every change
+ * lands in the bot's diff, where it is visible.
  *
  * A line may opt out of a check with an `evidence-ok` comment when the number it
  * states is deliberately historical (e.g. quoting an old pull while explaining a
@@ -160,18 +167,30 @@ function lineChecks(facts) {
   const checks = [];
 
   if (m) {
-    const snapshotish = /agmarknet|snapshot|cached pull|observed|price/i;
-    // A slice value is only acceptable on a line that names the crop it belongs
-    // to, so "49 rows" is fine next to "Onion" and drift anywhere else.
-    const sliceValues = (field) => (line) => Object.entries(m.slices || {})
-      .filter(([crop]) => new RegExp(crop, 'i').test(line))
-      .map(([, s]) => s[field]);
-    checks.push({ label: `snapshot rows (${m.rows})`, context: snapshotish, pattern: /(\d[\d,]{1,4})\s+rows?\b/g, expected: m.rows, oneOf: [m.rows], allowSlice: sliceValues('rows') });
+    const snapshotish = /agmarknet|snapshot|cache|observed|price/i;
+    // A slice value is acceptable only on a line that is *about a slice* — it
+    // names the crop AND signals the slice ("slice", "≈"). Two lessons are baked
+    // into that rule: "the 388-row snapshot" is a claim about the total even on a
+    // line that mentions Onion, and a rewrite that swaps a total for a slice
+    // produces a number that is wrong in a way no checker can see.
+    const sliceValues = (field) => (line) => {
+      if (!/slice|≈|~/.test(line)) return [];
+      return Object.entries(m.slices || {})
+        .filter(([crop]) => new RegExp(crop, 'i').test(line))
+        .map(([, s]) => s[field]);
+    };
+    // `\s+` and `-` both: "388 rows" and "the 388-row snapshot" are the same
+    // claim, and the hyphenated form is how prose writes it.
+    checks.push({ label: `snapshot rows (${m.rows})`, context: snapshotish, pattern: /(\d[\d,]{1,4})[-\s]rows?\b/g, expected: m.rows, oneOf: [m.rows], allowSlice: sliceValues('rows') });
     checks.push({ label: `markets (${m.markets})`, context: snapshotish, pattern: /(\d{1,3})\s+markets\b/gi, expected: m.markets, oneOf: [m.markets], allowSlice: sliceValues('markets') });
     checks.push({ label: `districts (${m.districts})`, context: /agmarknet|snapshot|pull|retrieved/i, pattern: /(\d{1,3})\s+districts\b/gi, expected: m.districts, oneOf: [m.districts] });
     // `crops` needs the tighter context: "7 crops" on a line mentioning a price
     // range is about the AGMARK grade rules, not the snapshot.
     checks.push({ label: `crops (${m.crops})`, context: /agmarknet|snapshot|pull|retrieved|cached/i, pattern: /(\d{1,3})\s+crops\b/gi, expected: m.crops, oneOf: [m.crops] });
+    // The data-file table states the row count in its own column, with no unit
+    // next to it — unmatched by the prose patterns, and stale for a week the
+    // first time it was written.
+    checks.push({ label: `snapshot rows (${m.rows})`, context: /priceSnapshots/, pattern: /^\|\s*priceSnapshots\.json\s*\|\s*(\d[\d,]*)\s*\|/gim, expected: m.rows, oneOf: [m.rows] });
     if (m.retrievedAt) {
       checks.push({ label: `retrieved date (${m.retrievedAt})`, context: /agmarknet|snapshot|pull|retrieved|cached/i, pattern: /(20\d\d-\d\d-\d\d)\s*(?:pull|retriev)|retriev\w*\s+(20\d\d-\d\d-\d\d)/gi, expected: m.retrievedAt, dateField: [m.retrievedAt, m.newestObservation] });
     }
@@ -202,8 +221,11 @@ function scanDocs(facts) {
       if (/^\s*```/.test(line)) { inFence = !inFence; return; }
       if (inFence) return;
       if (line.includes('evidence-ok')) return;
+      // Context may sit on the line above: prose wraps, and a sentence that is
+      // half on each line is still one claim.
+      const contextLine = `${lines[i - 1] || ''} ${line}`;
       for (const check of checks) {
-        if (!check.context.test(line)) continue;
+        if (!check.context.test(contextLine)) continue;
         check.pattern.lastIndex = 0;
         let match;
         while ((match = check.pattern.exec(line)) !== null) {
@@ -212,7 +234,7 @@ function scanDocs(facts) {
             ? (match[1] || match[2])
             : match[check.group || 1];
           if (!raw) continue;
-          const sliceExtra = check.allowSlice ? check.allowSlice(line) : [];
+          const sliceExtra = check.allowSlice ? check.allowSlice(contextLine) : [];
           const allowed = check.dateField || check.oneOf || [check.expected];
           // Dates compare as strings, counts as numbers. Coercing a date to a
           // number yields NaN, which matches nothing — a checker that silently
@@ -220,7 +242,17 @@ function scanDocs(facts) {
           const value = typeof check.expected === 'number' ? num(raw) : raw;
           if (typeof value === 'number' && sliceExtra.includes(value)) continue;
           if (allowed.includes(value)) continue;
-          findings.push({ file, line: i + 1, check: check.label, word: raw.trim(), text: line.trim().slice(0, 140) });
+          // The value a writer should substitute: the slice for a line that names
+          // its crop, otherwise the fact the check is about.
+          const sliceTarget = check.allowSlice ? check.allowSlice(contextLine)[0] : undefined;
+          findings.push({
+            file,
+            line: i + 1,
+            check: check.label,
+            word: raw.trim(),
+            target: String(sliceTarget !== undefined ? sliceTarget : check.expected),
+            text: line.trim().slice(0, 140),
+          });
         }
       }
     });
@@ -259,6 +291,40 @@ function reportFindings(findings) {
   console.log('\n  Fix the number, or mark the line `evidence-ok` when it is deliberately historical.\n');
 }
 
+/**
+ * Rewrite the numbers the checker flagged, in place.
+ *
+ * Only tokens already proven to disagree are touched, each replaced once, and
+ * every substitution is printed — so the resulting diff is reviewable rather
+ * than a silent sweep. Re-scans after writing (a line can hold several claims).
+ */
+function writeDrift(facts, { apply }) {
+  let findings = scanDocs(facts);
+  const changes = [];
+  for (let pass = 0; pass < 3 && findings.length; pass += 1) {
+    const byFile = new Map();
+    for (const f of findings) {
+      if (!byFile.has(f.file)) byFile.set(f.file, []);
+      byFile.get(f.file).push(f);
+    }
+    for (const [file, list] of byFile) {
+      const lines = fs.readFileSync(abs(file), 'utf8').split(/\r?\n/);
+      for (const f of list) {
+        const idx = f.line - 1;
+        const escaped = f.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const re = new RegExp(`(?<![\\w,])${escaped}(?![\\w,])`);
+        if (!re.test(lines[idx])) continue;
+        changes.push({ file, line: f.line, from: f.word, to: f.target, check: f.check });
+        if (apply) lines[idx] = lines[idx].replace(re, f.target);
+      }
+      if (apply) fs.writeFileSync(abs(file), lines.join('\n'));
+    }
+    if (!apply) break;
+    findings = scanDocs(gatherFacts());
+  }
+  return { changes, remaining: findings };
+}
+
 function recordTests(inputPath) {
   const raw = JSON.parse(fs.readFileSync(path.resolve(inputPath), 'utf8'));
   const reduced = {
@@ -283,6 +349,21 @@ function main() {
 
   const facts = gatherFacts();
   const findings = scanDocs(facts);
+
+  if (argv.includes('--write')) {
+    const apply = argv.includes('--yes');
+    const { changes, remaining } = writeDrift(facts, { apply });
+    printFacts(facts);
+    if (!changes.length) console.log('\n✅ Nothing to rewrite — docs already agree.\n');
+    else {
+      console.log(`\n${apply ? '✏️  Rewrote' : '📝 Would rewrite (dry run — add --yes to apply)'} ${changes.length} number(s):\n`);
+      for (const c of changes) console.log(`  ${c.file}:${c.line}  ${c.from} → ${c.to}   (${c.check})`);
+      console.log('');
+    }
+    if (apply && remaining.length) { reportFindings(remaining); process.exit(1); }
+    if (apply) fs.writeFileSync(abs('docs/evidence/facts.json'), `${JSON.stringify(facts, null, 2)}\n`);
+    process.exit(0);
+  }
 
   if (argv.includes('--check')) {
     printFacts(facts);

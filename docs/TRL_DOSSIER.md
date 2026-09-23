@@ -16,8 +16,8 @@ sessions have run yet.**
 
 | Claim | Evidence |
 |---|---|
-| Real market data, ingested continuously — not a fixture | `docs/evidence/facts.json` → market: 388 observations · 33 crops · 105 markets · 30 districts, retrieved 2026-09-23, newest observation same day |
-| The historical series grows by itself, one day per run | `docs/evidence/facts.json` → history: 7 days, 388 rows appended (`backend/src/data/priceHistory.json`) |
+| Real market data, ingested continuously — not a fixture | `docs/evidence/facts.json` → market: 388 observations · 34 crops · 105 markets · 30 districts, retrieved 2026-09-23, newest observation same day |
+| The historical series grows by itself, one day per run | `docs/evidence/facts.json` → history: 7 days, 421 rows appended (`backend/src/data/priceHistory.json`) |
 | Real persistence with honest degradation | `GET /health` distinguishes alive / database-ready / scheduler / calculator; boots degraded without Mongo by design |
 | The suite is real and reproducible | 638/638 backend tests, 29/29 suites (`docs/evidence/test-count.json`, written by CI), 29/29 calculator tests, `tsc --noEmit` clean |
 | The project's own gate passes | `node scripts/preflight.cjs --fast` → 11 checks, DEMO-READY |

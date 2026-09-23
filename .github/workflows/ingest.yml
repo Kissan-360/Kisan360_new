@@ -114,17 +114,27 @@ jobs:
           }
           "
 
+      # A refresh moves rows, markets and crops, and the judge-facing docs quote
+      # those numbers. Rather than letting the drift gate go red every night for a
+      # mechanical reason (which trains people to ignore it), the same commit that
+      # restamps the data also rewrites the numbers it moved — via the checker, so
+      # only flagged values change and every substitution is printed in the log.
+      - name: Rewrite the doc numbers the refresh moved
+        if: success()
+        run: node scripts/evidence.cjs --write --yes
+
       - name: Commit the restamped snapshot
         if: success()
         run: |
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add backend/src/data/priceSnapshots.json backend/src/data/priceHistory.json
+          git add backend/src/data/priceSnapshots.json backend/src/data/priceHistory.json docs/evidence/facts.json
+          git add -u docs
           if git diff --cached --quiet; then
             echo "no snapshot change — nothing to commit"
           else
-            git commit -m "data: refresh AGMARKNET price snapshot (${{ steps.fresh.outputs.rows }} rows, newest ${{ steps.fresh.outputs.newest }}h old)"
+            git commit -m "data: refresh AGMARKNET price snapshot (${{ steps.fresh.outputs.rows }} rows, newest ${{ steps.fresh.outputs.newest }}h old) and sync the doc numbers"
             git push origin "HEAD:${{ github.ref_name }}"
             echo "committed and pushed to ${{ github.ref_name }}"
           fi

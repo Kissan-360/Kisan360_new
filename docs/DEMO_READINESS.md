@@ -9,7 +9,7 @@
 | Frontend starts on port 3000 | PASS | Vite dev server |
 | `/health` returns OK/DEGRADED | PASS | Returns DEGRADED when DB offline, not DOWN |
 | MongoDB fallback works | PASS | In-memory server created on Atlas failure |
-| Cached snapshot loaded | PASS | 388 rows · 33 crops · 105 markets · 30 districts, retrieved 2026-09-23 |
+| Cached snapshot loaded | PASS | 421 rows · 34 crops · 114 markets · 30 districts, retrieved 2026-09-23 |
 
 ## Test Suites
 
@@ -29,9 +29,9 @@
 | Demo login (buyer) | POST /api/auth/demo-login | PASS |
 | Demo seed | POST /api/auth/demo/seed | PASS |
 | Net realization | GET /api/market/net-realization | PASS (ranked mandis for Onion/Nashik/10q; count varies with live vs cached slice — say the live number) |
-| Market prices | GET /api/market/prices | PASS (Onion/Maharashtra slice of the 388-row snapshot; 49 rows / 43 markets on 2026-09-23 pull) |
+| Market prices | GET /api/market/prices | PASS (Onion/Maharashtra slice of the 421-row snapshot — 53 rows / 47 markets on the 2026-09-23 pull) |
 | Farm context | GET /api/market/farm-context | PASS |
-| Cache status | GET /api/market/cache-status | PASS (388 rows) |
+| Cache status | GET /api/market/cache-status | PASS (421 rows) |
 | Health | GET /health | PASS (DEGRADED — expected) |
 | Diagnostics | GET /api/diagnostics | PASS |
 | Trading channels (eNAM) | GET /api/trading-channels | PASS (3 channels, DEMO_CHANNEL labeled) |
@@ -98,6 +98,6 @@ bash scripts/demo-reset.sh
 All 667 tests pass (638 backend + 29 calculator). All fallback paths verified. All documentation complete.
 
 **Number legend (why counts differ across docs):** the on-disk snapshot is the FULL pull
-(388 rows · 33 crops · 105 markets · 30 districts, 2026-09-23); per-crop slices are smaller
+(421 rows · 34 crops · 114 markets · 30 districts, 2026-09-23); per-crop slices are smaller
 (e.g. Onion ≈ 49 rows / 43 markets); ranked mandis are smaller still (only costable
 mandis for the queried district/quantity). Always quote the number on screen, never a memorized one.

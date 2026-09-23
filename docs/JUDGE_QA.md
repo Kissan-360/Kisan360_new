@@ -461,8 +461,8 @@ The architecture supports all of these — the demo uses static data where produ
 
 **A:** TRL 6 and 7 demonstrated · TRL 8 substantially, with named gaps · **TRL 9 not claimed.**
 
-- **TRL 6 (relevant environment):** 388 real AGMARKNET observations · 33 crops ·
-  105 markets · 30 districts, newest 2026-09-23; a 7-day history that grows by
+- **TRL 6 (relevant environment):** 388 real AGMARKNET observations · 34 crops ·
+  114 markets · 30 districts, newest 2026-09-23; a 7-day history that grows by
   itself; 638 backend tests across 29 suites (counted by CI, not by hand); 29
   calculator tests; a trained MobileNetV2 grader shipping 8.6 MB of weights at
   99.2% fresh/rotten on 6,738 held-out images.
@@ -495,8 +495,8 @@ rows, markets, districts, observation age, history depth, model accuracy, test
 counts, deploy verdicts and capacity **from the artifacts themselves**, then
 fails if any doc states something else — and CI runs it on every push.
 
-The first run found 21 disagreements: docs advertised a 250-row snapshot while
-disk held 388, a 3-crop/85-row fallback, 607/636 tests against a 638-test suite, <!-- evidence-ok: quoting the stale figure on purpose -->
+The first run found 21 disagreements: docs advertised a 250-row snapshot while <!-- evidence-ok: historical record, quoted on purpose -->
+disk held 388, a 3-crop/85-row fallback, 607/636 tests against a 638-test suite, <!-- evidence-ok: historical record — these are the stale figures the checker caught, quoted on purpose -->
 and a 2026-09-11 pull date against a 2026-09-23 one. All were true when written; <!-- evidence-ok: same -->
 none survived contact with the machine. Now zero, and a stale number cannot ship
 — which is also why the numbers in this document match the suite you can run.
