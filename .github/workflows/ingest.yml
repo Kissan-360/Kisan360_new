@@ -1,0 +1,166 @@
+name: ingest
+
+# Durable AGMARKNET ingestion + a staleness alarm.
+#
+# The API already runs an in-process node-cron refresh at 09:00 IST, and on a
+# good day it works — the live deployment's /health showed a real pull today
+# (23/09/2026, 33 crops, 70 markets). But that process is a Render free-tier
+# service: it sleeps after 15 minutes idle, so "daily at 09:00" only happens if
+# something else happened to keep it awake. server.js says as much itself:
+# "On Render free-tier the process dies between cron fires". Worse, a refresh at
+# runtime writes to the container's EPHEMERAL disk, so the new snapshot is lost
+# on the next restart/redeploy.
+#
+# So the durable refresh runs HERE, where the file can be committed. A price
+# snapshot in git also gives the dataset an audit trail for free: every change
+# to the numbers is a dated, reviewable commit (the repo already does this —
+# commit fa38655, "data: refresh AGMARKNET price snapshots and history").
+#
+# Two failure modes this closes:
+#   • ingestion silently stops (nothing was watching) → the freshness check below
+#     fails the job and opens an issue;
+#   • the numbers served are older than advertised → the age is computed with
+#     backend/src/lib/observedDate.js, the same parser the API uses.
+#
+# Requires: repo secret AGMARKNET_API_KEY (free from data.gov.in). Without it the
+# refresh exits 2 ("nothing usable fetched") and the job reports that honestly
+# instead of pretending to have refreshed.
+
+on:
+  schedule:
+    # 03:40 UTC = 09:10 IST, just after the source publishes the day's arrivals.
+    - cron: '40 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install
+        run: npm ci --prefix backend
+
+      - name: Pull AGMARKNET and restamp the snapshot
+        id: refresh
+        env:
+          AGMARKNET_API_KEY: ${{ secrets.AGMARKNET_API_KEY }}
+        run: |
+          set +e
+          node backend/scripts/refresh-prices.js
+          code=$?
+          set -e
+          echo "exit=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" = "2" ]; then
+            echo "::warning::Nothing usable fetched (exit 2). If this is the first run, add the AGMARKNET_API_KEY repo secret — the source is a free key from data.gov.in."
+          elif [ "$code" != "0" ]; then
+            echo "::warning::Partial refresh (exit $code) — wrote what it could."
+          fi
+
+      # Two different ages, two different owners — conflating them produces a
+      # nightly false alarm:
+      #
+      #   PIPELINE age (meta.retrievedAt) is OUR responsibility. A daily job that
+      #   has not fetched in >36h has stopped working. This fails the job.
+      #
+      #   SOURCE age (newest observation) is the source's cadence, not ours.
+      #   AGMARKNET publishes on its own schedule, so a healthy pipeline can
+      #   legitimately serve a day-old observation. Reported always, alarmed
+      #   only past 72h, when the source itself looks stalled.
+      #
+      # (Verified while writing this: the local snapshot is 19.9h old by pipeline
+      # age but 30.1h by observation age. An observation-age threshold of 30h
+      # would have cried wolf on a perfectly healthy pipeline.)
+      - name: Check freshness
+        id: fresh
+        run: |
+          node -e "
+          const fs = require('fs');
+          const { ageMs } = require('./backend/src/lib/observedDate');
+          const snap = require('./backend/src/data/priceSnapshots.json');
+          const meta = snap.meta || {};
+          const rows = Array.isArray(snap.rows) ? snap.rows : [];
+
+          const pipelineHours = ageMs(meta.retrievedAt || meta.fetchedAt) / 3.6e6;
+          const obsAges = rows.map(r => ageMs(r.observedOn || r.arrivalDate)).filter(v => v != null);
+          if (!obsAges.length) { console.error('no parseable observation dates in the snapshot'); process.exit(1); }
+          const newestHours = Math.min(...obsAges) / 3.6e6;
+
+          console.log('pipeline age: ' + pipelineHours.toFixed(1) + 'h (threshold 36h)');
+          console.log('source age:   ' + newestHours.toFixed(1) + 'h (alarm at 72h)');
+          console.log('rows:         ' + rows.length);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,
+            'newest=' + newestHours.toFixed(1) + '\\npipeline=' + pipelineHours.toFixed(1) + '\\nrows=' + rows.length + '\\n');
+
+          if (newestHours > 72) { console.log('::warning::the SOURCE has not published a new observation in over 72h'); }
+          if (pipelineHours > 36) {
+            console.error('STALE PIPELINE: last successful fetch was ' + pipelineHours.toFixed(1) + 'h ago');
+            process.exit(1);
+          }
+          "
+
+      - name: Commit the restamped snapshot
+        if: success()
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backend/src/data/priceSnapshots.json backend/src/data/priceHistory.json
+          if git diff --cached --quiet; then
+            echo "no snapshot change — nothing to commit"
+          else
+            git commit -m "data: refresh AGMARKNET price snapshot (${{ steps.fresh.outputs.rows }} rows, newest ${{ steps.fresh.outputs.newest }}h old)"
+            git push origin "HEAD:${{ github.ref_name }}"
+            echo "committed and pushed to ${{ github.ref_name }}"
+          fi
+
+      - name: Audit trail
+        if: always()
+        run: |
+          {
+            echo "### AGMARKNET ingestion"
+            echo ""
+            echo "| field | value |"
+            echo "|---|---|"
+            echo "| snapshot rows | ${{ steps.fresh.outputs.rows }} |"
+            echo "| pipeline age (ours) | ${{ steps.fresh.outputs.pipeline }} h |"
+            echo "| source age (AGMARKNET's cadence) | ${{ steps.fresh.outputs.newest }} h |"
+            echo "| refresh exit | ${{ steps.refresh.outputs.exit }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Alerting. A failing scheduled workflow notifies watchers, but the failure
+      # is easy to miss among routine runs — an issue is a durable queue entry.
+      - name: Open an issue when ingestion is stale
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          title="AGMARKNET ingestion is stale"
+          existing=$(gh issue list --state open --search "$title in:title" --json number --jq 'length' 2>/dev/null || echo 0)
+          if [ "$existing" != "0" ]; then
+            echo "an open issue already tracks this"
+            exit 0
+          fi
+          gh issue create --title "$title" --body "The scheduled AGMARKNET refresh failed the freshness check on $(date -u +%Y-%m-%dT%H:%MZ).
+
+          Last successful fetch was **${{ steps.fresh.outputs.pipeline }} h ago** (threshold 36h).
+          Newest observation available from the source: ${{ steps.fresh.outputs.newest }} h old.
+
+          Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          The site keeps serving the last known-good snapshot, labelled as cached — so farmers see data, but the provenance chip will say how old it is." || true

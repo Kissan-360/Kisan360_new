@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-09-23T06:06:36.581Z",
+  "startedAt": "2026-09-23T06:06:30.262Z",
+  "coldStartAllowanceMs": 60000,
+  "verdict": "LIVE WITH 1 EXPOSURE FINDING(S)",
+  "services": [
+    {
+      "service": "kisan360-web",
+      "url": "https://kisan360-web.onrender.com/",
+      "verdict": "live",
+      "attempts": 1,
+      "firstStatus": 200,
+      "lastStatus": 200,
+      "bootMs": null,
+      "health": null,
+      "note": null,
+      "summary": null
+    },
+    {
+      "service": "kisan360-api",
+      "url": "https://kisan360-api.onrender.com/health",
+      "verdict": "live",
+      "attempts": 1,
+      "firstStatus": 200,
+      "lastStatus": 200,
+      "bootMs": null,
+      "health": {
+        "status": "OK",
+        "message": "Kisan360 Backend is running",
+        "db": "connected",
+        "dbReady": true,
+        "mlServiceReady": true,
+        "mlServiceStatus": "ready",
+        "mlServiceUrl": "https://kisan360-calc.onrender.com",
+        "scheduler": {
+          "lastAttempt": "2026-09-23T05:51:10.529Z",
+          "lastSuccess": "2026-09-23T05:51:25.283Z",
+          "lastError": null,
+          "lastObservationDate": "23/09/2026",
+          "lastFetchAt": "2026-09-23T05:51:25.283Z",
+          "rowsReceived": 24,
+          "rowsAccepted": 9,
+          "rowsRejected": 0,
+          "rejectedReasons": {},
+          "rowsPreserved": 4,
+          "rowsFlagged": 0,
+          "consecutiveFailures": 0,
+          "totalRuns": 1,
+          "publishedAt": "2026-09-23T05:51:25.283Z",
+          "newObservationAvailable": true,
+          "distinctCrops": 33,
+          "distinctMarkets": 70,
+          "distinctDistricts": 21
+        },
+        "timestamp": "2026-09-23T06:06:32.250Z"
+      },
+      "note": null,
+      "summary": {
+        "status": "OK",
+        "database": null,
+        "scheduler": "ok",
+        "ml": null
+      }
+    },
+    {
+      "service": "kisan360-calc",
+      "url": "https://kisan360-calc.onrender.com/health",
+      "verdict": "live",
+      "attempts": 1,
+      "firstStatus": 200,
+      "lastStatus": 200,
+      "bootMs": null,
+      "health": {
+        "status": "ok",
+        "service": "net-realization-calculator",
+        "version": "1.2.0"
+      },
+      "note": null,
+      "summary": {
+        "status": "ok",
+        "database": null,
+        "scheduler": null,
+        "ml": null
+      }
+    }
+  ],
+  "frontendWiring": {
+    "checked": true,
+    "assetsScanned": 1,
+    "onrenderHostsFound": [
+      "https://kisan360-api.onrender.com"
+    ],
+    "apiHostsFound": [
+      "https://kisan360-api.onrender.com"
+    ],
+    "relativeApiBaseFound": false,
+    "expectedApiHost": "kisan360-api.onrender.com",
+    "pointsAtApi": true,
+    "verdict": "bundle points at the deployed API"
+  },
+  "exposure": [
+    {
+      "name": "/api/payments rejects anonymous callers",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "/api/grievances rejects anonymous callers",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "anonymous diagnostics does not expose the database host",
+      "ok": false,
+      "detail": "database host/endpoint is served to anonymous callers"
+    },
+    {
+      "name": "CORS does not allow an arbitrary origin",
+      "ok": true,
+      "detail": "allow-origin: https://kisan360-web.onrender.com"
+    }
+  ]
+}
