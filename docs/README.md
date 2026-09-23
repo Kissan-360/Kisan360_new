@@ -1,6 +1,6 @@
 # Kisan360 — Document Reading Order (Start Here)
 
-Sixteen docs live in `docs/`. This is the order to read them in, by role.
+These docs live in `docs/`. This is the order to read them in, by role.
 
 ## 🏁 Day-of-demo order (presenter / volunteers)
 
@@ -10,6 +10,7 @@ Sixteen docs live in `docs/`. This is the order to read them in, by role.
 4. **`DEMO_RISKS.md`** — failure playbook if something breaks mid-demo
 5. **`JUDGE_QA.md`** — 45 questions with answers
 6. **`JUDGE_ATTACK_15.md`** — the 15 most aggressive follow-ups
+7. **`TRL_DOSSIER.md`** — if anyone asks "which TRL, and how do you know?": per-level evidence, named gaps, and the list of things we explicitly do **not** claim
 
 ## 🏗️ Onboarding a new contributor (week one)
 
@@ -24,6 +25,9 @@ Sixteen docs live in `docs/`. This is the order to read them in, by role.
 - **`DEPLOYMENT_INSTRUCTIONS.md`** (repo root) — full stack startup
 - **`GITHUB_ORG_RUNBOOK.md`**, **`SNAPSHOT_BACKUP.md`** — repo ops
 - **`60_SECOND_VALUE.md`**, **`SIH_PITCH.md`** — elevator + 5-minute pitch (pitch numbers are fill-in-the-blank; verify against live engine values on demo morning)
+- **`PILOT_KIT.md`** — running real sessions before the event (consent in en/mr/hi, session script, ledger)
+- **`PILOT_RESULTS.md`** — the only place a pilot number may appear; predicted net vs price actually received
+- **`evidence/`** — machine-written artifacts + the `security-audit.md` summary; regenerate with the commands in `evidence/README.md`
 
 ## Rules the docs follow
 

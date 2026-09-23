@@ -454,3 +454,49 @@ Every assumption is labeled in the evidence drawer.
 8. Optional: Grievance escalation workflows
 
 The architecture supports all of these — the demo uses static data where production would use real integrations.
+
+---
+
+## 31. What TRL Are You At, and How Do You Know?
+
+**A:** TRL 6 and 7 demonstrated · TRL 8 substantially, with named gaps · **TRL 9 not claimed.**
+
+- **TRL 6 (relevant environment):** 388 real AGMARKNET observations · 33 crops ·
+  105 markets · 30 districts, newest 2026-09-23; a 7-day history that grows by
+  itself; 638 backend tests across 29 suites (counted by CI, not by hand); 29
+  calculator tests; a trained MobileNetV2 grader shipping 8.6 MB of weights at
+  99.2% fresh/rotten on 6,738 held-out images.
+- **TRL 7 (operational environment):** `https://kisan360-web.onrender.com` is
+  live with its API and calculator; the full sale — including the
+  payment-failure → grievance → resolution path — is proven **on that public
+  URL** by a smoke that runs nightly and keeps its artifact
+  (`docs/evidence/deployed-smoke.json`, 23/23 steps).
+- **TRL 8 (qualified):** CI on every push (jest · typecheck + build · calculator
+  · preflight · evidence), measured capacity (API 2,121 req/s @ p95 64 ms;
+  net-realization 17 req/s @ p95 15.7 s), an offline shell, and docs that fail
+  the build when they disagree with the artifacts.
+- **Not claimed, and we will say so:** no third-party error tracking; accessibility
+  checked by axe, not by users of assistive technology; load test ran locally,
+  and the free tier is a single instance; advisories remain in transitive
+  dependencies.
+- **TRL 9:** no real farmer has used it yet, so nothing is claimed. The pilot
+  kit (consent in en/mr/hi, session script, ledger) is ready, and the numbers
+  would land in `docs/PILOT_RESULTS.md` — predicted net realisation versus the
+  price actually received, captured a week later by phone.
+
+Every claim above names its artifact in **`docs/TRL_DOSSIER.md`**.
+
+---
+
+## 32. What Stops Your Documentation From Overstating Reality?
+
+**A:** A gate, not good intentions. `node scripts/evidence.cjs --check` derives
+rows, markets, districts, observation age, history depth, model accuracy, test
+counts, deploy verdicts and capacity **from the artifacts themselves**, then
+fails if any doc states something else — and CI runs it on every push.
+
+The first run found 21 disagreements: docs advertised a 250-row snapshot while
+disk held 388, a 3-crop/85-row fallback, 607/636 tests against a 638-test suite, <!-- evidence-ok: quoting the stale figure on purpose -->
+and a 2026-09-11 pull date against a 2026-09-23 one. All were true when written; <!-- evidence-ok: same -->
+none survived contact with the machine. Now zero, and a stale number cannot ship
+— which is also why the numbers in this document match the suite you can run.
