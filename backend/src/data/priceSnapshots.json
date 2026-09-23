@@ -3,10 +3,10 @@
     "purpose": "Known-good cached fallback for /api/market/prices and the net-realization calculator.",
     "note": "Machine-generated from a live AGMARKNET pull (see backend/scripts/refresh-prices.js). Real data, not a sample.",
     "source": "agmarknet_snapshot",
-    "retrievedAt": "2026-09-23T07:32:39.846Z",
+    "retrievedAt": "2026-09-23T09:59:14.681Z",
     "unit": "₹ per quintal",
-    "fetchedAt": "2026-09-23T07:32:39.820Z",
-    "publishedAt": "2026-09-23T07:32:39.820Z"
+    "fetchedAt": "2026-09-23T09:59:14.660Z",
+    "publishedAt": "2026-09-23T09:59:14.660Z"
   },
   "rows": [
     {
@@ -25,7 +25,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -44,7 +44,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -61,9 +61,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -80,9 +80,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -101,7 +101,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -120,7 +120,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -137,9 +137,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -158,7 +158,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -177,7 +177,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -194,9 +194,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -215,7 +215,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -234,7 +234,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -251,9 +251,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -270,9 +270,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -291,7 +291,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -310,7 +310,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -327,9 +327,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -348,7 +348,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -367,7 +367,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -384,9 +384,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -403,9 +403,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -424,7 +424,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -441,9 +441,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -462,7 +462,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -479,9 +479,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -498,9 +498,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -519,7 +519,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -538,7 +538,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -555,9 +555,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -576,7 +576,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -595,7 +595,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -614,7 +614,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -631,9 +631,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -652,7 +652,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -669,9 +669,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -688,9 +688,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -709,7 +709,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -726,9 +726,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -747,7 +747,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -766,7 +766,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -783,9 +783,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -802,9 +802,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -821,9 +821,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -842,7 +842,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -859,9 +859,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -880,26 +880,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Ginger(Green)",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 5500,
-      "maxPrice": 9500,
-      "modalPrice": 7500,
+      "minPrice": 5000,
+      "maxPrice": 12000,
+      "modalPrice": 8500,
       "market": "APMC Chattrapati Sambhajinagar ",
       "district": "Chattrapati Sambhajinagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -916,9 +916,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -935,9 +935,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -956,7 +956,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -973,9 +973,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -992,9 +992,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1011,9 +1011,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1032,7 +1032,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1051,7 +1051,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1070,7 +1070,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1079,17 +1079,17 @@
       "grade": "Local",
       "minPrice": 8000,
       "maxPrice": 13000,
-      "modalPrice": 10250,
+      "modalPrice": 10000,
       "market": "APMC Vai ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1108,7 +1108,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1127,7 +1127,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1144,9 +1144,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1165,7 +1165,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1178,32 +1178,32 @@
       "market": "APMC Bhusaval ",
       "district": "Jalgaon",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 1700,
+      "minPrice": 2000,
       "maxPrice": 3500,
-      "modalPrice": 2600,
+      "modalPrice": 2750,
       "market": "APMC Chattrapati Sambhajinagar ",
       "district": "Chattrapati Sambhajinagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1222,7 +1222,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1241,7 +1241,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1260,7 +1260,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1277,28 +1277,28 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 3000,
-      "maxPrice": 3500,
-      "modalPrice": 3350,
+      "minPrice": 2500,
+      "maxPrice": 3000,
+      "modalPrice": 2750,
       "market": "APMC Kamthi ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1317,26 +1317,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 1000,
+      "minPrice": 2000,
       "maxPrice": 2700,
-      "modalPrice": 1600,
+      "modalPrice": 2200,
       "market": "APMC Mangal Wedha ",
       "district": "Solapur",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1353,28 +1353,28 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 1800,
+      "minPrice": 2000,
       "maxPrice": 2200,
-      "modalPrice": 2100,
+      "modalPrice": 2150,
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1393,7 +1393,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1412,7 +1412,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1429,9 +1429,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1448,9 +1448,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1469,7 +1469,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1488,7 +1488,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1507,7 +1507,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1526,7 +1526,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1545,7 +1545,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1564,7 +1564,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1581,9 +1581,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1602,7 +1602,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1619,9 +1619,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1638,9 +1638,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1659,7 +1659,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1678,7 +1678,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1697,7 +1697,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1714,9 +1714,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1735,7 +1735,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1752,9 +1752,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1773,7 +1773,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1792,7 +1792,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1811,7 +1811,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1828,9 +1828,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1847,9 +1847,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1866,9 +1866,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1885,9 +1885,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -1906,7 +1906,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1925,7 +1925,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1944,7 +1944,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1963,7 +1963,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -1982,7 +1982,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2001,7 +2001,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2018,9 +2018,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2039,7 +2039,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2056,9 +2056,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2077,7 +2077,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2096,7 +2096,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2115,7 +2115,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2134,7 +2134,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2151,9 +2151,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2172,7 +2172,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2189,9 +2189,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2208,9 +2208,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2229,7 +2229,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2248,7 +2248,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2267,7 +2267,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2284,9 +2284,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2303,9 +2303,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2322,9 +2322,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2343,7 +2343,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2362,7 +2362,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2379,9 +2379,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2398,9 +2398,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2419,7 +2419,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2438,7 +2438,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2457,45 +2457,45 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 1400,
+      "minPrice": 1700,
       "maxPrice": 4500,
-      "modalPrice": 2950,
+      "modalPrice": 3100,
       "market": "APMC Chattrapati Sambhajinagar ",
       "district": "Chattrapati Sambhajinagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Unhali",
       "grade": "Local",
-      "minPrice": 4100,
-      "maxPrice": 4900,
-      "modalPrice": 4650,
+      "minPrice": 3400,
+      "maxPrice": 4480,
+      "modalPrice": 3800,
       "market": "APMC Dindori ",
       "district": "Nashik",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2514,7 +2514,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2533,7 +2533,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2552,7 +2552,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2571,7 +2571,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2590,7 +2590,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2609,26 +2609,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Local",
       "grade": "Local",
-      "minPrice": 4900,
-      "maxPrice": 6000,
-      "modalPrice": 5510,
+      "minPrice": 2000,
+      "maxPrice": 5000,
+      "modalPrice": 4400,
       "market": "APMC Mangal Wedha ",
       "district": "Solapur",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2645,9 +2645,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2664,9 +2664,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2685,7 +2685,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2702,9 +2702,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2723,7 +2723,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2742,7 +2742,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2761,7 +2761,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2780,26 +2780,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Local",
       "grade": "Local",
-      "minPrice": 3000,
-      "maxPrice": 4800,
-      "modalPrice": 4200,
+      "minPrice": 4000,
+      "maxPrice": 4500,
+      "modalPrice": 4250,
       "market": "APMC Vaduj ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2818,7 +2818,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2837,26 +2837,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Unhali",
       "grade": "Local",
-      "minPrice": 4101,
-      "maxPrice": 5252,
-      "modalPrice": 4601,
+      "minPrice": 3701,
+      "maxPrice": 4880,
+      "modalPrice": 4211,
       "market": "Dindori(Vani) ",
       "district": "Nashik",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2875,7 +2875,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2894,7 +2894,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2911,9 +2911,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2930,9 +2930,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -2951,7 +2951,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2970,7 +2970,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -2987,9 +2987,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3008,7 +3008,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3025,9 +3025,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3046,7 +3046,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3065,7 +3065,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3084,7 +3084,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3103,7 +3103,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3122,7 +3122,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3141,7 +3141,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3158,9 +3158,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3177,9 +3177,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3198,7 +3198,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3217,7 +3217,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3236,7 +3236,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3255,7 +3255,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3274,7 +3274,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3293,7 +3293,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3312,7 +3312,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3331,7 +3331,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3348,9 +3348,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3369,7 +3369,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3386,9 +3386,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3405,9 +3405,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3426,26 +3426,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Pomegranate",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 2200,
-      "maxPrice": 13500,
+      "minPrice": 2500,
+      "maxPrice": 12500,
       "modalPrice": 7500,
       "market": "APMC Sangola ",
       "district": "Solapur",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3464,7 +3464,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3483,7 +3483,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3491,18 +3491,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 8000,
-      "maxPrice": 14000,
-      "modalPrice": 11000,
+      "maxPrice": 12000,
+      "modalPrice": 10000,
       "market": "Mumbai- Fruit Market ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3521,7 +3521,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3540,7 +3540,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3559,7 +3559,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3578,7 +3578,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3595,9 +3595,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3614,9 +3614,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3635,7 +3635,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3654,7 +3654,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3673,7 +3673,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3692,7 +3692,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3709,9 +3709,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3730,7 +3730,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3749,7 +3749,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3768,7 +3768,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3787,7 +3787,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3806,7 +3806,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3825,7 +3825,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3844,7 +3844,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3857,32 +3857,32 @@
       "market": "APMC Bhusaval ",
       "district": "Jalgaon",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Tomato",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 400,
-      "maxPrice": 900,
-      "modalPrice": 650,
+      "minPrice": 450,
+      "maxPrice": 550,
+      "modalPrice": 500,
       "market": "APMC Chattrapati Sambhajinagar ",
       "district": "Chattrapati Sambhajinagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3901,7 +3901,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3920,7 +3920,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3939,7 +3939,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -3956,28 +3956,28 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Tomato",
       "variety": "Local",
       "grade": "Local",
-      "minPrice": 2000,
-      "maxPrice": 2500,
-      "modalPrice": 2350,
+      "minPrice": 1800,
+      "maxPrice": 2000,
+      "modalPrice": 1950,
       "market": "APMC Kamthi ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -3996,26 +3996,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Tomato",
       "variety": "Local",
       "grade": "Local",
-      "minPrice": 200,
-      "maxPrice": 1500,
+      "minPrice": 300,
+      "maxPrice": 1300,
       "modalPrice": 1000,
       "market": "APMC Mangal Wedha ",
       "district": "Solapur",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4032,28 +4032,28 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Tomato",
       "variety": "Local",
       "grade": "Local",
-      "minPrice": 1500,
-      "maxPrice": 2500,
-      "modalPrice": 2250,
+      "minPrice": 1700,
+      "maxPrice": 2200,
+      "modalPrice": 2075,
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4061,18 +4061,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 1200,
-      "maxPrice": 1700,
-      "modalPrice": 1575,
+      "maxPrice": 2000,
+      "modalPrice": 1800,
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4091,7 +4091,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4110,7 +4110,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4129,7 +4129,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4148,7 +4148,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4165,9 +4165,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4184,9 +4184,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4203,9 +4203,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4222,9 +4222,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4243,7 +4243,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4256,13 +4256,13 @@
       "market": "APMC Satara ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4281,7 +4281,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4300,7 +4300,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4319,7 +4319,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4336,9 +4336,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4357,7 +4357,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4376,7 +4376,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4393,9 +4393,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4414,7 +4414,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4433,7 +4433,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4452,7 +4452,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4471,7 +4471,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4490,7 +4490,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4507,9 +4507,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4528,7 +4528,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4545,9 +4545,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4564,9 +4564,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4585,7 +4585,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4604,7 +4604,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4623,7 +4623,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4642,7 +4642,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4661,7 +4661,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4680,7 +4680,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4699,7 +4699,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4718,7 +4718,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4737,7 +4737,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4756,7 +4756,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4773,9 +4773,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4792,9 +4792,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -4813,7 +4813,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4832,7 +4832,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4851,7 +4851,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4870,7 +4870,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4889,7 +4889,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4908,7 +4908,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4927,7 +4927,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4946,7 +4946,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4965,7 +4965,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -4984,26 +4984,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Bajra(Pearl Millet/Cumbu)",
       "variety": "Other",
       "grade": "Non-FAQ",
-      "minPrice": 2082,
-      "maxPrice": 2082,
-      "modalPrice": 2082,
+      "minPrice": 1900,
+      "maxPrice": 2200,
+      "modalPrice": 1950,
       "market": "APMC Nandurbar ",
       "district": "Nandurbar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5022,7 +5022,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5041,26 +5041,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Beans",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 2000,
-      "maxPrice": 3000,
-      "modalPrice": 3000,
+      "minPrice": 1500,
+      "maxPrice": 2000,
+      "modalPrice": 2000,
       "market": "APMC Karad ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5068,37 +5068,37 @@
       "variety": "Other",
       "grade": "FAQ",
       "minPrice": 5875,
-      "maxPrice": 6709,
-      "modalPrice": 6200,
+      "maxPrice": 7201,
+      "modalPrice": 6900,
       "market": "APMC  Latur",
       "district": "Latur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Bengal Gram(Gram)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 5875,
-      "maxPrice": 6800,
-      "modalPrice": 6000,
+      "minPrice": 5950,
+      "maxPrice": 6850,
+      "modalPrice": 6690,
       "market": "APMC Akola ",
       "district": "Akola",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5117,7 +5117,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5136,7 +5136,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5155,26 +5155,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Bengal Gram(Gram)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 5890,
-      "maxPrice": 6320,
-      "modalPrice": 6000,
+      "minPrice": 5900,
+      "maxPrice": 6455,
+      "modalPrice": 6200,
       "market": "APMC Mehekar ",
       "district": "Buldhana",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5193,45 +5193,45 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Black Gram(Urd Beans)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 8700,
-      "maxPrice": 9200,
-      "modalPrice": 9000,
+      "minPrice": 8200,
+      "maxPrice": 9061,
+      "modalPrice": 8850,
       "market": "APMC  Latur",
       "district": "Latur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Black Gram(Urd Beans)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 9050,
-      "maxPrice": 9050,
-      "modalPrice": 9050,
+      "minPrice": 10525,
+      "maxPrice": 10525,
+      "modalPrice": 10525,
       "market": "APMC Akola ",
       "district": "Akola",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5250,7 +5250,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5269,7 +5269,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5288,7 +5288,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5307,7 +5307,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5326,26 +5326,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Black Gram(Urd Beans)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 7800,
-      "maxPrice": 8725,
-      "modalPrice": 8600,
+      "minPrice": 8000,
+      "maxPrice": 8800,
+      "modalPrice": 8500,
       "market": "APMC Tuljapur ",
       "district": "Dharashiv",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5364,7 +5364,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5383,7 +5383,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5402,7 +5402,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5421,7 +5421,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5440,7 +5440,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5457,9 +5457,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5478,7 +5478,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5495,9 +5495,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5516,7 +5516,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5533,9 +5533,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5554,7 +5554,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5562,37 +5562,37 @@
       "variety": "Green (Whole)",
       "grade": "FAQ",
       "minPrice": 8768,
-      "maxPrice": 18000,
-      "modalPrice": 9900,
+      "maxPrice": 11600,
+      "modalPrice": 10000,
       "market": "APMC  Latur",
       "district": "Latur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Green Gram(Moong)(Whole)",
       "variety": "Green (Whole)",
-      "grade": "Non-FAQ",
-      "minPrice": 6550,
-      "maxPrice": 8570,
-      "modalPrice": 8230,
+      "grade": "FAQ",
+      "minPrice": 9125,
+      "maxPrice": 9125,
+      "modalPrice": 9125,
       "market": "APMC Akola ",
       "district": "Akola",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5611,7 +5611,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5630,7 +5630,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5649,7 +5649,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5668,7 +5668,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5687,7 +5687,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5706,26 +5706,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Green Gram(Moong)(Whole)",
       "variety": "Green (Whole)",
       "grade": "FAQ",
-      "minPrice": 8800,
+      "minPrice": 8768,
       "maxPrice": 9200,
-      "modalPrice": 9100,
+      "modalPrice": 9000,
       "market": "APMC Tuljapur ",
       "district": "Dharashiv",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5744,7 +5744,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5763,7 +5763,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5782,7 +5782,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5801,26 +5801,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Jowar(Sorghum)",
       "variety": "Other",
       "grade": "Non-FAQ",
-      "minPrice": 2200,
-      "maxPrice": 2380,
-      "modalPrice": 2350,
+      "minPrice": 2245,
+      "maxPrice": 2455,
+      "modalPrice": 2365,
       "market": "APMC Akola ",
       "district": "Akola",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5839,7 +5839,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5858,7 +5858,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5877,7 +5877,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5885,18 +5885,18 @@
       "variety": "Jowar ( White)",
       "grade": "Local",
       "minPrice": 3000,
-      "maxPrice": 5000,
-      "modalPrice": 4900,
+      "maxPrice": 5400,
+      "modalPrice": 5000,
       "market": "APMC Tuljapur ",
       "district": "Dharashiv",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5915,26 +5915,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Maize",
       "variety": "Deshi Red",
       "grade": "Non-FAQ",
-      "minPrice": 1641,
-      "maxPrice": 1901,
-      "modalPrice": 1775,
+      "minPrice": 1540,
+      "maxPrice": 2080,
+      "modalPrice": 1800,
       "market": "APMC Nandurbar ",
       "district": "Nandurbar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -5953,7 +5953,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -5972,26 +5972,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Unhali",
       "grade": "Local",
-      "minPrice": 1200,
-      "maxPrice": 4705,
-      "modalPrice": 4100,
+      "minPrice": 1000,
+      "maxPrice": 4500,
+      "modalPrice": 4050,
       "market": "APMC Devala ",
       "district": "Nashik",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6010,7 +6010,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6023,32 +6023,32 @@
       "market": "APMC Kamthi ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Halva",
       "grade": "Local",
-      "minPrice": 3000,
-      "maxPrice": 4000,
-      "modalPrice": 4000,
+      "minPrice": 2000,
+      "maxPrice": 5000,
+      "modalPrice": 5000,
       "market": "APMC Karad ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6067,7 +6067,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6084,9 +6084,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6105,7 +6105,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6124,7 +6124,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6143,7 +6143,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6160,9 +6160,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6179,9 +6179,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6200,7 +6200,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6219,7 +6219,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6236,9 +6236,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6257,7 +6257,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6265,18 +6265,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 1000,
-      "maxPrice": 35000,
-      "modalPrice": 6700,
+      "maxPrice": 6100,
+      "modalPrice": 3550,
       "market": "APMC Rahata ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6293,9 +6293,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6314,45 +6314,45 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Red gram/Arhar/Tur(whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 8000,
-      "maxPrice": 9490,
+      "minPrice": 9050,
+      "maxPrice": 9441,
       "modalPrice": 9300,
       "market": "APMC  Latur",
       "district": "Latur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Red gram/Arhar/Tur(whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 8000,
-      "maxPrice": 9765,
-      "modalPrice": 9000,
+      "minPrice": 8100,
+      "maxPrice": 9675,
+      "modalPrice": 9275,
       "market": "APMC Akola ",
       "district": "Akola",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6371,7 +6371,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6390,7 +6390,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6409,7 +6409,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6428,7 +6428,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6447,7 +6447,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6455,18 +6455,18 @@
       "variety": "Other",
       "grade": "FAQ",
       "minPrice": 8200,
-      "maxPrice": 8820,
-      "modalPrice": 8600,
+      "maxPrice": 8905,
+      "modalPrice": 8750,
       "market": "APMC Mehekar ",
       "district": "Buldhana",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6485,7 +6485,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6504,7 +6504,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6523,45 +6523,45 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Soyabean",
       "variety": "Yellow",
       "grade": "FAQ",
-      "minPrice": 5600,
-      "maxPrice": 5870,
+      "minPrice": 5680,
+      "maxPrice": 5861,
       "modalPrice": 5800,
       "market": "APMC  Latur",
       "district": "Latur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Soyabean",
       "variety": "Yellow",
       "grade": "FAQ",
-      "minPrice": 5395,
-      "maxPrice": 5705,
-      "modalPrice": 5680,
+      "minPrice": 5450,
+      "maxPrice": 5595,
+      "modalPrice": 5535,
       "market": "APMC Akola ",
       "district": "Akola",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6580,7 +6580,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6599,26 +6599,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Soyabean",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 5005,
-      "maxPrice": 5300,
-      "modalPrice": 5153,
+      "minPrice": 5370,
+      "maxPrice": 5550,
+      "modalPrice": 5460,
       "market": "APMC Hingoli ",
       "district": "Hingoli",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6637,7 +6637,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6645,18 +6645,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 5200,
-      "maxPrice": 5725,
+      "maxPrice": 5695,
       "modalPrice": 5600,
       "market": "APMC Mehekar ",
       "district": "Buldhana",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6675,7 +6675,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6694,7 +6694,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6713,7 +6713,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6732,7 +6732,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6751,7 +6751,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6768,28 +6768,28 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
       "crop": "Wheat",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 2585,
-      "maxPrice": 2800,
-      "modalPrice": 2750,
+      "minPrice": 2610,
+      "maxPrice": 2750,
+      "modalPrice": 2695,
       "market": "APMC Akola ",
       "district": "Akola",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6808,7 +6808,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6827,7 +6827,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6846,7 +6846,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6865,7 +6865,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6884,7 +6884,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6903,7 +6903,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6922,7 +6922,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6941,7 +6941,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6954,13 +6954,13 @@
       "market": "APMC Mehekar ",
       "district": "Buldhana",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -6979,7 +6979,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -6998,26 +6998,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
       "crop": "Wheat",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 2662,
-      "maxPrice": 2726,
-      "modalPrice": 2700,
+      "minPrice": 2630,
+      "maxPrice": 2688,
+      "modalPrice": 2650,
       "market": "APMC Nandurbar ",
       "district": "Nandurbar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7036,7 +7036,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -7055,7 +7055,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -7074,7 +7074,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -7093,7 +7093,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "publishedAt": "2026-09-23T07:32:39.846Z",
       "source": null
     },
     {
@@ -7110,9 +7110,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7129,9 +7129,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7148,9 +7148,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7167,9 +7167,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7186,9 +7186,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7205,9 +7205,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7224,9 +7224,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7243,9 +7243,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7262,9 +7262,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7281,9 +7281,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7300,9 +7300,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7319,9 +7319,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7338,9 +7338,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7357,9 +7357,9 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     },
     {
@@ -7376,9 +7376,636 @@
       "arrivalQuantity": null,
       "arrivalUnit": null,
       "observedOn": "23/09/2026",
-      "fetchedAt": "2026-09-23T07:32:39.820Z",
-      "validatedAt": "2026-09-23T07:32:39.820Z",
-      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Bajra(Pearl Millet/Cumbu)",
+      "variety": "Other",
+      "grade": "Non-FAQ",
+      "minPrice": 2300,
+      "maxPrice": 2300,
+      "modalPrice": 2300,
+      "market": "APMC Deoulgaon Raja ",
+      "district": "Buldhana",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Bajra(Pearl Millet/Cumbu)",
+      "variety": "Other",
+      "grade": "Non-FAQ",
+      "minPrice": 2041,
+      "maxPrice": 2361,
+      "modalPrice": 2308,
+      "market": "APMC Dharangaon ",
+      "district": "Jalgaon",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Bengal Gram(Gram)(Whole)",
+      "variety": "Kabul Small",
+      "grade": "Non-FAQ",
+      "minPrice": 5580,
+      "maxPrice": 5800,
+      "modalPrice": 5690,
+      "market": "APMC Akola ",
+      "district": "Akola",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Bengal Gram(Gram)(Whole)",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 6250,
+      "maxPrice": 6805,
+      "modalPrice": 6527,
+      "market": "APMC Hingoli ",
+      "district": "Hingoli",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Bengal Gram(Gram)(Whole)",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 6475,
+      "maxPrice": 6750,
+      "modalPrice": 6625,
+      "market": "APMC Wardha ",
+      "district": "Wardha",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Black Gram(Urd Beans)(Whole)",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 9300,
+      "maxPrice": 9300,
+      "modalPrice": 9300,
+      "market": "APMC Deoulgaon Raja ",
+      "district": "Buldhana",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Black Gram(Urd Beans)(Whole)",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 8500,
+      "maxPrice": 9300,
+      "modalPrice": 8500,
+      "market": "APMC Dharangaon ",
+      "district": "Jalgaon",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Black Gram(Urd Beans)(Whole)",
+      "variety": "Other",
+      "grade": "Non-FAQ",
+      "minPrice": 6000,
+      "maxPrice": 7100,
+      "modalPrice": 7000,
+      "market": "APMC Dharmabad ",
+      "district": "Nanded",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Black Gram(Urd Beans)(Whole)",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 7800,
+      "maxPrice": 9605,
+      "modalPrice": 8702,
+      "market": "APMC Hingoli ",
+      "district": "Hingoli",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Cotton",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 7700,
+      "maxPrice": 8150,
+      "modalPrice": 7950,
+      "market": "APMC Nandurbar ",
+      "district": "Nandurbar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Ginger(Green)",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 1500,
+      "maxPrice": 2500,
+      "modalPrice": 2000,
+      "market": "APMC Patan ",
+      "district": "Satara",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Green Chilli",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2000,
+      "maxPrice": 2500,
+      "modalPrice": 2111,
+      "market": "APMC Navapur ",
+      "district": "Nandurbar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Green Chilli",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2500,
+      "maxPrice": 3500,
+      "modalPrice": 3000,
+      "market": "APMC Patan ",
+      "district": "Satara",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Green Chilli",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2000,
+      "maxPrice": 3000,
+      "modalPrice": 2500,
+      "market": "APMC Vai ",
+      "district": "Satara",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Green Gram(Moong)(Whole)",
+      "variety": "Green (Whole)",
+      "grade": "FAQ",
+      "minPrice": 9200,
+      "maxPrice": 10000,
+      "modalPrice": 10000,
+      "market": "APMC Dharangaon ",
+      "district": "Jalgaon",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Green Gram(Moong)(Whole)",
+      "variety": "Green (Whole)",
+      "grade": "Non-FAQ",
+      "minPrice": 7000,
+      "maxPrice": 8100,
+      "modalPrice": 8000,
+      "market": "APMC Dharmabad ",
+      "district": "Nanded",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Green Gram(Moong)(Whole)",
+      "variety": "Green (Whole)",
+      "grade": "FAQ",
+      "minPrice": 10250,
+      "maxPrice": 13845,
+      "modalPrice": 12047,
+      "market": "APMC Hingoli ",
+      "district": "Hingoli",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Jowar(Sorghum)",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2500,
+      "maxPrice": 3951,
+      "modalPrice": 3776,
+      "market": "APMC Deoulgaon Raja ",
+      "district": "Buldhana",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Maize",
+      "variety": "Yellow",
+      "grade": "Non-FAQ",
+      "minPrice": 2056,
+      "maxPrice": 2300,
+      "modalPrice": 2056,
+      "market": "APMC Dharangaon ",
+      "district": "Jalgaon",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Onion",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2000,
+      "maxPrice": 4800,
+      "modalPrice": 3000,
+      "market": "APMC Akola ",
+      "district": "Akola",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Onion",
+      "variety": "Unhali",
+      "grade": "Local",
+      "minPrice": 700,
+      "maxPrice": 4175,
+      "modalPrice": 3600,
+      "market": "APMC Nampur",
+      "district": "Nashik",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Onion",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2000,
+      "maxPrice": 3000,
+      "modalPrice": 2700,
+      "market": "APMC Navapur ",
+      "district": "Nandurbar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Onion",
+      "variety": "Unhali",
+      "grade": "Local",
+      "minPrice": 1051,
+      "maxPrice": 4681,
+      "modalPrice": 3725,
+      "market": "APMC Yeola ",
+      "district": "Nashik",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Red gram/Arhar/Tur(whole)",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 8800,
+      "maxPrice": 9355,
+      "modalPrice": 9055,
+      "market": "APMC Wardha ",
+      "district": "Wardha",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Soyabean",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 5000,
+      "maxPrice": 5600,
+      "modalPrice": 5500,
+      "market": "APMC Tuljapur ",
+      "district": "Dharashiv",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Tomato",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2000,
+      "maxPrice": 2200,
+      "modalPrice": 2100,
+      "market": "APMC Ghoti ",
+      "district": "Nashik",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Tomato",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 900,
+      "maxPrice": 2500,
+      "modalPrice": 1409,
+      "market": "APMC Navapur ",
+      "district": "Nandurbar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Tomato",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 1250,
+      "maxPrice": 1450,
+      "modalPrice": 1350,
+      "market": "APMC Patan ",
+      "district": "Satara",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Tomato",
+      "variety": "Local",
+      "grade": "Local",
+      "minPrice": 800,
+      "maxPrice": 1300,
+      "modalPrice": 1100,
+      "market": "APMC Vai ",
+      "district": "Satara",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Wheat",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 2700,
+      "maxPrice": 2900,
+      "modalPrice": 2700,
+      "market": "APMC Deoulgaon Raja ",
+      "district": "Buldhana",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Wheat",
+      "variety": "Sharbati",
+      "grade": "FAQ",
+      "minPrice": 2595,
+      "maxPrice": 2885,
+      "modalPrice": 2740,
+      "market": "APMC Hingoli ",
+      "district": "Hingoli",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Wheat",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 2675,
+      "maxPrice": 2725,
+      "modalPrice": 2700,
+      "market": "APMC Wardha ",
+      "district": "Wardha",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
+      "source": null
+    },
+    {
+      "crop": "Wheat",
+      "variety": "Maharashtra 2189",
+      "grade": "Non-FAQ",
+      "minPrice": 2100,
+      "maxPrice": 2400,
+      "modalPrice": 2250,
+      "market": "Latur(Murud) ",
+      "district": "Latur",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T09:59:14.660Z",
+      "validatedAt": "2026-09-23T09:59:14.660Z",
+      "publishedAt": "2026-09-23T09:59:14.660Z",
       "source": null
     }
   ]
