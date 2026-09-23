@@ -5,6 +5,8 @@
 // When source-reported arrival quantity is available, computes quantity
 // aggregates. When it is not (current AGMARKNET Maharashtra data), falls
 // back to observation-count-based metrics.
+
+const { compareObservedDate } = require('../lib/observedDate');
 //
 // Deduplication: observations are identified by (crop, market, variety,
 // arrivalDate). Repeated ingestion of the same record does NOT double-count.
@@ -228,10 +230,12 @@ function getMarketArrivals(priceRows, opts = {}) {
     return { available: false, note: `No observations found for ${opts.crop || 'any crop'} at ${opts.market || 'any market'}` };
   }
 
-  // Latest observation
+  // Latest observation. Chronological, never lexicographic: as strings
+  // '08/09/2026' sorts BEFORE '22/08/2026' (8 < 22), so the reported "latest
+  // arrival" could be an August record while September's sat behind it.
   const sorted = filtered
     .filter(r => r.arrivalDate)
-    .sort((a, b) => String(a.arrivalDate).localeCompare(String(b.arrivalDate)));
+    .sort((a, b) => compareObservedDate(a.arrivalDate, b.arrivalDate));
 
   if (sorted.length === 0) {
     return { available: false, note: 'No dated observations found' };

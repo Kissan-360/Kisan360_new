@@ -14,17 +14,10 @@ const path = require('path');
 const HISTORY_FILE = path.join(__dirname, '..', 'data', 'priceHistory.json');
 
 // AGMARKNET arrival dates come as DD/MM/YYYY — normalize for sorting/storage.
-function normalizeDate(raw) {
-  const s = String(raw || '').trim();
-  const dmy = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (dmy) {
-    const [, d, m, y] = dmy;
-    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
-  }
-  const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (iso) return iso[0];
-  return null;
-}
+// Delegates to lib/observedDate.js, which is now the single definition of the
+// wire format (this function was the one place that already read it correctly).
+const { normalizeObservedDate } = require('../lib/observedDate');
+const normalizeDate = normalizeObservedDate;
 
 // Append snapshot rows into the days map (pure — returns a new map).
 function appendRows(days, rows, { retrievedAt } = {}) {
