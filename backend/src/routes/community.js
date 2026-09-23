@@ -821,9 +821,11 @@ async function ensureSeed() {
   }
   seedInitialized = true;
 }
-ensureSeed().catch(() => {});
-
+// Seeding is triggered by the boot sequence AFTER the database connection is
+// ready (see server.js) — at module load the connection is never ready yet, so
+// the seed silently failed and never retried for the life of the process.
 module.exports = router;
+module.exports.ensureSeed = ensureSeed;
 module.exports.readSeed = readSeed;
 module.exports.computeTrust = computeTrust;
 module.exports.trustLabel = trustLabel;

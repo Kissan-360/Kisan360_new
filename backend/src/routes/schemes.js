@@ -177,9 +177,13 @@ router.post('/check-eligibility', async (req, res) => {
   }
 });
 
-ensureSeed().catch(() => {});
+// Seeding is triggered by the boot sequence AFTER the database connection is
+// ready (see server.js). It used to run here at module load, where the
+// connection is never ready yet, so `countDocuments()` threw, the failure was
+// swallowed, and `seedInitialized = true` made the skip permanent.
 
 module.exports = router;
 module.exports.readSeedData = readSeedData;
+module.exports.ensureSeed = ensureSeed;
 module.exports.listSchemes = listSchemes;
 module.exports.eligibilityVerdict = eligibilityVerdict;
