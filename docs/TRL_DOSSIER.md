@@ -46,7 +46,7 @@ awake, so its first call can still take 30–60 s.
 
 | Claim | Evidence |
 |---|---|
-| Every push qualifies itself | `.github/workflows/ci.yml`: backend jest · web typecheck + build · calculator unittest · `preflight --fast` · `evidence --check` |
+| Every push qualifies itself | `.github/workflows/ci.yml`: backend jest · web typecheck + build · calculator unittest · **ui** (a real browser driven through login → decision → lot → buyers, plus a WCAG A/AA sweep in en/mr/hi) · `preflight --fast` · `evidence --check` |
 | Ingestion survives restarts | refresh → restamp → commit, as a scheduled workflow; runtime cron alone dies with the sleeping service |
 | Freshness is alarmed honestly | pipeline age (our responsibility, ~19.5 h) alarms; source age is **reported** — the government source publishes on its own cadence, so a threshold there would false-alarm on healthy days |
 | Capacity is measured, not assumed | `docs/evidence/loadtest-*.json`: API 2,121 req/s @ p95 64 ms; net-realization 17 req/s @ p95 15.7 s |

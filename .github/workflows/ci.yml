@@ -17,6 +17,9 @@ name: ci
 #              typescript was installed; before that it silently did nothing)
 #   calculator python -m unittest — stdlib only, so no pytest dependency is
 #              smuggled into the deployed service
+#   ui         the qualification the API tests cannot give: a real browser is
+#              driven through login -> decision -> lot -> buyers (journey-smoke),
+#              and every route is swept for WCAG A/AA violations in en/mr/hi
 #   gate       the project's own fast preflight, so the repo's contract is
 #              asserted by the repo's own tool
 #
@@ -140,9 +143,88 @@ jobs:
       - name: Test
         run: python -m unittest test_net_realization -v
 
+  ui:
+    name: ui (journey + a11y)
+    needs: [backend, web]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # The boot fallback is mongodb-memory-server, which downloads a MongoDB
+      # binary (~100 MB) on first use — the same cache the test job uses, so the
+      # two jobs share the download instead of paying for it twice.
+      - name: Cache the in-memory MongoDB binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/mongodb-binaries
+          key: mongo-binaries-${{ runner.os }}-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: mongo-binaries-${{ runner.os }}-
+
+      - name: Install deps
+        run: |
+          npm ci --prefix backend
+          npm ci --prefix web-app
+
+      # The API boots without a database (in-memory fallback). The unreachable
+      # URI is deliberate: CI must never be able to reach the pilot's Atlas
+      # cluster, and an explicit failure is more predictable than an unset one.
+      # Readiness, not liveness: /health answers immediately with
+      # "db":"offline" while mongodb-memory-server starts and seeds (measured at
+      # ~8 s locally, longer on a cold binary cache). Waiting for a 200 here
+      # would run the browser smoke against a database-less API.
+      - name: Start the API
+        run: |
+          cd backend
+          MONGODB_URI='mongodb://127.0.0.1:9/ci' KISAN_TELEMETRY=off \
+            nohup node src/server.js > /tmp/api.log 2>&1 &
+          for i in $(seq 1 90); do
+            curl -s http://localhost:5000/health | grep -q '"dbReady":true' && break
+            sleep 2
+          done
+          curl -s http://localhost:5000/health | grep -q '"dbReady":true' \
+            || { echo 'API never reported dbReady'; echo '--- api.log ---'; tail -60 /tmp/api.log; exit 1; }
+          curl -s http://localhost:5000/health | head -c 200
+
+      # The dev server (not the build) because it carries the /api proxy that
+      # makes the app behave exactly as it does on a laptop.
+      - name: Start the web dev server
+        run: |
+          cd web-app
+          nohup npm run dev -- --port 3000 > /tmp/vite.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://localhost:3000/ >/dev/null && break; sleep 2; done
+          curl -sf http://localhost:3000/ >/dev/null || { echo '--- vite.log ---'; tail -50 /tmp/vite.log; exit 1; }
+
+      # The API tests cannot see a broken button or a page that throws on mount.
+      - name: Journey smoke (drives the real UI)
+        run: node scripts/journey-smoke.cjs
+
+      - name: Accessibility sweep (WCAG 2.1 A/AA, three languages)
+        run: |
+          node scripts/a11y.cjs
+          node scripts/a11y.cjs --lang mr
+          node scripts/a11y.cjs --lang hi
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-ui
+          path: |
+            docs/evidence/journey-smoke.json
+            docs/evidence/a11y-*.json
+          if-no-files-found: error
+
+      - name: Logs on failure
+        if: failure()
+        run: tail -60 /tmp/api.log /tmp/vite.log
+
   gate:
     name: gate (preflight --fast)
-    needs: [backend, web, calculator]
+    needs: [backend, web, calculator, ui]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -170,5 +252,5 @@ jobs:
           {
             echo "### ci — all green"
             echo ""
-            echo "backend jest · web typecheck + build · calculator unittest · preflight --fast · evidence --check"
+            echo "backend jest · web typecheck + build · calculator unittest · ui journey + a11y · preflight --fast · evidence --check"
           } >> "$GITHUB_STEP_SUMMARY"

@@ -69,6 +69,23 @@ async function main() {
     process.exit(0);
   }
 
+  // Fail fast and clearly when the API behind the web origin is not usable —
+  // otherwise the browser just renders empty screens and the failure reads as a
+  // UI bug. (Cold boots answer /health before the database is ready, so this
+  // checks the endpoint the journey actually needs.)
+  try {
+    const res = await fetch(`${BASE}/api/auth/demo-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role: 'farmer' }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  } catch (e) {
+    console.log(`\n✗ The API is not reachable through ${BASE} (${e.message}).`);
+    console.log('  Start the backend on :5000 and wait until /health reports dbReady:true, then retry.\n');
+    process.exit(1);
+  }
+
   console.log(`\n🚜 UI journey smoke — ${BASE} · lang=${LANG}\n`);
   const browser = await puppeteer.launch({ executablePath: exe, headless: !KEEP_OPEN, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   const consoleErrors = [];
