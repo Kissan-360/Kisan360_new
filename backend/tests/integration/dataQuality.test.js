@@ -18,6 +18,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const getFreePort = require('../helpers/freePort');
+const waitHealth = require('../helpers/waitHealth');
 
 jest.setTimeout(120000);
 
@@ -27,20 +28,6 @@ let BASE;
 
 let mem;
 let server;
-
-async function waitHealth(url, timeoutMs = 20000) {
-  const deadline = Date.now() + timeoutMs;
-  let lastErr;
-  while (Date.now() < deadline) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) return;
-      lastErr = new Error(`health status ${res.status}`);
-    } catch (err) { lastErr = err; }
-    await new Promise(r => setTimeout(r, 500));
-  }
-  throw new Error(`Backend did not become healthy: ${lastErr && lastErr.message}`);
-}
 
 async function call(method, route, { token, body } = {}) {
   const headers = {};
