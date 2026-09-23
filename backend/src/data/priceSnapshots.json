@@ -3,10 +3,10 @@
     "purpose": "Known-good cached fallback for /api/market/prices and the net-realization calculator.",
     "note": "Machine-generated from a live AGMARKNET pull (see backend/scripts/refresh-prices.js). Real data, not a sample.",
     "source": "agmarknet_snapshot",
-    "retrievedAt": "2026-09-22T10:41:02.476Z",
+    "retrievedAt": "2026-09-23T07:32:39.846Z",
     "unit": "₹ per quintal",
-    "fetchedAt": "2026-09-22T10:41:02.439Z",
-    "publishedAt": "2026-09-22T10:41:02.439Z"
+    "fetchedAt": "2026-09-23T07:32:39.820Z",
+    "publishedAt": "2026-09-23T07:32:39.820Z"
   },
   "rows": [
     {
@@ -25,7 +25,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -44,7 +44,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -57,13 +57,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -71,18 +71,18 @@
       "variety": "Other",
       "grade": "FAQ",
       "minPrice": 3500,
-      "maxPrice": 3600,
-      "modalPrice": 3550,
+      "maxPrice": 3700,
+      "modalPrice": 3600,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -101,7 +101,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -120,26 +120,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Banana - Green",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 2600,
-      "maxPrice": 3200,
-      "modalPrice": 2900,
+      "minPrice": 3000,
+      "maxPrice": 4000,
+      "modalPrice": 3500,
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -158,7 +158,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -177,7 +177,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -190,13 +190,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -215,7 +215,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -234,7 +234,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -242,37 +242,37 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 2500,
-      "maxPrice": 5000,
-      "modalPrice": 3750,
+      "maxPrice": 6000,
+      "modalPrice": 4250,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Beans",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 2000,
+      "minPrice": 2500,
       "maxPrice": 2500,
-      "modalPrice": 2250,
+      "modalPrice": 2500,
       "market": "APMC Rahata ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -291,7 +291,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -310,7 +310,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -323,13 +323,13 @@
       "market": "Pune(Khadiki) ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -348,7 +348,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -367,26 +367,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Beans",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 3000,
-      "maxPrice": 3500,
-      "modalPrice": 3250,
+      "minPrice": 2500,
+      "maxPrice": 2500,
+      "modalPrice": 2500,
       "market": "Pune(Pimpri) ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -399,13 +399,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -424,26 +424,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Bengal Gram(Gram)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 6800,
-      "maxPrice": 7800,
-      "modalPrice": 7500,
+      "minPrice": 7000,
+      "maxPrice": 10000,
+      "modalPrice": 8700,
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -462,26 +462,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Bengal Gram(Gram)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 6000,
-      "maxPrice": 6880,
-      "modalPrice": 6660,
+      "minPrice": 6451,
+      "maxPrice": 6830,
+      "modalPrice": 6735,
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -489,18 +489,18 @@
       "variety": "Other",
       "grade": "FAQ",
       "minPrice": 6400,
-      "maxPrice": 7500,
-      "modalPrice": 6950,
+      "maxPrice": 7600,
+      "modalPrice": 7000,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -519,7 +519,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -538,7 +538,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -551,13 +551,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -576,7 +576,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -595,7 +595,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -614,7 +614,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -622,18 +622,18 @@
       "variety": "Other",
       "grade": "FAQ",
       "minPrice": 8000,
-      "maxPrice": 8450,
-      "modalPrice": 8300,
+      "maxPrice": 8400,
+      "modalPrice": 8200,
       "market": "APMC Karjat ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -652,7 +652,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -665,32 +665,32 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Black Gram(Urd Beans)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 9000,
+      "minPrice": 9100,
       "maxPrice": 10300,
-      "modalPrice": 9650,
+      "modalPrice": 9700,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -709,26 +709,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Black Gram(Urd Beans)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 8000,
-      "maxPrice": 8500,
-      "modalPrice": 8250,
+      "minPrice": 7800,
+      "maxPrice": 8400,
+      "modalPrice": 8200,
       "market": "Karjat(Rashin) ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -747,7 +747,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -766,7 +766,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -779,13 +779,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -798,13 +798,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -817,13 +817,13 @@
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -842,7 +842,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -850,18 +850,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 3000,
-      "maxPrice": 4500,
-      "modalPrice": 4000,
+      "maxPrice": 4000,
+      "modalPrice": 3500,
       "market": "APMC Ratnagiri (Nachane) ",
       "district": "Ratnagiri",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -880,7 +880,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -899,7 +899,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -907,18 +907,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 6000,
-      "maxPrice": 15000,
-      "modalPrice": 10500,
+      "maxPrice": 16000,
+      "modalPrice": 11000,
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -931,13 +931,13 @@
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -956,7 +956,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -969,51 +969,51 @@
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Ginger(Green)",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 7500,
-      "maxPrice": 12000,
-      "modalPrice": 9750,
+      "minPrice": 6000,
+      "maxPrice": 7000,
+      "modalPrice": 6500,
       "market": "APMC Rahata ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Ginger(Green)",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 10000,
-      "maxPrice": 16000,
-      "modalPrice": 12000,
+      "minPrice": 16000,
+      "maxPrice": 17000,
+      "modalPrice": 16500,
       "market": "APMC Ratnagiri (Nachane) ",
       "district": "Ratnagiri",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1032,7 +1032,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1051,7 +1051,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1070,7 +1070,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1089,7 +1089,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1108,7 +1108,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1127,7 +1127,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1135,18 +1135,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 4000,
-      "maxPrice": 15000,
-      "modalPrice": 9500,
+      "maxPrice": 14000,
+      "modalPrice": 9000,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1165,7 +1165,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1184,7 +1184,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1203,7 +1203,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1222,7 +1222,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1241,7 +1241,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1260,26 +1260,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 2535,
-      "maxPrice": 3000,
-      "modalPrice": 2855,
+      "minPrice": 2010,
+      "maxPrice": 25000,
+      "modalPrice": 2320,
       "market": "APMC Kalmeshwar ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1298,7 +1298,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1317,7 +1317,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1336,7 +1336,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1349,13 +1349,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1374,7 +1374,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1393,7 +1393,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1412,7 +1412,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1420,18 +1420,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 2000,
-      "maxPrice": 3500,
-      "modalPrice": 2750,
+      "maxPrice": 3000,
+      "modalPrice": 2500,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1444,13 +1444,13 @@
       "market": "APMC Rahata ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1469,7 +1469,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1488,7 +1488,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1507,7 +1507,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1526,7 +1526,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1545,7 +1545,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1564,26 +1564,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 1700,
+      "minPrice": 1600,
       "maxPrice": 2000,
-      "modalPrice": 1850,
+      "modalPrice": 1800,
       "market": "Pune(Khadiki) ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1602,26 +1602,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 3500,
-      "maxPrice": 3500,
+      "minPrice": 3000,
+      "maxPrice": 4000,
       "modalPrice": 3500,
       "market": "Pune(Pimpri) ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1634,13 +1634,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1659,7 +1659,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1678,7 +1678,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1697,7 +1697,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1710,13 +1710,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1735,26 +1735,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Green Gram(Moong)(Whole)",
       "variety": "Green (Whole)",
       "grade": "FAQ",
-      "minPrice": 8800,
+      "minPrice": 8900,
       "maxPrice": 9700,
-      "modalPrice": 9250,
+      "modalPrice": 9300,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1773,7 +1773,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1792,7 +1792,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1811,7 +1811,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1824,13 +1824,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1838,56 +1838,56 @@
       "variety": "White Fozi",
       "grade": "Local",
       "minPrice": 4500,
-      "maxPrice": 5500,
-      "modalPrice": 5100,
+      "maxPrice": 5400,
+      "modalPrice": 5200,
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Green Peas",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 6900,
+      "minPrice": 6700,
       "maxPrice": 7300,
-      "modalPrice": 7100,
+      "modalPrice": 7000,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Green Peas",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 7000,
-      "maxPrice": 8000,
-      "modalPrice": 7500,
+      "minPrice": 8000,
+      "maxPrice": 8500,
+      "modalPrice": 8250,
       "market": "APMC Rahata ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -1906,7 +1906,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1925,7 +1925,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1944,7 +1944,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1963,7 +1963,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -1982,7 +1982,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2001,7 +2001,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2014,13 +2014,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2039,26 +2039,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Jowar(Sorghum)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 6100,
-      "maxPrice": 6700,
-      "modalPrice": 6400,
+      "minPrice": 6200,
+      "maxPrice": 6800,
+      "modalPrice": 6500,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2077,7 +2077,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2096,7 +2096,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2115,7 +2115,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2134,26 +2134,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Jowar(Sorghum)",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 3900,
+      "minPrice": 3950,
       "maxPrice": 6000,
-      "modalPrice": 4950,
+      "modalPrice": 4975,
       "market": "Kolhapur(Laxmipuri) ",
       "district": "Kolhapur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2172,7 +2172,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2185,32 +2185,32 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Lentil(Masur)(Whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 7000,
+      "minPrice": 7100,
       "maxPrice": 7400,
-      "modalPrice": 7200,
+      "modalPrice": 7250,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2229,7 +2229,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2248,7 +2248,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2267,26 +2267,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Maize",
       "variety": "Other",
-      "grade": "Non-FAQ",
-      "minPrice": 1600,
-      "maxPrice": 2200,
-      "modalPrice": 2000,
+      "grade": "FAQ",
+      "minPrice": 2500,
+      "maxPrice": 2500,
+      "modalPrice": 2500,
       "market": "APMC Karjat ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2299,13 +2299,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2313,18 +2313,18 @@
       "variety": "Deshi Red",
       "grade": "FAQ",
       "minPrice": 2700,
-      "maxPrice": 2900,
-      "modalPrice": 2800,
+      "maxPrice": 3000,
+      "modalPrice": 2850,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2343,7 +2343,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2362,45 +2362,45 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Maize",
       "variety": "Yellow",
-      "grade": "Non-FAQ",
-      "minPrice": 1600,
-      "maxPrice": 2200,
-      "modalPrice": 2000,
+      "grade": "FAQ",
+      "minPrice": 2400,
+      "maxPrice": 2500,
+      "modalPrice": 2400,
       "market": "Karjat(Rashin) ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Mango(Raw-Ripe)",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 5000,
-      "maxPrice": 6000,
-      "modalPrice": 5500,
+      "minPrice": 7000,
+      "maxPrice": 10000,
+      "modalPrice": 8500,
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2419,7 +2419,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2438,7 +2438,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2457,7 +2457,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2476,7 +2476,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2495,7 +2495,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2514,7 +2514,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2533,7 +2533,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2552,7 +2552,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2571,7 +2571,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2590,7 +2590,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2609,7 +2609,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2628,7 +2628,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2641,13 +2641,13 @@
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2660,13 +2660,13 @@
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2685,7 +2685,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2693,18 +2693,18 @@
       "variety": "Local",
       "grade": "Local",
       "minPrice": 1000,
-      "maxPrice": 4800,
-      "modalPrice": 2900,
+      "maxPrice": 4700,
+      "modalPrice": 2850,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2723,7 +2723,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2742,7 +2742,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2761,7 +2761,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2780,7 +2780,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2799,7 +2799,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2818,7 +2818,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2837,7 +2837,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2856,7 +2856,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2875,7 +2875,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2894,26 +2894,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 3000,
-      "maxPrice": 4800,
-      "modalPrice": 3900,
+      "minPrice": 2800,
+      "maxPrice": 4600,
+      "modalPrice": 3700,
       "market": "Mumbai-Onion & Potato Market ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2921,18 +2921,18 @@
       "variety": "Local",
       "grade": "Local",
       "minPrice": 1000,
-      "maxPrice": 1700,
-      "modalPrice": 1350,
+      "maxPrice": 2400,
+      "modalPrice": 1700,
       "market": "Pune(Khadiki) ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -2951,7 +2951,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -2970,26 +2970,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Local",
       "grade": "Local",
-      "minPrice": 3500,
-      "maxPrice": 5200,
-      "modalPrice": 4350,
+      "minPrice": 2000,
+      "maxPrice": 4700,
+      "modalPrice": 3350,
       "market": "Pune(Pimpri) ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3008,7 +3008,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3016,18 +3016,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 500,
-      "maxPrice": 1000,
-      "modalPrice": 750,
+      "maxPrice": 1200,
+      "modalPrice": 850,
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3046,7 +3046,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3065,7 +3065,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3084,7 +3084,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3103,7 +3103,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3122,7 +3122,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3141,7 +3141,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3154,13 +3154,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3173,13 +3173,13 @@
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3198,7 +3198,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3217,7 +3217,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3236,7 +3236,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3255,7 +3255,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3274,7 +3274,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3293,7 +3293,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3312,7 +3312,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3331,7 +3331,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3344,13 +3344,13 @@
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3369,7 +3369,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3377,37 +3377,37 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 250,
-      "maxPrice": 12850,
-      "modalPrice": 8250,
+      "maxPrice": 14250,
+      "modalPrice": 8050,
       "market": "APMC Pimpalgaon Baswant ",
       "district": "Nashik",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Pomegranate",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 2000,
+      "minPrice": 2500,
       "maxPrice": 10000,
-      "modalPrice": 6000,
+      "modalPrice": 6200,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3426,7 +3426,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3445,7 +3445,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3464,7 +3464,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3483,7 +3483,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3502,7 +3502,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3521,7 +3521,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3540,7 +3540,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3559,7 +3559,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3578,7 +3578,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3586,18 +3586,18 @@
       "variety": "Other",
       "grade": "FAQ",
       "minPrice": 5000,
-      "maxPrice": 5700,
-      "modalPrice": 5350,
+      "maxPrice": 5900,
+      "modalPrice": 5450,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3610,13 +3610,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3635,7 +3635,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3654,7 +3654,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3673,7 +3673,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3692,26 +3692,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Red gram/Arhar/Tur(whole)",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 8500,
-      "maxPrice": 9245,
-      "modalPrice": 9058,
+      "minPrice": 8400,
+      "maxPrice": 9150,
+      "modalPrice": 8962,
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3730,7 +3730,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3749,7 +3749,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3768,7 +3768,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3787,7 +3787,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3806,7 +3806,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3825,7 +3825,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3844,7 +3844,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3863,7 +3863,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3882,7 +3882,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3901,7 +3901,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3920,7 +3920,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3939,26 +3939,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Tomato",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 1515,
-      "maxPrice": 2000,
-      "modalPrice": 1825,
+      "minPrice": 1450,
+      "maxPrice": 1800,
+      "modalPrice": 1630,
       "market": "APMC Kalmeshwar ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -3977,7 +3977,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -3996,7 +3996,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4015,7 +4015,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4028,13 +4028,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4053,7 +4053,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4072,7 +4072,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4091,7 +4091,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4110,7 +4110,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4129,7 +4129,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4148,7 +4148,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4156,18 +4156,37 @@
       "variety": "Local",
       "grade": "Local",
       "minPrice": 600,
-      "maxPrice": 1500,
-      "modalPrice": 1050,
+      "maxPrice": 2000,
+      "modalPrice": 1300,
       "market": "APMC Pune ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Tomato",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 400,
+      "maxPrice": 1500,
+      "modalPrice": 950,
+      "market": "APMC Rahata ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4177,35 +4196,16 @@
       "minPrice": 500,
       "maxPrice": 1500,
       "modalPrice": 1000,
-      "market": "APMC Rahata ",
-      "district": "Ahilyanagar",
-      "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
-      "arrivalQuantity": null,
-      "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
-      "source": null
-    },
-    {
-      "crop": "Tomato",
-      "variety": "Other",
-      "grade": "Local",
-      "minPrice": 1000,
-      "maxPrice": 1500,
-      "modalPrice": 1250,
       "market": "APMC Rahuri ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4213,18 +4213,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 1000,
-      "maxPrice": 1600,
-      "modalPrice": 1200,
+      "maxPrice": 1300,
+      "modalPrice": 1100,
       "market": "APMC Ratnagiri (Nachane) ",
       "district": "Ratnagiri",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4243,7 +4243,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4262,7 +4262,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4281,7 +4281,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4300,7 +4300,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4319,7 +4319,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4332,13 +4332,13 @@
       "market": "Pune(Khadiki) ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "10/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "10/09/2026",
-      "fetchedAt": "2026-09-10T17:46:50.654Z",
-      "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4357,7 +4357,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4376,26 +4376,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Tomato",
       "variety": "Local",
       "grade": "Local",
-      "minPrice": 1400,
-      "maxPrice": 1400,
-      "modalPrice": 1400,
+      "minPrice": 1200,
+      "maxPrice": 1800,
+      "modalPrice": 1500,
       "market": "Pune(Pimpri) ",
       "district": "Pune",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4414,7 +4414,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4433,7 +4433,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4452,7 +4452,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4471,7 +4471,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4490,7 +4490,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4503,13 +4503,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4528,26 +4528,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Wheat",
       "variety": "Other",
       "grade": "FAQ",
-      "minPrice": 2634,
-      "maxPrice": 2780,
-      "modalPrice": 2743,
+      "minPrice": 2600,
+      "maxPrice": 2748,
+      "modalPrice": 2711,
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4560,13 +4560,13 @@
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4585,7 +4585,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4604,7 +4604,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4623,7 +4623,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4642,7 +4642,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4661,7 +4661,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4680,7 +4680,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4699,7 +4699,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4718,7 +4718,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4737,7 +4737,7 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4756,26 +4756,26 @@
       "observedOn": "10/09/2026",
       "fetchedAt": "2026-09-10T17:46:50.654Z",
       "validatedAt": "2026-09-10T17:46:50.654Z",
-      "publishedAt": "2026-09-22T06:57:53.601Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 2000,
+      "minPrice": 3000,
       "maxPrice": 3500,
-      "modalPrice": 3000,
+      "modalPrice": 3200,
       "market": "APMC Ratnagiri (Nachane) ",
       "district": "Ratnagiri",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4788,13 +4788,13 @@
       "market": "APMC Mumbai ",
       "district": "Mumbai",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -4813,7 +4813,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4832,7 +4832,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4851,7 +4851,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4870,7 +4870,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4889,7 +4889,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4908,7 +4908,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4927,7 +4927,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4946,7 +4946,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4965,7 +4965,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -4984,7 +4984,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5003,7 +5003,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5022,7 +5022,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5041,7 +5041,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5060,7 +5060,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5079,7 +5079,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5098,7 +5098,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5117,7 +5117,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5136,7 +5136,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5155,7 +5155,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5174,7 +5174,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5193,7 +5193,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5212,7 +5212,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5231,7 +5231,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5250,7 +5250,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5269,7 +5269,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5288,7 +5288,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5307,7 +5307,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5326,7 +5326,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5345,7 +5345,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5364,7 +5364,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5383,7 +5383,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5402,7 +5402,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5421,7 +5421,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5440,26 +5440,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Ginger(Green)",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 15000,
-      "maxPrice": 16000,
-      "modalPrice": 16000,
+      "minPrice": 6000,
+      "maxPrice": 7500,
+      "modalPrice": 7500,
       "market": "APMC Karad ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -5478,7 +5478,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5491,13 +5491,13 @@
       "market": "APMC Nagpur ",
       "district": "Nagpur",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -5516,26 +5516,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Green Chilli",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 1500,
-      "maxPrice": 2000,
-      "modalPrice": 2000,
+      "minPrice": 2000,
+      "maxPrice": 2500,
+      "modalPrice": 2500,
       "market": "APMC Karad ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -5554,7 +5554,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5573,7 +5573,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5592,7 +5592,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5611,7 +5611,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5630,7 +5630,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5649,7 +5649,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5668,7 +5668,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5687,7 +5687,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5706,7 +5706,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5725,7 +5725,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5744,7 +5744,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5763,7 +5763,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5782,7 +5782,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5801,7 +5801,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5820,7 +5820,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5839,7 +5839,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5858,7 +5858,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5877,7 +5877,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5896,7 +5896,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5915,7 +5915,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5934,7 +5934,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5953,7 +5953,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5972,7 +5972,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -5991,7 +5991,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6010,7 +6010,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6029,7 +6029,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6048,7 +6048,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6067,26 +6067,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Unhali",
       "grade": "Local",
-      "minPrice": 1500,
-      "maxPrice": 5581,
-      "modalPrice": 4325,
+      "minPrice": 2100,
+      "maxPrice": 5551,
+      "modalPrice": 4400,
       "market": "APMC Pimpalgaon Baswant ",
       "district": "Nashik",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -6105,7 +6105,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6124,7 +6124,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6143,7 +6143,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6152,36 +6152,36 @@
       "grade": "Local",
       "minPrice": 1200,
       "maxPrice": 4852,
-      "modalPrice": 3975,
+      "modalPrice": 3850,
       "market": "Lasalgaon(Vinchur) ",
       "district": "Nashik",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
       "crop": "Onion",
       "variety": "Unhali",
       "grade": "Local",
-      "minPrice": 2175,
-      "maxPrice": 4141,
-      "modalPrice": 3650,
+      "minPrice": 2000,
+      "maxPrice": 4400,
+      "modalPrice": 3850,
       "market": "Pimpalgaon Baswant(Saykheda) ",
       "district": "Nashik",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -6200,7 +6200,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6219,26 +6219,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Peas Wet",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 5000,
-      "maxPrice": 5200,
-      "modalPrice": 5200,
+      "minPrice": 4000,
+      "maxPrice": 5000,
+      "modalPrice": 5000,
       "market": "APMC Karad ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -6257,7 +6257,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6276,26 +6276,26 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
       "crop": "Pomegranate",
       "variety": "Other",
       "grade": "Local",
-      "minPrice": 1500,
-      "maxPrice": 19000,
-      "modalPrice": 10250,
+      "minPrice": 1000,
+      "maxPrice": 15000,
+      "modalPrice": 8000,
       "market": "APMC Shrirampur ",
       "district": "Ahilyanagar",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -6314,7 +6314,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6333,7 +6333,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6352,7 +6352,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6371,7 +6371,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6390,7 +6390,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6409,7 +6409,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6428,7 +6428,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6447,7 +6447,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6466,7 +6466,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6485,7 +6485,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6504,7 +6504,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6523,7 +6523,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6542,7 +6542,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6561,7 +6561,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6580,7 +6580,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6599,7 +6599,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6618,7 +6618,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6637,7 +6637,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6656,7 +6656,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6675,7 +6675,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6694,7 +6694,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6713,7 +6713,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6732,7 +6732,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6751,7 +6751,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6759,18 +6759,18 @@
       "variety": "Other",
       "grade": "Local",
       "minPrice": 1000,
-      "maxPrice": 1400,
-      "modalPrice": 1400,
+      "maxPrice": 1500,
+      "modalPrice": 1500,
       "market": "APMC Karad ",
       "district": "Satara",
       "state": "Maharashtra",
-      "arrivalDate": "22/09/2026",
+      "arrivalDate": "23/09/2026",
       "arrivalQuantity": null,
       "arrivalUnit": null,
-      "observedOn": "22/09/2026",
-      "fetchedAt": "2026-09-22T10:41:02.439Z",
-      "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     },
     {
@@ -6789,7 +6789,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6808,7 +6808,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6827,7 +6827,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6846,7 +6846,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6865,7 +6865,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6884,7 +6884,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6903,7 +6903,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6922,7 +6922,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6941,7 +6941,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6960,7 +6960,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6979,7 +6979,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -6998,7 +6998,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -7017,7 +7017,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -7036,7 +7036,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -7055,7 +7055,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -7074,7 +7074,7 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
       "source": null
     },
     {
@@ -7093,7 +7093,292 @@
       "observedOn": "22/09/2026",
       "fetchedAt": "2026-09-22T10:41:02.439Z",
       "validatedAt": "2026-09-22T10:41:02.439Z",
-      "publishedAt": "2026-09-22T10:41:02.439Z",
+      "publishedAt": "2026-09-23T07:26:23.556Z",
+      "source": null
+    },
+    {
+      "crop": "Bajra(Pearl Millet/Cumbu)",
+      "variety": "Other",
+      "grade": "Non-FAQ",
+      "minPrice": 2200,
+      "maxPrice": 2500,
+      "modalPrice": 2200,
+      "market": "APMC Karjat ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Bajra(Pearl Millet/Cumbu)",
+      "variety": "Other",
+      "grade": "Non-FAQ",
+      "minPrice": 2500,
+      "maxPrice": 2700,
+      "modalPrice": 2500,
+      "market": "Karjat(Rashin) ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Bengal Gram(Gram)(Whole)",
+      "variety": "Other",
+      "grade": "Non-FAQ",
+      "minPrice": 5500,
+      "maxPrice": 5500,
+      "modalPrice": 5500,
+      "market": "Karjat(Rashin) ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Bengal Gram(Gram)(Whole)",
+      "variety": "Other",
+      "grade": "FAQ",
+      "minPrice": 7000,
+      "maxPrice": 8000,
+      "modalPrice": 7500,
+      "market": "Kolhapur(Laxmipuri) ",
+      "district": "Kolhapur",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Ginger(Green)",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 4000,
+      "maxPrice": 10000,
+      "modalPrice": 7000,
+      "market": "APMC Shrirampur ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Green Chilli",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2500,
+      "maxPrice": 3500,
+      "modalPrice": 3000,
+      "market": "APMC Shrirampur ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Green Chilli",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2200,
+      "maxPrice": 2200,
+      "modalPrice": 2200,
+      "market": "Varud(Rajura Bazar) ",
+      "district": "Amarawati",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Jowar(Sorghum)",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 2600,
+      "maxPrice": 4500,
+      "modalPrice": 4205,
+      "market": "APMC Jalgaon ",
+      "district": "Jalgaon",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Jowar(Sorghum)",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 4000,
+      "maxPrice": 5000,
+      "modalPrice": 5000,
+      "market": "APMC Karjat ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Red gram/Arhar/Tur(whole)",
+      "variety": "Other",
+      "grade": "Non-FAQ",
+      "minPrice": 5000,
+      "maxPrice": 5000,
+      "modalPrice": 5000,
+      "market": "Karjat(Rashin) ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Soyabean",
+      "variety": "Yellow",
+      "grade": "Non-FAQ",
+      "minPrice": 5300,
+      "maxPrice": 5300,
+      "modalPrice": 5300,
+      "market": "APMC Palam ",
+      "district": "Parbhani",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Soyabean",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 4100,
+      "maxPrice": 4100,
+      "modalPrice": 4100,
+      "market": "Jalgaon(Masawat) ",
+      "district": "Jalgaon",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Tomato",
+      "variety": "Other",
+      "grade": "Local",
+      "minPrice": 500,
+      "maxPrice": 1500,
+      "modalPrice": 1000,
+      "market": "APMC Shrirampur ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Wheat",
+      "variety": "147 Average",
+      "grade": "FAQ",
+      "minPrice": 2670,
+      "maxPrice": 2670,
+      "modalPrice": 2670,
+      "market": "APMC Jalgaon ",
+      "district": "Jalgaon",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
+      "source": null
+    },
+    {
+      "crop": "Wheat",
+      "variety": "Other",
+      "grade": "Non-FAQ",
+      "minPrice": 2200,
+      "maxPrice": 2500,
+      "modalPrice": 2200,
+      "market": "Karjat(Rashin) ",
+      "district": "Ahilyanagar",
+      "state": "Maharashtra",
+      "arrivalDate": "23/09/2026",
+      "arrivalQuantity": null,
+      "arrivalUnit": null,
+      "observedOn": "23/09/2026",
+      "fetchedAt": "2026-09-23T07:32:39.820Z",
+      "validatedAt": "2026-09-23T07:32:39.820Z",
+      "publishedAt": "2026-09-23T07:32:39.820Z",
       "source": null
     }
   ]

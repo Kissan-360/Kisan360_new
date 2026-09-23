@@ -2,8 +2,8 @@
   "meta": {
     "note": "Single-day bootstrap of real observed rows. Depth grows with daily refresher runs.",
     "bootstrappedFrom": "priceSnapshots.json 2026-09-08 pull",
-    "lastAppendedAt": "2026-09-22T10:41:02.476Z",
-    "lastRowCount": 373
+    "lastAppendedAt": "2026-09-23T07:32:39.846Z",
+    "lastRowCount": 388
   },
   "days": {
     "2026-09-08": [
@@ -4069,6 +4069,722 @@
         "variety": "Other",
         "modalPrice": 2200,
         "arrivalDate": "22/09/2026"
+      }
+    ],
+    "2026-09-23": [
+      {
+        "crop": "Bajra(Pearl Millet/Cumbu)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 3200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bajra(Pearl Millet/Cumbu)",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 3600,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Banana - Green",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 3500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Beans",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 2500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Beans",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 4250,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Beans",
+        "market": "APMC Rahata ",
+        "variety": "Other",
+        "modalPrice": 2500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Beans",
+        "market": "Pune(Khadiki) ",
+        "variety": "Other",
+        "modalPrice": 1800,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Beans",
+        "market": "Pune(Pimpri) ",
+        "variety": "Other",
+        "modalPrice": 2500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bengal Gram Dal(Chana Dal)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 7900,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bengal Gram(Gram)(Whole)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 8700,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bengal Gram(Gram)(Whole)",
+        "market": "APMC Nagpur ",
+        "variety": "Other",
+        "modalPrice": 6735,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bengal Gram(Gram)(Whole)",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 7000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Black Gram Dal(Urd Dal)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 12000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Black Gram(Urd Beans)(Whole)",
+        "market": "APMC Karjat ",
+        "variety": "Other",
+        "modalPrice": 8200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Black Gram(Urd Beans)(Whole)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 10500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Black Gram(Urd Beans)(Whole)",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 9700,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Black Gram(Urd Beans)(Whole)",
+        "market": "Karjat(Rashin) ",
+        "variety": "Other",
+        "modalPrice": 8200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Black pepper",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 70000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Chili Red",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 37500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Chili Red",
+        "market": "APMC Nagpur ",
+        "variety": "Other",
+        "modalPrice": 17000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "French Beans(Frasbean)",
+        "market": "APMC Ratnagiri (Nachane) ",
+        "variety": "Other",
+        "modalPrice": 3500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Ginger(Green)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 11000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Ginger(Green)",
+        "market": "APMC Nagpur ",
+        "variety": "Other",
+        "modalPrice": 7250,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Ginger(Green)",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 8000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Ginger(Green)",
+        "market": "APMC Rahata ",
+        "variety": "Other",
+        "modalPrice": 6500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Ginger(Green)",
+        "market": "APMC Ratnagiri (Nachane) ",
+        "variety": "Other",
+        "modalPrice": 16500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Grapes",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 9000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "APMC Kalmeshwar ",
+        "variety": "Other",
+        "modalPrice": 2320,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 3300,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 2500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "APMC Rahata ",
+        "variety": "Other",
+        "modalPrice": 2750,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "Pune(Khadiki) ",
+        "variety": "Other",
+        "modalPrice": 1800,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "Pune(Pimpri) ",
+        "variety": "Other",
+        "modalPrice": 3500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Gram Dal(Moong Dal)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 10300,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Gram(Moong)(Whole)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 10000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Gram(Moong)(Whole)",
+        "market": "APMC Pune ",
+        "variety": "Green (Whole)",
+        "modalPrice": 9300,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Peas",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 5200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Peas",
+        "market": "APMC Mumbai ",
+        "variety": "White Fozi",
+        "modalPrice": 5200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Peas",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 7000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Peas",
+        "market": "APMC Rahata ",
+        "variety": "Other",
+        "modalPrice": 8250,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Jowar(Sorghum)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 4600,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Jowar(Sorghum)",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 6500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Jowar(Sorghum)",
+        "market": "Kolhapur(Laxmipuri) ",
+        "variety": "Other",
+        "modalPrice": 4975,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Lentil(Masur)(Whole)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 7100,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Lentil(Masur)(Whole)",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 7250,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Maize",
+        "market": "APMC Karjat ",
+        "variety": "Other",
+        "modalPrice": 2500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Maize",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 3200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Maize",
+        "market": "APMC Pune ",
+        "variety": "Deshi Red",
+        "modalPrice": 2850,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Maize",
+        "market": "Karjat(Rashin) ",
+        "variety": "Yellow",
+        "modalPrice": 2400,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Mango(Raw-Ripe)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 8500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "APMC Nagpur ",
+        "variety": "Red",
+        "modalPrice": 4250,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "APMC Nagpur ",
+        "variety": "White",
+        "modalPrice": 5250,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "APMC Pune ",
+        "variety": "Local",
+        "modalPrice": 2850,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "Mumbai-Onion & Potato Market ",
+        "variety": "Other",
+        "modalPrice": 3700,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "Pune(Khadiki) ",
+        "variety": "Local",
+        "modalPrice": 1700,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "Pune(Pimpri) ",
+        "variety": "Local",
+        "modalPrice": 3350,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion Green",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 850,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Peas Wet",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 6500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Peas Wet",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 5000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Pomegranate",
+        "market": "APMC Nagpur ",
+        "variety": "Other",
+        "modalPrice": 5000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Pomegranate",
+        "market": "APMC Pimpalgaon Baswant ",
+        "variety": "Other",
+        "modalPrice": 8050,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Pomegranate",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 6200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Ragi(Finger Millet)",
+        "market": "APMC Pune ",
+        "variety": "Other",
+        "modalPrice": 5450,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Red gram split/Arhar dal/Tur dal",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 11000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Red gram/Arhar/Tur(whole)",
+        "market": "APMC Nagpur ",
+        "variety": "Other",
+        "modalPrice": 8962,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "APMC Kalmeshwar ",
+        "variety": "Other",
+        "modalPrice": 1630,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 1900,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "APMC Pune ",
+        "variety": "Local",
+        "modalPrice": 1300,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "APMC Rahata ",
+        "variety": "Other",
+        "modalPrice": 950,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "APMC Rahuri ",
+        "variety": "Other",
+        "modalPrice": 1000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "APMC Ratnagiri (Nachane) ",
+        "variety": "Other",
+        "modalPrice": 1100,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "Pune(Khadiki) ",
+        "variety": "Local",
+        "modalPrice": 1000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "Pune(Pimpri) ",
+        "variety": "Local",
+        "modalPrice": 1500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Wheat",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 4200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Wheat",
+        "market": "APMC Nagpur ",
+        "variety": "Other",
+        "modalPrice": 2711,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Wheat",
+        "market": "APMC Nagpur ",
+        "variety": "Sharbati",
+        "modalPrice": 3425,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "APMC Ratnagiri (Nachane) ",
+        "variety": "Other",
+        "modalPrice": 3200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "French Beans(Frasbean)",
+        "market": "APMC Mumbai ",
+        "variety": "Other",
+        "modalPrice": 3000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Ginger(Green)",
+        "market": "APMC Karad ",
+        "variety": "Other",
+        "modalPrice": 7500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Grapes",
+        "market": "APMC Nagpur ",
+        "variety": "Other",
+        "modalPrice": 5500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "APMC Karad ",
+        "variety": "Other",
+        "modalPrice": 2500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "APMC Pimpalgaon Baswant ",
+        "variety": "Unhali",
+        "modalPrice": 4400,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "Lasalgaon(Vinchur) ",
+        "variety": "Unhali",
+        "modalPrice": 3850,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Onion",
+        "market": "Pimpalgaon Baswant(Saykheda) ",
+        "variety": "Unhali",
+        "modalPrice": 3850,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Peas Wet",
+        "market": "APMC Karad ",
+        "variety": "Other",
+        "modalPrice": 5000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Pomegranate",
+        "market": "APMC Shrirampur ",
+        "variety": "Other",
+        "modalPrice": 8000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "APMC Karad ",
+        "variety": "Other",
+        "modalPrice": 1500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bajra(Pearl Millet/Cumbu)",
+        "market": "APMC Karjat ",
+        "variety": "Other",
+        "modalPrice": 2200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bajra(Pearl Millet/Cumbu)",
+        "market": "Karjat(Rashin) ",
+        "variety": "Other",
+        "modalPrice": 2500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bengal Gram(Gram)(Whole)",
+        "market": "Karjat(Rashin) ",
+        "variety": "Other",
+        "modalPrice": 5500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Bengal Gram(Gram)(Whole)",
+        "market": "Kolhapur(Laxmipuri) ",
+        "variety": "Other",
+        "modalPrice": 7500,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Ginger(Green)",
+        "market": "APMC Shrirampur ",
+        "variety": "Other",
+        "modalPrice": 7000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "APMC Shrirampur ",
+        "variety": "Other",
+        "modalPrice": 3000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Green Chilli",
+        "market": "Varud(Rajura Bazar) ",
+        "variety": "Other",
+        "modalPrice": 2200,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Jowar(Sorghum)",
+        "market": "APMC Jalgaon ",
+        "variety": "Other",
+        "modalPrice": 4205,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Jowar(Sorghum)",
+        "market": "APMC Karjat ",
+        "variety": "Other",
+        "modalPrice": 5000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Red gram/Arhar/Tur(whole)",
+        "market": "Karjat(Rashin) ",
+        "variety": "Other",
+        "modalPrice": 5000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Soyabean",
+        "market": "APMC Palam ",
+        "variety": "Yellow",
+        "modalPrice": 5300,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Soyabean",
+        "market": "Jalgaon(Masawat) ",
+        "variety": "Other",
+        "modalPrice": 4100,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Tomato",
+        "market": "APMC Shrirampur ",
+        "variety": "Other",
+        "modalPrice": 1000,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Wheat",
+        "market": "APMC Jalgaon ",
+        "variety": "147 Average",
+        "modalPrice": 2670,
+        "arrivalDate": "23/09/2026"
+      },
+      {
+        "crop": "Wheat",
+        "market": "Karjat(Rashin) ",
+        "variety": "Other",
+        "modalPrice": 2200,
+        "arrivalDate": "23/09/2026"
       }
     ]
   }
