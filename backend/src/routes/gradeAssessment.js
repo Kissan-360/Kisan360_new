@@ -2,6 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const router = express.Router();
 const { authenticateUser } = require('../middleware/auth');
+const { canVerifyCertificate } = require('../lib/roleScope');
 const { calculateGrade, getSupportedCrops, getGradeReference } = require('../lib/gradeRules');
 
 // Certificates carry an identity and can be marked FPO-verified, so every
@@ -9,25 +10,12 @@ const { calculateGrade, getSupportedCrops, getGradeReference } = require('../lib
 // anonymous caller could mint a certificate with `x-demo-uid` of their choosing
 // and then self-verify it via POST /:id/fpo-verify.
 //
-// Who may verify: the certificate's own holder, or an FPO/admin. This is NOT a
-// blanket role gate — GradeCrop.tsx calls fpo-verify from the farmer's own
+// Who may act on a certificate (the certificate's own holder, or an FPO/admin)
+// is defined once in lib/roleScope.js — canVerifyCertificate. This is NOT a
+// blanket role gate: GradeCrop.tsx calls fpo-verify from the farmer's own
 // screen as an explicitly-labelled simulation, so locking it to role alone
 // would 403 the documented demo flow while achieving nothing beyond the
-// ownership check below.
-function requireFpoVerifier(req, res, cert) {
-  const uid = req.user && req.user.uid;
-  const role = req.user && req.user.role;
-  const privileged = ['fpo', 'admin'].includes(role);
-  const owner = !!(cert && cert.farmerUid === uid);
-  if (!privileged && !owner) {
-    res.status(403).json({
-      success: false,
-      error: 'Only the certificate holder or an FPO can verify a grade certificate.',
-    });
-    return false;
-  }
-  return true;
-}
+// ownership half of the shared check.
 
 // In-memory fallback when MongoDB is offline (mirrors pattern from lots.js)
 let GradeCertificate = null;
@@ -198,7 +186,12 @@ router.post('/:id/fpo-verify', authenticateUser, async (req, res) => {
     if (!cert) {
       return res.status(404).json({ success: false, error: 'Certificate not found' });
     }
-    if (!requireFpoVerifier(req, res, cert)) return;
+    if (!canVerifyCertificate(req.user, cert)) {
+      return res.status(403).json({
+        success: false,
+        error: 'Only the certificate holder or an FPO can verify a grade certificate.',
+      });
+    }
 
     cert.fpoStatus = status;
     cert.fpoName = fpoName || 'Demo FPO';
@@ -238,8 +231,7 @@ router.get('/:id', authenticateUser, async (req, res) => {
     return res.status(404).json({ success: false, error: 'Certificate not found' });
   }
   // A certificate is a named farmer's record: read access is not public.
-  const privileged = ['fpo', 'admin'].includes(req.user.role);
-  if (!privileged && cert.farmerUid !== req.user.uid) {
+  if (!canVerifyCertificate(req.user, cert)) {
     return res.status(403).json({ success: false, error: 'Certificate belongs to another farmer.' });
   }
   res.json({ success: true, certificate: cert });

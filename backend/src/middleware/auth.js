@@ -37,6 +37,25 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
+/**
+ * The one identity policy for authenticated writes.
+ *
+ * Who the actor is comes ONLY from the verified token — never from the request
+ * body, which any client can forge (the pre-hardening community routes trusted
+ * body.userId/authorName). `name` is a display label read from the token
+ * (demo JWTs and Firebase tokens both carry one when set), falling back to
+ * `fallback` when absent.
+ */
+function identityOf(req, fallback = 'Farmer') {
+  const user = req.user || {};
+  return {
+    uid: String(user.uid || ''),
+    name: String(user.name || '').trim() || fallback,
+    role: String(user.role || ''),
+    district: String(user.district || ''),
+  };
+}
+
 // Like authenticateUser but never rejects: attaches a user when a valid token
 // is present and otherwise proceeds anonymously.
 const optionalAuth = async (req, res, next) => {
@@ -59,4 +78,4 @@ const optionalAuth = async (req, res, next) => {
   return next();
 };
 
-module.exports = { authenticateUser, optionalAuth };
+module.exports = { authenticateUser, optionalAuth, identityOf };

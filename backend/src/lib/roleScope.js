@@ -61,4 +61,18 @@ function bookFilter(req) {
   return listingScope(req) === 'buyer' ? {} : { farmerUid: req.user.uid };
 }
 
-module.exports = { isBuyerSideRole, sideOfRole, listingScope, bookFilter };
+/**
+ * Who may act on a grade certificate. One definition for all three grade
+ * certificate verbs (read, FPO-verify, hold-read):
+ *   • FPO/admin are the verification authority;
+ *   • the certificate's own holder may act on (and verify) their record —
+ *     GradeCrop.tsx submits from the farmer's own screen as an explicitly
+ *     labelled simulation, so role alone must not 403 that flow.
+ */
+function canVerifyCertificate(user, cert) {
+  const role = user && user.role;
+  const privileged = role === 'fpo' || role === 'admin';
+  return privileged || !!(cert && cert.farmerUid === (user && user.uid));
+}
+
+module.exports = { isBuyerSideRole, sideOfRole, listingScope, bookFilter, canVerifyCertificate };

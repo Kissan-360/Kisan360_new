@@ -94,7 +94,7 @@ const CommentNodeComponent: React.FC<NodeProps> = ({ node, topicId, currentUserI
       const res = await apiFetch(`${API_URL}/community/comments/${node.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUserId, content: editText.trim() }),
+        body: JSON.stringify({ content: editText.trim() }),
       });
       if (res.status === 403) setError(t('community.editWindowExpired'));
       else if (!res.ok) setError(t('community.postRateLimit'));
@@ -116,7 +116,7 @@ const CommentNodeComponent: React.FC<NodeProps> = ({ node, topicId, currentUserI
       const res = await apiFetch(`${API_URL}/community/comments/${node.id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUserId }),
+        body: JSON.stringify({}),
       });
       if (res.ok || res.status === 404) onVoted?.();
     } catch { /* ignore */ }
@@ -130,7 +130,7 @@ const CommentNodeComponent: React.FC<NodeProps> = ({ node, topicId, currentUserI
       await apiFetch(`${API_URL}/community/comments/${node.id}/vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUserId, value }),
+        body: JSON.stringify({ value }),
       });
       onVoted?.();
     } catch { /* ignore */ }
@@ -141,7 +141,7 @@ const CommentNodeComponent: React.FC<NodeProps> = ({ node, topicId, currentUserI
       await apiFetch(`${API_URL}/community/comments/${node.id}/report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUserId, reason: 'inappropriate' }),
+        body: JSON.stringify({ reason: 'inappropriate' }),
       });
     } catch { /* ignore */ }
   };
@@ -156,10 +156,10 @@ const CommentNodeComponent: React.FC<NodeProps> = ({ node, topicId, currentUserI
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           parentId: node.id,
-          userId: currentUserId,
           content: replyText.trim(),
+          // Restored: the composer previews an attached photo and the backend
+          // accepts it, so omitting this silently dropped reply images.
           photoDataUrl: replyPhoto || undefined,
-          authorName: 'You',
           language,
         }),
       });

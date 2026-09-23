@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
-const { authenticateUser, optionalAuth } = require('../middleware/auth');
+const { authenticateUser, optionalAuth, identityOf } = require('../middleware/auth');
 const Topic = require('../models/Topic');
 const Comment = require('../models/Comment');
 
@@ -310,7 +310,8 @@ router.post('/topics', authenticateUser, async (req, res) => {
     const { topics, comments } = getStore();
     // Identity comes from the verified token, never from the request body:
     // a client-supplied userId let anyone author, edit or delete as anyone.
-    const userId = String(req.user.uid);
+    const identity = identityOf(req);
+    const userId = identity.uid;
     const userTrust = computeTrust(userId, topics, comments);
     const label = trustLabel(userTrust);
 
@@ -366,8 +367,10 @@ router.post('/topics', authenticateUser, async (req, res) => {
       title,
       content,
       authorId: userId,
-      authorName: sanitizeContent(body.authorName || 'Farmer').slice(0, 50) || 'Farmer',
-      authorDistrict: sanitizeContent(body.authorDistrict || '').slice(0, 30),
+      // Display identity is token-derived too — a body-supplied authorName
+      // would let any author post under any name.
+      authorName: identity.name,
+      authorDistrict: identity.district,
       authorTrustLevel: userTrust,
       category,
       tags,
@@ -460,7 +463,8 @@ router.post('/topics/:id/comments', authenticateUser, async (req, res) => {
     if (!topic) return res.status(404).json({ success: false, error: 'Topic not found' });
     if (topic.locked) return res.status(400).json({ success: false, error: 'This topic is locked.' });
 
-    const userId = String(req.user.uid);
+    const identity = identityOf(req);
+    const userId = identity.uid;
     const userTrust = computeTrust(userId, topics, comments);
     const label = trustLabel(userTrust);
     const recentComments = userActionsSince(userId, comments, 3 * 60 * 1000);
@@ -504,8 +508,10 @@ router.post('/topics/:id/comments', authenticateUser, async (req, res) => {
       content,
       photoDataUrl,
       authorId: userId,
-      authorName: sanitizeContent(body.authorName || 'Farmer').slice(0, 50) || 'Farmer',
-      authorDistrict: sanitizeContent(body.authorDistrict || '').slice(0, 30),
+      // Display identity is token-derived too — a body-supplied authorName
+      // would let any author post under any name.
+      authorName: identity.name,
+      authorDistrict: identity.district,
       authorTrustLevel: userTrust,
       voteCount: 0,
       votes: [],

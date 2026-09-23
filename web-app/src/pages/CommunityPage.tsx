@@ -213,7 +213,6 @@ const CommunityPage: React.FC = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId,
           title: formTitle.trim(),
           category: formCategory,
           content: formContent.trim(),
@@ -260,7 +259,7 @@ const CommunityPage: React.FC = () => {
       await apiFetch(`${API_URL}/community/topics/${id}/vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, value }),
+        body: JSON.stringify({ value }),
       });
     } catch { /* ignore */ }
   };
@@ -270,7 +269,7 @@ const CommunityPage: React.FC = () => {
       await apiFetch(`${API_URL}/community/topics/${id}/report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, reason: 'inappropriate' }),
+        body: JSON.stringify({ reason: 'inappropriate' }),
       });
     } catch { /* ignore */ }
   };
@@ -300,7 +299,6 @@ const CommunityPage: React.FC = () => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId,
           title: editTitle.trim(),
           content: editContent.trim(),
           tags: editTags.split(/[,#]/).map((s) => s.trim()).filter(Boolean),
@@ -330,7 +328,7 @@ const CommunityPage: React.FC = () => {
       const res = await apiFetch(`${API_URL}/community/topics/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({}),
       });
       if (res.ok || res.status === 404) {
         setTopics((arr) => arr.filter((x) => x.id !== id));

@@ -185,6 +185,23 @@ describe('community ownership cannot be spoofed', () => {
     expect(res.data.topic.authorId).toBe('demo-farmer');
   });
 
+  test('display name is token-derived, a body authorName is ignored', async () => {
+    const res = await call('POST', '/api/community/topics', {
+      token: farmerToken,
+      body: {
+        title: 'Display identity probe',
+        content: 'A body authorName must not become the stored display name.',
+        category: 'general_farming',
+        authorName: 'Someone Else Entirely',
+        authorDistrict: 'Mumbai',
+      },
+    });
+    expect(res.status).toBe(201);
+    expect(res.data.topic.authorId).toBe('demo-farmer');
+    // Token name for the demo farmer profile — NOT the body-supplied string.
+    expect(res.data.topic.authorName).not.toBe('Someone Else Entirely');
+  });
+
   test('another authenticated user cannot edit or delete it', async () => {
     const edit = await call('PUT', `/api/community/topics/${topicId}`, {
       token: buyerToken,
