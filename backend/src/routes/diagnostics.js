@@ -23,6 +23,12 @@ const router = express.Router();
 // WRITE probe mutates the database and therefore requires an authenticated
 // admin token (demo-login as role=admin). Never exposes credentials or
 // connection strings — names and booleans only.
+//
+// The database host is withheld from anonymous callers. On Atlas that value is
+// the cluster endpoint (verified live: `ac-uxveveq-shard-00-02.zfwg0yz...
+// .mongodb.net` was served to anyone who asked), which is exactly the recon
+// material this file promises not to leak — enough to target credential
+// stuffing or to probe the cluster's IP allow-list. Admins still see it.
 router.get('/', optionalAuth, async (req, res) => {
   const startedAt = Date.now();
   const isProduction = process.env.NODE_ENV === 'production';
@@ -47,7 +53,11 @@ router.get('/', optionalAuth, async (req, res) => {
       readyState,
       readyStateLabel: { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' }[readyState] || 'unknown',
       name: mongoose.connection.name || null, // C: database name
-      host: mongoose.connection.host || null,
+      host: isAdmin ? (mongoose.connection.host || null) : null,
+      hostRedacted: !isAdmin && !!mongoose.connection.host,
+      hostNote: isAdmin
+        ? undefined
+        : 'host withheld — pass an admin token (demo-login role=admin) to see it',
       usingMemoryFallback: dbMode === 'memory',
     },
     firebase: {

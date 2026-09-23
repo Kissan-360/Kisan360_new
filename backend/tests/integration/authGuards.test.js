@@ -25,6 +25,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const getFreePort = require('../helpers/freePort');
+const waitHealth = require('../helpers/waitHealth');
 
 jest.setTimeout(120000);
 
@@ -34,19 +35,6 @@ let BASE;
 
 let mem;
 let server;
-
-async function waitHealth(url, timeoutMs = 20000) {
-  const deadline = Date.now() + timeoutMs;
-  let lastErr;
-  while (Date.now() < deadline) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) return;
-    } catch (err) { lastErr = err; }
-    await new Promise(r => setTimeout(r, 500));
-  }
-  throw new Error(`Backend did not become healthy: ${lastErr && lastErr.message}`);
-}
 
 async function call(method, route, { token, body, headers } = {}) {
   const h = { ...(headers || {}) };
@@ -329,7 +317,34 @@ describe('grade certificates are forged-proof and persistent', () => {
   });
 });
 
-// ── 5. chat: authed request answered without an LLM key ─────────────────────
+// ── 5. diagnostics: open status, but no infrastructure recon ────────────────
+// Verified live before the fix: anonymous GET /api/diagnostics returned
+// `database.host` — on Atlas that is the cluster endpoint
+// (ac-...shard-00-02.<cluster>.mongodb.net), the one thing this route's own
+// comment promises never to expose.
+
+describe('diagnostics never leaks the database host to anonymous callers', () => {
+  test('anonymous status is served without host or credentials', async () => {
+    const res = await call('GET', '/api/diagnostics');
+    expect(res.status).toBe(200); // operational status stays open by design
+    expect(res.data.database).toBeTruthy();
+    // Memory-server URIs carry 127.0.0.1; the contract is simply "no host".
+    expect(res.data.database.host).toBeNull();
+    expect(JSON.stringify(res.data)).not.toMatch(/mongodb\.net|shard-\d\d/);
+    expect(res.data.writeTest.ok).toBeNull(); // write probe still admin-only
+  });
+
+  test('an admin token still sees the host', async () => {
+    const login = await call('POST', '/api/auth/demo-login', { body: { role: 'admin' } });
+    expect(login.status).toBe(200);
+    const res = await call('GET', '/api/diagnostics', { token: login.data.token });
+    expect(res.status).toBe(200);
+    expect(typeof res.data.database.host).toBe('string');
+    expect(res.data.database.hostRedacted).toBe(false);
+  });
+});
+
+// ── 6. chat: authed request answered without an LLM key ─────────────────────
 
 describe('chat requires auth but still answers offline', () => {
   test('an authenticated greeting is answered from the local fallback', async () => {
