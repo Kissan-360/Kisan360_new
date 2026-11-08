@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–5: ask-mode agent + weather tool + mobile lot + corpus ~140 + smoke). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–6: mobile auth + web provenance + corpus ~150 + smoke). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -67,6 +67,12 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `callRagFallback`: extracts crop/district from message when context is empty; weather auto-fetched when missing
 - Mobile `TradeScreen`: create-lot form (crop/district/qty) → `POST /lots` + refresh list
 - Corpus ~140 docs (+18: tur, jute, cashew, coconut, fig, cabbage DBM, sweet corn, spray/label safety, poultry, soil/furrow/scouting, transport, storage threshold, AIF, MIDH)
+
+## Phase 6 (auth + provenance + corpus ~150)
+- Mobile `SignInScreen` + auth gate hint in `DecisionScreen` (token required for chat/disease/lots); `loginDemo` wired end-to-end (previously dead code)
+- Web `CropAdvisory` provenance chips: agent badge, intent, tools, sources, `provenance.source`, `groq · llama-3.3-70b | template`
+- Web `ChatMessage` weather card: `toolResults.weather` (temp/humidity/condition + source/date)
+- Corpus ~150 docs (+12: chana, urad, moong, groundnut pegging, soybean rust, cucumber mildew, okra harvest, cabbage black rot, guava, custard apple, sprayer calibration, green manuring)
 
 ## Pre-embed (skip cold start)
 ```

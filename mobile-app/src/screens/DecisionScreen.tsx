@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { ActivityIndicator, Button, ScrollView, Text, TextInput, View } from "react-native";
 import { Endpoints } from "../services/api";
+import { useAuth } from "../contexts/AuthContext";
 
-export default function DecisionScreen() {
+export default function DecisionScreen({ navigation }: any) {
+  const { token } = useAuth();
   const [crop, setCrop] = useState("Onion");
   const [district, setDistrict] = useState("Nashik");
   const [qty, setQty] = useState("10");
@@ -26,6 +28,12 @@ export default function DecisionScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
       <Text style={{ fontSize: 20, fontWeight: "700" }}>Decision — net realization</Text>
+      {!token ? (
+        <View>
+          <Text style={{ color: "#b45309", fontSize: 13 }}>Sign in first — chat / disease / lots need a demo token.</Text>
+          <Button title="Sign in (demo)" onPress={() => navigation?.navigate?.("SignIn")} />
+        </View>
+      ) : null}
       <TextInput value={crop} onChangeText={setCrop} placeholder="Crop" style={styles.input} />
       <TextInput value={district} onChangeText={setDistrict} placeholder="District" style={styles.input} />
       <TextInput value={qty} onChangeText={setQty} placeholder="Qty (q)" keyboardType="numeric" style={styles.input} />

@@ -20,13 +20,15 @@ export interface ToolNetRealization {
 
 export interface ToolSchemes { tool?: string; count?: number; schemes?: Array<{ slug: string; shortName: string; name: string; benefitLabel?: string }> }
 
+export interface ToolWeather { tool?: string; district?: string; current?: { temperature?: number; humidity?: number; condition?: string; description?: string }; source?: string; retrievedAt?: string }
+
 export interface ChatMessageItem {
   id: string;
   role: ChatMessageRole;
   text: string;
   intent?: string;
   intents?: string[];
-  toolResults?: { netRealization?: ToolNetRealization; schemes?: ToolSchemes };
+  toolResults?: { netRealization?: ToolNetRealization; schemes?: ToolSchemes; weather?: ToolWeather };
 }
 
 interface ChatMessageProps {
@@ -81,6 +83,17 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
               <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">source: {message.toolResults.netRealization.provenance?.source || 'agmarknet'}</span>
               <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">{message.toolResults.netRealization.provenance?.freshness === 'live' ? 'live' : 'cached'}</span>
               {message.toolResults.netRealization.provenance?.retrievedAt ? <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">{String(message.toolResults.netRealization.provenance.retrievedAt).slice(0, 10)}</span> : null}
+            </div>
+          </div>
+        ) : null}
+        {!isUser && message.toolResults?.weather?.current ? (
+          <div className="mt-2 w-full max-w-sm rounded-xl border border-blue-100 bg-blue-50/60 p-3 text-xs leading-relaxed text-stone-700">
+            <div className="font-semibold text-blue-900">
+              {message.toolResults.weather.district || "Weather"} — {message.toolResults.weather.current.temperature}°C · {message.toolResults.weather.current.humidity}% · {message.toolResults.weather.current.condition}
+            </div>
+            <div className="mt-1 flex flex-wrap gap-1 text-[10px] leading-tight text-stone-500">
+              <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">source: {message.toolResults.weather.source || "context"}</span>
+              {message.toolResults.weather.retrievedAt ? <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">{String(message.toolResults.weather.retrievedAt).slice(0, 10)}</span> : null}
             </div>
           </div>
         ) : null}
