@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–7: decision→lot + payments + PR template + corpus ~158). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–8: LangGraph wrapper + model cards + E2E smoke). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -79,6 +79,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `TradeScreen`: lots + payments list, `GET /payments`, simulate release/failure (simulated label kept)
 - `.github/pull_request_template.md` + push of `feat/agentic-platform-phase0-4` to `Kissan-360/Kisan360_new` (PR to open in browser — `gh` CLI not present)
 - Corpus ~158 docs (+8: FPO checklist, groundwater, custom hiring, subsoiling, arrivals, record book, goat, dairy)
+
+## Phase 8 (LangGraph + cards + E2E)
+- `ml-service/agent_graph.py`: LangGraph `StateGraph` (classify → plan → retrieve → generate → validate → respond) wrapping `agent.py` — optional (`requirements-agent.txt`); runtime stays dependency-light for Render free tier
+- `docs/MODEL_CARD.md`: Llama 3.3-70B (grounded explainer), MiniLM-L6-v2, MobileNetV2 38-class + OOD gates, AGMARKNET/OpenWeather, explicit non-goals
+- `backend/scripts/e2e-agent.js`: in-process full-turn E2E (multi-intent → tools → structured shape, no Groq key)
 
 ## Pre-embed (skip cold start)
 ```
