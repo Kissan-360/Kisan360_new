@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–10: HTTP E2E + mobile assets + corpus ~170). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–11: demo script + corpus ~188 + best polish). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -94,6 +94,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `backend/scripts/e2e-http.js`: running-stack smoke (`/health` → `demo-login` → `POST /api/chat` Marathi → `net-realization` (SKIP if calc waking) → `GET /api/advisory`) — 5 steps, graceful on ML-offline
 - `mobile-app/assets/{icon,favicon,splash}.png` copied from `web-app/public/logo*` (was missing — `expo start` warned)
 - Corpus ~170 docs (+12: cotton mealybug, sugarcane scale, rice nursery/SRI, wheat zero-till, tomato staking, trap crops, dairy/poultry rationing, solar pump, grading premium, band P, pond budgeting)
+
+## Phase 11 (best)
+- `docs/DEMO_SCRIPT_AGENTIC.md`: 5-minute demo narrative (Marathi multi-intent → tool cards → advisory provenance → disease OOD → decision → trade, with offline fallbacks)
+- Corpus ~188 docs (+18: kodo, little millet, barley, oats, tur/chana/moong/sesame/groundnut harvests, bitter gourd, pumpkin, beans, litchi, watermelon, bee-on-mustard, sodic, borewell logging, sheep)
+- `mobile-app/package-lock.json` committed (1229 packages — reproducible mobile builds)
 
 ## Pre-embed (skip cold start)
 ```
