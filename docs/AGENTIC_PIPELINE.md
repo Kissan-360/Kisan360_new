@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–27: corpus 250). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–28: LangGraph full runner). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -163,6 +163,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 27 (final 250)
 - Corpus **250 docs** (+11: potted fruit, grafting, calcareous P, check valve, potash, seed village, eNAM discipline, warehouse pledge, economic threshold, traps, calving interval) — verified `python -c "import knowledge_base; print(len(...))" = 250`
+
+## Phase 28 (LangGraph full runner)
+- `agent_graph.run_agent_graph()` now runs the full pipeline via injected `retrieve`/`generate` (was stubs); `build_graph(retrieve_fn, generate_fn)` is functional with or without LangGraph (`graph: langgraph | pure-python`)
+- `GET :8001/agent/graph?query=&crop=&location=&temperature=&humidity=&condition=` — thin wrapper over the graph for A/B vs `/agent/advisory`
+- `agent.py` grounding + Pydantic structured output reused unchanged
 
 ## Pre-embed (skip cold start)
 ```

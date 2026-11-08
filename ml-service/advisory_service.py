@@ -548,6 +548,34 @@ def json_str(obj) -> str:
     except Exception:
         return str(obj)
 
+@app.get("/agent/graph")
+def agent_graph(
+    query: str = Query(..., description="Farmer message"),
+    crop: str = Query("", description="Crop"),
+    location: str = Query("Maharashtra", description="Location"),
+    temperature: float = Query(None),
+    humidity: float = Query(None),
+    condition: str = Query(""),
+):
+    """LangGraph runner (optional dep). Falls back to pure-Python if missing."""
+    global doc_embeddings
+    from agent_graph import run_agent_graph
+    try:
+        if doc_embeddings is None:
+            build_index()
+    except Exception:
+        pass
+    def _retrieve_fn(q, top_k=7):
+        return retrieve(q, top_k=top_k)
+    def _generate_fn(crop_, loc, wctx, docs, query=""):
+        return generate_advisory(crop_, loc, wctx, docs, groq_key=None, query=query)
+    out = run_agent_graph(
+        query, crop=crop or "crop", location=location,
+        weather={"temperature": temperature, "humidity": humidity, "condition": condition},
+        retrieve_fn=_retrieve_fn, generate_fn=_generate_fn,
+    )
+    return {"graph": out.get("graph"), "intent": out.get("primary_intent"), "tools": out.get("tools"), "validated": out.get("validated"), "structured": out.get("structured")}
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8001))
