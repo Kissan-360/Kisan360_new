@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–4: agent-first advisory + live camera + corpus ~120 + smoke). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–5: ask-mode agent + weather tool + mobile lot + corpus ~140 + smoke). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -60,6 +60,13 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `DiseaseDetectionScreen.tsx`: live `CameraView` preview (`expo-camera`) + `takePicture({ base64: true })` capture, `ImagePicker` fallback for camera + gallery; permission-gated preview with graceful degrade
 - Corpus ~120 docs (+10: sesame, sunflower, linseed, ragi, little millet, pod borer IPM, weed/seed/storage, crop-livestock)
 - `backend/scripts/smoke-agent.js`: router + tool-wiring smoke (no Groq key needed)
+
+## Phase 5 (ask-mode agent + weather + trade)
+- Ask-mode is **agent-backed**: `advisory` / `crop_health` / `weather_info` intents try `callRagFallback` (RAG + weather) before direct Groq; scheme intents stay on template + schemes tool
+- `fetchWeatherTool(district)`: live OpenWeather via `maharashtraDistricts` coords (needs `OPENWEATHER_API_KEY`); context-provided weather passes through; returned as `toolResults.weather`
+- `callRagFallback`: extracts crop/district from message when context is empty; weather auto-fetched when missing
+- Mobile `TradeScreen`: create-lot form (crop/district/qty) → `POST /lots` + refresh list
+- Corpus ~140 docs (+18: tur, jute, cashew, coconut, fig, cabbage DBM, sweet corn, spray/label safety, poultry, soil/furrow/scouting, transport, storage threshold, AIF, MIDH)
 
 ## Pre-embed (skip cold start)
 ```

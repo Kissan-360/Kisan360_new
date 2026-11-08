@@ -411,6 +411,39 @@ async function fetchNetRealizationTool(message, context) {
   }
 }
 
+// ── Agent tool: live weather (OpenWeather) via district coords ──
+// Needs OPENWEATHER_API_KEY; otherwise null (never invented).
+async function fetchWeatherTool(message, context) {
+  const district = extractDistrict(message) || context?.district || context?.location;
+  if (!district) return null;
+  if (context?.weather?.temperature != null) {
+    return { tool: 'weather', district, current: context.weather, source: 'context', freshness: 'provided' };
+  }
+  if (!process.env.OPENWEATHER_API_KEY) return null;
+  try {
+    const { DISTRICTS, findDistrict } = require('../data/maharashtraDistricts');
+    const d = DISTRICTS.find((x) => x.name.toLowerCase() === String(district).toLowerCase()) || findDistrict(String(district).toLowerCase());
+    if (!d || !d.lat) return null;
+    const res = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+      params: { lat: d.lat, lon: d.lon, appid: process.env.OPENWEATHER_API_KEY, units: 'metric' },
+      timeout: 5000,
+    });
+    const c = res.data;
+    return {
+      tool: 'weather', district: d.name,
+      current: {
+        temperature: Math.round(c.main.temp),
+        humidity: c.main.humidity,
+        condition: c.weather?.[0]?.main || '',
+        description: c.weather?.[0]?.description || '',
+      },
+      source: 'openweather', retrievedAt: new Date().toISOString(),
+    };
+  } catch {
+    return null;
+  }
+}
+
 // ── Agent tool: schemes lookup (seed JSON, no DB required) ──
 function fetchSchemesTool(message) {
   try {
@@ -466,6 +499,18 @@ async function callGroqDirect(message, context, language) {
 }
 
 async function answerAskMode(message, context, language) {
+  // Phase 5: ask-mode is agent-backed first (RAG + weather tool), Groq second.
+  // Crop advisory / disease / fertilizer / irrigation queries get grounded RAG;
+  // scheme/PM-KISAN etc. stay on the precise template + schemes tool.
+  try {
+    const cls = classifyIntents(message);
+    const topIntent = cls[0]?.intent || 'fallback';
+    if (['advisory', 'crop_health', 'weather_info'].includes(topIntent)) {
+      const ragText = await callRagFallback(message, context, language);
+      if (ragText && ragText !== TEXT[language].fallback) return ragText;
+    }
+  } catch { /* fall through to Groq direct */ }
+
   const groqKey = process.env.GROQ_API_KEY;
   if (!groqKey) return localAskFallback(message, context, language);
 
@@ -498,9 +543,13 @@ async function answerAskMode(message, context, language) {
 }
 
 async function callRagFallback(message, context, language) {
-  const crop = context?.crop || 'crop';
-  const location = context?.district || context?.location || 'Maharashtra';
-  const weather = context?.weather || {};
+  const crop = context?.crop || extractCrop(message) || 'crop';
+  const location = context?.district || context?.location || extractDistrict(message) || 'Maharashtra';
+  let weather = context?.weather || {};
+  if (weather.temperature == null) {
+    const w = await fetchWeatherTool(message, context);
+    if (w?.current) weather = w.current;
+  }
   const query = [
     message,
     'Answer as Kisan360 for an Indian farmer.',
@@ -565,9 +614,12 @@ async function executeIntent({ message, language, context = {}, classification, 
 
   if (handler === 'empty') return { text: t.empty, suggestions };
   if (normalizedMode === 'ask') {
+    const text = await answerAskMode(message, context, language);
+    const weatherTool = await fetchWeatherTool(message, context);
     return {
-      text: await answerAskMode(message, context, language),
+      text,
       suggestions,
+      ...(weatherTool ? { toolResults: { weather: weatherTool } } : {}),
     };
   }
   if (handler === 'respond_greeting') return { text: t.greeting, suggestions };
@@ -692,4 +744,5 @@ module.exports.normalizeMessage = normalizeMessage;
 module.exports.normalizeMode = normalizeMode;
 module.exports.fetchNetRealizationTool = fetchNetRealizationTool;
 module.exports.fetchSchemesTool = fetchSchemesTool;
+module.exports.fetchWeatherTool = fetchWeatherTool;
 module.exports.extractParams = extractParams;
