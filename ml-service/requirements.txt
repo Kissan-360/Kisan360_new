@@ -11,7 +11,10 @@ transformers>=4.30.0,<5.0.0
 requests>=2.28.0
 sentence-transformers>=2.2.0
 numpy>=1.24.0
+pydantic>=2.0.0
 groq>=0.4.0
+# Agentic layer is lightweight (no LangChain required). For FAISS scale-out:
+# faiss-cpu>=1.7.4  # optional — numpy cosine path works without it
 
 # OpenCV headless (no GUI deps — required for OOD checks in model.py)
 opencv-python-headless>=4.8.0

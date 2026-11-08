@@ -3,10 +3,30 @@ import { Leaf } from 'lucide-react';
 
 export type ChatMessageRole = 'user' | 'assistant' | 'system';
 
+export interface ToolNetRealization {
+  tool?: string;
+  crop?: string;
+  district?: string;
+  quantityQuintals?: number;
+  topMandis?: Array<{
+    market: string;
+    farmerNetPerQuintal: number;
+    farmerNetTotal: number;
+    distanceKm?: number;
+    modalPrice?: number;
+  }>;
+  provenance?: { source?: string; retrievedAt?: string | null; freshness?: string; marketSource?: string };
+}
+
+export interface ToolSchemes { tool?: string; count?: number; schemes?: Array<{ slug: string; shortName: string; name: string; benefitLabel?: string }> }
+
 export interface ChatMessageItem {
   id: string;
   role: ChatMessageRole;
   text: string;
+  intent?: string;
+  intents?: string[];
+  toolResults?: { netRealization?: ToolNetRealization; schemes?: ToolSchemes };
 }
 
 interface ChatMessageProps {
@@ -44,6 +64,36 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
         >
           {message.text}
         </div>
+        {!isUser && message.toolResults?.netRealization?.topMandis?.length ? (
+          <div className="mt-2 w-full max-w-sm rounded-xl border border-emerald-100 bg-emerald-50/60 p-3 text-xs leading-relaxed text-stone-700">
+            <div className="font-semibold text-emerald-900">
+              Top mandis by net ({message.toolResults.netRealization.crop} · {message.toolResults.netRealization.district} · {message.toolResults.netRealization.quantityQuintals}q)
+            </div>
+            <ul className="mt-1 space-y-1">
+              {message.toolResults.netRealization.topMandis.map((m, i) => (
+                <li key={`${m.market}-${i}`} className="flex justify-between gap-2">
+                  <span className="truncate">{i + 1}. {m.market}</span>
+                  <span className="font-semibold text-emerald-800">Rs {m.farmerNetPerQuintal}/q net</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-2 flex flex-wrap gap-1 text-[10px] leading-tight text-stone-500">
+              <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">source: {message.toolResults.netRealization.provenance?.source || 'agmarknet'}</span>
+              <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">{message.toolResults.netRealization.provenance?.freshness === 'live' ? 'live' : 'cached'}</span>
+              {message.toolResults.netRealization.provenance?.retrievedAt ? <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">{String(message.toolResults.netRealization.provenance.retrievedAt).slice(0, 10)}</span> : null}
+            </div>
+          </div>
+        ) : null}
+        {!isUser && message.toolResults?.schemes?.schemes?.length ? (
+          <div className="mt-2 w-full max-w-sm rounded-xl border border-stone-100 bg-stone-50 p-3 text-xs leading-relaxed text-stone-700">
+            <div className="font-semibold text-stone-900">Matching schemes</div>
+            <ul className="mt-1 space-y-1">
+              {message.toolResults.schemes.schemes.map((s) => (
+                <li key={s.slug}>• {s.shortName} — {s.benefitLabel || s.name}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
         {!isUser && suggestions.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-2">
             {suggestions.map((suggestion) => (

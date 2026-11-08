@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || 'http://localhost:8001';
 
-// GET /api/advisory - Get AI-powered agricultural advisory via RAG
+// GET /api/advisory - Agent-first RAG advisory (structured + provenance)
 router.get('/', async (req, res) => {
   try {
     const { location, crop, query, temperature, humidity, condition } = req.query;
@@ -27,7 +27,29 @@ router.get('/', async (req, res) => {
         headers['X-Groq-Key'] = process.env.GROQ_API_KEY;
       }
 
-      const ragRes = await axios.get(`${RAG_SERVICE_URL}/advisory`, {
+      // Agent endpoint first: returns { structured, recommendations[], intent, tools, validated }
+      // Fall back to legacy /advisory if agent is not deployed yet.
+      let ragRes;
+      try {
+        ragRes = await axios.get(`${RAG_SERVICE_URL}/agent/advisory`, {
+          params: { query: query || `${crop} advisory for ${location}`, crop, location, temperature, humidity, condition },
+          headers,
+          timeout: 15000,
+        });
+        const agentData = ragRes.data || {};
+        if (Array.isArray(agentData.recommendations) && agentData.recommendations.length) {
+          return res.json({
+            ...agentData,
+            timestamp: new Date().toISOString(),
+            source: 'agent-rag',
+            agent: true,
+          });
+        }
+      } catch (agentErr) {
+        // fall through to legacy RAG
+      }
+
+      ragRes = await axios.get(`${RAG_SERVICE_URL}/advisory`, {
         params,
         headers,
         timeout: 30000,

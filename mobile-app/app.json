@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Kisan360",
+    "slug": "kisan360",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": { "image": "./assets/splash.png", "resizeMode": "contain" },
+    "extra": { "apiUrl": "http://10.0.2.2:5000/api" },
+    "plugins": [
+      [
+        "expo-camera",
+        { "cameraPermission": "Allow Kisan360 to take leaf photos for disease detection." }
+      ],
+      [
+        "expo-image-picker",
+        { "cameraPermission": "Allow Kisan360 to take leaf photos for disease detection." }
+      ]
+    ],
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.kisan360.app" },
+    "android": {
+      "package": "com.kisan360.app",
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE"]
+    },
+    "web": { "favicon": "./assets/favicon.png" }
+  }
+}

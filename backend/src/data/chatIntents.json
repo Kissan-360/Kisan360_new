@@ -2,8 +2,8 @@
   "intents": [
     {
       "name": "compare_mandis",
-      "keywords": ["compare", "mandi", "market", "price", "which market", "best mandi", "net realization", "tulna", "bajar", "bazaar", "mandis"],
-      "pattern": "(compare|mandi|market|price|best|which|tulna|bajar|bazaar).*(mandi|market|price|sell|vikri)",
+      "keywords": ["compare", "mandi", "market", "price", "which market", "best mandi", "net realization", "tulna", "bajar", "bazaar", "mandis", "बाजार", "मंडी", "मंडियाँ", "तुलना", "भाव", "किंमत", "कोणती", "चांगली", "कौनसी", "अच्छी"],
+      "pattern": "(compare|mandi|market|price|best|which|tulna|bajar|bazaar|बाजार|मंडी|तुलना|भाव|किंमत|कोंती|कोणती|कौनसी|कौन सी).*(mandi|market|price|sell|vikri|बाजार|मंडी|भाव|विक्री|चांगली|अच्छी|बेस्ट)",
       "handler": "navigate_decision",
       "response": "Let me take you to the Decision Workspace where you can compare mandis for your lot."
     },
@@ -23,8 +23,8 @@
     },
     {
       "name": "explain_net_realization",
-      "keywords": ["explain", "net realization", "calculator", "net", "understand", "how much", "pocket", "take home", "mil"],
-      "pattern": "(explain|understand|how|samjha|samjun).*(net|realization|calculator|take home|pocket|mil|shuddh)",
+      "keywords": ["explain", "net realization", "calculator", "net", "understand", "how much", "pocket", "take home", "mil", "निव्वळ", "शुद्ध", "लाभ", "नफा", "काम करतो", "कैसे काम"],
+      "pattern": "(explain|understand|how|samjha|samjun|निव्वळ|शुद्ध|काम|कैसे).*(net|realization|calculator|take home|pocket|mil|shuddh|लाभ|नफा)",
       "handler": "navigate_net_realization",
       "response": "I'll open the Net Realization Calculator so you can see exactly what you pocket at each mandi."
     },
@@ -44,15 +44,15 @@
     },
     {
       "name": "weather_info",
-      "keywords": ["weather", "rain", "temperature", "forecast", "havaman", "paus", "tapman", "mausam", "barish"],
-      "pattern": "(weather|rain|temperature|forecast|havaman|paus|tapman|mausam|barish)",
+      "keywords": ["weather", "rain", "temperature", "forecast", "havaman", "paus", "tapman", "mausam", "barish", "हवामान", "पाऊस", "मौसम", "बारिश", "तापमान"],
+      "pattern": "(weather|rain|temperature|forecast|havaman|paus|tapman|mausam|barish|हवामान|पाऊस|मौसम|बारिश|तापमान)",
       "handler": "navigate_weather",
       "response": "Let me check the weather for your area."
     },
     {
       "name": "crop_health",
-      "keywords": ["disease", "pest", "leaf", "health", "crop health", "rog", "keed", "aushadh", "bimari"],
-      "pattern": "(disease|pest|leaf|health|rog|keed|bimari).*(detect|check|identify|photo|crop|health|leaf|patta)",
+      "keywords": ["disease", "pest", "leaf", "health", "crop health", "rog", "keed", "aushadh", "bimari", "रोग", "कीड", "पत्ता", "पान", "बिमारी"],
+      "pattern": "(disease|pest|leaf|health|rog|keed|bimari|रोग|कीड|पत्ता|पान).*(detect|check|identify|photo|crop|health|leaf|patta|आहे|है)",
       "handler": "navigate_disease",
       "response": "Opening Crop Health. Upload a leaf photo and the app will analyze it for diseases."
     },
@@ -65,8 +65,8 @@
     },
     {
       "name": "govt_schemes",
-      "keywords": ["scheme", "government", "pm-kisan", "subsidy", "yojana", "sarkari", "government scheme"],
-      "pattern": "(scheme|government|pm.?kisan|subsidy|yojana|sarkari)",
+      "keywords": ["scheme", "government", "pm-kisan", "subsidy", "yojana", "sarkari", "government scheme", "योजना", "सरकारी", "योजनाएँ"],
+      "pattern": "(scheme|government|pm.?kisan|subsidy|yojana|sarkari|योजना|सरकारी)",
       "handler": "answer_schemes",
       "response": "Here are the government schemes relevant to you."
     },

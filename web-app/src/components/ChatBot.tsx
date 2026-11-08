@@ -11,6 +11,9 @@ interface ChatResponse {
   text?: string;
   action?: { type: 'navigate'; path: string };
   suggestions?: string[];
+  intent?: string;
+  intents?: string[];
+  toolResults?: ChatMessageItem['toolResults'];
 }
 
 const OPEN_KEY = 'kisan360-chat-open';
@@ -105,7 +108,10 @@ const ChatBot = () => {
 
       if (!response.ok) throw new Error(`Chat failed: ${response.status}`);
       const data = (await response.json()) as ChatResponse;
-      appendMessage({ id: makeId(), role: 'assistant', text: data.text || t('chat.error') });
+      appendMessage({
+        id: makeId(), role: 'assistant', text: data.text || t('chat.error'),
+        intent: data.intent, intents: data.intents, toolResults: data.toolResults,
+      });
       if (data.suggestions?.length) setSuggestions(data.suggestions);
       if (!open) setHasNewResponse(true);
       if (mode === 'action' && data.action?.type === 'navigate' && data.action.path) {
