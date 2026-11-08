@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–30: clear history + keyword RAG test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–31: HTTP E2E x7 + diagnostics). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -177,6 +177,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 30 (history + offline RAG test)
 - `ChatBot` clear-history button (trash) — wipes `localStorage` history and restores the welcome message
 - `ml-service/test_keyword_fallback.py` — unittest for `retrieve_keyword` (no torch needed): relevant doc returned, empty query safe, score present
+
+## Phase 31 (HTTP E2E deepened)
+- `backend/scripts/e2e-http.js` — 5 → 7 steps: FPO pooling (SKIP if DB offline) + disease safety gate (no-image → 400, proves OOD path without ML)
 
 ## Pre-embed (skip cold start)
 ```

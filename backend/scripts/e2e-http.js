@@ -64,6 +64,20 @@ async function main() {
   const adv = await http("/api/advisory?crop=Onion&location=Nashik&query=thrips%20control", { token });
   check("GET /api/advisory", adv.status === 200 && !!adv.data?.recommendations?.length, adv.data?.source || "");
 
+  // 6) FPO pooling (needs DB; graceful when offline)
+  const fpo = await http("/api/fpo/pool", { method: "POST", token, body: { crop: "Onion", district: "Nashik", quantity: 40 } });
+  if (fpo.status === 200) {
+    check("POST /api/fpo/pool", true, fpo.data?.pooledNetPerQuintal != null ? `pooled Rs ${fpo.data.pooledNetPerQuintal}/q` : "ok");
+  } else if (fpo.status === 503) {
+    skip("POST /api/fpo/pool", `DB offline (${fpo.data?.error || "503"})`);
+  } else {
+    check("POST /api/fpo/pool", false, `${fpo.status}: ${fpo.data?.error || "?"}`);
+  }
+
+  // 7) Disease safety gate (no image -> 400; proves the OOD path exists without ML)
+  const dis = await http("/api/disease/detect", { method: "POST", token, body: {} });
+  check("POST /api/disease/detect (no image -> 400)", dis.status === 400, dis.data?.error || "");
+
   console.log(`\n${pass}/${total} passed`);
   process.exit(pass === total ? 0 : 1);
 }
