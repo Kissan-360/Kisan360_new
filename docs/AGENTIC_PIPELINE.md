@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–28: LangGraph full runner). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–29: final audit v1.2.0). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -168,6 +168,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `agent_graph.run_agent_graph()` now runs the full pipeline via injected `retrieve`/`generate` (was stubs); `build_graph(retrieve_fn, generate_fn)` is functional with or without LangGraph (`graph: langgraph | pure-python`)
 - `GET :8001/agent/graph?query=&crop=&location=&temperature=&humidity=&condition=` — thin wrapper over the graph for A/B vs `/agent/advisory`
 - `agent.py` grounding + Pydantic structured output reused unchanged
+
+## Phase 29 (final audit)
+- `docs/FINAL_AUDIT.md` — measured counts (641 Jest, 250 docs, 5/5 live E2E), deployed stack, ship steps
+- Tag `v1.2.0-agentic` (matches `backend/package.json` 1.2.0-agentic)
+- Base `backend/team-lead-core` is the release line; `feat/agentic-platform-phase0-4` is merged + archived
 
 ## Pre-embed (skip cold start)
 ```
