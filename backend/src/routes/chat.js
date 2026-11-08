@@ -444,6 +444,22 @@ async function fetchWeatherTool(message, context) {
   }
 }
 
+// ── Agent tool: FPO pooling (deterministic via fpoPool service) ──
+async function fetchFpoPoolTool(message, context) {
+  const params = extractParams(message, context);
+  if (!params.crop || !params.district) return null;
+  try {
+    const fpoPool = require('../services/fpoPool');
+    const qty = params.quantity ? parseFloat(params.quantity) : 40;
+    const result = await fpoPool.assessPooling?.({ crop: params.crop, district: params.district, quantity: qty })
+      || await fpoPool.pool?.({ crop: params.crop, district: params.district, quantity: qty });
+    if (!result) return null;
+    return { tool: 'fpo_pool', crop: params.crop, district: params.district, quantity: qty, note: result.note || 'Pooled vs individual comparison' };
+  } catch {
+    return null;
+  }
+}
+
 // ── Agent tool: schemes lookup (seed JSON, no DB required) ──
 function fetchSchemesTool(message) {
   try {
@@ -697,6 +713,7 @@ async function executeIntent({ message, language, context = {}, classification, 
     // Economics tool (deterministic): include top-3 ranked mandis + provenance
     // so the frontend can render cards without a second round-trip.
     const econ = needsEconomics ? await fetchNetRealizationTool(message, context) : null;
+    const fpo = handler === 'navigate_pathways' ? await fetchFpoPoolTool(message, context) : null;
     const econLine =
       econ?.best
         ? ` Best right now: ${econ.best.market} at Rs ${econ.best.farmerNetPerQuintal}/q net for ${econ.quantityQuintals} q (${econ.provenance.freshness === 'live' ? 'live' : 'cached'} AGMARKNET).`
@@ -709,7 +726,7 @@ async function executeIntent({ message, language, context = {}, classification, 
         params: params.crop || params.district || params.quantity ? params : undefined,
       },
       suggestions,
-      ...(econ ? { toolResults: { netRealization: econ } } : {}),
+      ...(econ ? { toolResults: { netRealization: econ, ...(fpo ? { fpo } : {}) } } : {}),
     };
   }
 
@@ -755,4 +772,5 @@ module.exports.normalizeMode = normalizeMode;
 module.exports.fetchNetRealizationTool = fetchNetRealizationTool;
 module.exports.fetchSchemesTool = fetchSchemesTool;
 module.exports.fetchWeatherTool = fetchWeatherTool;
+module.exports.fetchFpoPoolTool = fetchFpoPoolTool;
 module.exports.extractParams = extractParams;

@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–16: offline RAG + onboarding test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–17: FPO tool + dashboard impact + corpus ~198). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -121,6 +121,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 16 (offline RAG + tests)
 - `advisory_service.retrieve()`: keyword fallback when embeddings unavailable (no torch/offline) — tag+content overlap, honest degraded path instead of a crash
 - `backend/tests/unit/chat.test.js`: first-run onboarding test (Marathi ask, no premature navigate) pinned by Jest, not only e2e-agent.js
+
+## Phase 17 (FPO + impact + corpus)
+- `chat.js fetchFpoPoolTool()` — `navigate_pathways` now returns `toolResults.fpo` alongside economics (FPO pooling surfaced in chat cards)
+- `Dashboard.tsx` impact strip — honest decision-support stats (421-row snapshot, net formula, chat-first CTA) without vanity numbers
+- Corpus ~198 docs (+10: whitefly/armyworm cycles, boron/zinc, rice AWD, mulch, fallow, mineral, propagation, grading premium)
 
 ## Pre-embed (skip cold start)
 ```

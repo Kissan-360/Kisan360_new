@@ -32,13 +32,15 @@ export interface ToolDisease {
   cropType?: string;
 }
 
+export interface ToolFpo { tool?: string; crop?: string; district?: string; quantity?: number; note?: string }
+
 export interface ChatMessageItem {
   id: string;
   role: ChatMessageRole;
   text: string;
   intent?: string;
   intents?: string[];
-  toolResults?: { netRealization?: ToolNetRealization; schemes?: ToolSchemes; weather?: ToolWeather };
+  toolResults?: { netRealization?: ToolNetRealization; schemes?: ToolSchemes; weather?: ToolWeather; fpo?: ToolFpo };
   disease?: ToolDisease | string;
 }
 

@@ -179,6 +179,13 @@ const SellHero = ({ top, pending, defaultCrop, feedFallback }: { top: PulseRow |
           {pending && <span className="ml-1.5 inline-block h-3 w-3 rounded-full border-2 border-emerald-300 border-t-emerald-700 animate-spin align-middle" />}
         </p>
       </div>
+
+      {/* Impact strip — honest decision support, not a vanity number */}
+      <div className="mt-3 flex flex-wrap gap-2 text-[11px] leading-tight text-stone-600">
+        <span className="rounded-full bg-white px-2.5 py-1 ring-1 ring-stone-200">mandis compared: 421 rows · 34 crops (snapshot)</span>
+        <span className="rounded-full bg-white px-2.5 py-1 ring-1 ring-stone-200">net = modal − farmer-borne costs</span>
+        <span className="rounded-full bg-white px-2.5 py-1 ring-1 ring-emerald-200 text-emerald-800 font-semibold">Ask Kisan360 — compare in chat, no forms</span>
+      </div>
     </section>
   );
 };
