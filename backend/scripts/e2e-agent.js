@@ -42,6 +42,14 @@ async function main() {
   });
   check("ask advisory: text non-empty", !!res3.text?.length);
 
+  // 4b) First-run onboarding: economics without crop/district asks, not navigate
+  const resOnboard = await chat.executeIntent({
+    message: "Compare mandis", language: "mr", context: {},
+    classification: chat.classifyIntent("Compare mandis"), mode: "action",
+  });
+  check("onboarding asks for crop/district (mr)", !!resOnboard.text?.includes("पीक"));
+  check("onboarding does not navigate prematurely", !resOnboard.action);
+
   // 5) Weather tool shape (no key -> null or context passthrough; never invented)
   const w = await chat.fetchWeatherTool("weather in Nashik", { district: "Nashik" });
   check("weather tool graceful", w === null || !!w.current);

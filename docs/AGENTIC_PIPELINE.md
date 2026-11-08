@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–12: chat disease + onboarding + share, 10/10 polish). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–13: code splitting + onboarding test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -104,6 +104,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - **Chat photo → disease inline:** 📷 button in `ChatBot` uploads leaf photo to `POST /disease/detect` (multipart, crop from context) and renders disease card in `ChatMessage` without leaving chat — closes the `crop_health` loop
 - **First-run onboarding:** `POST /api/chat` economics intents without crop/district now ask in EN/MR/HI (“पीक, जिल्हा, प्रमाण सांगा…”) instead of navigating to an empty Decision Workspace
 - **WhatsApp share:** net-realization tool card has a `Share on WhatsApp →` deep link with best-mandi summary (farmer-to-farmer spread)
+
+## Phase 13 (performance + tests)
+- `web-app/src/App.tsx`: route-level `React.lazy` + `Suspense` — initial bundle drops; heavy pages (Disease, GradeCrop, Decision) load on demand (fixes 1.6 MB chunk warning baseline)
+- `backend/scripts/e2e-agent.js`: onboarding assertion (Marathi ask, no premature navigate) — now 9 checks
 
 ## Pre-embed (skip cold start)
 ```
