@@ -36,18 +36,72 @@ def get_embedder():
         model = SentenceTransformer('all-MiniLM-L6-v2')
     return model
 
+EMBED_CACHE = os.environ.get("EMBED_CACHE", os.path.join(os.path.dirname(__file__), "corpus_embeddings.npy"))
+
 def build_index():
     global doc_embeddings, knowledge
     docs = load_knowledge()
     texts = [d["content"] for d in docs]
+    # Pre-embedded cache (built by scripts/embed_corpus.py) -> skip 30s cold start
+    if os.path.exists(EMBED_CACHE):
+        try:
+            cached = np.load(EMBED_CACHE)
+            if cached.shape[0] == len(docs):
+                doc_embeddings = cached
+                logger.info(f"Loaded cached embeddings: {doc_embeddings.shape} from {EMBED_CACHE}")
+                return doc_embeddings
+        except Exception as e:
+            logger.warning(f"Embedding cache load failed, regenerating: {e}")
     logger.info(f"Generating embeddings for {len(texts)} documents...")
     emb = get_embedder()
     doc_embeddings = emb.encode(texts, convert_to_numpy=True)
+    try:
+        np.save(EMBED_CACHE, doc_embeddings)
+        logger.info(f"Embeddings cached to {EMBED_CACHE}")
+    except Exception:
+        pass
     logger.info(f"Embeddings generated: {doc_embeddings.shape}")
     return doc_embeddings
 
+def retrieve_keyword(query, top_k=7):
+    """Keyword fallback when embeddings are unavailable (no torch, offline).
+
+    Scores docs by tag + content token overlap with the query — weak but honest,
+    and always available. Used as a degraded path, never as the primary.
+    """
+    docs = load_knowledge()
+    q = (query or "").lower()
+    q_tokens = set(q.replace("?", " ").split())
+    scored = []
+    for d in docs:
+        tags_blob = " ".join(d.get("tags", [])).lower()
+        content = (d.get("content") or "").lower()
+        hits = sum(1 for t in q_tokens if len(t) > 2 and (t in tags_blob or t in content))
+        # Exact tag match boosts
+        for tag in d.get("tags", []):
+            if tag.lower() in q:
+                hits += 2
+        scored.append((hits, d))
+    scored.sort(key=lambda x: -x[0])
+    return [
+        {"id": d["id"], "content": d["content"], "tags": d["tags"], "score": float(hits)}
+        for hits, d in scored[:top_k] if hits > 0
+    ]
+
 def retrieve(query, top_k=7):
-    emb = get_embedder()
+    if doc_embeddings is None:
+        try:
+            build_index()
+        except Exception as e:
+            logger.warning(f"Embedding index unavailable ({e}), keyword fallback active")
+            return retrieve_keyword(query, top_k=top_k)
+    if doc_embeddings is None:
+        return retrieve_keyword(query, top_k=top_k)
+    try:
+        emb = get_embedder()
+    except Exception as e:
+        logger.warning(f"Embedder unavailable ({e}), keyword fallback active")
+        return retrieve_keyword(query, top_k=top_k)
     q_vec = emb.encode([query], convert_to_numpy=True)
     sim = np.dot(doc_embeddings, q_vec.T).flatten()
     norms = np.linalg.norm(doc_embeddings, axis=1) * np.linalg.norm(q_vec)
@@ -74,7 +128,7 @@ def call_groq(groq_key, prompt, system_prompt=None):
         messages.append({"role": "user", "content": prompt})
 
         completion = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="llama-3.3-70b-versatile",
             messages=messages,
             temperature=0.3,
             max_tokens=1024,
@@ -412,6 +466,87 @@ def explain_net_realization(req: ExplainNetRealizationRequest, x_groq_key: str =
         return {"success": True, "explanation": groq_out.strip(), "explainedBy": "groq", "llmUsed": True, "templateFallback": template}
     return {"success": True, "explanation": template, "explainedBy": "template", "llmUsed": False}
 
+
+from datetime import datetime, timezone
+
+@app.get("/agent/health")
+def agent_health():
+    return {
+        "status": "ok",
+        "model": "llama-3.3-70b-versatile",
+        "pipeline": "classify->plan->retrieve->generate->validate",
+        "tools": ["rag_search", "market_prices", "net_realization", "weather", "disease_detect", "schemes"],
+    }
+
+@app.get("/agent/advisory")
+def agent_advisory(
+    query: str = Query(..., description="Farmer message"),
+    crop: str = Query("", description="Crop (optional, auto-extracted from query if empty)"),
+    location: str = Query("Maharashtra", description="Location/region"),
+    temperature: float = Query(None, description="Current temperature in C (weather-as-input)"),
+    humidity: float = Query(None, description="Humidity % (weather-as-input)"),
+    condition: str = Query("", description="Weather condition"),
+    x_groq_key: str = Header(None, alias="X-Groq-Key"),
+):
+    """Agentic endpoint: classify -> plan -> retrieve -> generate -> validate."""
+    global doc_embeddings
+    # Local import to avoid circular at module load
+    from agent import build_structured, classify_intents, plan_tools, validate_numbers
+    try:
+        if doc_embeddings is None:
+            build_index()
+        intents = classify_intents(query)
+        primary = intents[0]["intent"] if intents else "advisory"
+        intent_names = [i["intent"] for i in intents if i["intent"] not in ("fallback", "empty")] or ["advisory"]
+        tools = plan_tools(intents)
+        search_query = (query or f"{crop} crop farming advisory for {location}").strip()
+        retrieved = retrieve(search_query, top_k=7)
+        weather_ctx = {"temperature": temperature, "humidity": humidity, "condition": condition}
+        advisory = generate_advisory(
+            crop=crop or "crop", location=location, weather_context=weather_ctx,
+            retrieved_docs=retrieved, groq_key=x_groq_key, query=query,
+        )
+        # Grounding check on recommendations (they must not invent Rs figures
+        # beyond RAG docs + weather context)
+        rec_text = " ".join(advisory.get("recommendations", []))
+        tool_blob = json_blob = "\n".join(d["content"] for d in retrieved) + json_str(weather_ctx)
+        ok, halluc = validate_numbers(rec_text, tool_blob)
+        if not ok and advisory.get("generated"):
+            logger.warning(f"Agent grounding failed: {halluc} -> template fallback")
+            advisory = generate_advisory(
+                crop=crop or "crop", location=location, weather_context=weather_ctx,
+                retrieved_docs=retrieved, groq_key=None, query=query,
+            )
+        structured = build_structured(
+            advisory, intent=primary, intents=intent_names,
+            provenance_source="rag-groq" if advisory.get("generated") else "rag-template",
+            retrieved_at=datetime.now(timezone.utc).isoformat(),
+            knowledge_docs=len(load_knowledge()),
+            tools=tools,
+        )
+        return {
+            "structured": structured.model_dump(),
+            # Back-compat flat shape for existing frontend
+            **advisory,
+            "intent": primary,
+            "intents": intent_names,
+            "tools": tools,
+            "validated": True,
+        }
+    except Exception as e:
+        logger.error(f"Agent advisory error: {e}")
+        return {
+            "structured": None,
+            "error": "agent_failed",
+            "fallback": "Use GET /advisory (template path remains available)",
+        }
+
+def json_str(obj) -> str:
+    import json as _j
+    try:
+        return _j.dumps(obj, ensure_ascii=False)
+    except Exception:
+        return str(obj)
 
 if __name__ == "__main__":
     import uvicorn

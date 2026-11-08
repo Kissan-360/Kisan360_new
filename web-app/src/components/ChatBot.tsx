@@ -11,6 +11,10 @@ interface ChatResponse {
   text?: string;
   action?: { type: 'navigate'; path: string };
   suggestions?: string[];
+  intent?: string;
+  intents?: string[];
+  toolResults?: ChatMessageItem['toolResults'];
+  disease?: any;
 }
 
 const OPEN_KEY = 'kisan360-chat-open';
@@ -51,6 +55,8 @@ const ChatBot = () => {
     { id: makeId(), role: 'assistant', text: t('chat.welcome') },
     { id: `${makeId()}-system`, role: 'system', text: t('chat.systemHint') },
   ]);
+  const [photo, setPhoto] = useState<any>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -96,6 +102,9 @@ const ChatBot = () => {
     appendMessage({ id: makeId(), role: 'user', text: trimmed });
     setLoading(true);
 
+    // Reuse the disease quick-action: if the message is a photo placeholder,
+    // the upload path below handles it. Text path stays unchanged.
+
     try {
       const context = loadDecisionContext() || DEFAULT_CONTEXT;
       const response = await apiFetch(`${API_URL}/chat`, {
@@ -105,7 +114,11 @@ const ChatBot = () => {
 
       if (!response.ok) throw new Error(`Chat failed: ${response.status}`);
       const data = (await response.json()) as ChatResponse;
-      appendMessage({ id: makeId(), role: 'assistant', text: data.text || t('chat.error') });
+      appendMessage({
+        id: makeId(), role: 'assistant', text: data.text || t('chat.error'),
+        intent: data.intent, intents: data.intents, toolResults: data.toolResults,
+        disease: data.disease,
+      });
       if (data.suggestions?.length) setSuggestions(data.suggestions);
       if (!open) setHasNewResponse(true);
       if (mode === 'action' && data.action?.type === 'navigate' && data.action.path) {
@@ -118,6 +131,47 @@ const ChatBot = () => {
       setLoading(false);
     }
   };
+
+  const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setPhoto(f);
+    appendMessage({ id: makeId(), role: 'user', text: `📷 ${f.name}` });
+    setTimeout(() => fileRef.current && (fileRef.current.value = ''), 50);
+  };
+
+  useEffect(() => {
+    if (!photo) return;
+    (async () => {
+      setLoading(true);
+      try {
+        const form = new FormData();
+        form.append('image', photo);
+        const context = loadDecisionContext() || DEFAULT_CONTEXT;
+        if (context?.crop) form.append('cropType', String(context.crop));
+        const resp = await apiFetch(`${API_URL}/disease/detect`, { method: 'POST', body: form });
+        const data = await resp.json();
+        if (!resp.ok) {
+          appendMessage({ id: makeId(), role: 'assistant', text: data.message || data.error || t('chat.error') });
+          return;
+        }
+        appendMessage({
+          id: makeId(), role: 'assistant',
+          text: `${data.detectedDisease} — ${data.severity} · ${(data.confidence * 100).toFixed(0)}%`,
+          disease: {
+            detectedDisease: data.detectedDisease, confidence: data.confidence,
+            severity: data.severity, treatment: data.treatment,
+            recommendations: data.recommendations, mlLatency: data.mlLatency, cropType: data.cropType,
+          },
+        });
+      } catch {
+        appendMessage({ id: makeId(), role: 'assistant', text: t('chat.error') });
+      } finally {
+        setLoading(false);
+        setPhoto(null);
+      }
+    })();
+  }, [photo]);
 
   if (!open) {
     return (
@@ -216,22 +270,36 @@ const ChatBot = () => {
         )}
       </div>
 
-      <ChatInput
-        disabled={loading}
-        language={language}
-        placeholder={t('chat.placeholder')}
-        value={input}
-        voiceStartLabel={t('chat.voiceStart')}
-        voiceStopLabel={t('chat.voiceStop')}
-        voiceUnsupportedLabel={t('chat.voiceUnsupported')}
-        voiceDeniedLabel={t('chat.voiceDenied')}
-        voiceNoSpeechLabel={t('chat.voiceNoSpeech')}
-        voiceNetworkErrorLabel={t('chat.voiceNetworkError')}
-        voiceGenericErrorLabel={t('chat.voiceError')}
-        sendLabel={t('common.send')}
-        onChange={setInput}
-        onSend={sendMessage}
-      />
+      <div className="flex items-center gap-2 border-t border-stone-100 bg-white px-3 py-2">
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          disabled={loading}
+          className="flex h-9 items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-3 text-xs font-medium text-emerald-800 hover:bg-emerald-100 disabled:opacity-50"
+          title="Upload a leaf photo — disease check in chat"
+        >
+          📷 {loading ? '…' : 'Photo'}
+        </button>
+        <div className="flex-1">
+          <ChatInput
+            disabled={loading}
+            language={language}
+            placeholder={t('chat.placeholder')}
+            value={input}
+            voiceStartLabel={t('chat.voiceStart')}
+            voiceStopLabel={t('chat.voiceStop')}
+            voiceUnsupportedLabel={t('chat.voiceUnsupported')}
+            voiceDeniedLabel={t('chat.voiceDenied')}
+            voiceNoSpeechLabel={t('chat.voiceNoSpeech')}
+            voiceNetworkErrorLabel={t('chat.voiceNetworkError')}
+            voiceGenericErrorLabel={t('chat.voiceError')}
+            sendLabel={t('common.send')}
+            onChange={setInput}
+            onSend={sendMessage}
+          />
+        </div>
+      </div>
     </section>
   );
 };

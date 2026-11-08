@@ -1,30 +1,32 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
-import Dashboard from './pages/Dashboard';
-import DiseaseDetection from './pages/DiseaseDetection';
-import WeatherPage from './pages/WeatherPage';
-import CropAdvisory from './pages/CropAdvisory';
-import FarmManagement from './pages/FarmManagement';
-import MarketPlace from './pages/MarketPlace';
-import NetRealization from './pages/NetRealization';
-import TradePage from './pages/TradePage';
-import FpoPage from './pages/FpoPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import { I18nProvider } from './i18n';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
-import ProfilePage from './pages/ProfilePage';
-import SettingsPage from './pages/SettingsPage';
 import NotFoundPage from './pages/NotFoundPage';
-import PathwayPage from './pages/PathwayPage';
-import DecisionWorkspace from './pages/DecisionWorkspace';
-import SchemesPage from './pages/SchemesPage';
-import CommunityPage from './pages/CommunityPage';
-import GradeCrop from './pages/GradeCrop';
-import BuyCrops from './pages/BuyCrops';
+
+// Route-level code splitting: initial bundle stays small; heavy pages load on demand.
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const DiseaseDetection = lazy(() => import('./pages/DiseaseDetection'));
+const WeatherPage = lazy(() => import('./pages/WeatherPage'));
+const CropAdvisory = lazy(() => import('./pages/CropAdvisory'));
+const FarmManagement = lazy(() => import('./pages/FarmManagement'));
+const MarketPlace = lazy(() => import('./pages/MarketPlace'));
+const NetRealization = lazy(() => import('./pages/NetRealization'));
+const TradePage = lazy(() => import('./pages/TradePage'));
+const FpoPage = lazy(() => import('./pages/FpoPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const PathwayPage = lazy(() => import('./pages/PathwayPage'));
+const DecisionWorkspace = lazy(() => import('./pages/DecisionWorkspace'));
+const SchemesPage = lazy(() => import('./pages/SchemesPage'));
+const CommunityPage = lazy(() => import('./pages/CommunityPage'));
+const GradeCrop = lazy(() => import('./pages/GradeCrop'));
+const BuyCrops = lazy(() => import('./pages/BuyCrops'));
 
 const ProtectedRoute = () => {
   const { user, loading } = useAuth();
@@ -57,6 +59,7 @@ function App() {
       <ErrorBoundary>
       <I18nProvider>
       <AuthProvider>
+        <Suspense fallback={<div className="flex items-center justify-center h-screen text-stone-400">Loading…</div>}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -84,6 +87,7 @@ function App() {
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </Suspense>
       </AuthProvider>
       </I18nProvider>
     </ErrorBoundary>

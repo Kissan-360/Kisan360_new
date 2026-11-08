@@ -108,6 +108,11 @@ const DiseaseDetection = () => {
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-stone-900 tracking-tight">{t('disease.title')}</h1>
           <p className="text-stone-500 text-sm mt-1">{t('disease.subtitle')}</p>
+          <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] leading-tight text-stone-500">
+            <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">MobileNetV2 · FastAPI</span>
+            <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">canonical grader</span>
+            <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">OOD-gated (not-a-plant / crop-mismatch checked)</span>
+          </div>
         </div>
 
         <div className="card p-6 lg:p-8 space-y-5">
@@ -265,6 +270,20 @@ const DiseaseDetection = () => {
                     <p className="text-sm text-stone-700 bg-white rounded-xl px-4 py-3 border border-stone-100">{result.treatment}</p>
                   </div>
                 )}
+
+                <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] leading-tight text-stone-500">
+                  <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">
+                    model: MobileNetV2 (PlantDisease-ID, 38 classes)
+                  </span>
+                  {typeof result.mlLatency === 'number' ? (
+                    <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">
+                      inference: {result.mlLatency}s
+                    </span>
+                  ) : null}
+                  <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">
+                    via {API_URL.replace(/^https?:\/\//, '').split('/')[0]}/disease/detect
+                  </span>
+                </div>
               </div>
             </div>
           )}

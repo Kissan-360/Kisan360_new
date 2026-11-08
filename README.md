@@ -15,7 +15,7 @@ Kisan360 is a market-intelligence and transaction-enablement platform for smallh
 | `backend/` | Node/Express API — auth, routing, orchestration, MongoDB models (port 5000) |
 | `ml-service/` | FastAPI services — disease CNN (`:8000`), RAG advisory (`:8001`), net-realization calculator (`:8002`) |
 | `web-app/` | React (Vite + Tailwind) web app — demo UI (port 3000, proxies `/api` → 5000) |
-| `mobile-app/` | Legacy Expo scaffold — **out of scope** for the Sept 15 demo |
+| `mobile-app/` | Expo (React Native) — Decision / Trade / Chat / Disease (live camera) / SignIn, sharing the same API contract as web |
 | `deployment/`, `docs/` | Deployment configs and team docs |
 
 ## Quick start (local dev)

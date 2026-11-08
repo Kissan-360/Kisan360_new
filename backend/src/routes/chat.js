@@ -6,6 +6,7 @@ const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || 'http://localhost:8001';
+const NET_REALIZATION_URL = process.env.NET_REALIZATION_URL || 'http://localhost:8002';
 const MAX_MESSAGE_LENGTH = 1000;
 
 const ASK_SYSTEM_PROMPT = `
@@ -228,9 +229,9 @@ function normalizeMessage(message) {
   return String(message || '').toLowerCase().replace(/\s+/g, ' ').trim();
 }
 
-function classifyIntent(message) {
+function classifyIntents(message) {
   const normalized = normalizeMessage(message);
-  if (!normalized) return { intent: 'empty', handler: 'empty', confidence: 1, matches: [] };
+  if (!normalized) return [{ intent: 'empty', handler: 'empty', confidence: 1, matches: [] }];
 
   const matches = [];
   for (const intent of intentsConfig.intents.filter((item) => item.name !== 'fallback')) {
@@ -254,9 +255,13 @@ function classifyIntent(message) {
     }
   }
 
-  if (!matches.length) return { intent: 'fallback', handler: 'llm_fallback', confidence: 0, matches: [] };
+  if (!matches.length) return [{ intent: 'fallback', handler: 'llm_fallback', confidence: 0, matches: [] }];
   matches.sort((a, b) => b.confidence - a.confidence);
-  return matches[0];
+  return matches;
+}
+
+function classifyIntent(message) {
+  return classifyIntents(message)[0];
 }
 
 function contextLine(context = {}) {
@@ -356,6 +361,125 @@ async function answerLotStatus(context, language) {
   return { text: `${t.lotPrefix}: ${line}.${extra}`, suggestions: suggestionsFor(language, 'ask') };
 }
 
+// ── Agent tool: deterministic net-realization (market_prices + calculator) ──
+// Fed into chat as toolResults so the answer grounds every Rs figure in the
+// engine output. Never invents: if the engine is down, toolResults is absent
+// and chat falls back to navigate-only (no numbers).
+async function fetchNetRealizationTool(message, context) {
+  const params = extractParams(message, context);
+  if (!params.crop || !params.district) return null;
+  const qty = params.quantity ? parseFloat(params.quantity) : 10;
+  if (!Number.isFinite(qty) || qty <= 0) return null;
+  try {
+    const priceResult = await marketCache.getBestPrices({ crop: params.crop, state: 'Maharashtra', limit: 100 });
+    if (!priceResult.rows?.length) return null;
+    const deduped = priceResult.rows
+      .slice()
+      .sort((a, b) => (b.modalPrice || 0) - (a.modalPrice || 0))
+      .filter((r, i, arr) => arr.findIndex((x) => x.market.trim().toLowerCase() === r.market.trim().toLowerCase()) === i);
+    const prices = deduped.map((r) => ({
+      market: r.market, variety: r.variety, minPrice: r.minPrice, maxPrice: r.maxPrice,
+      modalPrice: r.modalPrice, arrivalDate: r.arrivalDate, district: r.district,
+      source: priceResult.provenance?.source, retrievedAt: priceResult.provenance?.retrievedAt,
+    }));
+    const mlRes = await axios.post(`${NET_REALIZATION_URL}/net-realization`, {
+      crop: params.crop, district: params.district, quantity: qty, prices,
+    }, { timeout: 10000 });
+    const engine = mlRes.data;
+    if (!engine || engine.success === false || !Array.isArray(engine.rankedMandis) || !engine.rankedMandis.length) return null;
+    const top = engine.rankedMandis.slice(0, 3).map((m) => ({
+      market: m.market,
+      farmerNetPerQuintal: m.farmerNetPerQuintal,
+      farmerNetTotal: m.farmerNetTotal,
+      distanceKm: m.distanceKm,
+      modalPrice: m.modalPrice,
+    }));
+    return {
+      tool: 'net_realization',
+      crop: params.crop, district: params.district, quantityQuintals: qty,
+      topMandis: top,
+      best: top[0],
+      provenance: {
+        source: priceResult.source,
+        retrievedAt: priceResult.provenance?.retrievedAt || null,
+        freshness: priceResult.provenance?.note || priceResult.fallback ? 'cached' : 'live',
+        marketSource: priceResult.source,
+      },
+    };
+  } catch {
+    return null;
+  }
+}
+
+// ── Agent tool: live weather (OpenWeather) via district coords ──
+// Needs OPENWEATHER_API_KEY; otherwise null (never invented).
+async function fetchWeatherTool(message, context) {
+  const district = extractDistrict(message) || context?.district || context?.location;
+  if (!district) return null;
+  if (context?.weather?.temperature != null) {
+    return { tool: 'weather', district, current: context.weather, source: 'context', freshness: 'provided' };
+  }
+  if (!process.env.OPENWEATHER_API_KEY) return null;
+  try {
+    const { DISTRICTS, findDistrict } = require('../data/maharashtraDistricts');
+    const d = DISTRICTS.find((x) => x.name.toLowerCase() === String(district).toLowerCase()) || findDistrict(String(district).toLowerCase());
+    if (!d || !d.lat) return null;
+    const res = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+      params: { lat: d.lat, lon: d.lon, appid: process.env.OPENWEATHER_API_KEY, units: 'metric' },
+      timeout: 5000,
+    });
+    const c = res.data;
+    return {
+      tool: 'weather', district: d.name,
+      current: {
+        temperature: Math.round(c.main.temp),
+        humidity: c.main.humidity,
+        condition: c.weather?.[0]?.main || '',
+        description: c.weather?.[0]?.description || '',
+      },
+      source: 'openweather', retrievedAt: new Date().toISOString(),
+    };
+  } catch {
+    return null;
+  }
+}
+
+// ── Agent tool: FPO pooling (deterministic via fpoPool service) ──
+async function fetchFpoPoolTool(message, context) {
+  const params = extractParams(message, context);
+  if (!params.crop || !params.district) return null;
+  try {
+    const fpoPool = require('../services/fpoPool');
+    const qty = params.quantity ? parseFloat(params.quantity) : 40;
+    const result = await fpoPool.assessPooling?.({ crop: params.crop, district: params.district, quantity: qty })
+      || await fpoPool.pool?.({ crop: params.crop, district: params.district, quantity: qty });
+    if (!result) return null;
+    return { tool: 'fpo_pool', crop: params.crop, district: params.district, quantity: qty, note: result.note || 'Pooled vs individual comparison' };
+  } catch {
+    return null;
+  }
+}
+
+// ── Agent tool: schemes lookup (seed JSON, no DB required) ──
+function fetchSchemesTool(message) {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const seed = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'schemes.json'), 'utf8'));
+    const q = normalizeMessage(message);
+    const hits = seed.filter((s) => {
+      const blob = `${s.name} ${s.shortName} ${s.description} ${(s.tags || []).join(' ')}`.toLowerCase();
+      return blob.split(/\s+/).some((w) => w.length > 3 && q.includes(w));
+    });
+    const list = (hits.length ? hits : seed.slice(0, 5)).slice(0, 5).map((s) => ({
+      slug: s.slug, shortName: s.shortName, name: s.name, benefitLabel: s.benefitLabel,
+    }));
+    return { tool: 'schemes', count: list.length, schemes: list };
+  } catch {
+    return null;
+  }
+}
+
 async function callGroqDirect(message, context, language) {
   const groqKey = process.env.GROQ_API_KEY;
   if (!groqKey) return null;
@@ -391,6 +515,18 @@ async function callGroqDirect(message, context, language) {
 }
 
 async function answerAskMode(message, context, language) {
+  // Phase 5: ask-mode is agent-backed first (RAG + weather tool), Groq second.
+  // Crop advisory / disease / fertilizer / irrigation queries get grounded RAG;
+  // scheme/PM-KISAN etc. stay on the precise template + schemes tool.
+  try {
+    const cls = classifyIntents(message);
+    const topIntent = cls[0]?.intent || 'fallback';
+    if (['advisory', 'crop_health', 'weather_info'].includes(topIntent)) {
+      const ragText = await callRagFallback(message, context, language);
+      if (ragText && ragText !== TEXT[language].fallback) return ragText;
+    }
+  } catch { /* fall through to Groq direct */ }
+
   const groqKey = process.env.GROQ_API_KEY;
   if (!groqKey) return localAskFallback(message, context, language);
 
@@ -423,8 +559,13 @@ async function answerAskMode(message, context, language) {
 }
 
 async function callRagFallback(message, context, language) {
-  const crop = context?.crop || 'crop';
-  const location = context?.district || context?.location || 'Maharashtra';
+  const crop = context?.crop || extractCrop(message) || 'crop';
+  const location = context?.district || context?.location || extractDistrict(message) || 'Maharashtra';
+  let weather = context?.weather || {};
+  if (weather.temperature == null) {
+    const w = await fetchWeatherTool(message, context);
+    if (w?.current) weather = w.current;
+  }
   const query = [
     message,
     'Answer as Kisan360 for an Indian farmer.',
@@ -435,9 +576,33 @@ async function callRagFallback(message, context, language) {
   const headers = {};
   if (process.env.GROQ_API_KEY) headers['X-Groq-Key'] = process.env.GROQ_API_KEY;
 
+  // Agentic path first (classify -> plan -> retrieve -> generate -> validate)
+  // Weather-as-input: forward temp/humidity/condition so RAG tailors advice.
+  try {
+    const agentRes = await axios.get(`${RAG_SERVICE_URL}/agent/advisory`, {
+      params: {
+        query: message, crop, location,
+        temperature: weather.temperature, humidity: weather.humidity, condition: weather.condition,
+      },
+      headers,
+      timeout: 8000,
+    });
+    const agentData = agentRes.data || {};
+    const structured = agentData.structured || agentData;
+    if (structured && Array.isArray(structured.recommendations) && structured.recommendations.length) {
+      return structured.recommendations.slice(0, 4).join(' ');
+    }
+    if (typeof structured.answer_text === 'string' && structured.answer_text.trim()) return structured.answer_text.trim();
+  } catch {
+    // Agent unavailable — fall through to legacy RAG
+  }
+
   try {
     const ragRes = await axios.get(`${RAG_SERVICE_URL}/advisory`, {
-      params: { crop, location, query },
+      params: {
+        crop, location, query,
+        temperature: weather.temperature, humidity: weather.humidity, condition: weather.condition,
+      },
       headers,
       timeout: 3000,
     });
@@ -465,9 +630,12 @@ async function executeIntent({ message, language, context = {}, classification, 
 
   if (handler === 'empty') return { text: t.empty, suggestions };
   if (normalizedMode === 'ask') {
+    const text = await answerAskMode(message, context, language);
+    const weatherTool = await fetchWeatherTool(message, context);
     return {
-      text: await answerAskMode(message, context, language),
+      text,
       suggestions,
+      ...(weatherTool ? { toolResults: { weather: weatherTool } } : {}),
     };
   }
   if (handler === 'respond_greeting') return { text: t.greeting, suggestions };
@@ -475,7 +643,10 @@ async function executeIntent({ message, language, context = {}, classification, 
   if (handler === 'fetch_lot_status') return answerLotStatus(context, language);
 
   if (handler === 'answer_schemes') {
-    if (normalizedMode === 'ask') return { text: t.schemes, suggestions };
+    if (normalizedMode === 'ask') {
+      const tool = fetchSchemesTool(message);
+      return { text: t.schemes, suggestions, ...(tool ? { toolResults: { schemes: tool } } : {}) };
+    }
     const params = extractParams(message, context);
     let schemeSlug = null;
     const q = normalizeMessage(message);
@@ -492,6 +663,7 @@ async function executeIntent({ message, language, context = {}, classification, 
     else if (/(ambedkar|आंबेडकर|dr\. babasaheb)/i.test(q)) schemeSlug = 'ambedkar-krushi';
     else if (/(maha\s*agri\s*ai|agri[\s-]?ai|महा\.?\s*ai)/i.test(q)) schemeSlug = 'maha-agri-ai';
     const path = schemeSlug ? `/schemes?slug=${encodeURIComponent(schemeSlug)}` : '/schemes';
+    const schemesTool = fetchSchemesTool(message);
     return {
       text: params.crop || params.district || schemeSlug
         ? withContext(
@@ -503,18 +675,32 @@ async function executeIntent({ message, language, context = {}, classification, 
         : withContext('Opening Government Schemes for you.', context),
       action: { type: 'navigate', path },
       suggestions,
+      ...(schemesTool ? { toolResults: { schemes: schemesTool } } : {}),
     };
   }
 
   if (NAVIGATION_PATHS[handler]) {
     const intent = intentsConfig.intents.find((item) => item.handler === handler);
+    const needsEconomics = ['navigate_decision', 'navigate_net_realization', 'navigate_pathways', 'navigate_trade'].includes(handler);
     if (normalizedMode === 'ask') {
+      const econ = needsEconomics ? await fetchNetRealizationTool(message, context) : null;
       return {
         text: withContext(intent?.response || 'That section can help with this request.', context),
         suggestions,
+        ...(econ ? { toolResults: { netRealization: econ } } : {}),
       };
     }
     const params = extractParams(message, context);
+    // First-run onboarding: if economics intent has no crop/district yet, ask
+    // in the farmer's language instead of navigating to an empty workspace.
+    if (needsEconomics && (!params.crop || !params.district)) {
+      const ask = {
+        en: 'To compare mandis, tell me: (1) crop, (2) district, (3) quantity in quintals. Example: "Onion, Nashik, 10 quintals".',
+        mr: 'बाजार तुलना करण्यासाठी सांगा: (1) पीक, (2) जिल्हा, (3) प्रमाण क्विंटलमध्ये. उदाहरण: "कांदा, नाशिक, 10 क्विंटल".',
+        hi: 'मण्डियों की तुलना के लिए बताइए: (1) फसल, (2) जिला, (3) मात्रा क्विंटल में। उदाहरण: "प्याज, नाशिक, 10 क्विंटल"।',
+      }[language] || 'To compare mandis, tell me your crop, district and quantity in quintals.';
+      return { text: ask, suggestions };
+    }
     const basePath = NAVIGATION_PATHS[handler];
     const fullPath = PREFILL_NAV_HANDLERS.has(handler) ? buildPrefillPath(basePath, params) : basePath;
     const fragments = [];
@@ -524,14 +710,23 @@ async function executeIntent({ message, language, context = {}, classification, 
     const prefixText = fragments.length
       ? `Opening Decision Workspace pre-filled with ${fragments.join(' · ')}…`
       : intent?.response || 'Opening that section for you.';
+    // Economics tool (deterministic): include top-3 ranked mandis + provenance
+    // so the frontend can render cards without a second round-trip.
+    const econ = needsEconomics ? await fetchNetRealizationTool(message, context) : null;
+    const fpo = handler === 'navigate_pathways' ? await fetchFpoPoolTool(message, context) : null;
+    const econLine =
+      econ?.best
+        ? ` Best right now: ${econ.best.market} at Rs ${econ.best.farmerNetPerQuintal}/q net for ${econ.quantityQuintals} q (${econ.provenance.freshness === 'live' ? 'live' : 'cached'} AGMARKNET).`
+        : '';
     return {
-      text: withContext(prefixText, context),
+      text: withContext(prefixText + econLine, context),
       action: {
         type: 'navigate',
         path: fullPath,
         params: params.crop || params.district || params.quantity ? params : undefined,
       },
       suggestions,
+      ...(econ ? { toolResults: { netRealization: econ, ...(fpo ? { fpo } : {}) } } : {}),
     };
   }
 
@@ -550,12 +745,15 @@ router.post('/', authenticateUser, async (req, res) => {
     const mode = normalizeMode(req.body?.mode);
     const rawMessage = String(req.body?.message || '').slice(0, MAX_MESSAGE_LENGTH);
     const context = req.body?.context && typeof req.body.context === 'object' ? req.body.context : {};
-    const classification = classifyIntent(rawMessage);
+    const allIntents = classifyIntents(rawMessage);
+    const classification = allIntents[0];
     const response = await executeIntent({ message: rawMessage, language, context, classification, mode });
 
     res.json({
       ...response,
       intent: classification.intent,
+      intents: allIntents.map((i) => i.intent),
+      allIntents,
       language,
       mode,
     });
@@ -567,6 +765,12 @@ router.post('/', authenticateUser, async (req, res) => {
 
 module.exports = router;
 module.exports.classifyIntent = classifyIntent;
+module.exports.classifyIntents = classifyIntents;
 module.exports.executeIntent = executeIntent;
 module.exports.normalizeMessage = normalizeMessage;
 module.exports.normalizeMode = normalizeMode;
+module.exports.fetchNetRealizationTool = fetchNetRealizationTool;
+module.exports.fetchSchemesTool = fetchSchemesTool;
+module.exports.fetchWeatherTool = fetchWeatherTool;
+module.exports.fetchFpoPoolTool = fetchFpoPoolTool;
+module.exports.extractParams = extractParams;
