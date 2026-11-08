@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–14: mobile FPO + Render paid blueprint). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–15: release checklist + final audit). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -113,6 +113,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - Mobile `FpoScreen` + `Endpoints.fpoPool()` → `POST /fpo/pool` (bulk tier ≥40 q, pooled vs individual uplift)
 - `render-optional.yaml` — paid-plan blueprint for RAG (`:8001`) + disease (`:8000`); free `render.yaml` stays 3-service with graceful degradation
 - `backend/package.json` → `1.1.0-agentic`
+
+## Phase 15 (final audit)
+- Root `README.md` + this file + `MODEL_CARD.md` + `DEMO_SCRIPT_AGENTIC.md` + `E2E_LIVE_RESULTS.md` are the canonical docs (GitHub PR template auto-loads on open)
+- Branch `feat/agentic-platform-phase0-4` pushed ✅ (12 commits). Open PR in browser: `https://github.com/Kissan-360/Kisan360_new/pull/new/feat/agentic-platform-phase0-4` (base `backend/team-lead-core`) — `gh` CLI unavailable in this env, template pre-fills from `.github/pull_request_template.md`
 
 ## Pre-embed (skip cold start)
 ```
