@@ -1,5 +1,5 @@
-import React from 'react';
-import { Leaf } from 'lucide-react';
+import React, { useState } from 'react';
+import { Copy, Leaf } from 'lucide-react';
 
 export type ChatMessageRole = 'user' | 'assistant' | 'system';
 
@@ -62,6 +62,22 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
   }
 
   const isUser = message.role === 'user';
+  const [copied, setCopied] = useState(false);
+
+  const copyText = async () => {
+    const parts = [message.text];
+    if (message.toolResults?.netRealization?.topMandis?.length) {
+      parts.push(...message.toolResults.netRealization.topMandis.map((m, i) => `${i + 1}. ${m.market} Rs ${m.farmerNetPerQuintal}/q net`));
+    }
+    if (typeof message.disease === "object" && message.disease) {
+      parts.push(`${(message.disease as ToolDisease).detectedDisease} — ${(message.disease as ToolDisease).treatment || ""}`);
+    }
+    try {
+      await navigator.clipboard.writeText(parts.join("\n"));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch { /* clipboard API may be unavailable in insecure context */ }
+  };
 
   return (
     <div className={`flex w-full gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -81,6 +97,16 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
         >
           {message.text}
         </div>
+        {!isUser && (
+          <button
+            type="button"
+            onClick={copyText}
+            className="mt-1 inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-500 hover:bg-stone-50"
+            title="Copy this answer"
+          >
+            <Copy size={11} aria-hidden="true" /> {copied ? "Copied!" : "Copy"}
+          </button>
+        )}
         {!isUser && message.toolResults?.netRealization?.topMandis?.length ? (
           <div className="mt-2 w-full max-w-sm rounded-xl border border-emerald-100 bg-emerald-50/60 p-3 text-xs leading-relaxed text-stone-700">
             <div className="font-semibold text-emerald-900">

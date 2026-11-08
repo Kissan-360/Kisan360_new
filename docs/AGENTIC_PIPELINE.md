@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–32: chat polish + mobile persistence). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–33: chat copy + polish). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -184,6 +184,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 32 (chat polish)
 - `ChatMessage` disease card now shows **top-3 of top5 predictions** (`top5Predictions` plumbed from `ChatBot` photo upload through to render)
 - `mobile-app/ChatScreen` — history persisted via `AsyncStorage` (`kisan360-mobile-chat`, last 10) + Clear button (parity with web localStorage)
+
+## Phase 33 (copy polish)
+- `ChatMessage` Copy button — copies answer text + top-mandi lines + disease/treatment to clipboard (farmer can paste into WhatsApp/family chat without re-typing)
 
 ## Pre-embed (skip cold start)
 ```
