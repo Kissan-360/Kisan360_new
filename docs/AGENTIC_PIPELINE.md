@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–23: FPO card + agent diagnostics + corpus ~223). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–24: FPO test + corpus ~235). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -148,6 +148,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `ChatMessage` FPO card (pooled net + note) when `toolResults.fpo` fires
 - `GET /api/diagnostics` → `agent` block (model + RAG/calc URLs, config-only, no secrets)
 - Corpus ~223 docs (+6: mobile harvester, winnowing, pulse storage, veg grading, compost pit, farm diary)
+
+## Phase 24 (tests + final corpus)
+- `backend/tests/unit/chatFpo.test.js` — FPO tool export + pathways shape (Jest, in-CI)
+- Corpus ~235 docs (+12: gypsum, tank silt, sprinkler, drip flushing, NCU vs urea, SSP, bund repair, farmgate vs mandi, mastitis, ducks, raised beds, price slip)
 
 ## Pre-embed (skip cold start)
 ```
