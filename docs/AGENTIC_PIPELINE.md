@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–15: release checklist + final audit). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–16: offline RAG + onboarding test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -117,6 +117,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 15 (final audit)
 - Root `README.md` + this file + `MODEL_CARD.md` + `DEMO_SCRIPT_AGENTIC.md` + `E2E_LIVE_RESULTS.md` are the canonical docs (GitHub PR template auto-loads on open)
 - Branch `feat/agentic-platform-phase0-4` pushed ✅ (12 commits). Open PR in browser: `https://github.com/Kissan-360/Kisan360_new/pull/new/feat/agentic-platform-phase0-4` (base `backend/team-lead-core`) — `gh` CLI unavailable in this env, template pre-fills from `.github/pull_request_template.md`
+
+## Phase 16 (offline RAG + tests)
+- `advisory_service.retrieve()`: keyword fallback when embeddings unavailable (no torch/offline) — tag+content overlap, honest degraded path instead of a crash
+- `backend/tests/unit/chat.test.js`: first-run onboarding test (Marathi ask, no premature navigate) pinned by Jest, not only e2e-agent.js
 
 ## Pre-embed (skip cold start)
 ```

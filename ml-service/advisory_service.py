@@ -63,8 +63,45 @@ def build_index():
     logger.info(f"Embeddings generated: {doc_embeddings.shape}")
     return doc_embeddings
 
+def retrieve_keyword(query, top_k=7):
+    """Keyword fallback when embeddings are unavailable (no torch, offline).
+
+    Scores docs by tag + content token overlap with the query — weak but honest,
+    and always available. Used as a degraded path, never as the primary.
+    """
+    docs = load_knowledge()
+    q = (query or "").lower()
+    q_tokens = set(q.replace("?", " ").split())
+    scored = []
+    for d in docs:
+        tags_blob = " ".join(d.get("tags", [])).lower()
+        content = (d.get("content") or "").lower()
+        hits = sum(1 for t in q_tokens if len(t) > 2 and (t in tags_blob or t in content))
+        # Exact tag match boosts
+        for tag in d.get("tags", []):
+            if tag.lower() in q:
+                hits += 2
+        scored.append((hits, d))
+    scored.sort(key=lambda x: -x[0])
+    return [
+        {"id": d["id"], "content": d["content"], "tags": d["tags"], "score": float(hits)}
+        for hits, d in scored[:top_k] if hits > 0
+    ]
+
 def retrieve(query, top_k=7):
-    emb = get_embedder()
+    if doc_embeddings is None:
+        try:
+            build_index()
+        except Exception as e:
+            logger.warning(f"Embedding index unavailable ({e}), keyword fallback active")
+            return retrieve_keyword(query, top_k=top_k)
+    if doc_embeddings is None:
+        return retrieve_keyword(query, top_k=top_k)
+    try:
+        emb = get_embedder()
+    except Exception as e:
+        logger.warning(f"Embedder unavailable ({e}), keyword fallback active")
+        return retrieve_keyword(query, top_k=top_k)
     q_vec = emb.encode([query], convert_to_numpy=True)
     sim = np.dot(doc_embeddings, q_vec.T).flatten()
     norms = np.linalg.norm(doc_embeddings, axis=1) * np.linalg.norm(q_vec)
