@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–8: LangGraph wrapper + model cards + E2E smoke). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–9: mobile typecheck + README truth). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -84,6 +84,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `ml-service/agent_graph.py`: LangGraph `StateGraph` (classify → plan → retrieve → generate → validate → respond) wrapping `agent.py` — optional (`requirements-agent.txt`); runtime stays dependency-light for Render free tier
 - `docs/MODEL_CARD.md`: Llama 3.3-70B (grounded explainer), MiniLM-L6-v2, MobileNetV2 38-class + OOD gates, AGMARKNET/OpenWeather, explicit non-goals
 - `backend/scripts/e2e-agent.js`: in-process full-turn E2E (multi-intent → tools → structured shape, no Groq key)
+
+## Phase 9 (hardening)
+- `mobile-app/tsconfig.json` + `typecheck` script — mobile now typechecks (`TSCEXIT: 0`)
+- Fixed Expo SDK 49 camera API (`Camera` component, not `CameraView` — CameraView is SDK 51+); added `expo-status-bar` + `async-storage` deps
+- Root `README.md`: `mobile-app` row updated from “legacy scaffold — out of scope” to real Expo app
 
 ## Pre-embed (skip cold start)
 ```

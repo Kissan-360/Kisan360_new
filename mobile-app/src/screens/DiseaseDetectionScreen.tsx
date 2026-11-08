@@ -1,36 +1,41 @@
 import React, { useRef, useState } from "react";
 import { ActivityIndicator, Button, Image, ScrollView, Text, View } from "react-native";
-import { CameraView, useCameraPermissions } from "expo-camera";
+import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { Endpoints } from "../services/api";
 
 const CROPS = ["Soybean", "Tomato", "Potato", "Grape", "Corn (Maize)", "Bell Pepper"];
 
 export default function DiseaseDetectionScreen() {
-  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
+  const [cameraPerm, setCameraPerm] = useState<any>(null);
   const [libPermission, requestLibPermission] = ImagePicker.useMediaLibraryPermissions();
   const cameraRef = useRef<any>(null);
+  const [type] = useState<any>("back");
   const [uri, setUri] = useState<string | null>(null);
   const [base64, setBase64] = useState<string | null>(null);
   const [cropType, setCropType] = useState("");
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [facing] = useState<"back" | "front">("back");
+
+  const requestCamera = async () => {
+    const p = await Camera.requestCameraPermissionsAsync();
+    setCameraPerm(p);
+    return p;
+  };
 
   const captureFromCamera = async () => {
-    if (!cameraPermission?.granted) {
-      const p = await requestCameraPermission();
+    if (!cameraPerm?.granted) {
+      const p = await requestCamera();
       if (!p.granted) return setError("Camera permission denied");
     }
     if (!cameraRef.current) {
-      // Fallback: system camera via ImagePicker (works without live preview binding)
       return takeViaPicker();
     }
     try {
       const photo = await cameraRef.current.takePicture({ base64: true, quality: 0.7 });
       setUri(photo.uri);
-      setBase64((photo as any).base64 || null);
+      setBase64(photo.base64 || null);
       setResult(null);
       setError("");
     } catch {
@@ -39,8 +44,8 @@ export default function DiseaseDetectionScreen() {
   };
 
   const takeViaPicker = async () => {
-    if (!cameraPermission?.granted) {
-      const p = await requestCameraPermission();
+    if (!cameraPerm?.granted) {
+      const p = await requestCamera();
       if (!p.granted) return setError("Camera permission denied");
     }
     const shot = await ImagePicker.launchCameraAsync({
@@ -102,7 +107,7 @@ export default function DiseaseDetectionScreen() {
     <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
       <Text style={{ fontSize: 18, fontWeight: "700" }}>Crop disease — leaf photo</Text>
       <Text style={{ color: "#555", fontSize: 13 }}>
-        Live preview (CameraView) + gallery fallback. MobileNetV2 via FastAPI (canonical) — POST /api/disease/detect.
+        Live preview (expo-camera) + gallery fallback. MobileNetV2 via FastAPI (canonical) — POST /api/disease/detect.
       </Text>
 
       <Text style={{ fontWeight: "600" }}>Crop (optional)</Text>
@@ -113,16 +118,16 @@ export default function DiseaseDetectionScreen() {
       </ScrollView>
       {cropType ? <Text style={{ color: "#006b2c", fontSize: 13 }}>Selected: {cropType}</Text> : null}
 
-      {/* Live camera preview (permission-gated) */}
+      {/* Live camera preview (SDK 49 Camera component) */}
       <View style={{ height: 220, borderRadius: 12, overflow: "hidden", backgroundColor: "#000" }}>
-        {cameraPermission?.granted ? (
-          <CameraView ref={cameraRef} style={{ flex: 1 }} facing={facing} />
+        {cameraPerm?.granted ? (
+          <Camera ref={cameraRef} style={{ flex: 1 }} type={type} />
         ) : (
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 16 }}>
             <Text style={{ color: "#fff", textAlign: "center" }}>
               Camera preview needs permission. You can still use “Take photo” or “Pick from gallery”.
             </Text>
-            <Button title="Grant camera permission" onPress={requestCameraPermission} />
+            <Button title="Grant camera permission" onPress={requestCamera} />
           </View>
         )}
       </View>
