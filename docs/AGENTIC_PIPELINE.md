@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–9: mobile typecheck + README truth). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–10: HTTP E2E + mobile assets + corpus ~170). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -89,6 +89,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `mobile-app/tsconfig.json` + `typecheck` script — mobile now typechecks (`TSCEXIT: 0`)
 - Fixed Expo SDK 49 camera API (`Camera` component, not `CameraView` — CameraView is SDK 51+); added `expo-status-bar` + `async-storage` deps
 - Root `README.md`: `mobile-app` row updated from “legacy scaffold — out of scope” to real Expo app
+
+## Phase 10 (HTTP E2E + assets + corpus)
+- `backend/scripts/e2e-http.js`: running-stack smoke (`/health` → `demo-login` → `POST /api/chat` Marathi → `net-realization` (SKIP if calc waking) → `GET /api/advisory`) — 5 steps, graceful on ML-offline
+- `mobile-app/assets/{icon,favicon,splash}.png` copied from `web-app/public/logo*` (was missing — `expo start` warned)
+- Corpus ~170 docs (+12: cotton mealybug, sugarcane scale, rice nursery/SRI, wheat zero-till, tomato staking, trap crops, dairy/poultry rationing, solar pump, grading premium, band P, pond budgeting)
 
 ## Pre-embed (skip cold start)
 ```
