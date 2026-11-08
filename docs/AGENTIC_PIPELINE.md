@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–6: mobile auth + web provenance + corpus ~150 + smoke). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–7: decision→lot + payments + PR template + corpus ~158). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -73,6 +73,12 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - Web `CropAdvisory` provenance chips: agent badge, intent, tools, sources, `provenance.source`, `groq · llama-3.3-70b | template`
 - Web `ChatMessage` weather card: `toolResults.weather` (temp/humidity/condition + source/date)
 - Corpus ~150 docs (+12: chana, urad, moong, groundnut pegging, soybean rust, cucumber mildew, okra harvest, cabbage black rot, guava, custard apple, sprayer calibration, green manuring)
+
+## Phase 7 (trade loop + PR)
+- `DecisionScreen`: “Create lot from best mandi” → `POST /lots` with best-mandi note (full decision → trade loop on mobile)
+- `TradeScreen`: lots + payments list, `GET /payments`, simulate release/failure (simulated label kept)
+- `.github/pull_request_template.md` + push of `feat/agentic-platform-phase0-4` to `Kissan-360/Kisan360_new` (PR to open in browser — `gh` CLI not present)
+- Corpus ~158 docs (+8: FPO checklist, groundwater, custom hiring, subsoiling, arrivals, record book, goat, dairy)
 
 ## Pre-embed (skip cold start)
 ```

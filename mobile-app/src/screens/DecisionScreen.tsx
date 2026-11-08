@@ -12,14 +12,34 @@ export default function DecisionScreen({ navigation }: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [msg, setMsg] = useState("");
   const run = async () => {
     setLoading(true);
     setError("");
+    setMsg("");
     try {
       const res = await Endpoints.netRealization(crop, district, Number(qty));
       setResult(res.data);
     } catch (e: any) {
       setError(e?.response?.data?.error || e.message || "Failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createLotFromBest = async () => {
+    if (!result?.rankedMandis?.length) return;
+    const best = result.rankedMandis[0];
+    setLoading(true);
+    setError("");
+    try {
+      const res = await Endpoints.createLot({
+        crop, district, quantity: Number(qty), unit: "quintals",
+        notes: `best=${best.market} net=${best.farmerNetPerQuintal} source=${result.marketSource}`,
+      });
+      setMsg(`Lot created (${res.data?.id || res.data?._id || "ok"}): ${crop} ${qty}q → ${best.market} at Rs ${best.farmerNetPerQuintal}/q net`);
+    } catch (e: any) {
+      setError(e?.response?.data?.error || e.message || "Create failed");
     } finally {
       setLoading(false);
     }
@@ -40,6 +60,7 @@ export default function DecisionScreen({ navigation }: any) {
       <Button title={loading ? "Ranking..." : "Compare mandis"} onPress={run} />
       {loading ? <ActivityIndicator /> : null}
       {!!error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+      {!!msg ? <Text style={{ color: "#006b2c" }}>{msg}</Text> : null}
       {result?.rankedMandis?.length ? (
         <View style={{ gap: 6 }}>
           {result.rankedMandis.slice(0, 5).map((m: any, i: number) => (
@@ -50,6 +71,7 @@ export default function DecisionScreen({ navigation }: any) {
           <Text style={{ color: "#666", fontSize: 12 }}>
             Source: {result.marketSource} · {result.servingMode}
           </Text>
+          <Button title="Create lot from best mandi" onPress={createLotFromBest} />
         </View>
       ) : null}
     </ScrollView>

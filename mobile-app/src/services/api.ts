@@ -31,6 +31,7 @@ export const Endpoints = {
   createLot: (payload: Record<string, unknown>) => api.post("/lots", payload),
   listLots: () => api.get("/lots"),
   createOffer: (payload: Record<string, unknown>) => api.post("/offers", payload),
+  listPayments: () => api.get("/payments"),
   releasePayment: (id: string) =>
     api.post(`/payments/${id}/simulate-release`),
   failPayment: (id: string) => api.post(`/payments/${id}/simulate-failure`),
