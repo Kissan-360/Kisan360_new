@@ -19,6 +19,7 @@ interface ChatResponse {
 
 const OPEN_KEY = 'kisan360-chat-open';
 const MODE_KEY = 'kisan360-chat-mode';
+const HISTORY_KEY = 'kisan360-chat-history';
 const HISTORY_LIMIT = 10;
 type ChatMode = 'ask' | 'action';
 
@@ -51,10 +52,19 @@ const ChatBot = () => {
     return [t(`${prefix}.one`), t(`${prefix}.two`), t(`${prefix}.three`), t(`${prefix}.four`)];
   }, [mode, t]);
   const [suggestions, setSuggestions] = useState<string[]>(modeSuggestions);
-  const [messages, setMessages] = useState<ChatMessageItem[]>(() => [
-    { id: makeId(), role: 'assistant', text: t('chat.welcome') },
-    { id: `${makeId()}-system`, role: 'system', text: t('chat.systemHint') },
-  ]);
+  const [messages, setMessages] = useState<ChatMessageItem[]>(() => {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length) return parsed.slice(-HISTORY_LIMIT);
+      }
+    } catch { /* ignore */ }
+    return [
+      { id: makeId(), role: 'assistant', text: t('chat.welcome') },
+      { id: `${makeId()}-system`, role: 'system', text: t('chat.systemHint') },
+    ];
+  });
   const [photo, setPhoto] = useState<any>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
@@ -77,6 +87,9 @@ const ChatBot = () => {
   }, [mode]);
 
   useEffect(() => {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(messages.slice(-HISTORY_LIMIT)));
+    } catch { /* ignore */ }
     scrollerRef.current?.scrollTo({ top: scrollerRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, loading, open]);
 

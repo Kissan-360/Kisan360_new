@@ -291,6 +291,12 @@ CROP_KNOWLEDGE = [
     {"id": "hort_002", "content": "Raised beds for vegetables in low-lying plots: 30 cm height, 1.2 m wide, drains in monsoon. Same soil, two extra pickings in wet years. Mulch between beds to stop splash.", "tags": ["horticulture", "raised bed", "vegetable"]},
     {"id": "market_014", "content": "Price slip record: note crop, date, mandi, modal, transport paid — every sale. After one season you know your true net per quintal, not the headline. That sheet beats any market tip.", "tags": ["market", "record", "slip"]},
 
+    # Phase 26: market risk + record-keeping
+    {"id": "market_015", "content": "Price risk rule: never borrow against an expected price. If loan repayment needs Rs X/q, sell enough at harvest to cover it and speculate only with the surplus. Kisan360 shows break-even — decide how much is ‘surplus’ yourself.", "tags": ["market", "risk", "debt"]},
+    {"id": "market_016", "content": "Arrival timing around festivals: demand for onion and banana spikes before festivals. Arriving 3-4 days early, graded and cleaned, catches the spike; arriving on the festival day takes the leftover price.", "tags": ["market", "festival", "timing"]},
+    {"id": "general_mgmt_014", "content": "Input receipt file: staple bills by crop-season. In 2 seasons you will see which input actually moved yield — the most reliable agronomy data you will ever own.", "tags": ["general", "record", "input"]},
+    {"id": "soil_018", "content": "FYM quality test: dark, crumbly, earthy smell without ammonia. If it smells like ammonia or shows white patches of urea, it is half-baked — cure 2 more weeks before field use.", "tags": ["soil", "fym", "compost"]},
+
     # Government schemes (factual, verify on official portal)
     {"id": "scheme_001", "content": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi) provides Rs 6,000 per year to eligible farmer families in three Rs 2,000 installments (April, August, December) via DBT. Eligibility depends on land records and government rules. Verify status on pmkisan.gov.in.", "tags": ["scheme", "pm-kisan", "income", "dbt"]},
     {"id": "scheme_002", "content": "PMFBY (Pradhan Mantri Fasal Bima Yojana) is crop insurance for notified crops against natural calamities, pests and diseases. Farmers pay a notified premium (capped by crop category); claims follow official crop-cutting and weather-trigger rules. Enrolment window and cut-off dates vary by season and state.", "tags": ["scheme", "pmfby", "insurance", "crop"]},
