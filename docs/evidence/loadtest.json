@@ -1,0 +1,90 @@
+{
+  "generatedAt": "2026-09-23T06:23:25.088Z",
+  "startedAt": "2026-09-23T06:22:43.517Z",
+  "target": "http://[::1]:5000",
+  "durationSeconds": 6,
+  "endpoints": [
+    {
+      "path": "/health",
+      "weight": 1
+    },
+    {
+      "path": "/api/market/prices?crop=Onion&state=Maharashtra",
+      "weight": 2
+    },
+    {
+      "path": "/api/market/net-realization?crop=Onion&district=Nashik&quantity=10",
+      "weight": 2
+    },
+    {
+      "path": "/api/buyers?crop=Onion&district=Nashik",
+      "weight": 1
+    },
+    {
+      "path": "/api/grade-assessment/crops",
+      "weight": 1
+    }
+  ],
+  "only": null,
+  "levels": [
+    {
+      "concurrency": 10,
+      "requests": 151,
+      "rps": 25.2,
+      "ok": 151,
+      "rateLimited": 0,
+      "failed": 0,
+      "errorRate": 0,
+      "p50Ms": 21.3,
+      "p95Ms": 1789.6,
+      "p99Ms": 2157,
+      "maxMs": 2335.1
+    },
+    {
+      "concurrency": 25,
+      "requests": 194,
+      "rps": 32.3,
+      "ok": 194,
+      "rateLimited": 0,
+      "failed": 0,
+      "errorRate": 0,
+      "p50Ms": 40,
+      "p95Ms": 4778.6,
+      "p99Ms": 8047.2,
+      "maxMs": 8072.3
+    },
+    {
+      "concurrency": 50,
+      "requests": 298,
+      "rps": 49.7,
+      "ok": 298,
+      "rateLimited": 0,
+      "failed": 0,
+      "errorRate": 0,
+      "p50Ms": 110.1,
+      "p95Ms": 9269.1,
+      "p99Ms": 10415.4,
+      "maxMs": 10451.2
+    },
+    {
+      "concurrency": 100,
+      "requests": 382,
+      "rps": 63.7,
+      "ok": 382,
+      "rateLimited": 0,
+      "failed": 0,
+      "errorRate": 0,
+      "p50Ms": 321.9,
+      "p95Ms": 11548.4,
+      "p99Ms": 13569,
+      "maxMs": 13713.1
+    }
+  ],
+  "headline": {
+    "maxConcurrency": 100,
+    "rpsAtMaxConcurrency": 63.7,
+    "p95MsAtMaxConcurrency": 11548.4,
+    "errorRateAtMaxConcurrency": 0,
+    "note": "Ran against a local stack. Add KISAN_RATE_LIMIT_MAX considerations before repeating against the deployment."
+  }
+}

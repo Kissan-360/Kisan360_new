@@ -113,6 +113,29 @@ const NULL_BODY_STATUS = new Set([101, 204, 205, 304]);
 // receive `{ success: false, error: <something readable> }` at the same status,
 // so existing `if (!res.ok)` and `if (data.success)` handling just works.
 // Nothing consumes a non-JSON body (no .blob()/.text()/.arrayBuffer() callers).
+/**
+ * A random, browser-local id so a pilot report can say "5 devices" instead of
+ * "43 requests". It is not an account, not a fingerprint, and is regenerated if
+ * browser storage is cleared. Sent on every request but only ever stored when
+ * the API has telemetry explicitly enabled (KISAN_TELEMETRY=on).
+ */
+const INSTALL_KEY = 'kisan360_install_id';
+
+function installId(): string | null {
+  try {
+    let id = localStorage.getItem(INSTALL_KEY);
+    if (!id) {
+      id = (globalThis.crypto && 'randomUUID' in globalThis.crypto)
+        ? globalThis.crypto.randomUUID()
+        : `i-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+      localStorage.setItem(INSTALL_KEY, id);
+    }
+    return id;
+  } catch {
+    return null; // private mode: no id, telemetry simply cannot count devices
+  }
+}
+
 export async function apiFetch(url: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers);
   const token = getFirebaseToken() || getDemoToken();
@@ -122,6 +145,11 @@ export async function apiFetch(url: string, init: RequestInit = {}): Promise<Res
   const isFormData = typeof FormData !== 'undefined' && init.body instanceof FormData;
   if (!isFormData && init.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
+  }
+  // Identity-free install marker; the API ignores it unless telemetry is on.
+  const install = installId();
+  if (install && !headers.has('x-kisan-install')) {
+    headers.set('x-kisan-install', install);
   }
 
   // Merge the caller's signal (if any) with our default timeout. A caller

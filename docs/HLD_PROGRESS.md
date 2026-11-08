@@ -62,3 +62,26 @@ wiring, lots/buyers/offers/payments state machine, demo-auth, integration tests)
 remaining gap: trend history depth (grows daily with the refresher), the
 disease/advisory re-boot confirmation, and demo-day rehearsal. Everything in
 the HLD's scored scope is implemented; P3 remains documented roadmap.
+
+## Identity & authorization structure (architecture pass)
+
+One policy per concern, defined once, imported by every consumer:
+
+- **Identity** — `middleware/auth.js → identityOf(req)` is the single source
+  of actor identity (uid, display name, role, district) for authenticated
+  writes; everything derives from the verified token, never the body. Display
+  name comes from the token's `name` claim (fallback `'Farmer'`); the
+  frontend's only identity owner is `useAuth()`. Community and grade
+  assessment were the duplicated consumers; their body-identity reads are gone.
+- **Certificate authorization** — `lib/roleScope.js → canVerifyCertificate(user,
+  cert)` is the single predicate (FPO/admin, or the record's own holder) for
+  all three grade-certificate verbs (POST-verify, GET-by-id read). Previously
+  two inline copies with slightly different wording; the 404-vs-403 ordering
+  stays in the route (not-found is decided before authorization).
+- **Frontend request bodies carry no identity** — `CommunityPage` and
+  `ThreadedComments` no longer send `userId`/`authorName`; the server takes
+  them from the token (pinned by tests in `authGuards.test.js`, including the
+  spoofed-`authorName` case).
+
+Behavior preserved: 638/638 backend tests, typecheck clean, build clean,
+preflight DEMO-READY with live contract green.

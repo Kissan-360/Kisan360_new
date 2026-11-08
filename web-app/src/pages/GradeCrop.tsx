@@ -246,6 +246,7 @@ export default function GradeCrop() {
           <div>
             <SectionLabel>{t('grade.selectCrop')}</SectionLabel>
             <select
+              aria-label={t('grade.selectCrop')}
               className="input-field"
               value={crop}
               onChange={(e) => setCrop(e.target.value)}
@@ -296,8 +297,8 @@ export default function GradeCrop() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-stone-600 mb-1">How was the crop dried?</label>
-                <select className="input-field" value={dryingMethod} onChange={(e) => setDryingMethod(e.target.value)}>
+                <label htmlFor="gc-drying" className="block text-xs font-medium text-stone-600 mb-1">How was the crop dried?</label>
+                <select id="gc-drying" className="input-field" value={dryingMethod} onChange={(e) => setDryingMethod(e.target.value)}>
                   <option value="">Select...</option>
                   <option value="sun-dried">Sun-dried (traditional)</option>
                   <option value="mechanical">Mechanical dryer</option>
@@ -305,8 +306,8 @@ export default function GradeCrop() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-stone-600 mb-1">Storage condition?</label>
-                <select className="input-field" value={storageCondition} onChange={(e) => setStorageCondition(e.target.value)}>
+                <label htmlFor="gc-storage" className="block text-xs font-medium text-stone-600 mb-1">Storage condition?</label>
+                <select id="gc-storage" className="input-field" value={storageCondition} onChange={(e) => setStorageCondition(e.target.value)}>
                   <option value="">Select...</option>
                   <option value="open-air">Open air / field</option>
                   <option value="covered">Covered (tarpaulin)</option>
@@ -315,15 +316,15 @@ export default function GradeCrop() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-stone-600 mb-1">Visible mold or fungus?</label>
-                <select className="input-field" value={visibleMold ? 'yes' : 'no'} onChange={(e) => setVisibleMold(e.target.value === 'yes')}>
+                <label htmlFor="gc-mold" className="block text-xs font-medium text-stone-600 mb-1">Visible mold or fungus?</label>
+                <select id="gc-mold" className="input-field" value={visibleMold ? 'yes' : 'no'} onChange={(e) => setVisibleMold(e.target.value === 'yes')}>
                   <option value="no">No</option>
                   <option value="yes">Yes — some visible</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-stone-600 mb-1">Unusual odor?</label>
-                <select className="input-field" value={odor} onChange={(e) => setOdor(e.target.value)}>
+                <label htmlFor="gc-odor" className="block text-xs font-medium text-stone-600 mb-1">Unusual odor?</label>
+                <select id="gc-odor" className="input-field" value={odor} onChange={(e) => setOdor(e.target.value)}>
                   <option value="">No unusual odor</option>
                   <option value="musty">Musty / damp smell</option>
                   <option value="fermented">Fermented / sour</option>

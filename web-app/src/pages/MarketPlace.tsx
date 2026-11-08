@@ -225,14 +225,14 @@ const MarketIntelligence = () => {
             "Search" label sitting 16px lower than its row-mates. */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
           <div>
-            <label className="block text-xs font-medium text-stone-500 mb-1">{t('market.whatSelling')}</label>
-            <select className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
+            <label htmlFor="market-crop" className="block text-xs font-medium text-stone-500 mb-1">{t('market.whatSelling')}</label>
+            <select id="market-crop" className="input-field" value={crop} onChange={(e) => setCrop(e.target.value)}>
               {ACTIVE_CROPS.map((c) => <option key={c}>{c}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-stone-500 mb-1">{t('market.yourDistrict')}</label>
-            <select className="input-field" value={district} onChange={(e) => setDistrict(e.target.value)}>
+            <label htmlFor="market-district" className="block text-xs font-medium text-stone-500 mb-1">{t('market.yourDistrict')}</label>
+            <select id="market-district" className="input-field" value={district} onChange={(e) => setDistrict(e.target.value)}>
               <option value="">{t('market.allDistricts')}</option>
               {REGIONS.map(region => {
                 const regionDistricts = MAHARASHTRA_DISTRICTS.filter(d => d.region === region);
@@ -247,8 +247,8 @@ const MarketIntelligence = () => {
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-stone-500 mb-1">{t('market.search')}</label>
-            <input className="input-field" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('market.searchPlaceholder')} />
+            <label htmlFor="market-search" className="block text-xs font-medium text-stone-500 mb-1">{t('market.search')}</label>
+            <input id="market-search" className="input-field" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('market.searchPlaceholder')} />
           </div>
           <button onClick={fetchPrices} className="btn-secondary h-[38px]" disabled={loading}>
             {loading ? t('market.loading') : t('market.refresh')}
@@ -300,7 +300,7 @@ const MarketIntelligence = () => {
               const open = trendFor === r.market;
               return (
                 <div key={r.market} className={`card p-5 border-t-[3px] ${isTop ? 'border-t-amber-500 border-emerald-300 ring-1 ring-emerald-200' : 'border-t-emerald-500'}`}>
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1.5">
                     <div className="min-w-0">
                       <p className="font-semibold text-stone-900 truncate">{r.market}</p>
                       <p className="text-xs text-stone-400">{r.district || r.state} · {r.variety || r.crop}</p>

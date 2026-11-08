@@ -38,7 +38,29 @@ initializeFirebase();
 // Connect to MongoDB
 const connectDB = require('./config/mongodb');
 const { getDbMode } = require('./config/mongodb');
-connectDB().catch(err => console.error('❌ MongoDB connection failed:', err.message));
+// Seeding is owned by the BOOT SEQUENCE, not by the route modules.
+//
+// The seeders used to fire at module load (`ensureSeed().catch(() => {})` at the
+// bottom of routes/schemes.js and routes/community.js). Route modules are
+// required before connectDB() resolves, and with `bufferCommands = false` any
+// query in that window throws — so the seed was skipped, the catch swallowed it,
+// and `seedInitialized = true` made the skip permanent for the process. The DB
+// then never received its scheme/community content; only the in-memory fallbacks
+// hid it.
+connectDB()
+  .then(async () => {
+    const { getDbMode: mode } = require('./config/mongodb');
+    if (mode() !== 'connected' && mode() !== 'memory') {
+      console.log('ℹ️  No database — serving scheme/community content from the bundled seed.');
+      return;
+    }
+    for (const [label, mod] of [['schemes', require('./routes/schemes')], ['community', require('./routes/community')]]) {
+      if (typeof mod.ensureSeed === 'function') {
+        try { await mod.ensureSeed(); } catch (err) { console.warn(`[${label}] seed failed:`, err.message); }
+      }
+    }
+  })
+  .catch(err => console.error('❌ MongoDB connection failed:', err.message));
 
 // Start automated market-data refresh scheduler + one-shot boot refresh.
 // On Render free-tier the process dies between cron fires, so the snapshot can
@@ -86,6 +108,51 @@ app.use((req, res, next) => {
   });
   next();
 });
+
+// Pilot usage telemetry — OFF unless KISAN_TELEMETRY=on.
+//
+// Records milestone completions (a decision run, a lot created, an offer
+// accepted, a settlement simulated, a grievance raised) so a real pilot can be
+// reported from evidence rather than memory. Identity-free by construction: the
+// record carries a coarse role, district, locale and a random browser install id
+// — never a uid, name, phone, price or free text. See lib/usageEvents.js.
+//
+// Recorded on response finish and never awaited: telemetry must not be able to
+// slow down or fail a farmer's request.
+const { milestoneFor, isTelemetryEnabled, buildRecord, sessionIdentityFromBody } = require('./lib/usageEvents');
+const TELEMETRY_ON = isTelemetryEnabled();
+if (TELEMETRY_ON) {
+  const UsageEvent = require('./models/UsageEvent');
+  const { peekUser } = require('./middleware/auth');
+  app.use((req, res, next) => {
+    res.on('finish', async () => {
+      try {
+        if (res.statusCode >= 400) return; // only completed milestones
+        // Machine-generated traffic is not user activity: the boot auto-seed
+        // calls this same API over HTTP and would otherwise add phantom lots,
+        // offers and logins to every pilot report.
+        if (req.headers['x-kisan-internal']) return;
+        const event = milestoneFor(req.method, req.originalUrl);
+        if (!event) return;
+        // Some milestones are public routes, so decode the token here rather
+        // than reporting every real farmer as `anonymous`. Safe because this
+        // runs after the response has been sent. The session milestone has no
+        // token at all (it is the login), so it falls back to the role the
+        // server is about to mint into that session's token.
+        const user = (await peekUser(req)) || (event === 'session_started' ? sessionIdentityFromBody(req) : null);
+        const record = buildRecord({
+          event,
+          user,
+          locale: req.headers['accept-language'],
+          installId: req.headers['x-kisan-install'],
+        });
+        if (record) UsageEvent.create(record).catch(() => { /* telemetry is never critical */ });
+      } catch { /* never let instrumentation fail a request */ }
+    });
+    next();
+  });
+  console.log('📈 Pilot telemetry ON (KISAN_TELEMETRY) — milestones only, no identifiers');
+}
 
 // CORS configuration
 // In production the single trusted FRONTEND_URL is enforced (reflecting only
@@ -166,6 +233,21 @@ app.get('/health', async (req, res) => {
 });
 
 // API routes
+//
+// Rate limiting is a DEPLOYMENT concern, not a code one: off by default outside
+// production so the local demo, the browser harness and the 204-combo layout
+// sweep run unthrottled, on automatically in production so the public URL is
+// protected (and docs/DEPLOYMENT_GUIDE.md's figures are true again).
+// See middleware/rateLimit.js. /health is deliberately NOT limited — the
+// keepalive and the deploy probe must never be throttled into a false alarm.
+const { buildLimiters } = require('./middleware/rateLimit');
+const limiters = buildLimiters();
+console.log(limiters.enabled
+  ? `🚦 Rate limiting ON (api ${limiters.global.stats().max}/15min, demo-login ${limiters.auth.stats().max}/15min)`
+  : '🚦 Rate limiting OFF (local/dev — set KISAN_RATE_LIMIT=on to exercise it)');
+app.use('/api/auth/demo-login', limiters.auth);
+app.use('/api', limiters.global);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/advisory', advisoryRoutes);
 app.use('/api/disease', diseaseRoutes);
@@ -188,6 +270,7 @@ app.use('/api/schemes', schemeRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/grade-assessment', gradeAssessmentRoutes);
 app.use('/api/trading-channels', tradingChannelsRoutes);
+app.use('/api/ops', require('./routes/ops'));
 
 // 404 handler
 app.use('*', (req, res) => {

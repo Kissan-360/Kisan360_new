@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-09-23T10:01:10.442Z",
+  "base": "http://localhost:3000",
+  "lang": "en",
+  "verdict": "JOURNEY OK (7/7 steps)",
+  "steps": [
+    {
+      "step": "login as farmer",
+      "ok": true,
+      "detail": "/dashboard",
+      "at": "2026-09-23T10:01:05.148Z"
+    },
+    {
+      "step": "decision computes a net figure",
+      "ok": true,
+      "detail": "₹5,510/q\t₹4,975/q\t342.3 km",
+      "at": "2026-09-23T10:01:07.285Z"
+    },
+    {
+      "step": "trade page shows the lot surface",
+      "ok": true,
+      "detail": "lot controls present",
+      "at": "2026-09-23T10:01:08.507Z"
+    },
+    {
+      "step": "lot appears after submit",
+      "ok": true,
+      "detail": "lot visible on the page",
+      "at": "2026-09-23T10:01:09.791Z"
+    },
+    {
+      "step": "buyer offer controls render",
+      "ok": true,
+      "detail": "10 interactive buyer control(s)",
+      "at": "2026-09-23T10:01:09.793Z"
+    },
+    {
+      "step": "no page exceptions",
+      "ok": true,
+      "detail": "none",
+      "at": "2026-09-23T10:01:09.793Z"
+    },
+    {
+      "step": "no console errors",
+      "ok": true,
+      "detail": "none",
+      "at": "2026-09-23T10:01:09.793Z"
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "note": "Driven through the real UI (puppeteer-core + system Chrome). Leaves a lot behind unless the state was already seeded — run scripts/demo-reset.sh for a clean slate."
+}

@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
+const { authenticateUser, optionalAuth, identityOf } = require('../middleware/auth');
 const Topic = require('../models/Topic');
 const Comment = require('../models/Comment');
 
@@ -303,11 +304,14 @@ router.get('/topics/:id', async (req, res) => {
   }
 });
 
-router.post('/topics', async (req, res) => {
+router.post('/topics', authenticateUser, async (req, res) => {
   try {
     const body = req.body || {};
     const { topics, comments } = getStore();
-    const userId = body.userId || `anon-${Math.random().toString(36).slice(2, 7)}`;
+    // Identity comes from the verified token, never from the request body:
+    // a client-supplied userId let anyone author, edit or delete as anyone.
+    const identity = identityOf(req);
+    const userId = identity.uid;
     const userTrust = computeTrust(userId, topics, comments);
     const label = trustLabel(userTrust);
 
@@ -363,8 +367,10 @@ router.post('/topics', async (req, res) => {
       title,
       content,
       authorId: userId,
-      authorName: sanitizeContent(body.authorName || 'Farmer').slice(0, 50) || 'Farmer',
-      authorDistrict: sanitizeContent(body.authorDistrict || '').slice(0, 30),
+      // Display identity is token-derived too — a body-supplied authorName
+      // would let any author post under any name.
+      authorName: identity.name,
+      authorDistrict: identity.district,
       authorTrustLevel: userTrust,
       category,
       tags,
@@ -396,13 +402,13 @@ router.post('/topics', async (req, res) => {
   }
 });
 
-router.post('/topics/:id/vote', async (req, res) => {
+router.post('/topics/:id/vote', authenticateUser, async (req, res) => {
   try {
     const id = String(req.params.id);
     const { topics } = getStore();
     const t = topics.find((x) => x._id === id);
     if (!t) return res.status(404).json({ success: false, error: 'Topic not found' });
-    const userId = String((req.body && req.body.userId) || `v-${Date.now()}`);
+    const userId = String(req.user.uid);
     const value = Number(req.body && req.body.value) === -1 ? -1 : 1;
     t.votes = t.votes || [];
     const existing = t.votes.findIndex((v) => v.userId === userId);
@@ -418,7 +424,7 @@ router.post('/topics/:id/vote', async (req, res) => {
   }
 });
 
-router.post('/topics/:id/report', async (req, res) => {
+router.post('/topics/:id/report', authenticateUser, async (req, res) => {
   try {
     const id = String(req.params.id);
     const { topics } = getStore();
@@ -448,7 +454,7 @@ router.get('/topics/:id/comments', async (req, res) => {
   }
 });
 
-router.post('/topics/:id/comments', async (req, res) => {
+router.post('/topics/:id/comments', authenticateUser, async (req, res) => {
   try {
     const topicId = String(req.params.id);
     const body = req.body || {};
@@ -457,7 +463,8 @@ router.post('/topics/:id/comments', async (req, res) => {
     if (!topic) return res.status(404).json({ success: false, error: 'Topic not found' });
     if (topic.locked) return res.status(400).json({ success: false, error: 'This topic is locked.' });
 
-    const userId = body.userId || `anon-${Math.random().toString(36).slice(2, 7)}`;
+    const identity = identityOf(req);
+    const userId = identity.uid;
     const userTrust = computeTrust(userId, topics, comments);
     const label = trustLabel(userTrust);
     const recentComments = userActionsSince(userId, comments, 3 * 60 * 1000);
@@ -501,8 +508,10 @@ router.post('/topics/:id/comments', async (req, res) => {
       content,
       photoDataUrl,
       authorId: userId,
-      authorName: sanitizeContent(body.authorName || 'Farmer').slice(0, 50) || 'Farmer',
-      authorDistrict: sanitizeContent(body.authorDistrict || '').slice(0, 30),
+      // Display identity is token-derived too — a body-supplied authorName
+      // would let any author post under any name.
+      authorName: identity.name,
+      authorDistrict: identity.district,
       authorTrustLevel: userTrust,
       voteCount: 0,
       votes: [],
@@ -530,13 +539,13 @@ router.post('/topics/:id/comments', async (req, res) => {
   }
 });
 
-router.post('/comments/:id/vote', async (req, res) => {
+router.post('/comments/:id/vote', authenticateUser, async (req, res) => {
   try {
     const id = String(req.params.id);
     const { comments } = getStore();
     const c = comments.find((x) => x._id === id);
     if (!c) return res.status(404).json({ success: false, error: 'Comment not found' });
-    const userId = String((req.body && req.body.userId) || `v-${Date.now()}`);
+    const userId = String(req.user.uid);
     const value = Number(req.body && req.body.value) === -1 ? -1 : 1;
     c.votes = c.votes || [];
     const existing = c.votes.findIndex((v) => v.userId === userId);
@@ -552,7 +561,7 @@ router.post('/comments/:id/vote', async (req, res) => {
   }
 });
 
-router.post('/comments/:id/report', async (req, res) => {
+router.post('/comments/:id/report', authenticateUser, async (req, res) => {
   try {
     const id = String(req.params.id);
     const { comments } = getStore();
@@ -587,12 +596,12 @@ function requireAuthor(item, userId, what, res) {
 }
 
 // PUT /topics/:id — edit title/content/tags (author only, within 15 min).
-router.put('/topics/:id', async (req, res) => {
+router.put('/topics/:id', authenticateUser, async (req, res) => {
   try {
     const id = String(req.params.id);
     const { topics, comments } = getStore();
     const t = topics.find((x) => x._id === id);
-    const userId = String((req.body && req.body.userId) || '');
+    const userId = String(req.user.uid);
     if (!requireAuthor(t && !t.hidden ? t : null, userId, 'Topic', res)) return;
     if (Date.now() - new Date(t.createdAt).getTime() > EDIT_WINDOW_MS) {
       return res.status(403).json({
@@ -632,12 +641,12 @@ router.put('/topics/:id', async (req, res) => {
 
 // DELETE /topics/:id — soft-delete (author only). Hides the topic; comments
 // stay in the store but vanish with it since detail lookups 404 on hidden.
-router.delete('/topics/:id', async (req, res) => {
+router.delete('/topics/:id', authenticateUser, async (req, res) => {
   try {
     const id = String(req.params.id);
     const { topics } = getStore();
     const t = topics.find((x) => x._id === id);
-    const userId = String((req.body && req.body.userId) || req.query.userId || '');
+    const userId = String(req.user.uid);
     if (!requireAuthor(t && !t.hidden ? t : null, userId, 'Topic', res)) return;
     t.hidden = true;
     t.hiddenReason = 'Deleted by author.';
@@ -650,12 +659,12 @@ router.delete('/topics/:id', async (req, res) => {
 });
 
 // PUT /comments/:id — edit content (author only, within 15 min).
-router.put('/comments/:id', async (req, res) => {
+router.put('/comments/:id', authenticateUser, async (req, res) => {
   try {
     const id = String(req.params.id);
     const { comments } = getStore();
     const c = comments.find((x) => x._id === id);
-    const userId = String((req.body && req.body.userId) || '');
+    const userId = String(req.user.uid);
     if (!requireAuthor(c && !c.hidden ? c : null, userId, 'Comment', res)) return;
     if (Date.now() - new Date(c.createdAt).getTime() > EDIT_WINDOW_MS) {
       return res.status(403).json({
@@ -682,12 +691,12 @@ router.put('/comments/:id', async (req, res) => {
 
 // DELETE /comments/:id — soft-delete (author only). Keeps thread structure;
 // decrements counters so topic/reply counts stay honest.
-router.delete('/comments/:id', async (req, res) => {
+router.delete('/comments/:id', authenticateUser, async (req, res) => {
   try {
     const id = String(req.params.id);
     const { topics, comments } = getStore();
     const c = comments.find((x) => x._id === id);
-    const userId = String((req.body && req.body.userId) || req.query.userId || '');
+    const userId = String(req.user.uid);
     if (!requireAuthor(c && !c.hidden ? c : null, userId, 'Comment', res)) return;
     c.hidden = true;
     c.hiddenReason = 'Deleted by author.';
@@ -705,9 +714,11 @@ router.delete('/comments/:id', async (req, res) => {
   }
 });
 
-router.get('/me/trusted', async (req, res) => {
+router.get('/me/trusted', optionalAuth, async (req, res) => {
   try {
-    const userId = String(req.query.userId || `anon-${Date.now()}`);
+    // Logged-in identity wins; an anonymous reader still gets a trust display
+    // (read-only), so browsing without a token keeps working.
+    const userId = String((req.user && req.user.uid) || req.query.userId || `anon-${Date.now()}`);
     const { topics, comments } = getStore();
     const trust = computeTrust(userId, topics, comments);
     res.json({
@@ -810,9 +821,11 @@ async function ensureSeed() {
   }
   seedInitialized = true;
 }
-ensureSeed().catch(() => {});
-
+// Seeding is triggered by the boot sequence AFTER the database connection is
+// ready (see server.js) — at module load the connection is never ready yet, so
+// the seed silently failed and never retried for the life of the process.
 module.exports = router;
+module.exports.ensureSeed = ensureSeed;
 module.exports.readSeed = readSeed;
 module.exports.computeTrust = computeTrust;
 module.exports.trustLabel = trustLabel;

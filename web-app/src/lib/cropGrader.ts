@@ -99,7 +99,6 @@ export async function loadModel(): Promise<boolean> {
       dummy.dispose();
 
       modelStatus = 'loaded';
-      console.log('[cropGrader] Model loaded successfully');
       return true;
     } catch (err) {
       console.warn('[cropGrader] Model load failed:', err);

@@ -169,7 +169,7 @@ function NavList({ onNavigate, collapsed }: { onNavigate?: () => void; collapsed
               : <div className="mx-2 my-2 border-t border-stone-100" aria-hidden="true" />
           )}
           {group.title && !collapsed && (
-            <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-400">
+            <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-500">
               {group.title}
             </div>
           )}
@@ -247,7 +247,7 @@ function UserFooter({ collapsed }: { collapsed: boolean }) {
             key={l.code}
             onClick={() => setLanguage(l.code)}
             aria-pressed={language === l.code}
-            className={`flex-1 min-h-[36px] flex items-center justify-center text-center rounded-md text-[11px] transition-colors ${language === l.code ? 'bg-emerald-100 text-emerald-700 font-semibold' : 'text-stone-400 hover:text-stone-600 hover:bg-stone-50'}`}
+            className={`flex-1 min-h-[36px] flex items-center justify-center text-center rounded-md text-[11px] transition-colors ${language === l.code ? 'bg-emerald-100 text-emerald-800 font-semibold' : 'text-stone-500 hover:text-stone-700 hover:bg-stone-50'}`}
           >
             {l.native}
           </button>

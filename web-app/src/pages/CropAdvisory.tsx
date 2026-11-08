@@ -282,6 +282,25 @@ const CropAdvisory = () => {
                   {t('advisory.refresh')}
                 </button>
               </div>
+
+              {(advisory.agent || advisory.structured || advisory.intent || advisory.tools?.length) && (
+                <div className="mt-3 flex flex-wrap gap-1.5 text-[11px] leading-tight text-stone-500">
+                  {advisory.agent ? <span className="rounded-full bg-emerald-50 px-2 py-0.5 ring-1 ring-emerald-200 text-emerald-800">agent · validated</span> : null}
+                  {advisory.intent ? <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">intent: {advisory.intent}</span> : null}
+                  {Array.isArray(advisory.tools) && advisory.tools.length ? (
+                    <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">tools: {advisory.tools.join(", ")}</span>
+                  ) : null}
+                  {Array.isArray(advisory.sources) && advisory.sources.length ? (
+                    <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">sources: {advisory.sources.slice(0, 3).join(", ")}</span>
+                  ) : null}
+                  {advisory.structured?.provenance?.source ? (
+                    <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">provenance: {advisory.structured.provenance.source}</span>
+                  ) : null}
+                  {advisory.generated != null ? (
+                    <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">{advisory.generated ? "groq · llama-3.3-70b" : "template"}</span>
+                  ) : null}
+                </div>
+              )}
             </div>
           </div>
         )}

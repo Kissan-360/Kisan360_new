@@ -3,6 +3,8 @@
 // context to classify market conditions.
 // NEVER forecasts prices. NEVER claims future price will change.
 
+const { ageMs } = require('../lib/observedDate');
+
 /**
  * Compute a sale-window signal from observed price history.
  * @param {Array} trendSeries - [{ date, modalPrice }] sorted oldest first
@@ -79,13 +81,18 @@ function computeSaleWindow(trendSeries, currentQuote, opts = {}) {
   const arrivalDate = currentQuote.arrivalDate;
   let freshnessDays = null;
   if (arrivalDate) {
-    const arrival = new Date(arrivalDate);
-    const now = new Date();
-    freshnessDays = Math.floor((now - arrival) / (1000 * 60 * 60 * 24));
-    evidence.push({ type: 'freshness', arrivalDate, daysOld: freshnessDays });
+    // Via lib/observedDate.js: AGMARKNET sends DD/MM/YYYY, and `new Date()`
+    // read that as US MM/DD — a 13-day-old quote came out NEGATIVE (aged into
+    // a future date), and any day past the 12th was Invalid. A sale-window
+    // signal built on a wrong age is worse than one that says "age unknown".
+    const observedAgeMs = ageMs(arrivalDate);
+    if (observedAgeMs != null && observedAgeMs >= 0) {
+      freshnessDays = Math.floor(observedAgeMs / (1000 * 60 * 60 * 24));
+      evidence.push({ type: 'freshness', arrivalDate, daysOld: freshnessDays });
 
-    if (freshnessDays > 3) {
-      unknowns.push(`Quote is ${freshnessDays} days old — market may have moved`);
+      if (freshnessDays > 3) {
+        unknowns.push(`Quote is ${freshnessDays} days old — market may have moved`);
+      }
     }
   }
 

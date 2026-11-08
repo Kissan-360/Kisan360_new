@@ -247,7 +247,7 @@ const DecisionWorkspace = () => {
       const res = await apiFetch(`${API_URL}/market/net-realization?crop=${encodeURIComponent(c)}&district=${encodeURIComponent(d)}&quantity=${q}`);
       if ((res.status === 503 || res.status === 502) && _retryCount < 2) {
         const delay = 3000 * (_retryCount + 1);
-        console.log(`[Kisan360] DecisionWorkspace net-realization ${res.status}, retry ${_retryCount + 1}/2 in ${delay}ms`);
+        console.warn(`[Kisan360] DecisionWorkspace net-realization ${res.status}, retry ${_retryCount + 1}/2 in ${delay}ms`);
         await new Promise(r => setTimeout(r, delay));
         return fetchMarketData(override, _retryCount + 1);
       }
@@ -256,7 +256,7 @@ const DecisionWorkspace = () => {
       else setError(data.error || 'Failed to fetch market data');
     } catch (e: any) {
       if (_retryCount < 1) {
-        console.log('[Kisan360] DecisionWorkspace net-realization error, retrying in 3s...');
+        console.warn('[Kisan360] DecisionWorkspace net-realization error, retrying in 3s...');
         await new Promise(r => setTimeout(r, 3000));
         return fetchMarketData(override, _retryCount + 1);
       }
@@ -276,7 +276,7 @@ const DecisionWorkspace = () => {
       const res = await apiFetch(`${API_URL}/market/pathways?${params}`);
       if ((res.status === 503 || res.status === 502) && _retryCount < 2) {
         const delay = 3000 * (_retryCount + 1);
-        console.log(`[Kisan360] DecisionWorkspace pathways ${res.status}, retry ${_retryCount + 1}/2 in ${delay}ms`);
+        console.warn(`[Kisan360] DecisionWorkspace pathways ${res.status}, retry ${_retryCount + 1}/2 in ${delay}ms`);
         await new Promise(r => setTimeout(r, delay));
         return fetchPathwayData(override, _retryCount + 1);
       }
@@ -285,7 +285,7 @@ const DecisionWorkspace = () => {
       else setError(data.error || 'Failed to fetch pathway data');
     } catch (e: any) {
       if (_retryCount < 1) {
-        console.log('[Kisan360] DecisionWorkspace pathways error, retrying in 3s...');
+        console.warn('[Kisan360] DecisionWorkspace pathways error, retrying in 3s...');
         await new Promise(r => setTimeout(r, 3000));
         return fetchPathwayData(override, _retryCount + 1);
       }
@@ -392,7 +392,7 @@ const DecisionWorkspace = () => {
           </div>
           <button
             onClick={() => navigate('/grade-crop')}
-            className="inline-flex items-center -my-2 py-2 text-xs font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-2"
+            className="inline-flex items-center -my-2 py-2 text-xs font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
           >
             Or grade with AGMARK standards first →
           </button>

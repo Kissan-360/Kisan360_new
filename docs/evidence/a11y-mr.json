@@ -1,0 +1,153 @@
+{
+  "generatedAt": "2026-09-23T09:18:43.601Z",
+  "base": "http://localhost:3000",
+  "lang": "mr",
+  "standard": "WCAG 2.1 A/AA (axe-core tags wcag2a, wcag2aa, wcag21a, wcag21aa)",
+  "authenticated": true,
+  "routesTested": 20,
+  "routesClean": 20,
+  "totalsByImpact": {},
+  "note": "Violations are counted per rule per route, not per element. Targets are selectors only — no page text is stored.",
+  "results": [
+    {
+      "route": "/",
+      "ms": 3116,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/login",
+      "ms": 3138,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/register",
+      "ms": 2431,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/dashboard",
+      "ms": 2490,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/decision",
+      "ms": 2469,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/disease-detection",
+      "ms": 2414,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/weather",
+      "ms": 2195,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/advisory",
+      "ms": 2440,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/farms",
+      "ms": 2438,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/market",
+      "ms": 2386,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/net-realization",
+      "ms": 2369,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/pathways",
+      "ms": 2337,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/trade",
+      "ms": 2661,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/buy",
+      "ms": 2352,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/fpo",
+      "ms": 3219,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/schemes",
+      "ms": 2787,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/community",
+      "ms": 3440,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/grade-crop",
+      "ms": 9926,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/profile",
+      "ms": 2851,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    },
+    {
+      "route": "/settings",
+      "ms": 2658,
+      "count": 0,
+      "byImpact": {},
+      "details": []
+    }
+  ]
+}

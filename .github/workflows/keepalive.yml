@@ -1,0 +1,109 @@
+name: keepalive
+
+# Keeps the Render free-tier API warm so the public URL a judge opens does not
+# answer 503 while the service cold-boots (measured: 50s+, and the frontend
+# loads fine, so the page looks alive while every number fails).
+#
+# ── Instance-hour arithmetic (do not "just warm everything") ────────────────
+# Render's free workspaces include 750 instance-hours/month. A free web service
+# sleeps after ~15 min idle, so a ping every 10 min keeps it awake permanently.
+#
+#   API warmed 01:00–16:59 UTC (06:30–22:30 IST) = 16 h/day  → ~480 h/month ✓
+#   API + calculator warmed the same window        = 16 h/day  → ~960 h/month ✗
+#
+# 960 > 750, so warming both continuously would burn the quota and Render would
+# suspend the services. The calculator is therefore warmed ON DEMAND only
+# (workflow_dispatch with warm_calc=true, e.g. 30 min before a demo); the static
+# frontend never sleeps and costs nothing.
+#
+# ── Actions minutes ────────────────────────────────────────────────────────
+# 96 runs/day x ~15s ≈ 24 min/day ≈ 720 min/month. Free on a public repo; on a
+# private repo that is ~36% of the 2,000 free minutes, so unless the repo is
+# public prefer an external pinger (cron-job.org / UptimeRobot) and keep this
+# workflow for demo-day warm-ups. GitHub also disables schedules after 60 days
+# of repo inactivity — re-enable from the Actions tab if that happens.
+#
+# Note the sanity check: probe-deploy.cjs distinguishes "spinning up" from
+# "never deployed" (404), which is why this workflow gives up immediately on 404.
+
+on:
+  workflow_dispatch:
+    inputs:
+      warm_calc:
+        description: 'Also warm the net-realization calculator (uses instance hours)'
+        type: boolean
+        default: false
+      timeout_seconds:
+        description: 'Cold-start allowance per service'
+        type: string
+        default: '150'
+  schedule:
+    # Every 10 minutes, 01:00–16:59 UTC == 06:30–22:30 IST.
+    - cron: '*/10 1-16 * * *'
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: true
+
+jobs:
+  warm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      API_URL: ${{ vars.KISAN_API_URL || 'https://kisan360-api.onrender.com' }}
+      CALC_URL: ${{ vars.KISAN_CALC_URL || 'https://kisan360-calc.onrender.com' }}
+      TIMEOUT: ${{ inputs.timeout_seconds || '150' }}
+    steps:
+      - name: Warm the API
+        run: |
+          set -uo pipefail
+          deadline=$(( $(date +%s) + TIMEOUT ))
+          attempt=0
+          code=000
+          while :; do
+            attempt=$((attempt + 1))
+            start=$(date +%s%3N)
+            code=$(curl -sS -o /tmp/health.json -w '%{http_code}' --max-time 30 "$API_URL/health" 2>/dev/null || echo 000)
+            took=$(( $(date +%s%3N) - start ))
+            echo "attempt $attempt: HTTP $code in ${took}ms"
+            [ "$code" = "200" ] && break
+            # 404 means the service name is unclaimed — waiting will not help.
+            [ "$code" = "404" ] && echo "::warning::$API_URL is not deployed (404)" && break
+            [ "$(date +%s)" -ge "$deadline" ] && break
+            sleep 10
+          done
+          echo "--- /health ---"
+          head -c 700 /tmp/health.json 2>/dev/null || true
+          echo
+          {
+            echo "### keepalive"
+            echo ""
+            echo "| service | HTTP | attempts |"
+            echo "|---|---|---|"
+            echo "| api | $code | $attempt |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" != "200" ]; then
+            echo "::error::API still not reachable after ${TIMEOUT}s (last HTTP $code) — a 503 the whole window means it crashed at boot, not that it is sleeping. Read the Render service logs."
+            exit 1
+          fi
+
+      - name: Warm the calculator (on demand only)
+        if: ${{ inputs.warm_calc == true || inputs.warm_calc == 'true' }}
+        run: |
+          set -uo pipefail
+          deadline=$(( $(date +%s) + TIMEOUT ))
+          code=000
+          while :; do
+            start=$(date +%s%3N)
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$CALC_URL/health" 2>/dev/null || echo 000)
+            took=$(( $(date +%s%3N) - start ))
+            echo "calc: HTTP $code in ${took}ms"
+            [ "$code" = "200" ] && break
+            [ "$code" = "404" ] && break
+            [ "$(date +%s)" -ge "$deadline" ] && break
+            sleep 10
+          done
+          echo "| calc | $code | - |" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" != "200" ]; then
+            echo "::warning::calculator not reachable (HTTP $code) — net-realization will answer 503 or degrade"
+          fi

@@ -565,7 +565,7 @@ const LandingPage: React.FC = () => {
                     <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
                     <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
                     <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
-                    <span className="ml-2 min-w-0 flex-1 truncate rounded-md bg-white/10 px-2.5 py-1 text-[10px] text-emerald-100/60">
+                    <span className="ml-2 min-w-0 flex-1 truncate rounded-md bg-white/10 px-2.5 py-1 text-[10px] text-emerald-100/90">
                       {t('landing.preview.label')}
                     </span>
                   </div>
@@ -591,24 +591,24 @@ const LandingPage: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-2.5">
                       <div className="rounded-lg border border-white/10 bg-white/[0.06] p-3">
-                        <p className="text-[9px] uppercase tracking-wide text-emerald-100/50">
+                        <p className="text-[9px] uppercase tracking-wide text-emerald-100/90">
                           {t('landing.preview.board')}
                         </p>
                         <p className="tabular mt-1 text-sm font-bold text-white">
                           {inr(best.gross)}
-                          <span className="text-[10px] font-medium text-emerald-200/50">/q</span>
+                          <span className="text-[10px] font-medium text-emerald-200/90">/q</span>
                         </p>
                         <p className="mt-0.5 text-[10px] text-amber-400">
                           −{inr(best.costs.total)}/q {t('landing.calc.inCosts')}
                         </p>
                       </div>
                       <div className="rounded-lg border border-white/10 bg-white/[0.06] p-3">
-                        <p className="text-[9px] uppercase tracking-wide text-emerald-100/50">
+                        <p className="text-[9px] uppercase tracking-wide text-emerald-100/90">
                           {t('landing.preview.next')}
                         </p>
                         <p className="tabular mt-1 text-sm font-bold text-white">
                           {result.ranked[1] ? inr(result.ranked[1].net) : '—'}
-                          <span className="text-[10px] font-medium text-emerald-200/50">/q</span>
+                          <span className="text-[10px] font-medium text-emerald-200/90">/q</span>
                         </p>
                         <p className="mt-0.5 truncate text-[10px] text-amber-400">
                           {result.ranked[1]?.market ?? ''}
@@ -626,7 +626,7 @@ const LandingPage: React.FC = () => {
                       <p className="mt-1 text-[10px] text-emerald-200/70">{t('landing.preview.buyerTier')}</p>
                     </div>
 
-                    <p className="flex items-start gap-1.5 text-[10px] leading-snug text-emerald-200/50">
+                    <p className="flex items-start gap-1.5 text-[10px] leading-snug text-emerald-200/90">
                       <Info size={11} className="mt-0.5 shrink-0" aria-hidden="true" />
                       {result.live ? t('landing.calc.provLive') : t('landing.calc.provCached')} ·{' '}
                       {t('landing.preview.note')}
@@ -1357,11 +1357,11 @@ const LandingPage: React.FC = () => {
               Kisan<span className="text-emerald-500">360</span>
               <span className="text-emerald-500">°</span>
             </p>
-            <p className="mt-2 text-xs leading-relaxed text-stone-500">{t('landing.footer.line')}</p>
+            <p className="mt-2 text-xs leading-relaxed text-stone-300">{t('landing.footer.line')}</p>
           </div>
-          <div className="flex flex-col gap-1 text-xs text-stone-400 sm:items-end">
+          <div className="flex flex-col gap-1 text-xs text-stone-300 sm:items-end">
             <span>{t('landing.footer.sih')}</span>
-            <span className="text-stone-600">{t('landing.footer.rights')}</span>
+            <span className="text-stone-300/80">{t('landing.footer.rights')}</span>
           </div>
         </div>
       </footer>

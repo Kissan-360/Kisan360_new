@@ -5,6 +5,7 @@ import Sidebar, { MobileNav, isBuyerRole } from './Sidebar';
 import Topbar from './Topbar';
 import ChatBot from './ChatBot';
 import FlowGuidanceBar from './FlowGuidanceBar';
+import OfflineBanner from './OfflineBanner';
 import { FlowProvider, useFlow } from './FlowContext';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from '../i18n';
@@ -86,6 +87,8 @@ const LayoutInner = ({ children }: { children: React.ReactNode }) => {
         {flowActive && <FlowGuidanceBar />}
 
         <Topbar onMenu={() => setMobileOpen(true)} />
+        {/* Renders nothing while online; states how old the cached prices are when not. */}
+        <OfflineBanner />
         <main className="flex-1 overflow-y-auto k-scroll">
           <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 lg:py-8">
             {children}

@@ -1,0 +1,93 @@
+name: deployed-smoke
+
+# Operates the real thing, on a schedule.
+#
+# Every other check in this repo trusts a local process. This one opens the
+# public URL a judge would open and sells a farmer's crop through it — twice:
+# once where the farmer gets the cash, once where they do not and raise a
+# grievance that gets reviewed and resolved. A green run here is the difference
+# between "it is deployed" and "it works, and we know it still works".
+#
+# Runs at 04:05 UTC = 09:35 IST, inside the keepalive window, so the free-tier
+# services are already warm and a cold start does not mask a real failure.
+#
+# Note: the smoke is an operational test, not a read-only probe — it leaves two
+# CLOSED lots in the deployed database as trade history. `bash scripts/demo-reset.sh`
+# re-seeds the canonical demo state when a clean slate is wanted.
+
+on:
+  workflow_dispatch:
+    inputs:
+      timeout_seconds:
+        description: 'Cold-start allowance per step'
+        type: string
+        default: '180'
+  schedule:
+    - cron: '5 4 * * *'
+
+concurrency:
+  group: deployed-smoke
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TIMEOUT: ${{ inputs.timeout_seconds || '180' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Probe the deployment (liveness, wiring, exposure)
+        id: probe
+        run: |
+          set +e
+          node scripts/probe-deploy.cjs --timeout "$TIMEOUT" > /tmp/probe.log 2>&1
+          code=$?
+          set -e
+          cat /tmp/probe.log
+          echo "exit=$code" >> "$GITHUB_OUTPUT"
+
+      - name: Sell a crop through the public URL (both payment outcomes)
+        run: node scripts/smoke-deployed.cjs --timeout "$TIMEOUT"
+
+      - name: Upload the evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployed-evidence
+          path: docs/evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Summarise
+        if: always()
+        run: |
+          node -e "
+          const fs = require('fs');
+          const out = [];
+          const read = (p) => { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return null; } };
+          const smoke = read('docs/evidence/deployed-smoke.json');
+          const probe = read('docs/evidence/deploy-probe.json');
+          out.push('### deployed smoke');
+          out.push('');
+          out.push('| check | result |');
+          out.push('|---|---|');
+          if (probe) out.push('| services | ' + probe.verdict + ' |');
+          if (probe) out.push('| exposure | ' + (probe.exposure || []).filter(c => !c.ok).length + ' finding(s) |');
+          if (smoke) out.push('| journey | ' + smoke.verdict + ' |');
+          if (smoke) out.push('| steps | ' + smoke.passed + ' passed, ' + smoke.failed + ' failed |');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, out.join('\n') + '\n');
+          "
+
+      # The gate. An exposure finding is a defect, not a note — it fails the job
+      # so it lands in the notification stream instead of a log nobody reads.
+      - name: Fail on findings
+        if: steps.probe.outputs.exit != '0'
+        run: |
+          echo "::error::deploy probe exited ${{ steps.probe.outputs.exit }} — live with findings. See the probe log above and docs/evidence/deploy-probe.json."
+          exit 1

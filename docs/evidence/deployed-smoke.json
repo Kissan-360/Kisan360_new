@@ -1,0 +1,229 @@
+{
+  "generatedAt": "2026-09-23T06:03:27.046Z",
+  "startedAt": "2026-09-23T06:03:17.841Z",
+  "targets": {
+    "web": "https://kisan360-web.onrender.com",
+    "api": "https://kisan360-api.onrender.com"
+  },
+  "verdict": "JOURNEY COMPLETE — both outcomes proven on the deployed stack",
+  "passed": 23,
+  "failed": 0,
+  "steps": [
+    {
+      "name": "Frontend serves the app shell",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "API reachable (https://kisan360-api.onrender.com)",
+      "ok": true,
+      "detail": "HTTP 200 after 0.4s",
+      "data": {
+        "health": {
+          "status": "OK",
+          "message": "Kisan360 Backend is running",
+          "db": "connected",
+          "dbReady": true,
+          "mlServiceReady": true,
+          "mlServiceStatus": "ready",
+          "mlServiceUrl": "https://kisan360-calc.onrender.com",
+          "scheduler": {
+            "lastAttempt": "2026-09-23T05:51:10.529Z",
+            "lastSuccess": "2026-09-23T05:51:25.283Z",
+            "lastError": null,
+            "lastObservationDate": "23/09/2026",
+            "lastFetchAt": "2026-09-23T05:51:25.283Z",
+            "rowsReceived": 24,
+            "rowsAccepted": 9,
+            "rowsRejected": 0,
+            "rejectedReasons": {},
+            "rowsPreserved": 4,
+            "rowsFlagged": 0,
+            "consecutiveFailures": 0,
+            "totalRuns": 1,
+            "publishedAt": "2026-09-23T05:51:25.283Z",
+            "newObservationAvailable": true,
+            "distinctCrops": 33,
+            "distinctMarkets": 70,
+            "distinctDistricts": 21
+          },
+          "timestamp": "2026-09-23T06:03:18.859Z"
+        },
+        "warmUpSeconds": 0.4
+      }
+    },
+    {
+      "name": "Farmer demo login",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Net realization returns a ranked recommendation",
+      "ok": true,
+      "detail": "Pimpalgaon Baswant(Saykheda) → ₹3809.85/q net (2 mandis ranked, gross ₹3850/q, ₹40.15/q costs)",
+      "data": {
+        "status": 200,
+        "servingMode": "LIVE",
+        "bestMandi": "Pimpalgaon Baswant(Saykheda)",
+        "rankedCount": 2,
+        "grossPricePerQuintal": 3850,
+        "farmerNetPerQuintal": 3809.85,
+        "costsPerQuintal": 40.15,
+        "distanceKm": 12.1,
+        "observedOn": "2026-09-23T06:03:20.206Z",
+        "source": "agmarknet_live",
+        "dataAgeHours": 0,
+        "engine": "1.2.0"
+      }
+    },
+    {
+      "name": "Matched buyers listed",
+      "ok": true,
+      "detail": "2 buyer(s) — using Dehydrated Onion Exports (Nasik)"
+    },
+    {
+      "name": "Path A (paid) · lot created",
+      "ok": true,
+      "detail": "HTTP 201",
+      "data": {
+        "lotId": "6ab36ba8581c8d3173367118"
+      }
+    },
+    {
+      "name": "Path A (paid) · offer sent",
+      "ok": true,
+      "detail": "HTTP 201",
+      "data": {
+        "offerId": "6ab36ba9581c8d317336711c"
+      }
+    },
+    {
+      "name": "Path A (paid) · buyer demo login",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Path A (paid) · farmer cannot accept own offer",
+      "ok": true,
+      "detail": "HTTP 403"
+    },
+    {
+      "name": "Path A (paid) · buyer accepts → escrow HELD",
+      "ok": true,
+      "detail": "HTTP 200, payment HELD",
+      "data": {
+        "paymentId": "6ab36ba9581c8d3173367125",
+        "amount": 46000
+      }
+    },
+    {
+      "name": "Path A (paid) · simulate-release → RELEASED",
+      "ok": true,
+      "detail": "HTTP 200, payment RELEASED",
+      "data": {
+        "paymentId": "6ab36ba9581c8d3173367125",
+        "mocked": true
+      }
+    },
+    {
+      "name": "Path A · farmer payment book shows RELEASED",
+      "ok": true,
+      "detail": "HTTP 200, entry RELEASED",
+      "data": {
+        "mocked": true
+      }
+    },
+    {
+      "name": "Path B (unpaid) · lot created",
+      "ok": true,
+      "detail": "HTTP 201",
+      "data": {
+        "lotId": "6ab36bab581c8d3173367134"
+      }
+    },
+    {
+      "name": "Path B (unpaid) · offer sent",
+      "ok": true,
+      "detail": "HTTP 201",
+      "data": {
+        "offerId": "6ab36bab581c8d3173367138"
+      }
+    },
+    {
+      "name": "Path B (unpaid) · buyer demo login",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Path B (unpaid) · farmer cannot accept own offer",
+      "ok": true,
+      "detail": "HTTP 403"
+    },
+    {
+      "name": "Path B (unpaid) · buyer accepts → escrow HELD",
+      "ok": true,
+      "detail": "HTTP 200, payment HELD",
+      "data": {
+        "paymentId": "6ab36bac581c8d3173367141",
+        "amount": 46000
+      }
+    },
+    {
+      "name": "Path B (unpaid) · simulate-failure → CANCELLED",
+      "ok": true,
+      "detail": "HTTP 200, payment CANCELLED",
+      "data": {
+        "paymentId": "6ab36bac581c8d3173367141",
+        "mocked": true
+      }
+    },
+    {
+      "name": "Path B · grievance raised (OPEN)",
+      "ok": true,
+      "detail": "HTTP 201",
+      "data": {
+        "grievanceId": "6ab36bad581c8d317336714e"
+      }
+    },
+    {
+      "name": "Path B · farmer cannot move own grievance",
+      "ok": true,
+      "detail": "HTTP 403"
+    },
+    {
+      "name": "Path B · authority moves to UNDER_REVIEW",
+      "ok": true,
+      "detail": "HTTP 200, UNDER_REVIEW"
+    },
+    {
+      "name": "Path B · authority resolves (RESOLVED)",
+      "ok": true,
+      "detail": "HTTP 200, RESOLVED"
+    },
+    {
+      "name": "Path B · grievance appears in the authority queue",
+      "ok": true,
+      "detail": "HTTP 200, 5 in queue"
+    }
+  ],
+  "cashPath": {
+    "lotId": "6ab36ba8581c8d3173367118",
+    "offerId": "6ab36ba9581c8d317336711c",
+    "paymentId": "6ab36ba9581c8d3173367125",
+    "buyerName": "Dehydrated Onion Exports (Nasik)",
+    "settledAs": "RELEASED",
+    "amount": 46000
+  },
+  "failedPath": {
+    "lotId": "6ab36bab581c8d3173367134",
+    "offerId": "6ab36bab581c8d3173367138",
+    "paymentId": "6ab36bac581c8d3173367141",
+    "buyerName": "Dehydrated Onion Exports (Nasik)",
+    "settledAs": "CANCELLED",
+    "amount": 46000
+  },
+  "grievanceId": "6ab36bad581c8d317336714e",
+  "crop": "Onion",
+  "district": "Nashik",
+  "quantityQuintals": 10
+}

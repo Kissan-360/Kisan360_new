@@ -137,6 +137,22 @@ The demo uses static data where production would use real integrations. The *dec
 
 ---
 
+## If Asked: Technology Readiness (30-second answer)
+
+> "TRL 6 and 7 are demonstrated, not asserted. TRL 6: 388 real AGMARKNET
+> observations across 105 mandis and 30 districts, a history that grows by
+> itself one day per run, 638 backend tests and a trained model shipping 8.6 MB
+> of weights. TRL 7: the app is public — a URL you can open now — and the whole
+> sale, including the payment-failure path, is proven there by a nightly smoke
+> that uploads its evidence. TRL 8 we claim substantially, with named gaps: CI on
+> every push, measured capacity, an offline shell, and docs that fail the build
+> when they disagree with the artifacts. TRL 9 we do **not** claim — no pilot
+> sessions yet; the consent script, session script and ledger are ready, and I'd
+> rather show you the kit than invent a number."
+
+Full ladder with per-level evidence and gaps: `docs/TRL_DOSSIER.md`. The one-line
+honesty check a judge can run: `node scripts/evidence.cjs --check`.
+
 ## Demo-Day Tips
 
 1. **Start with the problem, not the architecture.** Judges want to understand *why* before *how*.

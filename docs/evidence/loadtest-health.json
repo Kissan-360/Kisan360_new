@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-09-23T06:23:31.339Z",
+  "startedAt": "2026-09-23T06:23:25.257Z",
+  "target": "http://[::1]:5000",
+  "durationSeconds": 6,
+  "endpoints": [
+    {
+      "path": "/health",
+      "weight": 1
+    },
+    {
+      "path": "/api/market/prices?crop=Onion&state=Maharashtra",
+      "weight": 2
+    },
+    {
+      "path": "/api/market/net-realization?crop=Onion&district=Nashik&quantity=10",
+      "weight": 2
+    },
+    {
+      "path": "/api/buyers?crop=Onion&district=Nashik",
+      "weight": 1
+    },
+    {
+      "path": "/api/grade-assessment/crops",
+      "weight": 1
+    }
+  ],
+  "only": "health",
+  "levels": [
+    {
+      "concurrency": 100,
+      "requests": 12729,
+      "rps": 2121.5,
+      "ok": 12729,
+      "rateLimited": 0,
+      "failed": 0,
+      "errorRate": 0,
+      "p50Ms": 48.6,
+      "p95Ms": 64.4,
+      "p99Ms": 83.9,
+      "maxMs": 101.7
+    }
+  ],
+  "headline": {
+    "maxConcurrency": 100,
+    "rpsAtMaxConcurrency": 2121.5,
+    "p95MsAtMaxConcurrency": 64.4,
+    "errorRateAtMaxConcurrency": 0,
+    "note": "Ran against a local stack. Add KISAN_RATE_LIMIT_MAX considerations before repeating against the deployment."
+  }
+}

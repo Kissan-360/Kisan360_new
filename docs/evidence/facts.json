@@ -1,0 +1,80 @@
+{
+  "generatedAt": "2026-09-23T10:22:44.585Z",
+  "market": {
+    "rows": 421,
+    "crops": 34,
+    "markets": 114,
+    "districts": 30,
+    "slices": {
+      "onion": {
+        "rows": 53,
+        "markets": 47
+      },
+      "soyabean": {
+        "rows": 19,
+        "markets": 19
+      },
+      "tomato": {
+        "rows": 37,
+        "markets": 36
+      },
+      "cotton": {
+        "rows": 1,
+        "markets": 1
+      },
+      "grape": {
+        "rows": 2,
+        "markets": 2
+      }
+    },
+    "retrievedAt": "2026-09-23",
+    "newestObservation": "2026-09-23",
+    "newestObservationAgeHours": 10.4,
+    "note": "Machine-generated from a live AGMARKNET pull (see backend/scripts/refresh-prices.js). Real data, not a sample."
+  },
+  "history": {
+    "days": 7,
+    "rows": 421,
+    "lastAppendedAt": "2026-09-23"
+  },
+  "tests": {
+    "suites": 29,
+    "tests": 638,
+    "failed": 0,
+    "recordedAt": "2026-09-23"
+  },
+  "model": {
+    "name": "mobilenetv2-freshness-grader",
+    "version": "1.1.0",
+    "trained": "2026-09-12",
+    "accuracyBinaryPct": 99.2,
+    "accuracyFinePct": 99,
+    "testImages": 6738,
+    "megabytes": 8.6
+  },
+  "artifacts": {
+    "probe": {
+      "verdict": "LIVE WITH 1 EXPOSURE FINDING(S)",
+      "generatedAt": "2026-09-23T06:06:36.581Z",
+      "coldStart": []
+    },
+    "smoke": {
+      "verdict": "JOURNEY COMPLETE — both outcomes proven on the deployed stack",
+      "passed": 23,
+      "failed": 0,
+      "generatedAt": "2026-09-23T06:03:27.046Z"
+    },
+    "capacity": {
+      "api": {
+        "rps": 2121.5,
+        "p95Ms": 64.4,
+        "errors": 0
+      },
+      "calculator": {
+        "rps": 17,
+        "p95Ms": 15674.5,
+        "errors": 0
+      }
+    }
+  }
+}

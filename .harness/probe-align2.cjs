@@ -26,7 +26,12 @@ const ROUTES = [
 // Route selection comes from an env var, not argv: Git Bash on Windows rewrites
 // arguments that look like POSIX paths ("/trade" -> "C:/Program Files/Git/trade"),
 // which silently dropped routes from a subset run.
-const ONLY = process.env.KISAN_ROUTES ? process.env.KISAN_ROUTES.split(',') : null;
+// Git Bash may still rewrite the env *value* when it starts with a POSIX path
+// ("/dashboard" -> "C:/Program Files/Git/dashboard"), so resolve each entry
+// against the known route table by suffix — otherwise the route vanishes silently.
+const ONLY = process.env.KISAN_ROUTES
+  ? process.env.KISAN_ROUTES.split(',').map((s) => ROUTES.find((r) => r === s || s.endsWith(r)) || s)
+  : null;
 const BATCH = process.env.KISAN_BATCH ? Number(process.env.KISAN_BATCH) : null;
 const HALF = Math.ceil(ROUTES.length / 2);
 const USE = BATCH ? ROUTES.slice((BATCH - 1) * HALF, BATCH * HALF) : ONLY ? ROUTES.filter((r) => ONLY.includes(r)) : ROUTES;

@@ -1,0 +1,38 @@
+# Render Blueprint — OPTIONAL paid plan (RAG + disease deployed).
+# Copy this file to render.yaml when you move off the free tier.
+# Free tier stays on render.yaml (3 services, ML degrades gracefully).
+#
+# Adds two paid web services that the free render.yaml omits:
+#   kisan360-rag     advisory_service.py (sentence-transformers, needs RAM)
+#   kisan360-disease main.py (torch/transformers, needs RAM)
+#
+# Then set in kisan360-api:
+#   RAG_SERVICE_URL=https://kisan360-rag.onrender.com
+#   ML_SERVICE_URL=https://kisan360-disease.onrender.com
+#
+# Pre-embed the corpus before deploy to skip the 30s cold start:
+#   cd ml-service && python scripts/embed_corpus.py  (commit corpus_embeddings.npy)
+services:
+  - type: web
+    name: kisan360-rag
+    runtime: python
+    rootDir: ml-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn advisory_service:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /agent/health
+    plan: standard
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+
+  - type: web
+    name: kisan360-disease
+    runtime: python
+    rootDir: ml-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    plan: standard
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"

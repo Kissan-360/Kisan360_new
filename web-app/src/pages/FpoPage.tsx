@@ -162,7 +162,7 @@ const FpoPage = () => {
       // while the calc is waking. Retry both with backoff (max 2 retries).
       if ((res.status === 503 || res.status === 502) && _retryCount < 2) {
         const delay = 3000 * (_retryCount + 1);
-        console.log(`[Kisan360] FPO pool ${res.status} (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
+        console.warn(`[Kisan360] FPO pool ${res.status} (calculator waking up), retry ${_retryCount + 1}/2 in ${delay}ms`);
         await new Promise(r => setTimeout(r, delay));
         return compute(undefined, _retryCount + 1);
       }
@@ -181,7 +181,7 @@ const FpoPage = () => {
     } catch {
       // Network error — retry once if calculator might be waking up
       if (_retryCount < 1) {
-        console.log('[Kisan360] FPO pool network error, retrying in 3s...');
+        console.warn('[Kisan360] FPO pool network error, retrying in 3s...');
         await new Promise(r => setTimeout(r, 3000));
         return compute(undefined, _retryCount + 1);
       }
@@ -263,7 +263,7 @@ const FpoPage = () => {
           }
         />
 
-        <p className="text-xs text-amber-600 flex items-start gap-1.5">
+        <p className="text-xs text-amber-700 flex items-start gap-1.5">
           <Info size={13} className="mt-0.5 shrink-0" />
           {t('fpo.demoNote')}
         </p>
@@ -535,7 +535,7 @@ const FpoPage = () => {
                     <p className="text-[11px] text-stone-400">{t('fpo.fartherAtBulkRate', { market: result.pooledBestMandi })}</p>
                   </div>
                   <div className="rounded-lg border border-amber-200 bg-white p-3">
-                    <p className="text-[11px] uppercase tracking-wider text-amber-600">{t('fpo.extraTransport')}</p>
+                    <p className="text-[11px] uppercase tracking-wider text-amber-700">{t('fpo.extraTransport')}</p>
                     <p className="text-lg font-bold text-amber-700 mt-0.5">{inr(Math.abs(result.logistics.savedPerQuintal), 2)}/q</p>
                     <p className="text-[11px] text-stone-400">
                       {t('fpo.worthItBecause', {

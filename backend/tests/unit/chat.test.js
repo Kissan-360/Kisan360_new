@@ -94,4 +94,17 @@ describe('chat assistant', () => {
     const long = `${'x'.repeat(2000)} explain net realization`;
     expect(classifyIntent(long).intent).toBe('explain_net_realization');
   });
+
+  test('first-run onboarding asks for crop/district instead of navigating', async () => {
+    const classification = classifyIntent('Comparison mandis');
+    const response = await executeIntent({
+      message: 'Comparison mandis',
+      language: 'mr',
+      context: {},
+      classification,
+      mode: 'action',
+    });
+    expect(response.action).toBeUndefined();
+    expect(response.text).toContain('पीक');
+  });
 });

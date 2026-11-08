@@ -22,6 +22,13 @@ async function seedDemoScenario({ baseUrl = DEFAULT_BASE, log = () => {} } = {})
       method,
       headers: {
         'Content-Type': 'application/json',
+        // Marks this as machine-generated traffic. The boot auto-seed calls the
+        // API over HTTP, so without a marker it is indistinguishable from a
+        // farmer's activity — and it inflated every pilot metric (verified: a
+        // boot that created no user activity recorded 3 × lot_created and
+        // 1 × offer_sent). The telemetry recorder skips requests with this
+        // header. See lib/usageEvents.js.
+        'x-kisan-internal': 'demo-seed',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,

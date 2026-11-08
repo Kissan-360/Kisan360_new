@@ -1,63 +1,52 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useCallback, useContext, useState, ReactNode } from "react";
+import { Endpoints, setApiToken } from "../services/api";
 
-// Auth Context
+// Auth Context — demo-login first (backend issues a signed JWT), Firebase optional
 interface AuthContextType {
   user: any;
+  token: string | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  loginDemo: (role: "farmer" | "buyer" | "fpo", district?: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = async (email: string, password: string) => {
+  const loginDemo = useCallback(async (role: "farmer" | "buyer" | "fpo", district = "Nashik") => {
     setIsLoading(true);
     try {
-      // Add login logic here
-      console.log('Logging in:', email);
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
+      const res = await Endpoints.demoLogin(role, district);
+      const t = res.data?.token as string;
+      const u = res.data?.user;
+      if (!t) throw new Error("No token returned");
+      setApiToken(t);
+      setToken(t);
+      setUser(u || { role, district });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const logout = async () => {
-    setIsLoading(true);
-    try {
-      // Add logout logic here
-      setUser(null);
-    } catch (error) {
-      console.error('Logout error:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const logout = useCallback(async () => {
+    setApiToken(null);
+    setToken(null);
+    setUser(null);
+  }, []);
 
-  const value = {
-    user,
-    isLoading,
-    login,
-    logout,
-  };
+  const value = { user, token, isLoading, loginDemo, logout };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

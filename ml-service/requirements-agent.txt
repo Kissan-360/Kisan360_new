@@ -1,0 +1,4 @@
+# Optional LangChain/LangGraph stack (not required for Render free tier)
+# Install only where you want the LangGraph headline: local dev / paid CPU.
+langchain-core>=0.3.0
+langgraph>=0.2.0

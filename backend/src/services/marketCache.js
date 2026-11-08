@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const logger = require('../utils/logger');
+const { ageMs, oldestObservedOn } = require('../lib/observedDate');
 
 const SNAPSHOT_FILE = path.join(__dirname, '..', 'data', 'priceSnapshots.json');
 // Live rows are considered fresh for 6h; beyond that the route re-pulls and,
@@ -186,11 +187,8 @@ function getPrices(filters) {
     const liveFiltered = filterRows(liveRows.rows, filters || {});
     if (liveFiltered.length > 0) {
       // Use observation-based freshness: the age of the data, not the age of the fetch.
-      const oldestObservedOn = liveFiltered
-        .map(r => r.observedOn || r.arrivalDate)
-        .filter(Boolean)
-        .sort()[0];
-      const obsFresh = observationFreshness(oldestObservedOn, liveRows.fetchedAt);
+      const oldest = oldestObservedOn(liveFiltered.map(r => r.observedOn || r.arrivalDate));
+      const obsFresh = observationFreshness(oldest, liveRows.fetchedAt);
       return {
         rows: liveFiltered,
         source: liveRows.source,
@@ -199,7 +197,7 @@ function getPrices(filters) {
         fallback: false,
         freshnessMs: obsFresh.freshnessMs,
         freshnessLabel: obsFresh.freshnessLabel,
-        observedOn: oldestObservedOn,
+        observedOn: oldest,
         note: undefined,
         servingMode: 'LIVE',
       };
@@ -208,11 +206,8 @@ function getPrices(filters) {
   }
   const rows = filterRows(seedRows, filters || {});
   // Use observation-based freshness for snapshot rows too.
-  const oldestObservedOn = rows
-    .map(r => r.observedOn || r.arrivalDate)
-    .filter(Boolean)
-    .sort()[0];
-  const obsFresh = observationFreshness(oldestObservedOn, seedMeta.fetchedAt || seedMeta.retrievedAt);
+  const oldest = oldestObservedOn(rows.map(r => r.observedOn || r.arrivalDate));
+  const obsFresh = observationFreshness(oldest, seedMeta.fetchedAt || seedMeta.retrievedAt);
   return {
     rows,
     source: seedMeta.source || 'agmarknet_snapshot',
@@ -221,7 +216,7 @@ function getPrices(filters) {
     fallback: true,
     freshnessMs: obsFresh.freshnessMs,
     freshnessLabel: obsFresh.freshnessLabel,
-    observedOn: oldestObservedOn,
+    observedOn: oldest,
     note: seedMeta ? seedMeta.note : undefined,
     servingMode: obsFresh.freshnessLabel === 'CURRENT' ? 'CACHED' : obsFresh.freshnessLabel === 'RECENT' ? 'CACHED' : 'STALE',
   };
@@ -232,22 +227,33 @@ function ageHours(freshnessMs) {
 }
 
 // Calculate freshness from the observation date, not fetch time.
-// observedOn is when the source published the data (e.g. Sep 9).
+// observedOn is when the source published the data (e.g. Sep 9, as DD/MM/YYYY).
 // fetchedAt is when we retrieved it (e.g. Sep 10).
 // Freshness should reflect the age of the data, not the age of the fetch.
+//
+// The age is computed through lib/observedDate.js: parsing the raw string with
+// `new Date()` read DD/MM/YYYY as US MM/DD, so a 13-day-old quote reported a
+// NEGATIVE age (`ageHours: -378.01`) and the decision screen rendered
+// "-378.01h old". Ages are reported only when they can be trusted.
+const CLOCK_SKEW_MS = 60 * 60 * 1000;
 function observationFreshness(observedOn, fetchedAt) {
   if (!observedOn) return { freshnessMs: null, freshnessLabel: 'UNKNOWN', source: 'observedOn missing' };
-  const obsDate = new Date(observedOn);
-  if (isNaN(obsDate.getTime())) return { freshnessMs: null, freshnessLabel: 'UNKNOWN', source: 'observedOn unparseable' };
-  const now = Date.now();
-  const obsMs = obsDate.getTime();
-  const freshnessMs = now - obsMs;
-  let freshnessLabel = 'UNKNOWN';
-  if (freshnessMs < 0) freshnessLabel = 'FUTURE';
-  else if (freshnessMs < 24 * 3600 * 1000) freshnessLabel = 'CURRENT';
-  else if (freshnessMs < 3 * 24 * 3600 * 1000) freshnessLabel = 'RECENT';
+  const ms = ageMs(observedOn);
+  if (ms == null) return { freshnessMs: null, freshnessLabel: 'UNKNOWN', source: 'observedOn unparseable' };
+
+  // A date genuinely ahead of now is not data from the future; it is either a
+  // bad source date or clock skew. Under an hour is ordinary skew and counts as
+  // current; beyond that the age is unknown rather than a made-up number.
+  if (ms < 0) {
+    if (-ms <= CLOCK_SKEW_MS) return { freshnessMs: 0, freshnessLabel: 'CURRENT', observedOn, fetchedAt, source: 'clock skew under 1h' };
+    return { freshnessMs: null, freshnessLabel: 'FUTURE', observedOn, fetchedAt, source: 'observation date is ahead of now — age not reported' };
+  }
+
+  let freshnessLabel;
+  if (ms < 24 * 3600 * 1000) freshnessLabel = 'CURRENT';
+  else if (ms < 3 * 24 * 3600 * 1000) freshnessLabel = 'RECENT';
   else freshnessLabel = 'STALE';
-  return { freshnessMs, freshnessLabel, observedOn, fetchedAt };
+  return { freshnessMs: ms, freshnessLabel, observedOn, fetchedAt };
 }
 
 // ── primary entry point ────────────────────────────────────────────────────

@@ -57,7 +57,7 @@ const SettingsPage = () => {
       label: t('settings.tempUnit'),
       desc: t('settings.tempUnitDesc'),
       control: (
-        <select className="input-field w-32" value={settings.tempUnit} onChange={(e) => update('tempUnit', e.target.value as 'celsius' | 'fahrenheit')}>
+        <select aria-label={t('settings.tempUnit')} className="input-field w-32" value={settings.tempUnit} onChange={(e) => update('tempUnit', e.target.value as 'celsius' | 'fahrenheit')}>
           <option value="celsius">{t('settings.celsius')}</option>
           <option value="fahrenheit">{t('settings.fahrenheit')}</option>
         </select>
@@ -87,7 +87,7 @@ const SettingsPage = () => {
       label: t('settings.forecastDays'),
       desc: t('settings.forecastDaysDesc'),
       control: (
-        <select className="input-field w-24" value={settings.forecastDays} onChange={(e) => update('forecastDays', parseInt(e.target.value))}>
+        <select aria-label={t('settings.forecastDays')} className="input-field w-24" value={settings.forecastDays} onChange={(e) => update('forecastDays', parseInt(e.target.value))}>
           {[3, 5, 7].map((n) => <option key={n} value={n}>{n} days</option>)}
         </select>
       ),
@@ -97,6 +97,7 @@ const SettingsPage = () => {
       desc: t('settings.languageDesc'),
       control: (
         <select
+          aria-label={t('settings.language')}
           className="input-field w-36"
           value={settings.language}
           onChange={(e) => { const lang = normalizeLang(e.target.value); update('language', lang); setLanguage(lang); }}
@@ -135,7 +136,7 @@ const SettingsPage = () => {
       <div className="card p-6 lg:p-8">
         <h2 className="font-semibold text-stone-800 mb-3">{t('settings.account')}</h2>
         <p className="text-sm text-stone-600 mb-4">
-          {user ? t('settings.signedInAs', { email: user.email }) : t('settings.notSignedIn')}
+          {user ? t('settings.signedInAs', { email: user.email || '—' }) : t('settings.notSignedIn')}
         </p>
         <div className="flex flex-wrap gap-3">
           <button
