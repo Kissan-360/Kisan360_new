@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–26: chat history persistence + corpus ~239). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–27: corpus 250). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -160,6 +160,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 26 (history + corpus)
 - `ChatBot` history now persists in `localStorage` (`kisan360-chat-history`, last 10) — reload restores the farmer’s last conversation instead of resetting
 - Corpus ~239 docs (+4: price-risk, festival timing, input receipts, FYM quality)
+
+## Phase 27 (final 250)
+- Corpus **250 docs** (+11: potted fruit, grafting, calcareous P, check valve, potash, seed village, eNAM discipline, warehouse pledge, economic threshold, traps, calving interval) — verified `python -c "import knowledge_base; print(len(...))" = 250`
 
 ## Pre-embed (skip cold start)
 ```
