@@ -22,6 +22,16 @@ export interface ToolSchemes { tool?: string; count?: number; schemes?: Array<{ 
 
 export interface ToolWeather { tool?: string; district?: string; current?: { temperature?: number; humidity?: number; condition?: string; description?: string }; source?: string; retrievedAt?: string }
 
+export interface ToolDisease {
+  detectedDisease: string;
+  confidence: number;
+  severity: string;
+  treatment?: string;
+  recommendations?: string[];
+  mlLatency?: number;
+  cropType?: string;
+}
+
 export interface ChatMessageItem {
   id: string;
   role: ChatMessageRole;
@@ -29,6 +39,7 @@ export interface ChatMessageItem {
   intent?: string;
   intents?: string[];
   toolResults?: { netRealization?: ToolNetRealization; schemes?: ToolSchemes; weather?: ToolWeather };
+  disease?: ToolDisease | string;
 }
 
 interface ChatMessageProps {
@@ -84,6 +95,24 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
               <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">{message.toolResults.netRealization.provenance?.freshness === 'live' ? 'live' : 'cached'}</span>
               {message.toolResults.netRealization.provenance?.retrievedAt ? <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">{String(message.toolResults.netRealization.provenance.retrievedAt).slice(0, 10)}</span> : null}
             </div>
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`Kisan360: ${message.toolResults.netRealization.crop} in ${message.toolResults.netRealization.district} (${message.toolResults.netRealization.quantityQuintals}q) — best net ${message.toolResults.netRealization.best?.market} at Rs ${message.toolResults.netRealization.best?.farmerNetPerQuintal}/q. Compare your mandis by net, not headline.`)}`}
+              target="_blank" rel="noopener noreferrer"
+              className="mt-2 inline-block rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-semibold text-white"
+            >
+              Share on WhatsApp →
+            </a>
+          </div>
+        ) : null}
+        {!isUser && typeof message.disease === "object" && message.disease ? (
+          <div className="mt-2 w-full max-w-sm rounded-xl border border-amber-200 bg-amber-50/80 p-3 text-xs leading-relaxed text-stone-700">
+            <div className="font-semibold text-stone-900">{(message.disease as ToolDisease).detectedDisease}</div>
+            <div className="mt-0.5">Severity: {(message.disease as ToolDisease).severity} · Confidence: {(((message.disease as ToolDisease).confidence || 0) * 100).toFixed(0)}%{typeof (message.disease as ToolDisease).mlLatency === "number" ? ` · ${(message.disease as ToolDisease).mlLatency}s` : ""}</div>
+            {(message.disease as ToolDisease).treatment ? <div className="mt-1">Treatment: {(message.disease as ToolDisease).treatment}</div> : null}
+            {(message.disease as ToolDisease).recommendations?.length ? (
+              <ul className="mt-1 space-y-0.5">{(message.disease as ToolDisease).recommendations!.map((r, i) => <li key={i}>• {r}</li>)}</ul>
+            ) : null}
+            <div className="mt-1 text-[10px] text-stone-500">MobileNetV2 via FastAPI · OOD-gated</div>
           </div>
         ) : null}
         {!isUser && message.toolResults?.weather?.current ? (

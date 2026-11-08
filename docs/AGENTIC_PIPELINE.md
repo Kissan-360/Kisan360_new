@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–11: demo script + corpus ~188 + best polish). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–12: chat disease + onboarding + share, 10/10 polish). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -99,6 +99,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `docs/DEMO_SCRIPT_AGENTIC.md`: 5-minute demo narrative (Marathi multi-intent → tool cards → advisory provenance → disease OOD → decision → trade, with offline fallbacks)
 - Corpus ~188 docs (+18: kodo, little millet, barley, oats, tur/chana/moong/sesame/groundnut harvests, bitter gourd, pumpkin, beans, litchi, watermelon, bee-on-mustard, sodic, borewell logging, sheep)
 - `mobile-app/package-lock.json` committed (1229 packages — reproducible mobile builds)
+
+## Phase 12 (10/10 polish)
+- **Chat photo → disease inline:** 📷 button in `ChatBot` uploads leaf photo to `POST /disease/detect` (multipart, crop from context) and renders disease card in `ChatMessage` without leaving chat — closes the `crop_health` loop
+- **First-run onboarding:** `POST /api/chat` economics intents without crop/district now ask in EN/MR/HI (“पीक, जिल्हा, प्रमाण सांगा…”) instead of navigating to an empty Decision Workspace
+- **WhatsApp share:** net-realization tool card has a `Share on WhatsApp →` deep link with best-mandi summary (farmer-to-farmer spread)
 
 ## Pre-embed (skip cold start)
 ```

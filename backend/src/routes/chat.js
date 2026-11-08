@@ -675,6 +675,16 @@ async function executeIntent({ message, language, context = {}, classification, 
       };
     }
     const params = extractParams(message, context);
+    // First-run onboarding: if economics intent has no crop/district yet, ask
+    // in the farmer's language instead of navigating to an empty workspace.
+    if (needsEconomics && (!params.crop || !params.district)) {
+      const ask = {
+        en: 'To compare mandis, tell me: (1) crop, (2) district, (3) quantity in quintals. Example: "Onion, Nashik, 10 quintals".',
+        mr: 'बाजार तुलना करण्यासाठी सांगा: (1) पीक, (2) जिल्हा, (3) प्रमाण क्विंटलमध्ये. उदाहरण: "कांदा, नाशिक, 10 क्विंटल".',
+        hi: 'मण्डियों की तुलना के लिए बताइए: (1) फसल, (2) जिला, (3) मात्रा क्विंटल में। उदाहरण: "प्याज, नाशिक, 10 क्विंटल"।',
+      }[language] || 'To compare mandis, tell me your crop, district and quantity in quintals.';
+      return { text: ask, suggestions };
+    }
     const basePath = NAVIGATION_PATHS[handler];
     const fullPath = PREFILL_NAV_HANDLERS.has(handler) ? buildPrefillPath(basePath, params) : basePath;
     const fragments = [];
