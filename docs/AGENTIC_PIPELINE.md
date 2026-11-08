@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–19: 200-doc corpus + final audit). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–20: PR #2 opened + corpus 217). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -134,6 +134,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 19 (final push)
 - Corpus ~200 docs (+12: maize detasseling, wheat straw, rice DSR, onion grading, potato seed, brinjal/cabbage harvest, guava training, pond contamination, borewell logging, extension bridge, arrival timing)
 - `backend/package.json` stays `1.1.0-agentic`; release runs on `feat/agentic-platform-phase0-4` (16 commits), PR ready in browser
+
+## Phase 20 (PR opened)
+- `scripts/create-pr.py` — GitHub API PR opener using the stored git credential (no token printed); created PR **#2** ✅ `https://github.com/Kissan-360/Kisan360_new/pull/2` (`feat/agentic-platform-phase0-4` → `backend/team-lead-core`)
+- Corpus verified **217 docs** (`python -c "import knowledge_base; print(len(...))" = 217`)
+- Branch now **17 commits**, tag `v1.1.0-agentic` live
 
 ## Pre-embed (skip cold start)
 ```
