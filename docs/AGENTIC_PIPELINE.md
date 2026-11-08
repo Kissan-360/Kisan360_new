@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–17: FPO tool + dashboard impact + corpus ~198). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–18: release candidate v1.1.0-agentic). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -126,6 +126,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `chat.js fetchFpoPoolTool()` — `navigate_pathways` now returns `toolResults.fpo` alongside economics (FPO pooling surfaced in chat cards)
 - `Dashboard.tsx` impact strip — honest decision-support stats (421-row snapshot, net formula, chat-first CTA) without vanity numbers
 - Corpus ~198 docs (+10: whitefly/armyworm cycles, boron/zinc, rice AWD, mulch, fallow, mineral, propagation, grading premium)
+
+## Phase 18 (release candidate)
+- `docs/RELEASE_NOTES_1.1.0-agentic.md` — headline, verified matrix, farmer-facing highlights, honest limits; PR link + template note
+- Tag `v1.1.0-agentic` (matches `backend/package.json`)
 
 ## Pre-embed (skip cold start)
 ```
