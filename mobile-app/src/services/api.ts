@@ -39,6 +39,7 @@ export const Endpoints = {
     api.post("/chat", { message, context, language, mode }),
   gradeAssessment: (payload: Record<string, unknown>) =>
     api.post("/grade-assessment", payload),
+  fpoPool: (payload: Record<string, unknown>) => api.post("/fpo/pool", payload),
   // ── Disease: backend accepts multipart OR base64 JSON ──
   diseaseDetectBase64: (imageData: string, cropType?: string) =>
     api.post("/disease/detect", { imageData, cropType }),

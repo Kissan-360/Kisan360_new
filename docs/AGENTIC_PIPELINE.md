@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–13: code splitting + onboarding test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–14: mobile FPO + Render paid blueprint). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -108,6 +108,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 13 (performance + tests)
 - `web-app/src/App.tsx`: route-level `React.lazy` + `Suspense` — initial bundle drops; heavy pages (Disease, GradeCrop, Decision) load on demand (fixes 1.6 MB chunk warning baseline)
 - `backend/scripts/e2e-agent.js`: onboarding assertion (Marathi ask, no premature navigate) — now 9 checks
+
+## Phase 14 (release polish)
+- Mobile `FpoScreen` + `Endpoints.fpoPool()` → `POST /fpo/pool` (bulk tier ≥40 q, pooled vs individual uplift)
+- `render-optional.yaml` — paid-plan blueprint for RAG (`:8001`) + disease (`:8000`); free `render.yaml` stays 3-service with graceful degradation
+- `backend/package.json` → `1.1.0-agentic`
 
 ## Pre-embed (skip cold start)
 ```
