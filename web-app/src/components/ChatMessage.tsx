@@ -30,6 +30,7 @@ export interface ToolDisease {
   recommendations?: string[];
   mlLatency?: number;
   cropType?: string;
+  top5Predictions?: Array<{ label?: string; class?: any; confidence: number } | { disease?: string; confidence: number }>;
 }
 
 export interface ToolFpo { tool?: string; crop?: string; district?: string; quantity?: number; note?: string }
@@ -114,6 +115,13 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
             {(message.disease as ToolDisease).treatment ? <div className="mt-1">Treatment: {(message.disease as ToolDisease).treatment}</div> : null}
             {(message.disease as ToolDisease).recommendations?.length ? (
               <ul className="mt-1 space-y-0.5">{(message.disease as ToolDisease).recommendations!.map((r, i) => <li key={i}>• {r}</li>)}</ul>
+            ) : null}
+            {(message.disease as ToolDisease).top5Predictions?.length ? (
+              <ul className="mt-1 space-y-0.5 text-[11px] text-stone-500">
+                {(message.disease as ToolDisease).top5Predictions!.slice(0, 3).map((p: any, i: number) => (
+                  <li key={i}>#{i + 1} {p.label || p.disease || p.class} — {((p.confidence || 0) * 100).toFixed(0)}%</li>
+                ))}
+              </ul>
             ) : null}
             <div className="mt-1 text-[10px] text-stone-500">MobileNetV2 via FastAPI · OOD-gated</div>
           </div>

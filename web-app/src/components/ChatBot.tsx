@@ -175,6 +175,7 @@ const ChatBot = () => {
             detectedDisease: data.detectedDisease, confidence: data.confidence,
             severity: data.severity, treatment: data.treatment,
             recommendations: data.recommendations, mlLatency: data.mlLatency, cropType: data.cropType,
+            top5Predictions: data.top5Predictions,
           },
         });
       } catch {

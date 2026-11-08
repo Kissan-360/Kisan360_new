@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–31: HTTP E2E x7 + diagnostics). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–32: chat polish + mobile persistence). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -180,6 +180,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 31 (HTTP E2E deepened)
 - `backend/scripts/e2e-http.js` — 5 → 7 steps: FPO pooling (SKIP if DB offline) + disease safety gate (no-image → 400, proves OOD path without ML)
+
+## Phase 32 (chat polish)
+- `ChatMessage` disease card now shows **top-3 of top5 predictions** (`top5Predictions` plumbed from `ChatBot` photo upload through to render)
+- `mobile-app/ChatScreen` — history persisted via `AsyncStorage` (`kisan360-mobile-chat`, last 10) + Clear button (parity with web localStorage)
 
 ## Pre-embed (skip cold start)
 ```
