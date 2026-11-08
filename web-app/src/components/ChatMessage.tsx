@@ -33,6 +33,7 @@ export interface ToolDisease {
 }
 
 export interface ToolFpo { tool?: string; crop?: string; district?: string; quantity?: number; note?: string }
+export interface ToolFpoFull { tool?: string; crop?: string; district?: string; quantity?: number; pooledNetPerQuintal?: number; individualNetPerQuintal?: number; note?: string }
 
 export interface ChatMessageItem {
   id: string;
@@ -40,7 +41,7 @@ export interface ChatMessageItem {
   text: string;
   intent?: string;
   intents?: string[];
-  toolResults?: { netRealization?: ToolNetRealization; schemes?: ToolSchemes; weather?: ToolWeather; fpo?: ToolFpo };
+  toolResults?: { netRealization?: ToolNetRealization; schemes?: ToolSchemes; weather?: ToolWeather; fpo?: ToolFpoFull };
   disease?: ToolDisease | string;
 }
 
@@ -115,6 +116,15 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
               <ul className="mt-1 space-y-0.5">{(message.disease as ToolDisease).recommendations!.map((r, i) => <li key={i}>• {r}</li>)}</ul>
             ) : null}
             <div className="mt-1 text-[10px] text-stone-500">MobileNetV2 via FastAPI · OOD-gated</div>
+          </div>
+        ) : null}
+        {!isUser && message.toolResults?.fpo ? (
+          <div className="mt-2 w-full max-w-sm rounded-xl border border-emerald-100 bg-white p-3 text-xs leading-relaxed text-stone-700">
+            <div className="font-semibold text-emerald-900">FPO pooling — {message.toolResults.fpo.crop} · {message.toolResults.fpo.district} · {message.toolResults.fpo.quantity}q</div>
+            <div className="mt-0.5">{message.toolResults.fpo.note || "Pooled vs individual comparison"}</div>
+            {message.toolResults.fpo.pooledNetPerQuintal != null ? (
+              <div className="mt-1 font-semibold text-emerald-800">Pooled net: Rs {message.toolResults.fpo.pooledNetPerQuintal}/q</div>
+            ) : null}
           </div>
         ) : null}
         {!isUser && message.toolResults?.weather?.current ? (

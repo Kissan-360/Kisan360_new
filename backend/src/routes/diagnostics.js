@@ -67,6 +67,12 @@ router.get('/', optionalAuth, async (req, res) => {
       note: 'Backend Firebase = Admin SDK for ID-token verification only. Demo auth (demo-login) needs neither Firebase nor MongoDB.',
     },
     scheduler: { ...getSchedulerHealth() }, // H
+    agent: {
+      model: 'llama-3.3-70b-versatile',
+      rag: (process.env.RAG_SERVICE_URL || 'http://localhost:8001'),
+      calc: (process.env.NET_REALIZATION_URL || 'http://localhost:8002'),
+      note: 'agent/rag/calc health is probed via /health; this block is config only',
+    },
     marketIngestion: null, // I, filled below
     readTest: { ok: false, detail: 'skipped — not connected' }, // E
     writeTest: { ok: false, detail: 'skipped — not connected' }, // F

@@ -269,6 +269,14 @@ CROP_KNOWLEDGE = [
     {"id": "general_mgmt_011", "content": "Extension officer bridge: take a photo + market card + soil report to the officer — three facts beat ten questions. Ask for the district package, not a general lecture.", "tags": ["general", "extension"]},
     {"id": "market_012", "content": "Timing arrivals: morning arrival (before 9 am) catches the first auction where traders bid hottest. Evening arrival takes whatever is left. Plan transport the night before.", "tags": ["market", "arrival", "timing"]},
 
+    # Phase 23: harvest + storage depth
+    {"id": "harvest_001", "content": "Mobile harvester hiring: book 2 weeks ahead at peak season, keep a spare engine and belt list. Harvest at physiological maturity — delayed harvest loses 5-10% grain to shattering and birds.", "tags": ["harvest", "harvester", "machinery"]},
+    {"id": "harvest_002", "content": "Winnowing wind: 3-4 m/s at 1.5 m height separates grain from chaff. Clean floor, 2-3 turnings, then bag. Storage without winnowing invites weevils within 30 days.", "tags": ["harvest", "winnowing", "storage"]},
+    {"id": "storage_002", "content": "Pulse storage: dry to 10% moisture, add 5% neem powder or 500g alum per 100kg. Tightly sealed bins beat gunny bags — weevils thrive in loose sacks.", "tags": ["storage", "pulse", "weevil"]},
+    {"id": "storage_003", "content": "Vegetable grading line: 3 tiers (extra, marketable, cull). Cull is compost, not market. Grading at farm gate saves 1 mandi trip and lifts average price 10-15%.", "tags": ["storage", "vegetable", "grading"]},
+    {"id": "soil_015", "content": "Compost pit: 1.5m x 1m x 1m, layers of dung + straw + soil, water weekly, covered with polythene. Ready in 90 days when dark and crumbly. Turn every 3 weeks for air.", "tags": ["soil", "compost"]},
+    {"id": "general_mgmt_012", "content": "Farm diary economics: last season's notes predict this season's pest dates within ±7 days. Write sowing, rain, pest, spray and price on one page — it is your best advisory source after 2 years.", "tags": ["general", "diary", "record"]},
+
     # Government schemes (factual, verify on official portal)
     {"id": "scheme_001", "content": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi) provides Rs 6,000 per year to eligible farmer families in three Rs 2,000 installments (April, August, December) via DBT. Eligibility depends on land records and government rules. Verify status on pmkisan.gov.in.", "tags": ["scheme", "pm-kisan", "income", "dbt"]},
     {"id": "scheme_002", "content": "PMFBY (Pradhan Mantri Fasal Bima Yojana) is crop insurance for notified crops against natural calamities, pests and diseases. Farmers pay a notified premium (capped by crop category); claims follow official crop-cutting and weather-trigger rules. Enrolment window and cut-off dates vary by season and state.", "tags": ["scheme", "pmfby", "insurance", "crop"]},

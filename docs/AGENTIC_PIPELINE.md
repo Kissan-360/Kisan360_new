@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–22: CI mobile + agent jobs). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–23: FPO card + agent diagnostics + corpus ~223). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -143,6 +143,11 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 22 (CI coverage)
 - `.github/workflows/ci.yml`: new `mobile` job (`npm ci` + `tsc --noEmit`) and `agent` job (`pydantic+numpy eval_agent.py`, `eval-intents.js`, `smoke-agent.js`, `e2e-agent.js`); `gate` now needs `[backend, web, calculator, mobile, agent, ui]`
 - Base branch `backend/team-lead-core` updated (`.gitignore` conflict resolved, `5462d7a` merged)
+
+## Phase 23 (FPO + diagnostics + corpus)
+- `ChatMessage` FPO card (pooled net + note) when `toolResults.fpo` fires
+- `GET /api/diagnostics` → `agent` block (model + RAG/calc URLs, config-only, no secrets)
+- Corpus ~223 docs (+6: mobile harvester, winnowing, pulse storage, veg grading, compost pit, farm diary)
 
 ## Pre-embed (skip cold start)
 ```
