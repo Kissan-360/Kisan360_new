@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Brain, Languages, MessageCircle, Minus, Zap, X } from 'lucide-react';
+import { Brain, Languages, MessageCircle, Minus, Trash2, Zap, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ChatInput from './ChatInput';
 import ChatMessage, { ChatMessageItem } from './ChatMessage';
@@ -245,6 +245,21 @@ const ChatBot = () => {
           </div>
         </div>
         <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => {
+              setMessages([
+                { id: makeId(), role: 'assistant', text: t('chat.welcome') },
+                { id: `${makeId()}-system`, role: 'system', text: t('chat.systemHint') },
+              ]);
+              try { localStorage.removeItem(HISTORY_KEY); } catch { /* ignore */ }
+            }}
+            className="flex h-9 w-9 items-center justify-center rounded-full text-emerald-50 transition hover:bg-white/10"
+            aria-label="Clear history"
+            title="Clear history"
+          >
+            <Trash2 className="h-4 w-4" aria-hidden="true" />
+          </button>
           <button
             type="button"
             onClick={() => setOpen(false)}

@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–29: final audit v1.2.0). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–30: clear history + keyword RAG test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -173,6 +173,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `docs/FINAL_AUDIT.md` — measured counts (641 Jest, 250 docs, 5/5 live E2E), deployed stack, ship steps
 - Tag `v1.2.0-agentic` (matches `backend/package.json` 1.2.0-agentic)
 - Base `backend/team-lead-core` is the release line; `feat/agentic-platform-phase0-4` is merged + archived
+
+## Phase 30 (history + offline RAG test)
+- `ChatBot` clear-history button (trash) — wipes `localStorage` history and restores the welcome message
+- `ml-service/test_keyword_fallback.py` — unittest for `retrieve_keyword` (no torch needed): relevant doc returned, empty query safe, score present
 
 ## Pre-embed (skip cold start)
 ```
