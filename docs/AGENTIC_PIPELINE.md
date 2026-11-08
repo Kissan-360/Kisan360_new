@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–20: PR #2 opened + corpus 217). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–22: CI mobile + agent jobs). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -139,6 +139,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `scripts/create-pr.py` — GitHub API PR opener using the stored git credential (no token printed); created PR **#2** ✅ `https://github.com/Kissan-360/Kisan360_new/pull/2` (`feat/agentic-platform-phase0-4` → `backend/team-lead-core`)
 - Corpus verified **217 docs** (`python -c "import knowledge_base; print(len(...))" = 217`)
 - Branch now **17 commits**, tag `v1.1.0-agentic` live
+
+## Phase 22 (CI coverage)
+- `.github/workflows/ci.yml`: new `mobile` job (`npm ci` + `tsc --noEmit`) and `agent` job (`pydantic+numpy eval_agent.py`, `eval-intents.js`, `smoke-agent.js`, `e2e-agent.js`); `gate` now needs `[backend, web, calculator, mobile, agent, ui]`
+- Base branch `backend/team-lead-core` updated (`.gitignore` conflict resolved, `5462d7a` merged)
 
 ## Pre-embed (skip cold start)
 ```
