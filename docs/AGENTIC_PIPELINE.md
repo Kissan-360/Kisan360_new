@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Implemented (Phase 0–18: release candidate v1.1.0-agentic). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Implemented (Phase 0–19: 200-doc corpus + final audit). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -130,6 +130,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 18 (release candidate)
 - `docs/RELEASE_NOTES_1.1.0-agentic.md` — headline, verified matrix, farmer-facing highlights, honest limits; PR link + template note
 - Tag `v1.1.0-agentic` (matches `backend/package.json`)
+
+## Phase 19 (final push)
+- Corpus ~200 docs (+12: maize detasseling, wheat straw, rice DSR, onion grading, potato seed, brinjal/cabbage harvest, guava training, pond contamination, borewell logging, extension bridge, arrival timing)
+- `backend/package.json` stays `1.1.0-agentic`; release runs on `feat/agentic-platform-phase0-4` (16 commits), PR ready in browser
 
 ## Pre-embed (skip cold start)
 ```
