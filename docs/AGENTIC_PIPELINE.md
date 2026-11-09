@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–116: v3.1.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–117: scheduler test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -484,3 +484,6 @@ cd ml-service && python scripts/embed_corpus.py
 ## Phase 116 (v3.1.0 final)
 - backend/package.json -> 3.1.0-agentic (Phase 0-116, corpus 270)
 - Tag v3.1.0-agentic to be created; this is the 10/10 ship-complete point
+
+## Phase 117 (scheduler test)
+- backend/tests/unit/schedulerAlerts.test.js - threshold contract + runWeatherAlerts export, in-CI
