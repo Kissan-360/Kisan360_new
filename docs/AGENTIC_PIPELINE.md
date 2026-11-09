@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–44: mobile server history + test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–45: PWA install prompt). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -227,6 +227,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 44 (mobile history parity + test)
 - `mobile-app/ChatScreen` loads `GET /chat/history` (server, cross-device) on mount; `AsyncStorage` stays as the offline cache; `Endpoints.chatHistory()` added
 - `backend/tests/unit/chatHistory.test.js` — schema contract (text cap, index, role enum), in-CI
+
+## Phase 45 (PWA install)
+- `web-app/src/components/InstallPrompt.tsx` — `beforeinstallprompt` handler (“Install Kisan360” card, desktop Chrome/Android); iOS users still get Share → Add to Home; wired in `App.tsx` inside `AuthProvider`
+- Offline queue (web + mobile) already persisted — install makes the home-screen entry real for field use
 
 ## Pre-embed (skip cold start)
 ```

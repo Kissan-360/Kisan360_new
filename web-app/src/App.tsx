@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './hooks/useAuth';
 import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
 import ErrorBoundary from './components/ErrorBoundary';
+import InstallPrompt from './components/InstallPrompt';
 import { I18nProvider } from './i18n';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
@@ -59,6 +60,7 @@ function App() {
       <ErrorBoundary>
       <I18nProvider>
       <AuthProvider>
+        <InstallPrompt />
         <Suspense fallback={<div className="flex items-center justify-center h-screen text-stone-400">Loading…</div>}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
