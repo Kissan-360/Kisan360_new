@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–70: v1.6.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–71: history test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -315,6 +315,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 70 (v1.6.0 final)
 - `backend/package.json` → **`1.6.0-agentic`** — corpus 250, Phases 0–70, all gates green
 - Tag `v1.6.0-agentic` to be created from `backend/team-lead-core` after full-suite verification
+
+## Phase 71 (history test)
+- `backend/tests/unit/chatHistoryEndpoints.test.js` — ChatHistory model validation (user/assistant accept, empty text rejects) in-CI
 - This closes the build loop: Phases 0–70 are the complete 10/10 product (agent + RAG 250 + Groq 70B + MobileNetV2 + live weather/commodity + React + React Native + Render + Razorpay test + offline queues + history + share/copy + CI + E2E 8/8 live)
 
 ## Pre-embed (skip cold start)
