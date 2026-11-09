@@ -1611,6 +1611,18 @@ const TradePage = () => {
                 // Razorpay test checkout: create-order → checkout → verify.
                 // Test keys only; simulated fallback when keys are missing.
                 (async () => {
+                  // Ensure checkout.js is present (fallback to simulate if it fails to load)
+                  if (!(window as any).Razorpay) {
+                    try {
+                      await new Promise<void>((resolve, reject) => {
+                        const s = document.createElement('script');
+                        s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                        s.onload = () => resolve();
+                        s.onerror = () => reject(new Error('checkout.js failed'));
+                        document.body.appendChild(s);
+                      });
+                    } catch {}
+                  }
                   try {
                     const orderRes = await apiFetch(`${API_URL}/payments/create-order`, {
                       method: 'POST',

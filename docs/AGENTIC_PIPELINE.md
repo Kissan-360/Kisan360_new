@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–93: WhatsApp test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–94: Razorpay script fix). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -388,6 +388,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 93 (WhatsApp test)
 - `backend/tests/unit/whatsapp.test.js` — 400 on missing `to`, 503 when not configured (mocked auth, in-CI, no Cloud API)
+
+## Phase 94 (Razorpay script fix)
+- `TradePage` — dynamically loads `checkout.razorpay.com/v1/checkout.js` before `create-order` (was checking `window.Razorpay` without ever loading it, so checkout silently fell back to simulate)
 
 ## Pre-embed (skip cold start)
 ```
