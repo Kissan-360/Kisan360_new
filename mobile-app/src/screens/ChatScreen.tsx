@@ -3,6 +3,10 @@ import { ActivityIndicator, Button, FlatList, ScrollView, Share, Text, TextInput
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Endpoints } from "../services/api";
 
+async function copyText(text: string) {
+  try { await Share.share({ message: text }); } catch {}
+}
+
 const HISTORY_KEY = "kisan360-mobile-chat";
 const QUEUE_KEY = "kisan360-mobile-chat-queue";
 
@@ -143,9 +147,14 @@ export default function ChatScreen() {
         keyExtractor={(m) => m.id}
         scrollEnabled={false}
         renderItem={({ item }) => (
-          <Text style={{ paddingVertical: 4, color: item.role === "user" ? "#006b2c" : "#333" }}>
-            {item.role === "user" ? "You: " : "Kisan: "}{item.text}
-          </Text>
+          <View style={{ paddingVertical: 4, flexDirection: "row", justifyContent: "space-between" }}>
+            <Text style={{ flex: 1, color: item.role === "user" ? "#006b2c" : "#333" }}>
+              {item.role === "user" ? "You: " : "Kisan: "}{item.text}
+            </Text>
+            {item.role === "assistant" ? (
+              <Button title="Copy" onPress={() => copyText(item.text)} />
+            ) : null}
+          </View>
         )}
       />
       {reply?.toolResults?.netRealization?.topMandis?.length ? (

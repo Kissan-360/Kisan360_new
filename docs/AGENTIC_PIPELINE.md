@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–68: history clear). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–69: mobile copy). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -308,6 +308,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 68 (history clear)
 - `DELETE /api/chat/history` — clears the server rows for the calling user (best-effort, offline DB → note); web clear button + mobile Clear now wipe local + server (previously local-only, server rows lived until TTL)
+
+## Phase 69 (mobile copy)
+- `mobile-app/ChatScreen` — **Copy** button on assistant bubbles (`Share.share` fallback for clipboard-less Android) — parity with web `ChatMessage` copy
 
 ## Pre-embed (skip cold start)
 ```
