@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–110: v2.3.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–111: Hindi corpus). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -440,6 +440,13 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 109 (disease top5)
 - DiseaseDetection.tsx - Top-5 model predictions (label + pct) under treatment; parity with chat disease card (top-3)
+
+## Phase 110 (v2.3.0 final)
+- backend/package.json -> 2.3.0-agentic (Phase 0-110, corpus 260)
+- Tag v2.3.0-agentic to be created; this closes the build loop (110 phases, 10/10 product)
+
+## Phase 111 (Hindi corpus)
+- Corpus 260 -> 270 docs (+10 HI translations mirroring MR: rice blast, onion thrips, market net, soil pH, heat, PM-KISAN/FBY, cotton pink, sugarcane red rot, groundnut tikka, tomato blight) - Hindi queries now retrieve in-language docs; MR+Hindi parity for farmer language experience
 
 ## Pre-embed (skip cold start)
 ```
