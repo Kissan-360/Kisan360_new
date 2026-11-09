@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–96: WhatsApp alerts). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–97: WhatsApp alerts test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -398,6 +398,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 96 (WhatsApp alerts)
 - `POST /api/notifications/whatsapp/weather-alert` — proactive severe-weather alert (`weatherAlerts.shouldAlert`: temp >40 / humidity >85 / rain) → WhatsApp Cloud template (`mr`); `service` in `backend/src/services/whatsappAlerts.js`; 200 with `alert: null` when no severe weather (honest, no spam)
+
+## Phase 97 (WhatsApp alerts test)
+- `backend/tests/unit/whatsappAlerts.test.js` — threshold logic (heat / humidity / rain / mild-no-alert), in-CI, no Cloud API
 
 ## Pre-embed (skip cold start)
 ```
