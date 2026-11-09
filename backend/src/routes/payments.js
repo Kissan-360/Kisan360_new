@@ -54,6 +54,36 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// GET /api/payments/:id/upi-intent — TEST-ONLY UPI intent preview.
+// Returns a upi://pay deep link for a SIMULATED payment. Never settles,
+// releases, transitions, or writes anything. The payee + amount come from
+// server env / the stored Payment — never the client.
+router.get('/:id/upi-intent', async (req, res) => {
+  try {
+    const payment = await Payment.findById(req.params.id);
+    if (!payment) return res.status(404).json({ success: false, error: 'Payment not found' });
+    if (payment.farmerUid !== req.user.uid && !isBuyerSide(req.user.role)) {
+      return res.status(403).json({ success: false, error: 'Not your payment' });
+    }
+    const result = require('../services/upiIntent').buildTestUpiIntent(payment);
+    if (!result.ok) {
+      return res.status(result.status).json({ success: false, error: result.reason, testMode: true, mocked: true });
+    }
+    res.json({
+      success: true,
+      testMode: true,
+      mocked: true,
+      gateway: 'upi_intent_preview',
+      upi: result.intent,
+      note: result.intent.note,
+    });
+  } catch (error) {
+    if (error.name === 'CastError') return res.status(404).json({ success: false, error: 'Payment not found' });
+    logger.error('UPI intent error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to build UPI test intent' });
+  }
+});
+
 // POST /api/payments/simulate/accept-latest — FARMER-SIDE DEMO CONTROL:
 // simulates a buyer accepting the farmer's most recent SENT offer (single-device
 // demo ladder). Mirrors offers.js accept logic — offer ACCEPTED, payment created

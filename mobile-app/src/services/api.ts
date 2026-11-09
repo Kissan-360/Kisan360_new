@@ -34,6 +34,7 @@ export const Endpoints = {
   listPayments: () => api.get("/payments"),
   releasePayment: (id: string) =>
     api.post(`/payments/${id}/simulate-release`),
+  upiIntent: (id: string) => api.get(`/payments/${id}/upi-intent`),
   failPayment: (id: string) => api.post(`/payments/${id}/simulate-failure`),
   chat: (message: string, context: Record<string, unknown>, language = "en", mode = "action") =>
     api.post("/chat", { message, context, language, mode }),

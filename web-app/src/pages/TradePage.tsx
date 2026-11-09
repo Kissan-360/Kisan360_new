@@ -21,7 +21,7 @@ import {
   Package, Users, Send, Wallet, BadgeCheck, Search, FlaskConical, AlertTriangle,
   Target, Plus, X, Check, ArrowRight, MapPin, FileText, LifeBuoy, TrendingUp,
   CheckCircle2, AlertCircle, Banknote, Receipt, Clock, Scale, Info, Download,
-  History,
+  History, Smartphone,
 } from 'lucide-react';
 
 // Trade page — HLD P0.3/P0.4 screens: create a lot, see matched buyers with
@@ -870,6 +870,27 @@ const TradePage = () => {
     }
   };
 
+  // Test-only UPI intent: fetch the server-built deep link, copy it, and try
+  // to open it. This never settles/releases — the backend returns a preview
+  // for simulated payments only when PAYMENTS_TEST_MODE=1 + a test payee exist.
+  const openUpiIntent = async (paymentId: string) => {
+    setError('');
+    setNotice('');
+    try {
+      const res = await apiFetch(`${API_URL}/payments/${paymentId}/upi-intent`);
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.upi?.uri) {
+        setError(data?.error || 'UPI test intent unavailable');
+        return;
+      }
+      try { await navigator.clipboard.writeText(data.upi.uri); } catch { /* clipboard may be blocked */ }
+      window.location.href = data.upi.uri;
+      setNotice('UPI test intent copied/opened — no settlement was made.');
+    } catch {
+      setError('UPI test intent failed');
+    }
+  };
+
   // ── Active deal: latest lot → its latest offer → its payment ─────────────
   // The 7-step payment timeline, the receipt, and the demo simulation all
   // follow the CURRENT deal — never `.some()` over all history. The old
@@ -1713,6 +1734,11 @@ const TradePage = () => {
                             <PrimaryButton className="text-xs !px-3 !py-1.5" icon={Banknote} onClick={() => act(`/payments/${p._id}/release`, 'Funds released to the farmer (simulated).')}>
                               Release funds
                             </PrimaryButton>
+                          )}
+                          {(p.status === 'HELD' || p.status === 'PENDING') && (
+                            <GhostButton className="text-xs !px-3 !py-1.5" onClick={() => openUpiIntent(p._id)}>
+                              <Smartphone size={13} /> UPI test
+                            </GhostButton>
                           )}
                           {/* Every completed deal's receipt stays re-openable —
                               the celebration modal is not the only copy. */}

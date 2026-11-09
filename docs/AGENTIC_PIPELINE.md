@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–123: producer phone-on-file trust signal). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–124: test-only UPI intent flow). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -514,3 +514,9 @@ cd ml-service && python scripts/embed_corpus.py
 - `GET /api/lots/available` now annotates each lot with `producerPhoneOnFile`; note explicitly says this is a WhatsApp opt-in contact signal, not KYC identity proof
 - Web `BuyCrops` shows a “Phone on file” badge (EN/MR/HI) when the signal is present
 - Added `backend/tests/unit/producerTrust.test.js` and an integration assertion in `buyerMarketplace.test.js` covering the opt-in → badge flow
+
+## Phase 124 (test-only UPI intent flow)
+- Added `backend/src/services/upiIntent.js` — pure builder for `upi://pay` intents; explicit `PAYMENTS_TEST_MODE=1` gate, server-env payee VPA/name only, stored amount only, simulated payments only
+- Added `GET /api/payments/:id/upi-intent` — returns the encoded intent for owner/buyer-side callers; never settles, releases, transitions, or writes state
+- Web `TradePage` gains a “UPI test” button on HELD/PENDING rows: fetches, copies, and attempts to open the intent with a no-settlement notice
+- Mobile `Endpoints.upiIntent(id)` added for parity; `backend/tests/unit/upiIntent.test.js` covers gating, VPA validation, encoding, and refusal cases
