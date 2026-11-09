@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–127: price-alert UI). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–128: mobile price-alert UI). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -537,3 +537,7 @@ cd ml-service && python scripts/embed_corpus.py
 - Web `NotificationBell` now manages price alerts in-panel: list, create (crop/market/direction/target), pause/resume, and delete; `price_alert` items render with a trend icon and EN/MR/HI text
 - Added EN/MR/HI labels for the alert section and trigger text
 - Mobile `Endpoints` gained price-alert CRUD parity for future in-app management
+
+## Phase 128 (mobile price-alert UI)
+- Mobile `NotificationsScreen` now manages price alerts in-app: list, create (crop/market/direction/target), pause/resume, and delete via the Phase 126 endpoints
+- Mobile notification service gained typed price-alert fetch/create/update/delete helpers
