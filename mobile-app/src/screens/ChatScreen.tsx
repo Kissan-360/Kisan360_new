@@ -19,6 +19,25 @@ export default function ChatScreen() {
   const [queued, setQueued] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [summarizing, setSummarizing] = useState(false);
+
+  const summarize = async () => {
+    setSummarizing(true);
+    try {
+      const res = await Endpoints.chatSummarize();
+      const summary = (res.data as any)?.summary;
+      if (summary) {
+        const next = [...messages, { id: `${Date.now()}-s`, role: "assistant" as const, text: `📌 ${summary}` }];
+        await persist(next);
+      } else {
+        setError((res.data as any)?.error || "Not enough history to summarize");
+      }
+    } catch (e: any) {
+      setError(e?.response?.data?.error || e.message || "Summarize failed");
+    } finally {
+      setSummarizing(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -133,6 +152,9 @@ export default function ChatScreen() {
         </View>
         <View>
           <Button title="Clear" onPress={async () => { await AsyncStorage.removeItem(HISTORY_KEY); try { await Endpoints.clearChatHistory(); } catch {} setMessages([]); setReply(null); }} />
+        </View>
+        <View>
+          <Button title={summarizing ? "…" : "✨ Summary"} onPress={summarize} />
         </View>
         {queued.length ? (
           <View style={{ flex: 1 }}>

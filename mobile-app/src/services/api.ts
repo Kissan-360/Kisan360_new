@@ -38,6 +38,7 @@ export const Endpoints = {
   chat: (message: string, context: Record<string, unknown>, language = "en", mode = "action") =>
     api.post("/chat", { message, context, language, mode }),
   chatHistory: () => api.get("/chat/history"),
+  chatSummarize: () => api.post("/chat/summarize", {}),
   clearChatHistory: () => api.delete("/chat/history"),
   gradeAssessment: (payload: Record<string, unknown>) =>
     api.post("/grade-assessment", payload),

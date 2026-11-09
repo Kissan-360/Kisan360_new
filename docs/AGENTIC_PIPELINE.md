@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–82: health badge). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–83: mobile summarize). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -352,6 +352,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 82 (health badge)
 - `Dashboard.tsx` health badge — `GET /health` (API db mode + calc status + scheduler runs) so farmers/judges see “● OK / DEGRADED / CHECK” before they start a decision
+
+## Phase 83 (mobile summarize)
+- `mobile-app/ChatScreen` — **✨ Summary** button → `POST /chat/summarize` (last 10 turns, Groq recap) rendered as `📌 …` in history; parity with web chat’s Summarize
 
 ## Pre-embed (skip cold start)
 ```
