@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–74: E2E feedback step). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–75: picker parity test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -327,6 +327,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 74 (E2E feedback)
 - `e2e-http.js` — 8 → 9 steps: `POST /chat/feedback` (up) proves the quality-measurement write path end-to-end
+
+## Phase 75 (picker parity test)
+- `mobile-app/src/__tests__/maharashtra.test.ts` — crop/district lists have >15 entries, contain Onion/Nashik, no duplicates (prevents picker drift from web lists); `jest` + `ts-jest` added to `mobile-app`
 
 ## Pre-embed (skip cold start)
 ```
