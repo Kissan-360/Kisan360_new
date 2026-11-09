@@ -185,6 +185,7 @@ jobs:
         run: |
           pip install pydantic numpy
           python eval_agent.py
+          python -m unittest test_agent_graph test_keyword_fallback test_net_realization -v
 
       - name: Backend agent checks
         working-directory: backend

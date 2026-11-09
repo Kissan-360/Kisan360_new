@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–60: LangGraph test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–61: CI full Python suite). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -283,6 +283,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 60 (LangGraph test)
 - `ml-service/test_agent_graph.py` — unittest for `run_agent_graph` (injected retrieve/generate): intent + tool plan + structured output; pure-Python or LangGraph both pass (no torch needed)
+
+## Phase 61 (CI full Python)
+- `.github/workflows/ci.yml` agent job now runs `test_agent_graph test_keyword_fallback test_net_realization -v` (34 tests) — not just `eval_agent.py`
 
 ## Pre-embed (skip cold start)
 ```
