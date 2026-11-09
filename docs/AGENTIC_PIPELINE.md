@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–57: Razorpay test gateway). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–58: Razorpay webhook + test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -272,6 +272,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `Payment` model: `gateway`, `razorpayOrderId/PaymentId/Signature`; demo simulate endpoints untouched
 - Web: Trade → `Pay via Razorpay (TEST)` loads checkout, verifies, releases; graceful fallback to simulate when keys missing
 - Env: `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` in `backend/.env.example` (test keys only)
+
+## Phase 58 (Razorpay webhook + test)
+- `razorpayGateway.verifyWebhook` (HMAC over raw body) + `POST /api/payments/webhook` — `payment.captured` → `HELD → RELEASED` (test mode, idempotent)
+- `RAZORPAY_WEBHOOK_SECRET` in `.env.example`; `backend/tests/unit/razorpayGateway.test.js` — signature primitives + demo-safe null when keys missing (in-CI, no network)
 
 ## Pre-embed (skip cold start)
 ```

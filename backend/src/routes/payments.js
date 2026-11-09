@@ -240,6 +240,36 @@ router.post('/verify', async (req, res) => {
   }
 });
 
+// POST /api/payments/webhook — Razorpay async settlement webhook (raw body, HMAC)
+router.post('/webhook', async (req, res) => {
+  try {
+    // Raw body captured in server.js (express.json verify); fall back to re-stringify
+    const rawBody = req.rawBody || JSON.stringify(req.body || {});
+    const sig = req.headers['x-razorpay-signature'];
+    const ok = require('../services/razorpayGateway').verifyWebhook(rawBody, sig);
+    if (!ok) return res.status(400).json({ success: false, error: 'Invalid webhook signature' });
+    const event = req.body?.event;
+    const entity = req.body?.payload?.payment?.entity;
+    if (event === 'payment.captured' && entity?.id) {
+      const payment = await Payment.findOne({ razorpayPaymentId: entity.id })
+        || await Payment.findOne({ razorpayOrderId: entity.order_id });
+      if (payment) {
+        payment.razorpayPaymentId = entity.id;
+        payment.gateway = 'razorpay_test';
+        payment.mocked = false;
+        if (payment.status === 'HELD') {
+          transition('payment', payment, 'RELEASED', { by: 'razorpay_webhook', note: 'Webhook payment.captured — funds released (test mode).' });
+        }
+        await payment.save();
+      }
+    }
+    res.json({ received: true });
+  } catch (error) {
+    logger.error('Webhook error:', error.message);
+    res.status(500).json({ success: false, error: 'Webhook failed' });
+  }
+});
+
 // POST /api/payments/:id/cancel — abort a PENDING/HELD payment (demo)
 router.post('/:id/cancel', async (req, res) => {
   try {

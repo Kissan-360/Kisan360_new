@@ -29,4 +29,15 @@ function verifySignature(orderId, paymentId, signature) {
   } catch { return false; }
 }
 
-module.exports = { getRazorpay, verifySignature };
+function verifyWebhook(rawBody, signature) {
+  const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+  if (!secret || !rawBody || !signature) return false;
+  const expected = crypto.createHmac('sha256', secret)
+    .update(rawBody)
+    .digest('hex');
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  } catch { return false; }
+}
+
+module.exports = { getRazorpay, verifySignature, verifyWebhook };
