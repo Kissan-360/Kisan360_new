@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–87: E2E transcribe step). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–88: continue decision). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -369,6 +369,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 87 (E2E transcribe)
 - `e2e-http.js` — 10 → 11 steps: `POST /transcribe` gate (no audio → 400, proves the endpoint without Whisper)
+
+## Phase 88 (continue decision)
+- `Dashboard.tsx` — “Continue” card from the saved `decisionContext` (crop · district · qty) with a one-tap jump back into Decision Workspace (farmer never re-enters the same lot)
 
 ## Pre-embed (skip cold start)
 ```

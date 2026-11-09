@@ -296,6 +296,7 @@ const Dashboard = () => {
 
   const saved = loadDecisionContext();
   const navigate = useNavigate();
+  const hasSavedDecision = !!(saved?.crop && saved?.district);
   // Market pulse follows the farmer's crop from the saved decision context
   // instead of a hardcoded Onion feed.
   const pulseCrop = saved?.crop || 'Onion';
@@ -418,6 +419,19 @@ const Dashboard = () => {
           <p className="mt-1 text-xs text-stone-600">
             API: {health.db || '—'} · Calculator: {health.mlServiceStatus || '—'} · Scheduler runs: {health.scheduler?.totalRuns ?? 0}
           </p>
+        </div>
+      )}
+
+      {/* ── continue last decision ── */}
+      {hasSavedDecision && (
+        <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 px-4 py-3 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Continue</p>
+            <p className="mt-0.5 text-sm font-semibold text-stone-900">{saved.crop} · {saved.district} · {saved.quantityQuintals || 10}q</p>
+          </div>
+          <button type="button" onClick={goToDecision} className="rounded-xl bg-emerald-800 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-900">
+            Continue decision →
+          </button>
         </div>
       )}
 
