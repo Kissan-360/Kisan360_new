@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–52: merged branch deleted). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–53: demo video poster). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -253,6 +253,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 52 (branch cleanup)
 - Deleted merged `feat/agentic-platform-phase0-4` locally + on origin (was `fb87d08`) — `backend/team-lead-core` is the only line; tags `v1.1.0–v1.4.0` retained
+
+## Phase 53 (demo video poster)
+- `LandingPage` — “Watch the 5-minute demo” section (poster `/farmer-ramesh-256.png`, `src=/demo.mp4`, graceful 404 → poster; “Try as farmer (demo)” button wired to the existing one-tap demo sign-in)
 
 ## Pre-embed (skip cold start)
 ```

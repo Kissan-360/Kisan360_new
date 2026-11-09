@@ -1349,6 +1349,36 @@ const LandingPage: React.FC = () => {
         </Reveal>
       </section>
 
+      {/* --------------------------------------------------- DEMO VIDEO ---- */}
+      <section className="mx-auto max-w-6xl px-4 md:px-6 py-12">
+        <div className="overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50/80 to-white shadow-sm">
+          <div className="relative aspect-video w-full bg-stone-900">
+            <video
+              className="h-full w-full object-contain bg-stone-900"
+              poster="/farmer-ramesh-256.png"
+              controls
+              playsInline
+              preload="metadata"
+              src="/demo.mp4"
+            />
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+            <div>
+              <p className="text-sm font-bold text-stone-900">Watch the 5-minute demo</p>
+              <p className="text-xs text-stone-500">Marathi multi-intent chat → tool cards → disease → decision. If the video is offline, try the live widget above — same engine, same numbers.</p>
+            </div>
+            <button
+              type="button"
+              onClick={tryDemoFarmer}
+              disabled={demoBusy}
+              className="rounded-xl bg-emerald-800 px-4 py-2.5 text-xs font-bold text-white hover:bg-emerald-900 disabled:opacity-60"
+            >
+              {demoBusy ? 'Signing in…' : 'Try as farmer (demo) →'}
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* ---------------------------------------------------------- FOOTER -- */}
       <footer className="border-t border-white/5 bg-[#0b1120] py-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
