@@ -14,8 +14,15 @@ const QUEUE_KEY = "kisan360-mobile-chat-queue";
 
 interface Msg { id: string; role: "user" | "assistant"; text: string }
 
+const I18N: Record<string, { placeholder: string; send: string; title: string }> = {
+  en: { placeholder: "Compare mandis for onion in Nashik", send: "Send", title: "Ask Kisan360" },
+  mr: { placeholder: "नाशिकमध्ये कांद्यासाठी बाजार तुलना करा", send: "पाठवा", title: "Kisan360 ला विचारा" },
+  hi: { placeholder: "नाशिक में प्याज के लिए मंडी तुलना करें", send: "भेजें", title: "Kisan360 से पूछें" },
+};
+
 export default function ChatScreen() {
   const [msg, setMsg] = useState("");
+  const [lang, setLang] = useState<"en" | "mr" | "hi">("en");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [reply, setReply] = useState<any>(null);
   const [queued, setQueued] = useState<string[]>([]);
@@ -99,7 +106,7 @@ export default function ChatScreen() {
     setLoading(true);
     setError("");
     try {
-      const res = await Endpoints.chat(nextQueued, {}, "en", "action");
+      const res = await Endpoints.chat(nextQueued, {}, lang, "action");
       setReply(res.data);
       await persist([...messages, userMsg, { id: `${Date.now()}-a`, role: "assistant", text: res.data?.text || "…" }]);
     } catch (e: any) {
@@ -151,7 +158,7 @@ export default function ChatScreen() {
     setLoading(true);
     setError("");
     try {
-      const res = await Endpoints.chat(userMsg.text, {}, "en", "action");
+      const res = await Endpoints.chat(userMsg.text, {}, lang, "action");
       setReply(res.data);
       await persist([...next, { id: `${Date.now()}-a`, role: "assistant", text: res.data?.text || "…" }]);
     } catch (e: any) {
@@ -168,13 +175,17 @@ export default function ChatScreen() {
     }
   };
 
+  const labels = I18N[lang] || I18N.en;
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
-      <Text style={{ fontSize: 20, fontWeight: "700" }}>Ask Kisan360 {queued.length ? `(${queued.length} queued)` : ""}</Text>
-      <TextInput value={msg} onChangeText={setMsg} placeholder="e.g. Compare mandis for onion in Nashik" style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 12 }} />
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <Text style={{ fontSize: 20, fontWeight: "700" }}>{labels.title} {queued.length ? `(${queued.length} queued)` : ""}</Text>
+        <Button title={lang.toUpperCase()} onPress={() => setLang((l) => (l === "en" ? "mr" : l === "mr" ? "hi" : "en"))} />
+      </View>
+      <TextInput value={msg} onChangeText={setMsg} placeholder={labels.placeholder} style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 12 }} />
       <View style={{ flexDirection: "row", gap: 8 }}>
         <View style={{ flex: 1 }}>
-          <Button title={loading ? "Asking..." : "Send"} onPress={send} />
+          <Button title={loading ? "Asking..." : labels.send} onPress={send} />
         </View>
         <View>
           <Button title={recording ? "⏹ Stop" : "🎤 Voice"} onPress={toggleVoice} />

@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–103: Marathi corpus). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–104: mobile language toggle). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -422,6 +422,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 103 (Marathi corpus)
 - Corpus 250 -> 260 docs (+10 MR translations: rice blast, onion thrips, market net, soil pH, heat, PM-KISAN/FBY, cotton pink, sugarcane red rot, groundnut tikka, tomato blight) - Marathi queries now retrieve in-language docs via keyword fallback + dense mr tags
 
+## Phase 104 (mobile language toggle)
+- `mobile-app/ChatScreen` — EN/MR/HI toggle in header; chat sends that language to the backend and the placeholder/title switch (parity with web ChatBot language cycle)
+
 ## Pre-embed (skip cold start)
 ```
 cd ml-service && python scripts/embed_corpus.py
@@ -433,4 +436,5 @@ cd ml-service && python scripts/embed_corpus.py
 2. Provenance or it didn't happen (`live|cached` + `source` + `retrievedAt`).
 3. Honest states (YES / TOO CLOSE / NO CURRENT BUYER) over forced confidence.
 4. Commission never subtracted from farmer net (APMC Act s.31).
-5. Simulated payments/buyers labeled simulated.
+5. Simulated payments/buyers labeled simulated.
+
