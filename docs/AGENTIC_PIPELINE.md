@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–50: chat history HTTP test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–51: live 8-step E2E). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -247,6 +247,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 50 (chat history E2E)
 - `e2e-http.js` — 7 → 8 steps: `GET /chat/history` asserts server history written by the chat turn (cross-device contract, TTL 90d)
+
+## Phase 51 (live 8-step E2E)
+- Reran the full HTTP E2E live (backend :5001 + calc :8003): **8/8 PASS** — APMC Kalyan Rs 3795.9/q, FPO pooled Rs 3895.5/q, disease gate 400, history rows=2. (Port 8002 was occupied by an unrelated InternIQ app, so the test used clean ports — documented in `E2E_LIVE_RESULTS.md`)
 
 ## Pre-embed (skip cold start)
 ```
