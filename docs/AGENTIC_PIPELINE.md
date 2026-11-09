@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–112: mobile feedback parity). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–113: v3.0.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -450,6 +450,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 112 (mobile feedback parity)
 - mobile-app/ChatScreen - thumbs buttons per assistant bubble (POST /chat/feedback via Endpoints.postFeedback) — parity with web ChatMessage thumbs
+
+## Phase 113 (v3.0.0 final)
+- backend/package.json -> 3.0.0-agentic (Phase 0-113, corpus 270)
+- Tag v3.0.0-agentic to be created; major version since the hackathon Next.js → agentic rewrite is complete
 
 ## Pre-embed (skip cold start)
 ```
