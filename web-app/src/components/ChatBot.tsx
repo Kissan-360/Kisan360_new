@@ -20,6 +20,7 @@ interface ChatResponse {
 const OPEN_KEY = 'kisan360-chat-open';
 const MODE_KEY = 'kisan360-chat-mode';
 const HISTORY_KEY = 'kisan360-chat-history';
+const QUEUE_KEY = 'kisan360-chat-queue';
 const HISTORY_LIMIT = 10;
 type ChatMode = 'ask' | 'action';
 
@@ -107,6 +108,29 @@ const ChatBot = () => {
     setMessages((current) => [...current, message].slice(-HISTORY_LIMIT));
   };
 
+  const [queued, setQueued] = useState<string[]>(() => {
+    try {
+      const raw = localStorage.getItem(QUEUE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  });
+
+  const enqueue = (text: string) => {
+    setQueued((q) => {
+      const next = [...q, text].slice(-5);
+      try { localStorage.setItem(QUEUE_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
+  const dequeue = () => {
+    setQueued((q) => {
+      const next = q.slice(1);
+      try { localStorage.setItem(QUEUE_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
@@ -114,9 +138,6 @@ const ChatBot = () => {
     setInput('');
     appendMessage({ id: makeId(), role: 'user', text: trimmed });
     setLoading(true);
-
-    // Reuse the disease quick-action: if the message is a photo placeholder,
-    // the upload path below handles it. Text path stays unchanged.
 
     try {
       const context = loadDecisionContext() || DEFAULT_CONTEXT;
@@ -138,12 +159,27 @@ const ChatBot = () => {
         setTimeout(() => navigate(data.action!.path), 450);
       }
     } catch {
-      appendMessage({ id: makeId(), role: 'assistant', text: t('chat.error') });
+      // Offline-tolerant: queue for retry when the browser goes back online.
+      enqueue(trimmed);
+      appendMessage({ id: makeId(), role: 'assistant', text: `${t('chat.error')} (queued — will retry when online)` });
       if (!open) setHasNewResponse(true);
     } finally {
       setLoading(false);
     }
   };
+
+  // Retry queued messages when connectivity returns.
+  useEffect(() => {
+    const onOnline = () => {
+      if (queued.length) {
+        const next = queued[0];
+        dequeue();
+        sendMessage(next);
+      }
+    };
+    window.addEventListener('online', onOnline);
+    return () => window.removeEventListener('online', onOnline);
+  }, [queued, mode, language]);
 
   const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -207,7 +243,10 @@ const ChatBot = () => {
     <section className="fixed bottom-16 right-4 z-50 flex h-[520px] w-[calc(100vw-2rem)] max-w-[380px] flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-2xl shadow-stone-950/20 sm:bottom-16 sm:right-5">
       <header className="flex items-center justify-between border-b border-emerald-900/10 bg-emerald-700 px-4 py-3 text-white">
         <div className="min-w-0 flex-1">
-          <div className="truncate text-sm font-semibold">{t('chat.title')}</div>
+          <div className="flex items-center gap-2">
+            <div className="truncate text-sm font-semibold">{t('chat.title')}</div>
+            {queued.length ? <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800">{queued.length} queued</span> : null}
+          </div>
           <div className="mt-2 flex items-center gap-2">
             <div className="inline-flex rounded-full bg-emerald-950/20 p-0.5 text-xs">
               <button
