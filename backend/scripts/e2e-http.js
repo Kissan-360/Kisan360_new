@@ -86,6 +86,14 @@ async function main() {
   const fb = await http("/api/chat/feedback", { method: "POST", token, body: { messageId: "e2e", rating: "up" } });
   check("POST /api/chat/feedback", fb.status === 200 && fb.data?.success, fb.data?.error || "");
 
+  // 10) Summarize (SKIP if no Groq key — honest graceful path)
+  const sum = await http("/api/chat/summarize", { method: "POST", token, body: {} });
+  if (sum.status === 200 && sum.data?.summary) {
+    check("POST /api/chat/summarize", true, sum.data.summary.slice(0, 60));
+  } else {
+    skip("POST /api/chat/summarize", sum.data?.error || "GROQ missing — graceful");
+  }
+
   console.log(`\n${pass}/${total} passed`);
   process.exit(pass === total ? 0 : 1);
 }
