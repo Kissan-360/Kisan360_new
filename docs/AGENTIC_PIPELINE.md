@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–104: mobile language toggle). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–105: decision copy). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -424,6 +424,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 104 (mobile language toggle)
 - `mobile-app/ChatScreen` — EN/MR/HI toggle in header; chat sends that language to the backend and the placeholder/title switch (parity with web ChatBot language cycle)
+
+## Phase 105 (decision copy)
+- `mobile-app/DecisionScreen` — **Copy / Share** button beside “Create lot” (`Share.share` with top-5 mandi lines) — parity with web decision share
 
 ## Pre-embed (skip cold start)
 ```

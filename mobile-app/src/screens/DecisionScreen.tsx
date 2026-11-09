@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Button, ScrollView, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Button, ScrollView, Share, Text, TextInput, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Endpoints } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
@@ -83,7 +83,20 @@ export default function DecisionScreen({ navigation }: any) {
           <Text style={{ color: "#666", fontSize: 12 }}>
             Source: {result.marketSource} · {result.servingMode}
           </Text>
-          <Button title="Create lot from best mandi" onPress={createLotFromBest} />
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1 }}>
+              <Button title="Create lot from best mandi" onPress={createLotFromBest} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                title="Copy / Share"
+                onPress={() => {
+                  const lines = result.rankedMandis.slice(0, 5).map((m: any, i: number) => `${i + 1}. ${m.market} Rs ${m.farmerNetPerQuintal}/q net`);
+                  Share.share({ message: `Kisan360 ${crop} ${district} ${qty}q:\n${lines.join("\n")}` }).catch(() => {});
+                }}
+              />
+            </View>
+          </View>
         </View>
       ) : null}
     </ScrollView>
