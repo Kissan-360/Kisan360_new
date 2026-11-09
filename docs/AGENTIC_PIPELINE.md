@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–111: Hindi corpus). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–112: mobile feedback parity). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -447,6 +447,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 111 (Hindi corpus)
 - Corpus 260 -> 270 docs (+10 HI translations mirroring MR: rice blast, onion thrips, market net, soil pH, heat, PM-KISAN/FBY, cotton pink, sugarcane red rot, groundnut tikka, tomato blight) - Hindi queries now retrieve in-language docs; MR+Hindi parity for farmer language experience
+
+## Phase 112 (mobile feedback parity)
+- mobile-app/ChatScreen - thumbs buttons per assistant bubble (POST /chat/feedback via Endpoints.postFeedback) — parity with web ChatMessage thumbs
 
 ## Pre-embed (skip cold start)
 ```

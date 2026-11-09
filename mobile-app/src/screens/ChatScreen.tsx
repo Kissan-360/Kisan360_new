@@ -251,6 +251,8 @@ export default function ChatScreen() {
               <View style={{ flexDirection: "row", gap: 4 }}>
                 <Button title="Copy" onPress={() => copyText(item.text)} />
                 <Button title="🔊" onPress={() => Speech.speak(item.text, { language: "mr-IN" })} />
+                <Button title="👍" onPress={async () => { try { await Endpoints.postFeedback("up"); } catch {} }} />
+                <Button title="👎" onPress={async () => { try { await Endpoints.postFeedback("down"); } catch {} }} />
               </View>
             ) : null}
           </View>
