@@ -132,7 +132,7 @@ export default function TradeScreen() {
         <Text style={{ color: "#666" }}>No payments yet — accept an offer in the web app first.</Text>
       )}
       <Text style={{ color: "#888", fontSize: 12 }}>
-        Payments are simulated in the demo — no real money moves.
+        Payments are simulated in the demo — no real money moves. For Razorpay test checkout, use the web app (Trade → Payment → Pay via Razorpay TEST).
       </Text>
     </ScrollView>
   );

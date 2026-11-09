@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–63: demo video live). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–64: mobile Razorpay hint). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -292,6 +292,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 63 (demo video live)
 - `web-app/public/demo.mp4` — promoted from `demo-video/renders/kisan360_demo_60s.mp4` (2.8 MB, 60s). LandingPage “Watch the 5-minute demo” now plays the real video (was poster-only on 404); poster `/farmer-ramesh-256.png` unchanged
+
+## Phase 64 (mobile Razorpay hint)
+- `TradeScreen` footer — points test-checkout users to the web (Razorpay needs WebView/native module on mobile; mobile stays on simulated escrow with honest label)
 
 ## Pre-embed (skip cold start)
 ```
