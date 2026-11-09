@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–58: Razorpay webhook + test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–59: webhook raw-body fix). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -276,6 +276,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 58 (Razorpay webhook + test)
 - `razorpayGateway.verifyWebhook` (HMAC over raw body) + `POST /api/payments/webhook` — `payment.captured` → `HELD → RELEASED` (test mode, idempotent)
 - `RAZORPAY_WEBHOOK_SECRET` in `.env.example`; `backend/tests/unit/razorpayGateway.test.js` — signature primitives + demo-safe null when keys missing (in-CI, no network)
+
+## Phase 59 (webhook raw-body fix)
+- `backend/src/server.js` — `express.json({ verify: (req) => req.rawBody = buf })` so the webhook HMAC runs over the exact signed bytes (previously `req.rawBody` was never set and `JSON.stringify` could reorder keys → false rejects)
+- `payments.webhook` now verifies against `req.rawBody` (fallback keeps the old path for tests)
 
 ## Pre-embed (skip cold start)
 ```

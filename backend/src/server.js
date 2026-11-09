@@ -166,7 +166,8 @@ app.use(cors({
 
 // Body parsing — 1 MB is far above any legitimate JSON payload (image uploads
 // go through multipart with their own 10 MB limit in routes/disease.js).
-app.use(express.json({ limit: '1mb' }));
+// rawBody is captured for webhook HMACs (Razorpay signs the exact bytes).
+app.use(express.json({ limit: '1mb', verify: (req, _res, buf) => { req.rawBody = buf.toString('utf8'); } }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Health check — distinguishes process alive vs database ready vs scheduler
