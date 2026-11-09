@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–66: chat auto-login retry). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–67: mobile share). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -302,6 +302,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 66 (chat auto-login retry)
 - `ChatBot` on 401 (logged out) → silent `demo-login (farmer/Nashik)` + `setDemoAuth` + one retry of the chat turn, before falling back to the offline queue. Judge can tap “Try as farmer” → chat without ever seeing a login wall.
+
+## Phase 67 (mobile share)
+- `mobile-app/ChatScreen` — **Share best mandi** button (`Share.share` → WhatsApp) when `toolResults.netRealization` is present; parity with web chat’s WhatsApp deep link
 
 ## Pre-embed (skip cold start)
 ```

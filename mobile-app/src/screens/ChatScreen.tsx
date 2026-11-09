@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Button, FlatList, ScrollView, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Button, FlatList, ScrollView, Share, Text, TextInput, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Endpoints } from "../services/api";
 
@@ -155,6 +155,14 @@ export default function ChatScreen() {
               {i + 1}. {m.market} — Rs {m.farmerNetPerQuintal}/q net
             </Text>
           ))}
+          <Button
+            title="Share best mandi (WhatsApp)"
+            onPress={() => {
+              const best = reply.toolResults.netRealization.topMandis[0];
+              const text = `Kisan360: ${reply.toolResults.netRealization.crop} in ${reply.toolResults.netRealization.district} — best net ${best.market} at Rs ${best.farmerNetPerQuintal}/q. Compare your mandis by net, not headline.`;
+              Share.share({ message: text }).catch(() => {});
+            }}
+          />
         </View>
       ) : null}
     </ScrollView>
