@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–113: v3.0.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–115: final audit). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -473,3 +473,10 @@ cd ml-service && python scripts/embed_corpus.py
 ## Phase 110 (v2.3.0 final)
 - backend/package.json -> 2.3.0-agentic (Phase 0-110, corpus 260)
 - Tag v2.3.0-agentic to be created; this closes the build loop (110 phases, 10/10 product)
+
+## Phase 114 (WhatsApp opt-in)
+- PUT /api/auth/phone - opt-in WhatsApp phone (E.164, upsert User.phone); web ProfilePage opt-in card (daily 07:00 IST weather alerts)
+
+## Phase 115 (final audit v3.0.0)
+- FINAL_AUDIT.md -> COMPLETE (Phases 0-115, 659 Jest, 250+60 docs, 8/8 live + 11-step HTTP E2E)
+- This closes the build loop: 115 phases, 10/10 product (agent + RAG 270 + Groq 70B + MobileNetV2 + live weather/commodity + React + React Native + Razorpay test + offline queues/history + share/copy/feedback/summarize/TTS/voice + CI/E2E live)
