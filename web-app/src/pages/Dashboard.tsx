@@ -302,6 +302,13 @@ const Dashboard = () => {
   const pulse = useMarketPulse(pulseCrop);
   const top = topOfFeed(pulse.rows);
   const impact = useImpact();
+  const [health, setHealth] = useState<any>(null);
+  useEffect(() => {
+    apiFetch(`${API_URL.replace(/\/$/, '')}/health`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then(setHealth)
+      .catch(() => setHealth(null));
+  }, []);
 
   // Real lots + farms — replaces the hardcoded "0 Active" badge and the
   // static crop-portfolio card with the farmer's actual records.
@@ -401,6 +408,18 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* ── health badge ── */}
+      {health && (
+        <div className="rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-stone-500">
+            System {health.status === 'OK' ? '● OK' : health.status === 'DEGRADED' ? '● DEGRADED' : '● CHECK'}
+          </p>
+          <p className="mt-1 text-xs text-stone-600">
+            API: {health.db || '—'} · Calculator: {health.mlServiceStatus || '—'} · Scheduler runs: {health.scheduler?.totalRuns ?? 0}
+          </p>
+        </div>
+      )}
 
       {/* ── impact strip — telemetry milestones only (GET /api/metrics/impact) ── */}
       {impact?.milestones && (

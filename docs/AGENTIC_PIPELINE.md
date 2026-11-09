@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–81: dashboard impact). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–82: health badge). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -349,6 +349,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 81 (dashboard impact)
 - `Dashboard.tsx` impact strip — `GET /api/metrics/impact` (30-day `UsageEvent` milestones) rendered as “Impact (last 30 days) · ~N devices + top milestones” with the no-prices/no-PII note. Empty state is honest (“No telemetry yet”).
+
+## Phase 82 (health badge)
+- `Dashboard.tsx` health badge — `GET /health` (API db mode + calc status + scheduler runs) so farmers/judges see “● OK / DEGRADED / CHECK” before they start a decision
 
 ## Pre-embed (skip cold start)
 ```
