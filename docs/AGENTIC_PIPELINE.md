@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–62: deploy checklist). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–63: demo video live). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -289,6 +289,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 62 (deploy checklist)
 - `docs/DEPLOY_CHECKLIST.md` — Render free vs paid, env checklist, EAS build command, demo walkthrough pointer (single pre-ship gate before `prod-check.js`)
+
+## Phase 63 (demo video live)
+- `web-app/public/demo.mp4` — promoted from `demo-video/renders/kisan360_demo_60s.mp4` (2.8 MB, 60s). LandingPage “Watch the 5-minute demo” now plays the real video (was poster-only on 404); poster `/farmer-ramesh-256.png` unchanged
 
 ## Pre-embed (skip cold start)
 ```
