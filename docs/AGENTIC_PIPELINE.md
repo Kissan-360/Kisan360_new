@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–59: webhook raw-body fix). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–60: LangGraph test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -280,6 +280,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 59 (webhook raw-body fix)
 - `backend/src/server.js` — `express.json({ verify: (req) => req.rawBody = buf })` so the webhook HMAC runs over the exact signed bytes (previously `req.rawBody` was never set and `JSON.stringify` could reorder keys → false rejects)
 - `payments.webhook` now verifies against `req.rawBody` (fallback keeps the old path for tests)
+
+## Phase 60 (LangGraph test)
+- `ml-service/test_agent_graph.py` — unittest for `run_agent_graph` (injected retrieve/generate): intent + tool plan + structured output; pure-Python or LangGraph both pass (no torch needed)
 
 ## Pre-embed (skip cold start)
 ```
