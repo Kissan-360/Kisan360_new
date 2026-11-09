@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–45: PWA install prompt). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–46: v1.4.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -231,6 +231,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 45 (PWA install)
 - `web-app/src/components/InstallPrompt.tsx` — `beforeinstallprompt` handler (“Install Kisan360” card, desktop Chrome/Android); iOS users still get Share → Add to Home; wired in `App.tsx` inside `AuthProvider`
 - Offline queue (web + mobile) already persisted — install makes the home-screen entry real for field use
+
+## Phase 46 (v1.4.0 final)
+- `backend/package.json` → **`1.4.0-agentic`** — corpus 250, Phases 0–46, all gates green
+- Tag `v1.4.0-agentic` to be created from `backend/team-lead-core` after full-suite verification
 
 ## Pre-embed (skip cold start)
 ```
