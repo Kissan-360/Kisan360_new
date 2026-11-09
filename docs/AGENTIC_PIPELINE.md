@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–38: v1.3.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–39: mobile pickers). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -204,6 +204,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 38 (v1.3.0 final)
 - `backend/package.json` → **`1.3.0-agentic`** (was `1.2.0-agentic`) — corpus 250, Phases 0–38, all gates green
 - Tag `v1.3.0-agentic` to be created from `backend/team-lead-core` after full-suite verification
+
+## Phase 39 (mobile pickers)
+- `mobile-app/DecisionScreen` — Crop/District are now **Picker** dropdowns (`src/data/maharashtra.ts`, 22 crops + 23 districts, mirrors web) instead of free-text `TextInput` (typo-proof, matches backend market coverage)
+- Added `@react-native-picker/picker@2.5.1` (Expo 49 compatible)
 
 ## Pre-embed (skip cold start)
 ```
