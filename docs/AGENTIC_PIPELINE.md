@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–40: pickers everywhere). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–41: diagnostics test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -211,6 +211,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 40 (pickers everywhere)
 - `TradeScreen` (crop/district) + `SignInScreen` (district) also use the shared `Picker` lists — no free-text crop/district remains on mobile
+
+## Phase 41 (diagnostics test)
+- `backend/tests/integration/security.test.js` now asserts `diagnostics.agent.model === 'llama-3.3-70b-versatile'` (config-only, no secrets)
 
 ## Pre-embed (skip cold start)
 ```

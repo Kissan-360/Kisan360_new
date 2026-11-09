@@ -196,6 +196,8 @@ describe('request safety', () => {
     expect(res.status).toBe(200);
     expect(res.data.checks.backendRunning).toBe(true);
     expect(res.data.writeTest.detail).toMatch(/admin token/i);
+    // Agent block is config-only (no secrets)
+    expect(res.data.agent?.model).toBe('llama-3.3-70b-versatile');
     // No secrets in the payload
     const raw = JSON.stringify(res.data);
     expect(raw).not.toMatch(/mongodb(\+srv)?:\/\//);
