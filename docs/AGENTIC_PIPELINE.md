@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–76: CI mobile test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–77: chat summarize). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -333,6 +333,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 76 (CI mobile test)
 - `.github/workflows/ci.yml` mobile job now runs `npm test` (picker parity, 2 tests) in addition to `tsc --noEmit` — mobile data drift fails CI, not just the emulator
+
+## Phase 77 (chat summarize)
+- `POST /api/chat/summarize` — last 10 turns → Groq `llama-3.3-70b` 3-sentence recap (same language, no new prices); `ChatBot` ✨ Summarize button renders the recap in chat
 
 ## Pre-embed (skip cold start)
 ```

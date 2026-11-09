@@ -737,6 +737,33 @@ async function executeIntent({ message, language, context = {}, classification, 
   }
 }
 
+// POST /api/chat/summarize — 3-sentence recap of the farmer's last turns
+router.post('/summarize', authenticateUser, async (req, res) => {
+  try {
+    const groqKey = process.env.GROQ_API_KEY;
+    if (!groqKey) return res.json({ success: false, error: 'GROQ_API_KEY not configured', summary: null });
+    const ChatHistory = require('../models/ChatHistory');
+    const uid = req.user.uid || req.user.id || req.user.sub;
+    const rows = await ChatHistory.find({ userUid: uid }).sort({ createdAt: -1 }).limit(10).lean();
+    if (rows.length < 2) return res.json({ success: false, error: 'Not enough history to summarize', summary: null });
+    const transcript = rows.reverse().map((r) => `${r.role}: ${r.text.slice(0, 200)}`).join("\n");
+    const gRes = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'system', content: 'Summarize this farmer chat in 3 sentences max, in the same language as the last farmer message. No new prices.' },
+        { role: 'user', content: transcript },
+      ],
+      max_tokens: 200,
+      temperature: 0.2,
+    }, { headers: { Authorization: `Bearer ${groqKey}`, 'Content-Type': 'application/json' }, timeout: 15000 });
+    const summary = gRes.data?.choices?.[0]?.message?.content?.trim();
+    res.json({ success: true, summary: summary || null });
+  } catch (e) {
+    console.error('Summarize error:', e.message);
+    res.status(500).json({ success: false, error: 'Summarize failed' });
+  }
+});
+
 // Feedback (thumbs) — persisted for quality measurement (best-effort)
 router.post('/feedback', authenticateUser, async (req, res) => {
   try {

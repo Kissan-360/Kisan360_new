@@ -301,6 +301,26 @@ const ChatBot = () => {
             <div className="truncate text-sm font-semibold">{t('chat.title')}</div>
             {queued.length ? <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800">{queued.length} queued</span> : null}
           </div>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const res = await apiFetch(`${API_URL}/chat/summarize`, { method: 'POST', body: JSON.stringify({}) });
+                const data = await res.json();
+                if (res.ok && data.summary) {
+                  appendMessage({ id: makeId(), role: 'assistant', text: `📌 ${data.summary}` });
+                } else {
+                  appendMessage({ id: makeId(), role: 'assistant', text: data.error || t('chat.error') });
+                }
+              } catch {
+                appendMessage({ id: makeId(), role: 'assistant', text: t('chat.error') });
+              }
+            }}
+            className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-50 hover:bg-white/20"
+            title="Summarize this conversation"
+          >
+            ✨ Summarize
+          </button>
           <div className="mt-2 flex items-center gap-2">
             <div className="inline-flex rounded-full bg-emerald-950/20 p-0.5 text-xs">
               <button
