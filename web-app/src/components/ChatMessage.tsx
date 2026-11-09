@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Leaf } from 'lucide-react';
+import { Copy, Leaf, Volume2 } from 'lucide-react';
 
 export type ChatMessageRole = 'user' | 'assistant' | 'system';
 
@@ -123,6 +123,22 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
               <button type="button" aria-label="Helpful" onClick={() => rate("up")} className={`px-2 text-xs ${feedback === "up" ? "text-emerald-700 font-bold" : "text-stone-400 hover:text-emerald-700"}`}>👍</button>
               <button type="button" aria-label="Not helpful" onClick={() => rate("down")} className={`px-2 text-xs ${feedback === "down" ? "text-red-600 font-bold" : "text-stone-400 hover:text-red-600"}`}>👎</button>
             </div>
+            <button
+              type="button"
+              aria-label="Listen"
+              onClick={() => {
+                try {
+                  window.speechSynthesis?.cancel();
+                  const utter = new SpeechSynthesisUtterance(message.text);
+                  utter.lang = 'mr-IN';
+                  window.speechSynthesis?.speak(utter);
+                } catch { /* TTS unavailable */ }
+              }}
+              className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-500 hover:bg-stone-50"
+              title="Listen (TTS)"
+            >
+              <Volume2 size={11} aria-hidden="true" /> Listen
+            </button>
             {feedback ? <span className="text-[11px] text-stone-400">Thanks for feedback</span> : null}
           </div>
         )}
