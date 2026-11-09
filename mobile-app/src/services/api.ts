@@ -42,6 +42,7 @@ export const Endpoints = {
     api.post("/transcribe", formData, { headers: { "Content-Type": "multipart/form-data" } }),
   chatSummarize: () => api.post("/chat/summarize", {}),
   postFeedback: (rating: "up" | "down") => api.post("/chat/feedback", { rating }),
+  impact: () => api.get("/metrics/impact"),
   clearChatHistory: () => api.delete("/chat/history"),
   gradeAssessment: (payload: Record<string, unknown>) =>
     api.post("/grade-assessment", payload),

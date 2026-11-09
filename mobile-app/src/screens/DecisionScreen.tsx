@@ -7,6 +7,12 @@ import { CROPS, DISTRICTS } from "../data/maharashtra";
 
 export default function DecisionScreen({ navigation }: any) {
   const { token } = useAuth();
+  const [impact, setImpact] = useState<any>(null);
+  React.useEffect(() => {
+    Endpoints.impact()
+      .then((r) => setImpact(r.data))
+      .catch(() => setImpact(null));
+  }, []);
   const [crop, setCrop] = useState("Onion");
   const [district, setDistrict] = useState("Nashik");
   const [qty, setQty] = useState("10");
@@ -68,6 +74,11 @@ export default function DecisionScreen({ navigation }: any) {
           <Picker.Item key={d} label={d} value={d} />
         ))}
       </Picker>
+      {impact?.milestones ? (
+        <Text style={{ color: "#666", fontSize: 12 }}>
+          Impact (30d): {Object.entries(impact.milestones).slice(0, 3).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+        </Text>
+      ) : null}
       <TextInput value={qty} onChangeText={setQty} placeholder="Qty (q)" keyboardType="numeric" style={styles.input} />
       <Button title={loading ? "Ranking..." : "Compare mandis"} onPress={run} />
       {loading ? <ActivityIndicator /> : null}

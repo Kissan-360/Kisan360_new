@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–118: alerts auto-send test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–119: mobile impact). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -489,3 +489,5 @@ cd ml-service && python scripts/embed_corpus.py
 - backend/tests/unit/schedulerAlerts.test.js - threshold contract + runWeatherAlerts export, in-CI
 ## Phase 118 (alerts auto-send test)
 - backend/tests/unit/schedulerAutoSend.test.js - runWeatherAlerts no-ops gracefully without keys/phones, in-CI
+## Phase 119 (mobile impact)
+- mobile-app/DecisionScreen - impact strip (GET /api/metrics/impact, 30-day milestones) under pickers; parity with web Dashboard impact strip
