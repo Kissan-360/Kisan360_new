@@ -4,6 +4,27 @@ const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 
+// POST /api/notifications/whatsapp/weather-alert — proactive severe-weather alert
+router.post('/weather-alert', authenticateUser, async (req, res) => {
+  try {
+    const { to, district } = req.body || {};
+    if (!to || !district) return res.status(400).json({ success: false, error: 'to and district are required' });
+    const chatMod = require('./chat');
+    const weatherTool = chatMod.fetchWeatherTool
+      ? await chatMod.fetchWeatherTool(`weather in ${district}`, { district })
+      : null;
+    const weather = weatherTool?.current ? { current: weatherTool.current } : null;
+    if (!weather) return res.json({ success: true, alert: null, note: 'No live weather available — no alert sent.' });
+    const { shouldAlert, sendAlert } = require('../services/whatsappAlerts');
+    const msg = shouldAlert(weather);
+    if (!msg) return res.json({ success: true, alert: null, weather });
+    const sent = await sendAlert(to, msg);
+    res.json({ success: true, alert: msg, sent, weather });
+  } catch (e) {
+    res.status(500).json({ success: false, error: 'Weather alert failed' });
+  }
+});
+
 // POST /api/notifications/whatsapp — send a template via WhatsApp Cloud API
 // Body: { to, template, params?: { crop?, district?, disease? } }
 // Requires WHATSAPP_TOKEN + WHATSAPP_PHONE_NUMBER_ID (verified sender).
