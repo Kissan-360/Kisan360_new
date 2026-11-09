@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Endpoints } from "../services/api";
 
 const HISTORY_KEY = "kisan360-mobile-chat";
+const QUEUE_KEY = "kisan360-mobile-chat-queue";
 
 interface Msg { id: string; role: "user" | "assistant"; text: string }
 
@@ -11,8 +12,24 @@ export default function ChatScreen() {
   const [msg, setMsg] = useState("");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [reply, setReply] = useState<any>(null);
+  const [queued, setQueued] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const qraw = await AsyncStorage.getItem(QUEUE_KEY);
+        if (qraw) setQueued(JSON.parse(qraw));
+      } catch {}
+    })();
+  }, []);
+
+  const enqueue = async (text: string) => {
+    const next = [...queued, text].slice(-5);
+    setQueued(next);
+    try { await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(next)); } catch {}
+  };
 
   useEffect(() => {
     (async () => {
@@ -44,7 +61,14 @@ export default function ChatScreen() {
       setReply(res.data);
       await persist([...next, { id: `${Date.now()}-a`, role: "assistant", text: res.data?.text || "…" }]);
     } catch (e: any) {
-      setError(e?.response?.data?.error || e.message || "Chat failed");
+      const offline = !e?.response; // network error vs server error
+      if (offline) {
+        await enqueue(userMsg.text);
+        await persist([...next, { id: `${Date.now()}-a`, role: "assistant", text: "Queued — will retry when online." }]);
+        setError("");
+      } else {
+        setError(e?.response?.data?.error || e.message || "Chat failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -52,7 +76,7 @@ export default function ChatScreen() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
-      <Text style={{ fontSize: 20, fontWeight: "700" }}>Ask Kisan360</Text>
+      <Text style={{ fontSize: 20, fontWeight: "700" }}>Ask Kisan360 {queued.length ? `(${queued.length} queued)` : ""}</Text>
       <TextInput value={msg} onChangeText={setMsg} placeholder="e.g. Compare mandis for onion in Nashik" style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 12 }} />
       <View style={{ flexDirection: "row", gap: 8 }}>
         <View style={{ flex: 1 }}>

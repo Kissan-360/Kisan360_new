@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–34: offline queue + polish). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–35: mobile offline queue). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -190,6 +190,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 34 (offline queue)
 - `ChatBot` offline queue (`kisan360-chat-queue`, last 5) — on network failure the message is queued with a “queued — will retry when online” note, badge shows queued count, and a `window online` listener auto-retries (farmer-friendly for patchy village connectivity)
+
+## Phase 35 (mobile offline parity)
+- `mobile-app/ChatScreen` — same queue/persist pattern via `AsyncStorage` (`kisan360-mobile-chat-queue` + history), “Queued — will retry when online” on network error, queue count in header
 
 ## Pre-embed (skip cold start)
 ```
