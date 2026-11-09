@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–55: chat feedback). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–56: EAS build config). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -262,6 +262,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 55 (chat feedback)
 - `ChatMessage` 👍/👎 feedback buttons (local state + “Thanks” note) — farmers signal helpful/not instead of silently leaving; pairs with copy (copy answer, rate it, share it)
+
+## Phase 56 (EAS build config)
+- `mobile-app/eas.json` — EAS Build profiles (`development` / `preview` APK / `production` AAB, autoIncrement) so Play Store builds are one command: `eas build --platform android --profile production`
 
 ## Pre-embed (skip cold start)
 ```
