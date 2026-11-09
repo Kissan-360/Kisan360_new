@@ -358,6 +358,41 @@ let scheduledTask = null;
  * @param {string} cronExpression - Cron schedule (default: '0 9 * * *' = 09:00 daily)
  * @param {string} timezone - Timezone (default: 'Asia/Kolkata')
  */
+let alertTask = null;
+
+async function runWeatherAlerts() {
+  // Proactive WhatsApp weather alerts (opt-in via env, no spam by default).
+  // Checks Lots for districts, fetches weather, and sends a single alert per
+  // district per run when a severe threshold is crossed.
+  if (!process.env.WHATSAPP_TOKEN || !process.env.WHATSAPP_PHONE_NUMBER_ID || !process.env.OPENWEATHER_API_KEY) {
+    logger.info('[Scheduler] WhatsApp alerts skipped — WHATSAPP/OPENWEATHER keys missing');
+    return;
+  }
+  try {
+    const Lot = require('../models/Lot');
+    const lots = await Lot.find({}, 'district').lean();
+    const districts = [...new Set(lots.map((l) => l.district).filter(Boolean))].slice(0, 20);
+    if (!districts.length) return;
+    const { shouldAlert, sendAlert } = require('./whatsappAlerts');
+    const { DISTRICTS } = require('../data/maharashtraDistricts');
+    const chat = require('../routes/chat');
+    for (const district of districts) {
+      try {
+        const w = await chat.fetchWeatherTool(`weather in ${district}`, { district });
+        const alert = w?.current ? shouldAlert({ current: w.current }) : null;
+        if (!alert) continue;
+        // In a pilot, recipients are the farmer's registered phone; here we
+        // log the alert that WOULD be sent (no directory of phones to spam).
+        logger.info(`[Scheduler] Weather alert ${district}: ${alert}`);
+      } catch (e) {
+        logger.warn(`[Scheduler] Weather alert ${district} failed: ${e.message}`);
+      }
+    }
+  } catch (e) {
+    logger.warn(`[Scheduler] Weather alerts run failed: ${e.message}`);
+  }
+}
+
 function startScheduler(cronExpression = '0 9 * * *', timezone = 'Asia/Kolkata') {
   if (scheduledTask) {
     logger.warn('[Scheduler] Already running — skipping duplicate start');
@@ -381,6 +416,15 @@ function startScheduler(cronExpression = '0 9 * * *', timezone = 'Asia/Kolkata')
   }, { timezone });
 
   logger.info(`[Scheduler] Daily market refresh scheduled: "${cronExpression}" (${timezone})`);
+
+  // Proactive weather alerts run once daily at 07:00 IST (before the market refresh).
+  if (!alertTask && cron.validate('0 7 * * *')) {
+    alertTask = cron.schedule('0 7 * * *', async () => {
+      logger.info(`[Scheduler] Running WhatsApp weather alerts at ${new Date().toISOString()}`);
+      await runWeatherAlerts();
+    }, { timezone });
+    logger.info('[Scheduler] Weather alerts scheduled: "0 7 * * *" (Asia/Kolkata)');
+  }
 }
 
 function stopScheduler() {
