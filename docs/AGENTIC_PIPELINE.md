@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–79: impact metrics). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–80: summarize test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -343,6 +343,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 79 (impact metrics)
 - `GET /api/metrics/impact` — 30-day `UsageEvent` counts (`farmersServedEstimate` from distinct `installId`, `milestones` by event) + honest DB-offline note. No prices, no PII, telemetry opt-in (`KISAN_TELEMETRY=on`). This is the pilot-proof endpoint (`FINAL_AUDIT.md` “no vanity numbers” rule, now executable).
+
+## Phase 80 (summarize test)
+- `backend/tests/unit/chatSummarize.test.js` — summarize endpoint contract + intent classification (in-CI)
 
 ## Pre-embed (skip cold start)
 ```
