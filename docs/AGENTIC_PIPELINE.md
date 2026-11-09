@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–61: CI full Python suite). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–62: deploy checklist). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -286,6 +286,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 61 (CI full Python)
 - `.github/workflows/ci.yml` agent job now runs `test_agent_graph test_keyword_fallback test_net_realization -v` (34 tests) — not just `eval_agent.py`
+
+## Phase 62 (deploy checklist)
+- `docs/DEPLOY_CHECKLIST.md` — Render free vs paid, env checklist, EAS build command, demo walkthrough pointer (single pre-ship gate before `prod-check.js`)
 
 ## Pre-embed (skip cold start)
 ```
