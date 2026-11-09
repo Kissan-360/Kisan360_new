@@ -98,6 +98,10 @@ async function main() {
   const tr = await http("/api/transcribe", { method: "POST", token, body: {} });
   check("POST /api/transcribe (no audio -> 400)", tr.status === 400, tr.data?.error || "");
 
+  // 12) WhatsApp weather-alert gate (missing to/district -> 400)
+  const wa = await http("/api/notifications/whatsapp/weather-alert", { method: "POST", token, body: {} });
+  check("POST /weather-alert gate (400)", wa.status === 400, wa.data?.error || "");
+
   console.log(`\n${pass}/${total} passed`);
   process.exit(pass === total ? 0 : 1);
 }
