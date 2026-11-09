@@ -855,6 +855,40 @@ router.get('/crop-suitability', (req, res) => {
   }
 });
 
+// GET /api/market/ndvi-context?district=Nashik&crop=Onion
+// Satellite/NDVI readiness + thresholds. No provider is bundled with the
+// demo, so this is honest about availability and names the env contract a
+// provider adapter would need. Use POST /ndvi with supplied reflectance.
+router.get('/ndvi-context', (req, res) => {
+  try {
+    const { district, crop } = req.query;
+    if (!district) {
+      return res.status(400).json({ success: false, error: 'district query param is required' });
+    }
+    const context = require('../services/ndvi').buildNdviContext({ district, crop });
+    res.json({ success: true, ...context });
+  } catch (error) {
+    logger.error('NDVI context error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to get NDVI context' });
+  }
+});
+
+// POST /api/market/ndvi — compute NDVI from supplied red/NIR reflectance.
+// Body: { red, nir, crop?, district? } — reflectance in [0, 1].
+router.post('/ndvi', (req, res) => {
+  try {
+    const { red, nir, crop, district } = req.body || {};
+    const result = require('../services/ndvi').buildNdviResult({ red, nir, crop, district });
+    if (!result.ok) {
+      return res.status(400).json({ success: false, error: result.errors.join('; ') });
+    }
+    res.json({ success: true, ...result.result });
+  } catch (error) {
+    logger.error('NDVI error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to compute NDVI' });
+  }
+});
+
 // ═════════════════════════════════════════════════════════════════════════
 // FARMER ECONOMICS — production cost → break-even → profit → trend → scenario
 // Every number is FARMER_ENTERED, observed, or deterministically derived.

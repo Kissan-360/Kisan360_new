@@ -28,6 +28,9 @@ export const Endpoints = {
     api.get("/market/prices", { params: { crop, district } }),
   netRealization: (crop: string, district: string, quantity: number) =>
     api.get("/market/net-realization", { params: { crop, district, quantity } }),
+  ndvi: (payload: Record<string, unknown>) => api.post("/market/ndvi", payload),
+  ndviContext: (district: string, crop?: string) =>
+    api.get("/market/ndvi-context", { params: { district, crop } }),
   createLot: (payload: Record<string, unknown>) => api.post("/lots", payload),
   listLots: () => api.get("/lots"),
   createOffer: (payload: Record<string, unknown>) => api.post("/offers", payload),
