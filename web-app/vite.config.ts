@@ -11,7 +11,7 @@ export default defineConfig({
       // index.html already links /manifest.json from public/, so leave one
       // source of truth for the manifest rather than generating a second.
       manifest: false,
-      includeAssets: ['kisan360-mark.png', 'logo192.png', 'logo512.png', 'apple-touch-icon.png', 'farmer-ramesh.png'],
+      includeAssets: ['kisan360-mark.png', 'logo192.png', 'logo512.png', 'apple-touch-icon.png', 'farmer-ramesh.png', 'offline.html'],
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         // The trained grader (mobileNetV2, ~8.8 MB across three shards) is
@@ -29,7 +29,7 @@ export default defineConfig({
         // (This glob tracks an emitted name; if a build ever renames it the
         // result is a heavier install, never a broken app.)
         globIgnores: ['**/models/**', '**/assets/dist-*.js'],
-        navigateFallback: '/index.html',
+        navigateFallback: '/offline.html',
         // The shell must never answer an API call.
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
