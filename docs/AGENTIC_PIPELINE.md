@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–65: v1.5.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–66: chat auto-login retry). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -299,6 +299,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 65 (v1.5.0 final)
 - `backend/package.json` → **`1.5.0-agentic`** — corpus 250, Phases 0–65, all gates green
 - Tag `v1.5.0-agentic` to be created from `backend/team-lead-core` after full-suite verification
+
+## Phase 66 (chat auto-login retry)
+- `ChatBot` on 401 (logged out) → silent `demo-login (farmer/Nashik)` + `setDemoAuth` + one retry of the chat turn, before falling back to the offline queue. Judge can tap “Try as farmer” → chat without ever seeing a login wall.
 
 ## Pre-embed (skip cold start)
 ```

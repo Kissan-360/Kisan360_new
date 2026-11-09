@@ -181,7 +181,38 @@ const ChatBot = () => {
       if (mode === 'action' && data.action?.type === 'navigate' && data.action.path) {
         setTimeout(() => navigate(data.action!.path), 450);
       }
-    } catch {
+    } catch (err: any) {
+      // 401 (logged out) → one silent demo-login retry, then queue if still offline.
+      if (err?.status === 401 || err?.message?.includes('401')) {
+        try {
+          const loginRes = await apiFetch(`${API_URL}/auth/demo-login`, {
+            method: 'POST',
+            body: JSON.stringify({ role: 'farmer', district: 'Nashik' }),
+          });
+          if (loginRes.ok) {
+            const loginData = await loginRes.json();
+            if (loginData.token && loginData.user) {
+              const { setDemoAuth } = await import('../lib/api');
+              setDemoAuth(loginData.token, loginData.user);
+            }
+            // Retry once
+            const retry = await apiFetch(`${API_URL}/chat`, {
+              method: 'POST',
+              body: JSON.stringify({ message: trimmed, language, mode, context: loadDecisionContext() || DEFAULT_CONTEXT }),
+            });
+            if (retry.ok) {
+              const retryData = await retry.json();
+              appendMessage({
+                id: makeId(), role: 'assistant', text: retryData.text || t('chat.error'),
+                intent: retryData.intent, intents: retryData.intents, toolResults: retryData.toolResults,
+                disease: retryData.disease,
+              });
+              setLoading(false);
+              return;
+            }
+          }
+        } catch { /* fall through to queue */ }
+      }
       // Offline-tolerant: queue for retry when the browser goes back online.
       enqueue(trimmed);
       appendMessage({ id: makeId(), role: 'assistant', text: `${t('chat.error')} (queued — will retry when online)` });
