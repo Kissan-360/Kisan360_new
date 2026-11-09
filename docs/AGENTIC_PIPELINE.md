@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–122: production DB index migration). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–123: producer phone-on-file trust signal). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -508,3 +508,9 @@ cd ml-service && python scripts/embed_corpus.py
 - Added named compound indexes to Lot, Offer, Payment, Grievance, Detection, Farm, GradeCertificate, and UsageEvent schemas
 - Added `backend/scripts/migrate-indexes.js` — `--dry-run` prints the manifest without opening a DB; real runs require a live MongoDB and explicitly disable the demo in-memory fallback
 - Added `backend/tests/unit/dbIndexes.test.js` — manifest completeness/uniqueness + schema parity coverage
+
+## Phase 123 (producer phone-on-file trust signal)
+- Added `backend/src/lib/producerTrust.js` — pure helper that maps User phone opt-ins to a boolean signal without leaking uids or phone numbers
+- `GET /api/lots/available` now annotates each lot with `producerPhoneOnFile`; note explicitly says this is a WhatsApp opt-in contact signal, not KYC identity proof
+- Web `BuyCrops` shows a “Phone on file” badge (EN/MR/HI) when the signal is present
+- Added `backend/tests/unit/producerTrust.test.js` and an integration assertion in `buyerMarketplace.test.js` covering the opt-in → badge flow

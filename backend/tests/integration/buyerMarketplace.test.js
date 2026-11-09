@@ -116,6 +116,25 @@ describe('buyer browses available lots', () => {
     expect(found.farmerUid).toBeUndefined();
   });
 
+  test('producer phone-on-file signal follows the farmer WhatsApp opt-in', async () => {
+    const lot = await createLot({ crop: 'Chilli', quantity: 15 });
+    const before = await call('GET', '/api/lots/available?crop=Chilli', { token: buyerToken });
+    const beforeLot = before.data.lots.find(l => l._id === lot._id);
+    expect(beforeLot?.producerPhoneOnFile).toBe(false);
+
+    const phone = await call('PUT', '/api/auth/phone', {
+      token: farmerToken,
+      body: { phone: '919999999999' },
+    });
+    expect(phone.status).toBe(200);
+
+    const after = await call('GET', '/api/lots/available?crop=Chilli', { token: buyerToken });
+    const afterLot = after.data.lots.find(l => l._id === lot._id);
+    expect(afterLot?.producerPhoneOnFile).toBe(true);
+    expect(afterLot?.phone).toBeUndefined();
+    expect(after.data.note).toMatch(/not KYC identity proof/);
+  });
+
   test('a farmer never sees their own lots in the buy-side listing', async () => {
     const lot = await createLot({ crop: 'Soybean' });
     const res = await call('GET', '/api/lots/available', { token: farmerToken });

@@ -40,6 +40,7 @@ interface ListedLot {
   unit: string;
   district?: string;
   producer?: string;
+  producerPhoneOnFile?: boolean;
   photos?: string[];
   assayStatus?: string;
   expectedPricePerQuintal?: number | null;
@@ -446,6 +447,7 @@ export default function BuyCrops() {
                         </div>
                         <div className="flex flex-wrap items-center gap-1.5 justify-end shrink-0">
                           {catLabel && <Chip color="stone">{catLabel}</Chip>}
+                          {lot.producerPhoneOnFile && <Chip color="emerald">{t('buy.phoneOnFile')}</Chip>}
                           <Chip color={lot.grade === 'A' ? 'emerald' : lot.grade === 'B' ? 'sky' : 'stone'}>
                             {lot.grade && lot.grade !== 'Unassessed' ? `${t('buy.grade')} ${lot.grade}` : t('buy.unassessed')}
                           </Chip>

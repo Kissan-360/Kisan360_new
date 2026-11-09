@@ -2,6 +2,8 @@ const express = require('express');
 const { authenticateUser } = require('../middleware/auth');
 const requireDb = require('../middleware/requireDb');
 const Lot = require('../models/Lot');
+const User = require('../models/User');
+const { annotateProducerTrust } = require('../lib/producerTrust');
 
 const { CROPS } = require('../data/cropCatalog');
 
@@ -134,17 +136,27 @@ router.get('/available', async (req, res) => {
     }
 
     const lots = await Lot.find(filter).sort({ createdAt: -1 }).limit(100).lean();
-    const listed = lots.map(({ farmerUid, ...rest }) => ({
-      ...rest,
-      producer: rest.farmerName || (rest.district ? `Producer · ${rest.district}` : 'Producer'),
-    }));
+    let users = [];
+    try {
+      const farmerUids = [...new Set(lots.map((lot) => lot.farmerUid).filter(Boolean))];
+      if (farmerUids.length > 0) {
+        users = await User.find(
+          { firebaseUid: { $in: farmerUids }, phone: { $ne: null } },
+          'firebaseUid phone',
+        ).lean();
+      }
+    } catch (e) {
+      // Trust signal is additive only — never break the buy-side listing.
+      users = [];
+    }
+    const listed = annotateProducerTrust(lots, users);
 
     res.json({
       success: true,
       count: listed.length,
       lots: listed,
       view: 'market',
-      note: 'Open lots listed by other producers. Producer identity verification is not implemented in this demo.',
+      note: 'Open lots listed by other producers. Producer identity verification is not implemented in this demo. producerPhoneOnFile means a WhatsApp opt-in phone is on file; it is not KYC identity proof.',
     });
   } catch (error) {
     console.error('List available lots error:', error.message);
