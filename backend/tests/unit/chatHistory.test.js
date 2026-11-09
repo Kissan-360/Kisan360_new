@@ -8,6 +8,8 @@ describe('ChatHistory model', () => {
     const schema = ChatHistory.schema;
     expect(schema.path('text').options.maxlength).toBe(5000);
     expect(schema.indexes().some(([f]) => f.userUid === 1 && f.createdAt === -1)).toBe(true);
+    const ttl = schema.indexes().find(([f, opts]) => opts && opts.expireAfterSeconds === 90 * 24 * 3600);
+    expect(ttl).toBeTruthy();
   });
 
   test('rejects invalid role', async () => {

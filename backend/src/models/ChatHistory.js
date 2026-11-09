@@ -9,5 +9,6 @@ const chatHistorySchema = new mongoose.Schema({
 }, { strict: true });
 
 chatHistorySchema.index({ userUid: 1, createdAt: -1 });
+chatHistorySchema.index({ createdAt: 1 }, { expireAfterSeconds: 90 * 24 * 3600, name: 'chat_ttl_90d' });
 
 module.exports = mongoose.models.ChatHistory || mongoose.model('ChatHistory', chatHistorySchema);
