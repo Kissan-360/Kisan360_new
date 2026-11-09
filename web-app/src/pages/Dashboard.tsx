@@ -31,6 +31,18 @@ interface PulseFeed {
   reload: () => void;
 }
 
+/* ── Impact metrics — telemetry milestones only (no vanity numbers) ─── */
+const useImpact = () => {
+  const [data, setData] = useState<any>(null);
+  useEffect(() => {
+    apiFetch(`${API_URL}/metrics/impact`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then(setData)
+      .catch(() => setData(null));
+  }, []);
+  return data;
+};
+
 /* ── Market pulse feed — REAL prices from the backend, fetched once and
    shared by the Active Trading chip, the calculator advisory strip and the
    dark Mandi Pulse ticker. ─────────────────────────────────────────────── */
@@ -289,6 +301,7 @@ const Dashboard = () => {
   const pulseCrop = saved?.crop || 'Onion';
   const pulse = useMarketPulse(pulseCrop);
   const top = topOfFeed(pulse.rows);
+  const impact = useImpact();
 
   // Real lots + farms — replaces the hardcoded "0 Active" badge and the
   // static crop-portfolio card with the farmer's actual records.
@@ -388,6 +401,19 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* ── impact strip — telemetry milestones only (GET /api/metrics/impact) ── */}
+      {impact?.milestones && (
+        <div className="rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-stone-500">
+            Impact (last 30 days) {impact.farmersServedEstimate ? `· ~${impact.farmersServedEstimate} devices` : ''}
+          </p>
+          <p className="mt-1 text-xs leading-relaxed text-stone-600">
+            {Object.entries(impact.milestones).slice(0, 4).map(([k, v]) => `${k}: ${v}`).join(' · ') || 'No telemetry yet — enable KISAN_TELEMETRY for pilot counts.'}
+          </p>
+          <p className="mt-1 text-[10px] text-stone-400">Counts from UsageEvent milestones only. No prices, no PII.</p>
+        </div>
+      )}
 
       {/* ── resume flow card — shown if farmer has an incomplete selling flow ── */}
       {inFlow && (

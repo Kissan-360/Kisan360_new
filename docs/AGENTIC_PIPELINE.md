@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–80: summarize test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–81: dashboard impact). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -346,6 +346,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 80 (summarize test)
 - `backend/tests/unit/chatSummarize.test.js` — summarize endpoint contract + intent classification (in-CI)
+
+## Phase 81 (dashboard impact)
+- `Dashboard.tsx` impact strip — `GET /api/metrics/impact` (30-day `UsageEvent` milestones) rendered as “Impact (last 30 days) · ~N devices + top milestones” with the no-prices/no-PII note. Empty state is honest (“No telemetry yet”).
 
 ## Pre-embed (skip cold start)
 ```
