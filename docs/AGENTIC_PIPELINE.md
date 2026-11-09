@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–125: mobile notifications parity). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–126: price-trend alert subscriptions). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -526,3 +526,9 @@ cd ml-service && python scripts/embed_corpus.py
 - Added `mobile-app/src/services/notificationState.ts` — pure route mapping, seen-at parsing, unread derivation, and newest-first sorting
 - Added `NotificationsScreen`, `Endpoints.notifications()`, navigator route, and Decision entry point for signed-in users
 - Added `mobile-app/src/__tests__/notifications.test.ts` — route mapping, safe seen-at parsing, unread derivation, and non-mutating sort coverage
+
+## Phase 126 (price-trend alert subscriptions)
+- Added `PriceAlert` model + `backend/src/services/priceAlerts.js` — input validation, crossing evaluation, and derived notification items from observed `priceHistory` only (no forecasts)
+- `GET /api/notifications` now includes per-day-stable `price_alert` items when the latest observed modal crosses a subscription target
+- Added CRUD: `GET/POST /api/notifications/price-alerts`, `PATCH/DELETE /api/notifications/price-alerts/:id` (auth + DB gated, deduped by crop/market/direction/target)
+- Added the `price_alerts_user_active_crop_market` index to the DB manifest/migration script; added `backend/tests/unit/priceAlerts.test.js` coverage

@@ -26,6 +26,7 @@ const models = {
   Farm: require('../src/models/Farm'),
   GradeCertificate: require('../src/models/GradeCertificate'),
   UsageEvent: require('../src/models/UsageEvent'),
+  PriceAlert: require('../src/models/PriceAlert'),
 };
 
 function printManifest() {

@@ -1,10 +1,14 @@
 const express = require('express');
 const axios = require('axios');
 const { authenticateUser } = require('../middleware/auth');
+const requireDb = require('../middleware/requireDb');
 const Lot = require('../models/Lot');
 const Offer = require('../models/Offer');
 const Payment = require('../models/Payment');
 const Grievance = require('../models/Grievance');
+const PriceAlert = require('../models/PriceAlert');
+const priceHistory = require('../services/priceHistory');
+const { validatePriceAlertInput, priceAlertItems } = require('../services/priceAlerts');
 const router = express.Router();
 
 // Notifications are DERIVED, never stored: deal events come from the
@@ -174,6 +178,21 @@ async function dealItems(uid) {
   return items;
 }
 
+async function priceItems(uid) {
+  try {
+    const alerts = await PriceAlert.find({ userUid: uid, active: true })
+      .sort({ createdAt: -1 })
+      .limit(20)
+      .lean();
+    if (alerts.length === 0) return [];
+    const history = priceHistory.loadHistory();
+    return priceAlertItems(alerts, history.days);
+  } catch (e) {
+    console.error('Notification price-alert error:', e.message);
+    return [];
+  }
+}
+
 // GET /api/notifications - deal events + weather + tip (auth required)
 router.get('/', authenticateUser, async (req, res) => {
   try {
@@ -187,13 +206,15 @@ router.get('/', authenticateUser, async (req, res) => {
     }
 
     const day = dayKey();
-    const [weather, deals] = await Promise.all([
+    const [weather, deals, prices] = await Promise.all([
       fetchWeather(lat, lon),
       dealItems(req.user.uid),
+      priceItems(req.user.uid),
     ]);
 
     const notifications = [
       ...deals.sort((a, b) => +new Date(b.createdAt || 0) - +new Date(a.createdAt || 0)).slice(0, 8),
+      ...prices,
       ...weatherItems(weather, day),
       {
         id: `tip_${day}`, kind: 'tip', params: {},
@@ -211,6 +232,79 @@ router.get('/', authenticateUser, async (req, res) => {
   } catch (error) {
     console.error('Notifications error:', error);
     res.status(500).json({ success: false, error: 'Failed to fetch notifications' });
+  }
+});
+
+// ── Price-alert subscriptions ──────────────────────────────────────────────
+// Observed-price triggers only: when the latest AGMARKNET modal in
+// priceHistory crosses the target, GET /api/notifications derives a
+// per-day-stable item. No forecasts, no writes on read.
+
+const escapeRegex = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+router.get('/price-alerts', authenticateUser, requireDb, async (req, res) => {
+  try {
+    const alerts = await PriceAlert.find({ userUid: req.user.uid })
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .lean();
+    res.json({ success: true, count: alerts.length, alerts });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Failed to list price alerts' });
+  }
+});
+
+router.post('/price-alerts', authenticateUser, requireDb, async (req, res) => {
+  try {
+    const { errors, clean } = validatePriceAlertInput(req.body || {});
+    if (errors.length > 0) {
+      return res.status(400).json({ success: false, error: errors.join('; ') });
+    }
+    const existing = await PriceAlert.findOne({
+      userUid: req.user.uid,
+      active: true,
+      direction: clean.direction,
+      targetPrice: clean.targetPrice,
+      crop: new RegExp(`^${escapeRegex(clean.crop)}$`, 'i'),
+      market: new RegExp(`^${escapeRegex(clean.market)}$`, 'i'),
+    });
+    if (existing) {
+      return res.json({ success: true, alert: existing, existing: true });
+    }
+    const alert = await PriceAlert.create({ userUid: req.user.uid, ...clean, active: true });
+    res.status(201).json({ success: true, alert });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Failed to create price alert' });
+  }
+});
+
+router.patch('/price-alerts/:id', authenticateUser, requireDb, async (req, res) => {
+  try {
+    const { active } = req.body || {};
+    if (typeof active !== 'boolean') {
+      return res.status(400).json({ success: false, error: 'active must be a boolean' });
+    }
+    const alert = await PriceAlert.findOneAndUpdate(
+      { _id: req.params.id, userUid: req.user.uid },
+      { $set: { active } },
+      { new: true },
+    );
+    if (!alert) return res.status(404).json({ success: false, error: 'Price alert not found' });
+    res.json({ success: true, alert });
+  } catch (error) {
+    if (error.name === 'CastError') return res.status(404).json({ success: false, error: 'Price alert not found' });
+    res.status(500).json({ success: false, error: 'Failed to update price alert' });
+  }
+});
+
+router.delete('/price-alerts/:id', authenticateUser, requireDb, async (req, res) => {
+  try {
+    const result = await PriceAlert.deleteOne({ _id: req.params.id, userUid: req.user.uid });
+    if (result.deletedCount === 0) return res.status(404).json({ success: false, error: 'Price alert not found' });
+    res.json({ success: true, deleted: true });
+  } catch (error) {
+    if (error.name === 'CastError') return res.status(404).json({ success: false, error: 'Price alert not found' });
+    res.status(500).json({ success: false, error: 'Failed to delete price alert' });
   }
 });
 

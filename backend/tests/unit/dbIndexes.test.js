@@ -9,6 +9,7 @@ const models = {
   Farm: require('../../src/models/Farm'),
   GradeCertificate: require('../../src/models/GradeCertificate'),
   UsageEvent: require('../../src/models/UsageEvent'),
+  PriceAlert: require('../../src/models/PriceAlert'),
 };
 
 function sameKeys(actual, expected) {
@@ -17,7 +18,7 @@ function sameKeys(actual, expected) {
 
 describe('db index manifest', () => {
   test('entries are complete, named, and unique', () => {
-    expect(EXPECTED_INDEXES.length).toBeGreaterThanOrEqual(13);
+    expect(EXPECTED_INDEXES.length).toBeGreaterThanOrEqual(14);
     const names = EXPECTED_INDEXES.map((entry) => indexKeyName(entry));
     expect(new Set(names).size).toBe(names.length);
 

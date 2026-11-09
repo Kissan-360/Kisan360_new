@@ -98,6 +98,13 @@ const EXPECTED_INDEXES = [
     options: { name: 'usage_install_at' },
     reason: 'Pilot telemetry grouped by anonymous install over time.',
   },
+  {
+    model: 'PriceAlert',
+    collection: 'pricealerts',
+    keys: { userUid: 1, active: 1, crop: 1, market: 1, createdAt: -1 },
+    options: { name: 'price_alerts_user_active_crop_market' },
+    reason: 'Active price-alert subscriptions evaluated per user and crop/market.',
+  },
 ];
 
 function indexKeyName(entry) {
