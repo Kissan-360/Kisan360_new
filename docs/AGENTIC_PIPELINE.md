@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–75: picker parity test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–76: CI mobile test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -330,6 +330,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 75 (picker parity test)
 - `mobile-app/src/__tests__/maharashtra.test.ts` — crop/district lists have >15 entries, contain Onion/Nashik, no duplicates (prevents picker drift from web lists); `jest` + `ts-jest` added to `mobile-app`
+
+## Phase 76 (CI mobile test)
+- `.github/workflows/ci.yml` mobile job now runs `npm test` (picker parity, 2 tests) in addition to `tsc --noEmit` — mobile data drift fails CI, not just the emulator
 
 ## Pre-embed (skip cold start)
 ```
