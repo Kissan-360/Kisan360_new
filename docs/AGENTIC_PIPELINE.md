@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–64: mobile Razorpay hint). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–65: v1.5.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -295,6 +295,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 64 (mobile Razorpay hint)
 - `TradeScreen` footer — points test-checkout users to the web (Razorpay needs WebView/native module on mobile; mobile stays on simulated escrow with honest label)
+
+## Phase 65 (v1.5.0 final)
+- `backend/package.json` → **`1.5.0-agentic`** — corpus 250, Phases 0–65, all gates green
+- Tag `v1.5.0-agentic` to be created from `backend/team-lead-core` after full-suite verification
 
 ## Pre-embed (skip cold start)
 ```
