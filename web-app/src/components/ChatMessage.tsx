@@ -63,6 +63,7 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
 
   const isUser = message.role === 'user';
   const [copied, setCopied] = useState(false);
+  const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
 
   const copyText = async () => {
     const parts = [message.text];
@@ -98,14 +99,21 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
           {message.text}
         </div>
         {!isUser && (
-          <button
-            type="button"
-            onClick={copyText}
-            className="mt-1 inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-500 hover:bg-stone-50"
-            title="Copy this answer"
-          >
-            <Copy size={11} aria-hidden="true" /> {copied ? "Copied!" : "Copy"}
-          </button>
+          <div className="mt-1 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={copyText}
+              className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-500 hover:bg-stone-50"
+              title="Copy this answer"
+            >
+              <Copy size={11} aria-hidden="true" /> {copied ? "Copied!" : "Copy"}
+            </button>
+            <div className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-1 py-0.5">
+              <button type="button" aria-label="Helpful" onClick={() => setFeedback("up")} className={`px-2 text-xs ${feedback === "up" ? "text-emerald-700 font-bold" : "text-stone-400 hover:text-emerald-700"}`}>👍</button>
+              <button type="button" aria-label="Not helpful" onClick={() => setFeedback("down")} className={`px-2 text-xs ${feedback === "down" ? "text-red-600 font-bold" : "text-stone-400 hover:text-red-600"}`}>👎</button>
+            </div>
+            {feedback ? <span className="text-[11px] text-stone-400">Thanks for feedback</span> : null}
+          </div>
         )}
         {!isUser && message.toolResults?.netRealization?.topMandis?.length ? (
           <div className="mt-2 w-full max-w-sm rounded-xl border border-emerald-100 bg-emerald-50/60 p-3 text-xs leading-relaxed text-stone-700">

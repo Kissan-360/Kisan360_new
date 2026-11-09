@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–54: offline fallback). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–55: chat feedback). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -259,6 +259,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 54 (offline fallback)
 - `web-app/public/offline.html` — branded offline page (“Your last chat and decision are saved…”), PWA `navigateFallback` switched from `/index.html` → `/offline.html` + `offline.html` added to `includeAssets` (precached at install)
+
+## Phase 55 (chat feedback)
+- `ChatMessage` 👍/👎 feedback buttons (local state + “Thanks” note) — farmers signal helpful/not instead of silently leaving; pairs with copy (copy answer, rate it, share it)
 
 ## Pre-embed (skip cold start)
 ```
