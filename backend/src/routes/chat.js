@@ -737,6 +737,21 @@ async function executeIntent({ message, language, context = {}, classification, 
   }
 }
 
+// Feedback (thumbs) — persisted for quality measurement (best-effort)
+router.post('/feedback', authenticateUser, async (req, res) => {
+  try {
+    const { messageId, rating } = req.body || {};
+    if (!['up', 'down'].includes(rating)) return res.status(400).json({ error: 'rating must be up or down' });
+    const uid = req.user.uid || req.user.id || req.user.sub;
+    // Reuse ChatHistory as the feedback store (rating column via intent field)
+    const ChatHistory = require('../models/ChatHistory');
+    await ChatHistory.create({ userUid: uid, role: 'assistant', text: `feedback:${rating}`, intent: `feedback_${rating}` });
+    res.json({ success: true });
+  } catch {
+    res.status(500).json({ error: 'Failed to save feedback' });
+  }
+});
+
 // Server-side chat history (per user, last 20) — survives across devices.
 // localStorage stays as offline cache; the DB is the source of truth when up.
 router.delete('/history', authenticateUser, async (req, res) => {

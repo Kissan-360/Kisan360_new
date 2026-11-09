@@ -80,6 +80,17 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
     } catch { /* clipboard API may be unavailable in insecure context */ }
   };
 
+  const rate = async (r: "up" | "down") => {
+    setFeedback(r);
+    try {
+      const { apiFetch, API_URL } = await import('../lib/api');
+      apiFetch(`${API_URL}/chat/feedback`, {
+        method: 'POST',
+        body: JSON.stringify({ messageId: message.id, rating: r }),
+      }).catch(() => {});
+    } catch { /* offline — feedback is best-effort */ }
+  };
+
   return (
     <div className={`flex w-full gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && (
@@ -109,8 +120,8 @@ const ChatMessage = ({ message, suggestions = [], onSuggestion }: ChatMessagePro
               <Copy size={11} aria-hidden="true" /> {copied ? "Copied!" : "Copy"}
             </button>
             <div className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-1 py-0.5">
-              <button type="button" aria-label="Helpful" onClick={() => setFeedback("up")} className={`px-2 text-xs ${feedback === "up" ? "text-emerald-700 font-bold" : "text-stone-400 hover:text-emerald-700"}`}>👍</button>
-              <button type="button" aria-label="Not helpful" onClick={() => setFeedback("down")} className={`px-2 text-xs ${feedback === "down" ? "text-red-600 font-bold" : "text-stone-400 hover:text-red-600"}`}>👎</button>
+              <button type="button" aria-label="Helpful" onClick={() => rate("up")} className={`px-2 text-xs ${feedback === "up" ? "text-emerald-700 font-bold" : "text-stone-400 hover:text-emerald-700"}`}>👍</button>
+              <button type="button" aria-label="Not helpful" onClick={() => rate("down")} className={`px-2 text-xs ${feedback === "down" ? "text-red-600 font-bold" : "text-stone-400 hover:text-red-600"}`}>👎</button>
             </div>
             {feedback ? <span className="text-[11px] text-stone-400">Thanks for feedback</span> : null}
           </div>

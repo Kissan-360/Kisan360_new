@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–72: mobile disease share). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–73: server feedback). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -321,6 +321,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 72 (mobile disease share)
 - `DiseaseDetectionScreen` — **Share result (WhatsApp)** button (`Share.share`) with disease + severity + confidence + treatment summary; parity with web disease card
+
+## Phase 73 (server feedback)
+- `POST /api/chat/feedback` — persists thumbs (`up|down`) as `ChatHistory` rows (`intent: feedback_up/down`) for quality measurement; `ChatMessage` 👍/👎 now POSTs (best-effort, offline → local only)
 - This closes the build loop: Phases 0–70 are the complete 10/10 product (agent + RAG 250 + Groq 70B + MobileNetV2 + live weather/commodity + React + React Native + Render + Razorpay test + offline queues + history + share/copy + CI + E2E 8/8 live)
 
 ## Pre-embed (skip cold start)
