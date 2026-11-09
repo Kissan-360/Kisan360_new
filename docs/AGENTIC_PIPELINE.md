@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–39: mobile pickers). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–40: pickers everywhere). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -208,6 +208,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 39 (mobile pickers)
 - `mobile-app/DecisionScreen` — Crop/District are now **Picker** dropdowns (`src/data/maharashtra.ts`, 22 crops + 23 districts, mirrors web) instead of free-text `TextInput` (typo-proof, matches backend market coverage)
 - Added `@react-native-picker/picker@2.5.1` (Expo 49 compatible)
+
+## Phase 40 (pickers everywhere)
+- `TradeScreen` (crop/district) + `SignInScreen` (district) also use the shared `Picker` lists — no free-text crop/district remains on mobile
 
 ## Pre-embed (skip cold start)
 ```

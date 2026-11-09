@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Button, FlatList, ScrollView, Text, TextInput, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { Endpoints } from "../services/api";
+import { CROPS, DISTRICTS } from "../data/maharashtra";
 
 export default function TradeScreen() {
   const [lots, setLots] = useState<any[]>([]);
@@ -82,8 +84,14 @@ export default function TradeScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 10 }}>
       <Text style={{ fontSize: 20, fontWeight: "700" }}>Trade — lots & payments</Text>
-      <TextInput value={crop} onChangeText={setCrop} placeholder="Crop" style={styles.input} />
-      <TextInput value={district} onChangeText={setDistrict} placeholder="District" style={styles.input} />
+      <Text style={{ fontWeight: "600" }}>Crop</Text>
+      <Picker selectedValue={crop} onValueChange={(v) => setCrop(v)} style={styles.input}>
+        {CROPS.map((c) => <Picker.Item key={c} label={c} value={c} />)}
+      </Picker>
+      <Text style={{ fontWeight: "600" }}>District</Text>
+      <Picker selectedValue={district} onValueChange={(v) => setDistrict(v)} style={styles.input}>
+        {DISTRICTS.map((d) => <Picker.Item key={d} label={d} value={d} />)}
+      </Picker>
       <TextInput value={qty} onChangeText={setQty} placeholder="Qty (q)" keyboardType="numeric" style={styles.input} />
       <Button title={loading ? "Working..." : "Create lot"} onPress={create} />
       <Button title={loading ? "Loading..." : "Refresh"} onPress={load} />

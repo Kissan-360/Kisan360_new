@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Button, ScrollView, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Button, ScrollView, Text, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import { DISTRICTS } from "../data/maharashtra";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function SignInScreen({ navigation }: any) {
@@ -43,7 +45,10 @@ export default function SignInScreen({ navigation }: any) {
           </View>
         ))}
       </View>
-      <TextInput value={district} onChangeText={setDistrict} placeholder="District" style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 12 }} />
+      <Text style={{ fontWeight: "600" }}>District</Text>
+      <Picker selectedValue={district} onValueChange={(v) => setDistrict(v)} style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
+        {DISTRICTS.map((d) => <Picker.Item key={d} label={d} value={d} />)}
+      </Picker>
       <Button title={isLoading ? "Signing in..." : "Sign in"} onPress={signIn} />
       {isLoading ? <ActivityIndicator /> : null}
       {!!error ? <Text style={{ color: "red" }}>{error}</Text> : null}
