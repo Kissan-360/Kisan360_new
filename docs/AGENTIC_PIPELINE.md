@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–126: price-trend alert subscriptions). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–127: price-alert UI). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -532,3 +532,8 @@ cd ml-service && python scripts/embed_corpus.py
 - `GET /api/notifications` now includes per-day-stable `price_alert` items when the latest observed modal crosses a subscription target
 - Added CRUD: `GET/POST /api/notifications/price-alerts`, `PATCH/DELETE /api/notifications/price-alerts/:id` (auth + DB gated, deduped by crop/market/direction/target)
 - Added the `price_alerts_user_active_crop_market` index to the DB manifest/migration script; added `backend/tests/unit/priceAlerts.test.js` coverage
+
+## Phase 127 (price-alert UI)
+- Web `NotificationBell` now manages price alerts in-panel: list, create (crop/market/direction/target), pause/resume, and delete; `price_alert` items render with a trend icon and EN/MR/HI text
+- Added EN/MR/HI labels for the alert section and trigger text
+- Mobile `Endpoints` gained price-alert CRUD parity for future in-app management

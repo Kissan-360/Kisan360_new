@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Send, CheckCircle2, Banknote, XCircle, Package, FileText,
   CloudSun, CloudRain, Zap, Thermometer, Snowflake, Droplets, Lightbulb,
-  Bell, type LucideIcon,
+  Bell, TrendingUp, type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from '../i18n';
@@ -37,6 +37,7 @@ const KIND_ICONS: Record<string, LucideIcon> = {
   wx_storm: Zap,
   wx_frost: Snowflake,
   tip: Lightbulb,
+  price_alert: TrendingUp,
 };
 
 interface Notif {
@@ -48,6 +49,15 @@ interface Notif {
   type?: string;
   to?: string;
   createdAt?: string;
+}
+
+interface PriceAlert {
+  _id: string;
+  crop: string;
+  market: string;
+  direction: 'above' | 'below';
+  targetPrice: number;
+  active: boolean;
 }
 
 function readSeen(): number {
@@ -65,6 +75,12 @@ const NotificationBell = () => {
   const [seenAt, setSeenAt] = useState<number>(readSeen);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
+  const [alerts, setAlerts] = useState<PriceAlert[]>([]);
+  const [alertError, setAlertError] = useState('');
+  const [crop, setCrop] = useState('Onion');
+  const [market, setMarket] = useState('APMC Lasalgaon');
+  const [direction, setDirection] = useState<'above' | 'below'>('above');
+  const [target, setTarget] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   // Respect the Settings toggle: when off, the bell neither fetches nor
@@ -112,6 +128,77 @@ const NotificationBell = () => {
     }
   }, [user]);
 
+  const authHeaders = useCallback(async (): Promise<Record<string, string>> => {
+    const headers: Record<string, string> = {};
+    if (!getDemoToken() && user && typeof (user as any).getIdToken === 'function') {
+      try {
+        headers.Authorization = `Bearer ${await (user as any).getIdToken()}`;
+      } catch {}
+    }
+    return headers;
+  }, [user]);
+
+  const fetchAlerts = useCallback(async () => {
+    try {
+      setAlertError('');
+      const resp = await apiFetch(`${API_URL}/notifications/price-alerts`, { headers: await authHeaders() });
+      const data = await resp.json();
+      if (data.success && Array.isArray(data.alerts)) setAlerts(data.alerts);
+      else if (!data.success) setAlertError(data.error || 'Could not load price alerts.');
+    } catch {
+      setAlertError('Could not load price alerts.');
+    }
+  }, [authHeaders]);
+
+  const createAlert = async () => {
+    setAlertError('');
+    try {
+      const resp = await apiFetch(`${API_URL}/notifications/price-alerts`, {
+        method: 'POST',
+        headers: await authHeaders(),
+        body: JSON.stringify({ crop, market, direction, targetPrice: Number(target) }),
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.success) throw new Error(data.error || 'Could not add alert');
+      setTarget('');
+      await fetchAlerts();
+      await fetchNotifications();
+    } catch (e: any) {
+      setAlertError(e.message || 'Could not add alert');
+    }
+  };
+
+  const toggleAlert = async (alert: PriceAlert) => {
+    setAlertError('');
+    try {
+      const resp = await apiFetch(`${API_URL}/notifications/price-alerts/${alert._id}`, {
+        method: 'PATCH',
+        headers: await authHeaders(),
+        body: JSON.stringify({ active: !alert.active }),
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.success) throw new Error(data.error || 'Could not update alert');
+      await fetchAlerts();
+    } catch (e: any) {
+      setAlertError(e.message || 'Could not update alert');
+    }
+  };
+
+  const deleteAlert = async (alert: PriceAlert) => {
+    setAlertError('');
+    try {
+      const resp = await apiFetch(`${API_URL}/notifications/price-alerts/${alert._id}`, {
+        method: 'DELETE',
+        headers: await authHeaders(),
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.success) throw new Error(data.error || 'Could not delete alert');
+      await fetchAlerts();
+    } catch (e: any) {
+      setAlertError(e.message || 'Could not delete alert');
+    }
+  };
+
   useEffect(() => {
     if (user && notificationsEnabled) {
       fetchNotifications();
@@ -132,6 +219,7 @@ const NotificationBell = () => {
   const toggleOpen = () => {
     if (!open) {
       fetchNotifications();
+      fetchAlerts();
       markSeen();
     }
     setOpen(!open);
@@ -242,6 +330,45 @@ const NotificationBell = () => {
                 );
               })
             )}
+          </div>
+
+          <div className="border-t border-stone-100 px-4 py-3">
+            <div className="flex items-center justify-between gap-2">
+              <h4 className="font-semibold text-stone-800 text-xs">{t('notif.priceAlerts')}</h4>
+              <span className="text-[10px] text-stone-400">{t('notif.priceAlertHint')}</span>
+            </div>
+            {alertError && <p className="text-[11px] text-red-600 mt-1">{alertError}</p>}
+            {alerts.length > 0 && (
+              <ul className="mt-2 space-y-1.5">
+                {alerts.map((alert) => (
+                  <li key={alert._id} className="flex items-center justify-between gap-2 text-xs text-stone-700">
+                    <span className={!alert.active ? 'opacity-50 line-through' : ''}>
+                      {alert.crop} · {alert.market} · {alert.direction} ₹{Number(alert.targetPrice).toLocaleString('en-IN')}/q
+                    </span>
+                    <span className="flex items-center gap-1 shrink-0">
+                      <button onClick={() => toggleAlert(alert)} className="px-2 py-1 text-[10px] font-semibold text-emerald-700 hover:text-emerald-800 min-h-[28px]">
+                        {alert.active ? 'Pause' : 'Resume'}
+                      </button>
+                      <button onClick={() => deleteAlert(alert)} className="px-2 py-1 text-[10px] font-semibold text-red-600 hover:text-red-700 min-h-[28px]">
+                        Delete
+                      </button>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <input value={crop} onChange={(e) => setCrop(e.target.value)} placeholder="Crop" className="input-field !py-1.5 text-xs" />
+              <input value={market} onChange={(e) => setMarket(e.target.value)} placeholder="Market" className="input-field !py-1.5 text-xs" />
+              <select value={direction} onChange={(e) => setDirection(e.target.value as 'above' | 'below')} className="input-field !py-1.5 text-xs">
+                <option value="above">At/above</option>
+                <option value="below">At/below</option>
+              </select>
+              <input value={target} onChange={(e) => setTarget(e.target.value)} placeholder="₹/q" inputMode="numeric" className="input-field !py-1.5 text-xs" />
+            </div>
+            <button onClick={createAlert} className="btn-primary mt-2 w-full text-xs !py-1.5">
+              {t('notif.priceAlertAdd')}
+            </button>
           </div>
         </div>
       )}

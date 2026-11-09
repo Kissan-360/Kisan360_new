@@ -45,6 +45,12 @@ export const Endpoints = {
   postFeedback: (rating: "up" | "down") => api.post("/chat/feedback", { rating }),
   impact: () => api.get("/metrics/impact"),
   notifications: () => api.get("/notifications"),
+  listPriceAlerts: () => api.get("/notifications/price-alerts"),
+  createPriceAlert: (payload: Record<string, unknown>) =>
+    api.post("/notifications/price-alerts", payload),
+  updatePriceAlert: (id: string, active: boolean) =>
+    api.patch(`/notifications/price-alerts/${id}`, { active }),
+  deletePriceAlert: (id: string) => api.delete(`/notifications/price-alerts/${id}`),
   clearChatHistory: () => api.delete("/chat/history"),
   gradeAssessment: (payload: Record<string, unknown>) =>
     api.post("/grade-assessment", payload),
