@@ -1,6 +1,6 @@
-# Final Audit — v1.2.0-agentic ✅ COMPLETE (Phases 0–33)
+# Final Audit — v1.4.0-agentic ✅ COMPLETE (Phases 0–49)
 
-**Status:** Shipped, merged, tagged, verified — 2026-11-08
+**Status:** Shipped, merged, tagged, verified — 2026-11-09
 
 ## Deployed stack
 - **Web:** Render static (Vite, code-split, PWA, 44 precache) — always up
@@ -8,17 +8,17 @@
 - **Calc:** Render free (pure-Python, `requirements-calc.txt`) — 50s cold start, keepalive every 10 min
 - **RAG/Disease:** optional (torch) — `render-optional.yaml` for paid; keyword fallback + template when offline
 
-## Counts (measured 2026-11-08, not memories)
-- Backend Jest: **641 passed** (30 suites)
+## Counts (measured 2026-11-09, not memories)
+- Backend Jest: **643 passed** (31 suites)
 - Python eval: **8/8**, e2e-agent **9/9**, smoke-agent ALL PASS, eval-intents **11/11**, keyword fallback **3/3**
 - Corpus: **250 docs** verified
-- Live E2E: backend+calc `5/5` (`docs/E2E_LIVE_RESULTS.md` — APMC Mangal Wedha Rs 3464.55/q)
+- Live E2E: backend+calc `5/5` (`docs/E2E_LIVE_RESULTS.md` — APMC Mangal Wedha Rs 3464.55/q) · HTTP E2E now 7 steps (FPO + disease gate)
 - Web: `tsc` clean + `vite build` OK · Mobile: `tsc` 0
-- Git: PR **#2** squash-merged (`1dc3074`), base `backend/team-lead-core` at `c8dcfd1`, tags `v1.1.0-agentic`, `v1.2.0-agentic`
-- LangGraph full runner (`/agent/graph`, `graph: langgraph | pure-python`)
+- Git: PR **#2** squash-merged (`1dc3074`), base `backend/team-lead-core`, tags `v1.1.0-agentic`, `v1.2.0-agentic`, `v1.4.0-agentic`
+- LangGraph full runner (`/agent/graph`, `graph: langgraph | pure-python`) + server chat history (90d TTL)
 
 ## To ship (already done)
-1. ✅ Tag `v1.2.0-agentic` pushed
+1. ✅ Tag `v1.4.0-agentic` pushed (matches `backend/package.json` 1.4.0)
 2. Deploy: Render Blueprint from `render.yaml` (free) or `render-optional.yaml` (paid ML)
 3. Demo: `docs/DEMO_SCRIPT_AGENTIC.md` (5 min) + `docs/E2E_LIVE_RESULTS.md`
 4. Production inline check: `node scripts/prod-check.js`
