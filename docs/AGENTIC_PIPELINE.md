@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–91: mobile voice playback). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–92: WhatsApp notifications). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -382,6 +382,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 91 (mobile voice playback)
 - `mobile-app/ChatScreen` — **🔊** button per assistant bubble (`expo-speech` `mr-IN`) — parity with web Listen; added `expo-speech@~13.1.0` (Expo 49)
+
+## Phase 92 (WhatsApp notifications)
+- `POST /api/notifications/whatsapp` — WhatsApp Cloud template send (`mr` language, `WHATSAPP_TOKEN` + `WHATSAPP_PHONE_NUMBER_ID`); 503 with honest fallback when not configured (in-app notifications remain). Proactive alerts, not just share links.
 
 ## Pre-embed (skip cold start)
 ```
