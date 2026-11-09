@@ -45,4 +45,13 @@ const lotSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+lotSchema.index(
+  { status: 1, district: 1, grade: 1, crop: 1, createdAt: -1 },
+  { name: 'lots_available_market' },
+);
+lotSchema.index(
+  { farmerUid: 1, status: 1, createdAt: -1 },
+  { name: 'lots_farmer_status_created' },
+);
+
 module.exports = mongoose.model('Lot', lotSchema);

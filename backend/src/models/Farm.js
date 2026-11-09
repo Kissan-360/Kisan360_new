@@ -15,4 +15,6 @@ const farmSchema = new mongoose.Schema({
   notes: { type: String, default: '' },
 }, { timestamps: true });
 
+farmSchema.index({ firebaseUid: 1, createdAt: -1 }, { name: 'farms_user_created' });
+
 module.exports = mongoose.model('Farm', farmSchema);

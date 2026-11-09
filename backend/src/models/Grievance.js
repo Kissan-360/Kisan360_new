@@ -29,4 +29,9 @@ const grievanceSchema = new mongoose.Schema({
   resolutionNote: { type: String, default: '' },
 }, { timestamps: true });
 
+grievanceSchema.index(
+  { raisedByUid: 1, status: 1, updatedAt: -1 },
+  { name: 'grievances_raised_status_updated' },
+);
+
 module.exports = mongoose.model('Grievance', grievanceSchema);

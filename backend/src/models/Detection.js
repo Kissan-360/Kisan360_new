@@ -14,4 +14,6 @@ const detectionSchema = new mongoose.Schema({
   recommendations: [{ type: String }],
 }, { timestamps: true });
 
+detectionSchema.index({ firebaseUid: 1, createdAt: -1 }, { name: 'detections_user_created' });
+
 module.exports = mongoose.model('Detection', detectionSchema);

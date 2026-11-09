@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–121: KVK PDF ingestion). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–122: production DB index migration). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -502,3 +502,9 @@ cd ml-service && python scripts/embed_corpus.py
 - Replaced the `ingest_kvk.py` TODO stub with real text extraction: PyMuPDF (`fitz`) first, `pypdf` fallback, normalized text, paragraph-aware chunking, unique review IDs, recursive PDF discovery, page/char limits, language metadata, per-file skip reporting
 - Added ingestion-only `ml-service/requirements-ingest.txt` to keep the Render ML service lean
 - Added `ml-service/test_ingest_kvk.py` — normalization, chunking, metadata, generated-PDF extraction, and CLI JSON output coverage
+
+## Phase 122 (production DB index migration)
+- Added `backend/src/lib/dbIndexes.js` — 13-entry index manifest for hot lots/offers/payments/grievances/detections/farms/grade-certificates/usage query paths
+- Added named compound indexes to Lot, Offer, Payment, Grievance, Detection, Farm, GradeCertificate, and UsageEvent schemas
+- Added `backend/scripts/migrate-indexes.js` — `--dry-run` prints the manifest without opening a DB; real runs require a live MongoDB and explicitly disable the demo in-memory fallback
+- Added `backend/tests/unit/dbIndexes.test.js` — manifest completeness/uniqueness + schema parity coverage

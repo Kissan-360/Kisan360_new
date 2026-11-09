@@ -19,5 +19,6 @@ const usageEventSchema = new mongoose.Schema({
 
 // Pilot reports query by window and group by milestone.
 usageEventSchema.index({ at: -1, event: 1 });
+usageEventSchema.index({ installId: 1, at: -1 }, { name: 'usage_install_at' });
 
 module.exports = mongoose.model('UsageEvent', usageEventSchema);

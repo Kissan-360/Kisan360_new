@@ -3,6 +3,7 @@
 ## Render (free tier, 3 services)
 - [ ] Blueprint from `render.yaml` (web static + api + calc)
 - [ ] `MONGODB_URI` (Atlas M0) + `FRONTEND_URL` set in dashboard
+- [ ] `cd backend && node scripts/migrate-indexes.js --dry-run` (review), then `node scripts/migrate-indexes.js` against the production URI
 - [ ] `GROQ_API_KEY`, `AGMARKNET_API_KEY`, `OPENWEATHER_API_KEY` set (optional — fallbacks work)
 - [ ] `DEMO_JWT_SECRET` generated (stable across restarts)
 - [ ] `python scripts/prod-check.js` passes (web 200; api/calc may need 60s wake)

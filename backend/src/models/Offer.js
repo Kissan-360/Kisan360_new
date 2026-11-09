@@ -35,4 +35,14 @@ const offerSchema = new mongoose.Schema({
   notes: { type: String, default: '' },
 }, { timestamps: true });
 
+offerSchema.index(
+  { farmerUid: 1, status: 1, createdAt: -1 },
+  { name: 'offers_farmer_status_created' },
+);
+offerSchema.index({ lotId: 1, status: 1 }, { name: 'offers_lot_status' });
+offerSchema.index(
+  { buyerId: 1, status: 1, createdAt: -1 },
+  { name: 'offers_buyer_status_created' },
+);
+
 module.exports = mongoose.model('Offer', offerSchema);

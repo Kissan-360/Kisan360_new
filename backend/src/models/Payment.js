@@ -37,4 +37,11 @@ const paymentSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+paymentSchema.index(
+  { farmerUid: 1, status: 1, createdAt: -1 },
+  { name: 'payments_farmer_status_created' },
+);
+paymentSchema.index({ farmerUid: 1, updatedAt: -1 }, { name: 'payments_farmer_updated' });
+paymentSchema.index({ lotId: 1 }, { name: 'payments_lot' });
+
 module.exports = mongoose.model('Payment', paymentSchema);

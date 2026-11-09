@@ -68,5 +68,9 @@ const gradeCertificateSchema = new mongoose.Schema({
 
 // Index for farmer's certificates
 gradeCertificateSchema.index({ farmerUid: 1, crop: 1, createdAt: -1 });
+gradeCertificateSchema.index(
+  { fpoStatus: 1, createdAt: -1 },
+  { name: 'grade_certs_fpo_status_created' },
+);
 
 module.exports = mongoose.model('GradeCertificate', gradeCertificateSchema);
