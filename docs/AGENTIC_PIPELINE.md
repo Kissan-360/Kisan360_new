@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–37: 10/10 ready). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–38: v1.3.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -200,6 +200,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 37 (10/10 ready)
 - Mobile `DecisionScreen` banner corrected: price comparison works without sign-in (public `/net-realization`); only chat / disease / lots need the demo token
 - This closes the last misleading prompt in the farmer flow — no dead ends, no fake gates
+
+## Phase 38 (v1.3.0 final)
+- `backend/package.json` → **`1.3.0-agentic`** (was `1.2.0-agentic`) — corpus 250, Phases 0–38, all gates green
+- Tag `v1.3.0-agentic` to be created from `backend/team-lead-core` after full-suite verification
 
 ## Pre-embed (skip cold start)
 ```
