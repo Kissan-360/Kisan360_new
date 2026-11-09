@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–90: TTS playback). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–91: mobile voice playback). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -379,6 +379,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 90 (TTS playback)
 - `ChatMessage` **Listen** button — `SpeechSynthesisUtterance` (`mr-IN`) reads the answer aloud (low-literacy farmers can hear it); cancels previous utterance first
+
+## Phase 91 (mobile voice playback)
+- `mobile-app/ChatScreen` — **🔊** button per assistant bubble (`expo-speech` `mr-IN`) — parity with web Listen; added `expo-speech@~13.1.0` (Expo 49)
 
 ## Pre-embed (skip cold start)
 ```

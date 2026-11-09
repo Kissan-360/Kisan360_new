@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Button, FlatList, ScrollView, Share, Text, TextInput, View } from "react-native";
 import { Audio } from "expo-av";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Speech from "expo-speech";
 import { Endpoints } from "../services/api";
 
 async function copyText(text: string) {
@@ -202,7 +203,10 @@ export default function ChatScreen() {
               {item.role === "user" ? "You: " : "Kisan: "}{item.text}
             </Text>
             {item.role === "assistant" ? (
-              <Button title="Copy" onPress={() => copyText(item.text)} />
+              <View style={{ flexDirection: "row", gap: 4 }}>
+                <Button title="Copy" onPress={() => copyText(item.text)} />
+                <Button title="🔊" onPress={() => Speech.speak(item.text, { language: "mr-IN" })} />
+              </View>
             ) : null}
           </View>
         )}
