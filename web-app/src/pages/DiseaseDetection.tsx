@@ -271,6 +271,20 @@ const DiseaseDetection = () => {
                   </div>
                 )}
 
+                {result.top5Predictions?.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-stone-200">
+                    <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Top predictions (model)</p>
+                    <ul className="space-y-1">
+                      {result.top5Predictions.slice(0, 5).map((p: any, i: number) => (
+                        <li key={i} className="flex justify-between text-xs text-stone-600">
+                          <span>#{i + 1} {p.label || p.disease || p.class}</span>
+                          <span>{((p.confidence || 0) * 100).toFixed(0)}%</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] leading-tight text-stone-500">
                   <span className="rounded-full bg-white px-2 py-0.5 ring-1 ring-stone-200">
                     model: MobileNetV2 (PlantDisease-ID, 38 classes)

@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–108: v2.2.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–109: disease top5). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -438,6 +438,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `backend/package.json` → **`2.2.0-agentic`** — corpus 260, Phases 0–108, all gates green
 - Tag `v2.2.0-agentic` to be created; this closes the build loop (100+ phases, 10/10 product)
 
+## Phase 109 (disease top5)
+- DiseaseDetection.tsx - Top-5 model predictions (label + pct) under treatment; parity with chat disease card (top-3)
+
 ## Pre-embed (skip cold start)
 ```
 cd ml-service && python scripts/embed_corpus.py
@@ -451,3 +454,4 @@ cd ml-service && python scripts/embed_corpus.py
 4. Commission never subtracted from farmer net (APMC Act s.31).
 5. Simulated payments/buyers labeled simulated.
 
+
