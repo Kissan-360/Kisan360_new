@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–115: final audit). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–116: v3.1.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -480,3 +480,7 @@ cd ml-service && python scripts/embed_corpus.py
 ## Phase 115 (final audit v3.0.0)
 - FINAL_AUDIT.md -> COMPLETE (Phases 0-115, 659 Jest, 250+60 docs, 8/8 live + 11-step HTTP E2E)
 - This closes the build loop: 115 phases, 10/10 product (agent + RAG 270 + Groq 70B + MobileNetV2 + live weather/commodity + React + React Native + Razorpay test + offline queues/history + share/copy/feedback/summarize/TTS/voice + CI/E2E live)
+
+## Phase 116 (v3.1.0 final)
+- backend/package.json -> 3.1.0-agentic (Phase 0-116, corpus 270)
+- Tag v3.1.0-agentic to be created; this is the 10/10 ship-complete point

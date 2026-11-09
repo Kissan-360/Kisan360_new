@@ -1,7 +1,7 @@
 {
   "name": "kisan360-backend",
-  "version": "3.0.0-agentic",
-  "description": "Backend API for Kisan360 agricultural platform (agentic Phase 0-113, corpus 270)",
+  "version": "3.1.0-agentic",
+  "description": "Backend API for Kisan360 agricultural platform (agentic Phase 0-116, corpus 270)",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
