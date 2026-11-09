@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–109: disease top5). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–110: v2.3.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -455,3 +455,7 @@ cd ml-service && python scripts/embed_corpus.py
 5. Simulated payments/buyers labeled simulated.
 
 
+
+## Phase 110 (v2.3.0 final)
+- backend/package.json -> 2.3.0-agentic (Phase 0-110, corpus 260)
+- Tag v2.3.0-agentic to be created; this closes the build loop (110 phases, 10/10 product)
