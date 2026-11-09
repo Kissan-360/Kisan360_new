@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–92: WhatsApp notifications). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–93: WhatsApp test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -385,6 +385,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 92 (WhatsApp notifications)
 - `POST /api/notifications/whatsapp` — WhatsApp Cloud template send (`mr` language, `WHATSAPP_TOKEN` + `WHATSAPP_PHONE_NUMBER_ID`); 503 with honest fallback when not configured (in-app notifications remain). Proactive alerts, not just share links.
+
+## Phase 93 (WhatsApp test)
+- `backend/tests/unit/whatsapp.test.js` — 400 on missing `to`, 503 when not configured (mocked auth, in-CI, no Cloud API)
 
 ## Pre-embed (skip cold start)
 ```
