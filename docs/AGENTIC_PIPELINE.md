@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–49: final audit v1.4.0). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–50: chat history HTTP test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -244,6 +244,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 49 (final audit v1.4.0)
 - `docs/FINAL_AUDIT.md` → COMPLETE (643 Jest, 250 docs, live E2E 5/5, HTTP E2E 7 steps, LangGraph runner) + `backend/package.json` description → Phase 0–49
+
+## Phase 50 (chat history E2E)
+- `e2e-http.js` — 7 → 8 steps: `GET /chat/history` asserts server history written by the chat turn (cross-device contract, TTL 90d)
 
 ## Pre-embed (skip cold start)
 ```

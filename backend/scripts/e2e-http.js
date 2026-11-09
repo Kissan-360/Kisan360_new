@@ -78,6 +78,10 @@ async function main() {
   const dis = await http("/api/disease/detect", { method: "POST", token, body: {} });
   check("POST /api/disease/detect (no image -> 400)", dis.status === 400, dis.data?.error || "");
 
+  // 8) Chat history (server-side, cross-device) — written by step 3
+  const hist = await http("/api/chat/history", { token });
+  check("GET /api/chat/history", hist.status === 200 && Array.isArray(hist.data?.history), `rows=${hist.data?.history?.length || 0}`);
+
   console.log(`\n${pass}/${total} passed`);
   process.exit(pass === total ? 0 : 1);
 }
