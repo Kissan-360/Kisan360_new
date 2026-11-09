@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–43: server chat history). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–44: mobile server history + test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -223,6 +223,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 - `backend/src/models/ChatHistory.js` — per-user `userUid/role/text/intent`, last 20, indexed
 - `POST /api/chat` persists both turns (best-effort, never blocks the answer); new `GET /api/chat/history` returns them (offline DB → empty + note)
 - `ChatBot` loads server history on mount (cross-device), localStorage remains the offline cache
+
+## Phase 44 (mobile history parity + test)
+- `mobile-app/ChatScreen` loads `GET /chat/history` (server, cross-device) on mount; `AsyncStorage` stays as the offline cache; `Endpoints.chatHistory()` added
+- `backend/tests/unit/chatHistory.test.js` — schema contract (text cap, index, role enum), in-CI
 
 ## Pre-embed (skip cold start)
 ```

@@ -71,6 +71,20 @@ export default function ChatScreen() {
           if (Array.isArray(parsed)) setMessages(parsed.slice(-10));
         }
       } catch {}
+      // Server history (cross-device) when online — local stays as offline cache
+      try {
+        const res = await Endpoints.chatHistory();
+        const rows = (res.data as any)?.history || [];
+        if (Array.isArray(rows) && rows.length) {
+          const serverMsgs: Msg[] = rows.slice(-10).map((r: any, i: number) => ({
+            id: `srv-${r.createdAt || i}`,
+            role: r.role === "user" ? "user" : "assistant",
+            text: String(r.text || "").slice(0, 5000),
+          }));
+          setMessages(serverMsgs);
+          try { await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(serverMsgs)); } catch {}
+        }
+      } catch { /* offline — keep localStorage */ }
     })();
   }, []);
 
