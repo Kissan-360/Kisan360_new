@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–36: mobile offline retry). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–37: 10/10 ready). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -196,6 +196,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 36 (manual retry)
 - `ChatScreen` **Retry (N)** button — re-sends the first queued message on demand (farmer taps when signal returns, instead of waiting for a NetInfo listener); re-enqueues automatically if still offline
+
+## Phase 37 (10/10 ready)
+- Mobile `DecisionScreen` banner corrected: price comparison works without sign-in (public `/net-realization`); only chat / disease / lots need the demo token
+- This closes the last misleading prompt in the farmer flow — no dead ends, no fake gates
 
 ## Pre-embed (skip cold start)
 ```

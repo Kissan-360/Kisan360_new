@@ -50,7 +50,7 @@ export default function DecisionScreen({ navigation }: any) {
       <Text style={{ fontSize: 20, fontWeight: "700" }}>Decision — net realization</Text>
       {!token ? (
         <View>
-          <Text style={{ color: "#b45309", fontSize: 13 }}>Sign in first — chat / disease / lots need a demo token.</Text>
+          <Text style={{ color: "#b45309", fontSize: 13 }}>Price comparison works without sign-in. Chat / disease / lots need a demo token.</Text>
           <Button title="Sign in (demo)" onPress={() => navigation?.navigate?.("SignIn")} />
         </View>
       ) : null}
