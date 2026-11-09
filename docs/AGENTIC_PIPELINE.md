@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–105: decision copy). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–106: mobile voice transcribe). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -427,6 +427,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 105 (decision copy)
 - `mobile-app/DecisionScreen` — **Copy / Share** button beside “Create lot” (`Share.share` with top-5 mandi lines) — parity with web decision share
+
+## Phase 106 (mobile voice transcribe)
+- `mobile-app/ChatScreen` — 🎤 now actually transcribes: stop → `POST /api/transcribe` (Groq Whisper `whisper-large-v3`, `lang` = EN/MR/HI toggle) → fills input and auto-sends. Previously it only recorded and discarded.
 
 ## Pre-embed (skip cold start)
 ```

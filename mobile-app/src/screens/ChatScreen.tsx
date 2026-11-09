@@ -33,10 +33,44 @@ export default function ChatScreen() {
 
   const toggleVoice = async () => {
     if (recording) {
+      setRecording(false);
       try {
         await recRef.current?.stopAndUnloadAsync();
-      } catch {}
-      setRecording(false);
+        const uri = recRef.current?.getURI?.();
+        if (!uri) return;
+        // Transcribe the recording via backend Whisper (Groq)
+        const form = new FormData();
+        form.append('audio', {
+          uri,
+          name: 'voice.m4a',
+          type: 'audio/m4a',
+        } as any);
+        form.append('language', lang);
+        setLoading(true);
+        const res = await Endpoints.transcribe(form);
+        const text = (res.data as any)?.text;
+        if (text) {
+          setMsg(text);
+          // Auto-send so the farmer hears and sees the answer in one tap
+          const userMsg: Msg = { id: `${Date.now()}`, role: 'user', text };
+          const next = [...messages, userMsg];
+          await persist(next);
+          setMsg('');
+          try {
+            const chatRes = await Endpoints.chat(text, {}, lang, 'action');
+            setReply(chatRes.data);
+            await persist([...next, { id: `${Date.now()}-a`, role: 'assistant', text: chatRes.data?.text || '…' }]);
+          } catch (e: any) {
+            setError(e?.response?.data?.error || e.message || 'Chat failed');
+          }
+        } else {
+          setError((res.data as any)?.error || 'Transcription empty');
+        }
+      } catch (e: any) {
+        setError(e?.response?.data?.error || e.message || 'Voice failed');
+      } finally {
+        setLoading(false);
+      }
       return;
     }
     try {
