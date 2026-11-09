@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–107: transcribe test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–108: v2.2.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -433,6 +433,10 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 107 (transcribe test)
 - `backend/tests/unit/transcribe.test.js` — endpoint contract (400 without audio, 503 when `GROQ_API_KEY` missing), in-CI, no Whisper call
+
+## Phase 108 (v2.2.0 final)
+- `backend/package.json` → **`2.2.0-agentic`** — corpus 260, Phases 0–108, all gates green
+- Tag `v2.2.0-agentic` to be created; this closes the build loop (100+ phases, 10/10 product)
 
 ## Pre-embed (skip cold start)
 ```
