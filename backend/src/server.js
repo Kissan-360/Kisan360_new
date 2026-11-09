@@ -271,6 +271,7 @@ app.use('/api/schemes', schemeRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/grade-assessment', gradeAssessmentRoutes);
 app.use('/api/trading-channels', tradingChannelsRoutes);
+app.use('/api/metrics', require('./routes/metrics'));
 app.use('/api/ops', require('./routes/ops'));
 
 // 404 handler

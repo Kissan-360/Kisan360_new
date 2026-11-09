@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–78: v1.7.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–79: impact metrics). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -340,6 +340,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 78 (v1.7.0 final)
 - `backend/package.json` → **`1.7.0-agentic`** — corpus 250, Phases 0–78, all gates green
 - Tag `v1.7.0-agentic` to be created; this closes the build loop (50+ phases, 10/10 product)
+
+## Phase 79 (impact metrics)
+- `GET /api/metrics/impact` — 30-day `UsageEvent` counts (`farmersServedEstimate` from distinct `installId`, `milestones` by event) + honest DB-offline note. No prices, no PII, telemetry opt-in (`KISAN_TELEMETRY=on`). This is the pilot-proof endpoint (`FINAL_AUDIT.md` “no vanity numbers” rule, now executable).
 
 ## Pre-embed (skip cold start)
 ```
