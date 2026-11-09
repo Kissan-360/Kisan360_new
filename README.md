@@ -1,6 +1,6 @@
-# Kisan360 — Market Linkages & Price Discovery for Farmers
+# Kisan360 — Agentic Agricultural Advisory Platform · v1.4.0-agentic
 
-**SIH 2026 Internal Hackathon (CMR University) · PS: SIH26132 · Demo: 15 Sept 2026**
+**SIH 2026 · PS: SIH26132 · Demo: 15 Sept 2026 · Status: Merged (PR #2), 641 tests, 250-doc RAG**
 
 Kisan360 is a market-intelligence and transaction-enablement platform for smallholder farmers. Headline feature: a **net-realization calculator** — not just "what's the mandi price", but what a farmer will actually pocket after farmer-borne costs (transport, storage, other charges) across nearby mandis, ranked by take-home. On top of that: buyer matching with static trust badges, lot creation, a simulated payment-status flow, FPO bulk-lot aggregation, plus disease detection and RAG advisory as secondary features.
 

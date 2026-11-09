@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–46: v1.4.0 final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–47: README final). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -235,6 +235,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 ## Phase 46 (v1.4.0 final)
 - `backend/package.json` → **`1.4.0-agentic`** — corpus 250, Phases 0–46, all gates green
 - Tag `v1.4.0-agentic` to be created from `backend/team-lead-core` after full-suite verification
+
+## Phase 47 (README final)
+- Root `README.md` title → “Agentic Agricultural Advisory Platform · v1.4.0-agentic” with live counts (641 tests, 250-doc RAG, PR #2 merged)
 
 ## Pre-embed (skip cold start)
 ```
