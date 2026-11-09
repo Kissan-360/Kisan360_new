@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–106: mobile voice transcribe). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–107: transcribe test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -430,6 +430,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 106 (mobile voice transcribe)
 - `mobile-app/ChatScreen` — 🎤 now actually transcribes: stop → `POST /api/transcribe` (Groq Whisper `whisper-large-v3`, `lang` = EN/MR/HI toggle) → fills input and auto-sends. Previously it only recorded and discarded.
+
+## Phase 107 (transcribe test)
+- `backend/tests/unit/transcribe.test.js` — endpoint contract (400 without audio, 503 when `GROQ_API_KEY` missing), in-CI, no Whisper call
 
 ## Pre-embed (skip cold start)
 ```
