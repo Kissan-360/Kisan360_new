@@ -128,7 +128,7 @@ export default function ChatScreen() {
           <Button title={loading ? "Asking..." : "Send"} onPress={send} />
         </View>
         <View>
-          <Button title="Clear" onPress={async () => { await AsyncStorage.removeItem(HISTORY_KEY); setMessages([]); setReply(null); }} />
+          <Button title="Clear" onPress={async () => { await AsyncStorage.removeItem(HISTORY_KEY); try { await Endpoints.clearChatHistory(); } catch {} setMessages([]); setReply(null); }} />
         </View>
         {queued.length ? (
           <View style={{ flex: 1 }}>

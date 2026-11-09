@@ -739,6 +739,17 @@ async function executeIntent({ message, language, context = {}, classification, 
 
 // Server-side chat history (per user, last 20) — survives across devices.
 // localStorage stays as offline cache; the DB is the source of truth when up.
+router.delete('/history', authenticateUser, async (req, res) => {
+  try {
+    const ChatHistory = require('../models/ChatHistory');
+    const uid = req.user.uid || req.user.id || req.user.sub;
+    await ChatHistory.deleteMany({ userUid: uid });
+    res.json({ success: true, cleared: true });
+  } catch (e) {
+    res.json({ success: true, cleared: false, note: 'db offline — localStorage only' });
+  }
+});
+
 router.get('/history', authenticateUser, async (req, res) => {
   try {
     const ChatHistory = require('../models/ChatHistory');

@@ -347,6 +347,8 @@ const ChatBot = () => {
                 { id: `${makeId()}-system`, role: 'system', text: t('chat.systemHint') },
               ]);
               try { localStorage.removeItem(HISTORY_KEY); } catch { /* ignore */ }
+              apiFetch(`${API_URL}/chat/history`, { method: 'DELETE' }).catch(() => {});
+              try { localStorage.removeItem(QUEUE_KEY); setQueued([]); } catch { /* ignore */ }
             }}
             className="flex h-9 w-9 items-center justify-center rounded-full text-emerald-50 transition hover:bg-white/10"
             aria-label="Clear history"

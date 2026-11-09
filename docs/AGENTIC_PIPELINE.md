@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–67: mobile share). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–68: history clear). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -305,6 +305,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 67 (mobile share)
 - `mobile-app/ChatScreen` — **Share best mandi** button (`Share.share` → WhatsApp) when `toolResults.netRealization` is present; parity with web chat’s WhatsApp deep link
+
+## Phase 68 (history clear)
+- `DELETE /api/chat/history` — clears the server rows for the calling user (best-effort, offline DB → note); web clear button + mobile Clear now wipe local + server (previously local-only, server rows lived until TTL)
 
 ## Pre-embed (skip cold start)
 ```
