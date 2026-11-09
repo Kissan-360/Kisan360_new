@@ -370,20 +370,33 @@ async function runWeatherAlerts() {
   }
   try {
     const Lot = require('../models/Lot');
-    const lots = await Lot.find({}, 'district').lean();
-    const districts = [...new Set(lots.map((l) => l.district).filter(Boolean))].slice(0, 20);
-    if (!districts.length) return;
+    const User = require('../models/User');
+    const lots = await Lot.find({}, 'district farmerUid').lean();
+    // Opt-in phone directory: only farmers who stored a phone get alerts.
+    const uids = [...new Set(lots.map((l) => l.farmerUid).filter(Boolean))].slice(0, 100);
+    const users = await User.find({ firebaseUid: { $in: uids }, phone: { $ne: null } }, 'firebaseUid phone location').lean();
+    const byDistrict = new Map();
+    for (const lot of lots) {
+      const user = users.find((u) => u.firebaseUid === lot.farmerUid);
+      if (!user?.phone) continue;
+      if (!byDistrict.has(lot.district)) byDistrict.set(lot.district, []);
+      byDistrict.get(lot.district).push(user.phone);
+    }
+    if (!byDistrict.size) {
+      logger.info('[Scheduler] Weather alerts skipped — no opt-in phones for lot districts');
+      return;
+    }
     const { shouldAlert, sendAlert } = require('./whatsappAlerts');
-    const { DISTRICTS } = require('../data/maharashtraDistricts');
     const chat = require('../routes/chat');
-    for (const district of districts) {
+    for (const [district, phones] of byDistrict.entries()) {
       try {
         const w = await chat.fetchWeatherTool(`weather in ${district}`, { district });
         const alert = w?.current ? shouldAlert({ current: w.current }) : null;
         if (!alert) continue;
-        // In a pilot, recipients are the farmer's registered phone; here we
-        // log the alert that WOULD be sent (no directory of phones to spam).
-        logger.info(`[Scheduler] Weather alert ${district}: ${alert}`);
+        for (const to of phones.slice(0, 20)) {
+          const sent = await sendAlert(to, alert).catch(() => ({ ok: false }));
+          logger.info(`[Scheduler] Weather alert ${district} -> ${to.slice(0, 4)}****: sent=${!!sent?.ok}`);
+        }
       } catch (e) {
         logger.warn(`[Scheduler] Weather alert ${district} failed: ${e.message}`);
       }

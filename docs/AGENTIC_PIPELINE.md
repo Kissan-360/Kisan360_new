@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–99: E2E weather-alert). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–100: alerts auto-send). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -407,6 +407,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 99 (E2E weather-alert)
 - `e2e-http.js` — 11 → 12 steps: `POST /weather-alert` gate (missing `to/district` → 400, proves the proactive endpoint without WhatsApp keys)
+
+## Phase 100 (alerts auto-send)
+- `scheduler.runWeatherAlerts()` now **actually sends** to opt-in farmers (Lot districts × `User.phone` E.164, max 20/district) instead of only logging; `User.phone` added (opt-in for WhatsApp alerts). Keys missing → skip with info log.
 
 ## Pre-embed (skip cold start)
 ```
