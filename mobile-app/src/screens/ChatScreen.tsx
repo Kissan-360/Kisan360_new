@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Button, FlatList, ScrollView, Share, Text, TextInput, View } from "react-native";
+import { Audio } from "expo-av";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Endpoints } from "../services/api";
 
@@ -19,6 +20,30 @@ export default function ChatScreen() {
   const [queued, setQueued] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [recording, setRecording] = useState(false);
+  const recRef = React.useRef<Audio.Recording | null>(null);
+
+  const toggleVoice = async () => {
+    if (recording) {
+      try {
+        await recRef.current?.stopAndUnloadAsync();
+      } catch {}
+      setRecording(false);
+      return;
+    }
+    try {
+      const perm = await Audio.requestPermissionsAsync();
+      if (!perm.granted) return setError("Microphone permission denied");
+      await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true });
+      const rec = new Audio.Recording();
+      recRef.current = rec;
+      await rec.prepareToRecordAsync(Audio.RecordingOptionsPresets.DEFAULT_RECORDING);
+      await rec.startAsync();
+      setRecording(true);
+    } catch (e: any) {
+      setError(e?.message || "Voice failed");
+    }
+  };
   const [summarizing, setSummarizing] = useState(false);
 
   const summarize = async () => {
@@ -149,6 +174,9 @@ export default function ChatScreen() {
       <View style={{ flexDirection: "row", gap: 8 }}>
         <View style={{ flex: 1 }}>
           <Button title={loading ? "Asking..." : "Send"} onPress={send} />
+        </View>
+        <View>
+          <Button title={recording ? "⏹ Stop" : "🎤 Voice"} onPress={toggleVoice} />
         </View>
         <View>
           <Button title="Clear" onPress={async () => { await AsyncStorage.removeItem(HISTORY_KEY); try { await Endpoints.clearChatHistory(); } catch {} setMessages([]); setReply(null); }} />
