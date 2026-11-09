@@ -94,6 +94,10 @@ async function main() {
     skip("POST /api/chat/summarize", sum.data?.error || "GROQ missing — graceful");
   }
 
+  // 11) Transcribe gate (no audio -> 400; proves the endpoint without ML)
+  const tr = await http("/api/transcribe", { method: "POST", token, body: {} });
+  check("POST /api/transcribe (no audio -> 400)", tr.status === 400, tr.data?.error || "");
+
   console.log(`\n${pass}/${total} passed`);
   process.exit(pass === total ? 0 : 1);
 }
