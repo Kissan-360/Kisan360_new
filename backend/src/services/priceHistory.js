@@ -12,6 +12,46 @@ const fs = require('fs');
 const path = require('path');
 
 const HISTORY_FILE = path.join(__dirname, '..', 'data', 'priceHistory.json');
+const DEFAULT_MAX_HISTORY_DAYS = 180;
+
+function getMaxHistoryDays(options = {}) {
+  const configured = Number(
+    options.maxDays ?? process.env.PRICE_HISTORY_RETENTION_DAYS ?? DEFAULT_MAX_HISTORY_DAYS,
+  );
+  return Number.isFinite(configured) && configured > 0
+    ? Math.floor(configured)
+    : DEFAULT_MAX_HISTORY_DAYS;
+}
+
+/**
+ * Keep only the newest `maxDays` date buckets (pure — returns a new map).
+ * The public trend windows are 7/14/30 days, so the default 180-day retention
+ * is deliberately far above the longest user-facing window.
+ */
+function pruneDays(days, options = {}) {
+  const maxDays = getMaxHistoryDays(options);
+  const source = days || {};
+  const keys = Object.keys(source).sort();
+  if (keys.length <= maxDays) {
+    return { days: { ...source }, removed: 0, maxDays };
+  }
+
+  const keep = new Set(keys.slice(-maxDays));
+  const pruned = {};
+  for (const key of keys) {
+    if (keep.has(key)) pruned[key] = source[key];
+  }
+  return { days: pruned, removed: keys.length - maxDays, maxDays };
+}
+
+function pruneHistory(history, options = {}) {
+  const result = pruneDays(history?.days || {}, options);
+  return {
+    history: { meta: history?.meta || {}, days: result.days },
+    removedDays: result.removed,
+    maxDays: result.maxDays,
+  };
+}
 
 // AGMARKNET arrival dates come as DD/MM/YYYY — normalize for sorting/storage.
 // Delegates to lib/observedDate.js, which is now the single definition of the
@@ -79,6 +119,8 @@ function getHistorySummary() {
     distinctCrops: [...crops],
     distinctMarkets: markets.size,
     lastRefresh: history.meta.lastAppendedAt || null,
+    retentionDays: history.meta.historyRetentionDays || DEFAULT_MAX_HISTORY_DAYS,
+    lastPrunedDays: history.meta.lastPrunedDays || 0,
   };
 }
 
@@ -145,4 +187,17 @@ function describeDelta(series) {
   return `Modal price on ${last.date} is ₹${Math.abs(diff).toLocaleString('en-IN')}/q ${dir} than on ${first.date} (${pct > 0 ? '+' : ''}${pct}% over ${span} days of observations). This describes the past only — Kisan360 does not forecast prices.`;
 }
 
-module.exports = { HISTORY_FILE, normalizeDate, appendRows, loadHistory, saveHistory, getHistorySummary, trendSeries, describeDelta };
+module.exports = {
+  HISTORY_FILE,
+  DEFAULT_MAX_HISTORY_DAYS,
+  getMaxHistoryDays,
+  normalizeDate,
+  appendRows,
+  pruneDays,
+  pruneHistory,
+  loadHistory,
+  saveHistory,
+  getHistorySummary,
+  trendSeries,
+  describeDelta,
+};

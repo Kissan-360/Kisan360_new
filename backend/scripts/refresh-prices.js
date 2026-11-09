@@ -158,9 +158,16 @@ async function main() {
   // data only — the trend endpoint describes the past, it never forecasts.
   const history = priceHistory.loadHistory();
   history.days = priceHistory.appendRows(history.days, rows, { retrievedAt: payload.meta.retrievedAt });
-  priceHistory.saveHistory(history, { lastAppendedAt: payload.meta.retrievedAt, lastRowCount: rows.length });
+  const prune = priceHistory.pruneDays(history.days);
+  history.days = prune.days;
+  priceHistory.saveHistory(history, {
+    lastAppendedAt: payload.meta.retrievedAt,
+    lastRowCount: rows.length,
+    historyRetentionDays: prune.maxDays,
+    lastPrunedDays: prune.removed,
+  });
   const dayCount = Object.keys(history.days).length;
-  console.log(`📈 History updated — ${dayCount} day(s) recorded in priceHistory.json.`);
+  console.log(`📈 History updated — ${dayCount} day(s) recorded in priceHistory.json${prune.removed ? ` (pruned ${prune.removed} day(s) older than ${prune.maxDays})` : ''}.`);
   console.log('   The running backend serves this snapshot as its offline cache on next boot (or after a restart).');
   process.exit(0);
 }

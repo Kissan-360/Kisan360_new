@@ -41,6 +41,33 @@ router.get('/me', authenticateUser, (req, res) => {
   res.json({ success: true, user: req.user });
 });
 
+// PUT /api/auth/phone — opt-in WhatsApp phone (E.164) for weather alerts
+router.put('/phone', authenticateUser, async (req, res) => {
+  try {
+    const { phone } = req.body || {};
+    if (!phone || !/^\+?\d{10,15}$/.test(String(phone).replace(/[\s-]/g, ''))) {
+      return res.status(400).json({ success: false, error: 'phone must be 10-15 digits (E.164, e.g. 919999999999)' });
+    }
+    const clean = String(phone).replace(/[\s-]/g, '');
+    // User model is keyed by firebaseUid; demo uids (demo-farmer) have no row
+    // until Firebase is wired — best-effort upsert, demo stays in-memory.
+    try {
+      const User = require('../models/User');
+      const uid = req.user.uid || req.user.id || req.user.sub;
+      if (uid) {
+        await User.findOneAndUpdate(
+          { firebaseUid: uid },
+          { $set: { firebaseUid: uid, phone: clean } },
+          { upsert: true },
+        );
+      }
+    } catch { /* demo in-memory: no persistent row */ }
+    res.json({ success: true, phone: clean, note: 'Opted in for WhatsApp weather alerts (daily 07:00 IST).' });
+  } catch (e) {
+    res.status(500).json({ success: false, error: 'Failed to save phone' });
+  }
+});
+
 // GET /api/auth/roles — discover demo roles (used by the login UI)
 router.get('/roles', (req, res) => {
   res.json({

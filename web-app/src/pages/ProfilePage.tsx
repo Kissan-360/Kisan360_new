@@ -17,6 +17,27 @@ const ProfilePage = () => {
   const [draft, setDraft] = useState('');
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState('');
+  const [phone, setPhone] = useState('');
+  const [savingPhone, setSavingPhone] = useState(false);
+
+  const savePhone = async () => {
+    const clean = phone.trim();
+    if (!/^\d{10,15}$/.test(clean.replace(/^\+/, ''))) {
+      setNotice('Phone must be 10–15 digits (E.164, e.g. 919999999999)');
+      return;
+    }
+    setSavingPhone(true);
+    try {
+      const { apiFetch, API_URL } = await import('../lib/api');
+      const res = await apiFetch(`${API_URL}/auth/phone`, { method: 'PUT', body: JSON.stringify({ phone: clean }) });
+      const data = await res.json();
+      setNotice(res.ok ? 'WhatsApp alerts opted in — daily 07:00 IST weather.' : (data.error || 'Save failed'));
+    } catch {
+      setNotice('Save failed — try again when online.');
+    } finally {
+      setSavingPhone(false);
+    }
+  };
 
   const startEdit = () => {
     setDraft(user?.displayName || '');
@@ -124,6 +145,17 @@ const ProfilePage = () => {
               <span className={`text-sm font-medium text-stone-900 ${d.mono ? 'font-mono text-xs' : ''}`}>{d.value}</span>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div className="card p-6">
+        <h2 className="font-semibold text-stone-800 mb-3">📱 WhatsApp weather alerts</h2>
+        <p className="text-xs text-stone-500 mb-3">Daily 07:00 IST severe-weather alerts (heat / humidity / rain) via WhatsApp. Opt-in with your E.164 mobile number.</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="919999999999" inputMode="tel" className="input-field !w-52 !py-1.5 text-sm" maxLength={16} />
+          <button onClick={savePhone} disabled={savingPhone} className="btn-primary text-xs !py-1.5 disabled:opacity-60">
+            {savingPhone ? 'Saving…' : 'Opt in'}
+          </button>
         </div>
       </div>
 

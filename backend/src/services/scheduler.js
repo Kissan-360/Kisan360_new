@@ -66,6 +66,8 @@ const health = {
   distinctCrops: 0,
   distinctMarkets: 0,
   distinctDistricts: 0,
+  historyPrunedDays: 0,
+  historyRetentionDays: null,
 };
 
 function getHealth() {
@@ -284,7 +286,14 @@ async function runRefreshPipeline({ limit = 500, dryRun = false } = {}) {
   const history = priceHistory.loadHistory();
   const prevDayCount = Object.keys(history.days).length;
   history.days = priceHistory.appendRows(history.days, rows, { retrievedAt: payload.meta.retrievedAt });
-  priceHistory.saveHistory(history, { lastAppendedAt: payload.meta.retrievedAt, lastRowCount: rows.length });
+  const prune = priceHistory.pruneDays(history.days);
+  history.days = prune.days;
+  priceHistory.saveHistory(history, {
+    lastAppendedAt: payload.meta.retrievedAt,
+    lastRowCount: rows.length,
+    historyRetentionDays: prune.maxDays,
+    lastPrunedDays: prune.removed,
+  });
   const newDayCount = Object.keys(history.days).length;
 
   // Update the in-memory cache so the running server sees fresh data immediately
@@ -322,11 +331,14 @@ async function runRefreshPipeline({ limit = 500, dryRun = false } = {}) {
   health.distinctCrops = distinctCrops.size;
   health.distinctMarkets = distinctMarkets.size;
   health.distinctDistricts = distinctDistricts.size;
+  health.historyPrunedDays = prune.removed;
+  health.historyRetentionDays = prune.maxDays;
 
   logger.info(
     `[Scheduler] Refresh complete in ${elapsed}ms: ${rows.length} rows, ` +
     `${distinctMarkets.size} markets, ${distinctDistricts.size} districts, ` +
-    `history: ${prevDayCount} → ${newDayCount} days`
+    `history: ${prevDayCount} → ${newDayCount} days` +
+    (prune.removed ? ` (pruned ${prune.removed} day(s) older than ${prune.maxDays})` : '')
   );
 
   return {
@@ -341,6 +353,8 @@ async function runRefreshPipeline({ limit = 500, dryRun = false } = {}) {
     lastObservationDate: latestObservedOn,
     newObservationAvailable: health.newObservationAvailable,
     historyDays: newDayCount,
+    historyPrunedDays: prune.removed,
+    historyRetentionDays: prune.maxDays,
     elapsed,
     fetched,
     publishedAt: fetchedAt,
@@ -452,6 +466,7 @@ module.exports = {
   startScheduler,
   stopScheduler,
   runRefreshPipeline,
+  runWeatherAlerts,
   getHealth,
   fetchCrop,
 };

@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–119: mobile impact). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–120: price-history retention + WhatsApp opt-in). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -491,3 +491,9 @@ cd ml-service && python scripts/embed_corpus.py
 - backend/tests/unit/schedulerAutoSend.test.js - runWeatherAlerts no-ops gracefully without keys/phones, in-CI
 ## Phase 119 (mobile impact)
 - mobile-app/DecisionScreen - impact strip (GET /api/metrics/impact, 30-day milestones) under pickers; parity with web Dashboard impact strip
+
+## Phase 120 (price-history retention + WhatsApp opt-in)
+- `backend/src/services/priceHistory.js` — added `getMaxHistoryDays` / `pruneDays` / `pruneHistory` (newest 180 observed days by default, configurable via `PRICE_HISTORY_RETENTION_DAYS`); retention metadata exposed in `getHistorySummary`
+- `backend/src/services/scheduler.js` + `backend/scripts/refresh-prices.js` — prune after each successful append; scheduler health/return surfaces `historyPrunedDays` + `historyRetentionDays`
+- Included the previously uncommitted WhatsApp opt-in work: `PUT /api/auth/phone`, `runWeatherAlerts` export, and web ProfilePage opt-in card
+- `backend/tests/unit/priceHistory.test.js` — pure retention coverage (within window, oldest-bucket pruning, 180-day default, metadata, no input mutation)

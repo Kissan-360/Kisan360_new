@@ -65,7 +65,7 @@ Consistency rule: the `/api/market/prices` response includes `source` and `fallb
 
 | Collection/File | Retention | Cleanup |
 |----------------|-----------|---------|
-| `priceHistory.json` | Append-only; grows daily | Manual or cron prune (not implemented; file stays small for demo) |
+| `priceHistory.json` | Newest 180 observed days (override: `PRICE_HISTORY_RETENTION_DAYS`) | Pruned automatically on each successful refresh/scheduler run |
 | `priceSnapshots.json` | Replaced on each successful refresh | Last-known-good preserved on failure |
 | `kisan360_diagnostics` | **7-day TTL** | MongoDB auto-deletes via `autoExpireAt` index |
 | `lots`, `offers`, `payments`, `grievances` | **Permanent** (demo data) | Seed endpoint is idempotent (reuses, never stacks) |

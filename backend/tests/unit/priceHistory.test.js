@@ -149,6 +149,39 @@ describe('priceHistory', () => {
     expect(Object.keys(next)).toHaveLength(0);
   });
 
+  test('pruneDays keeps history unchanged within the retention window', () => {
+    const result = priceHistory.pruneDays(DAYS);
+    expect(result.removed).toBe(0);
+    expect(result.maxDays).toBe(180);
+    expect(Object.keys(result.days).sort()).toEqual(Object.keys(DAYS).sort());
+  });
+
+  test('pruneDays drops only the oldest buckets beyond the configured limit', () => {
+    const result = priceHistory.pruneDays(DAYS, { maxDays: 2 });
+    expect(result.removed).toBe(1);
+    expect(Object.keys(result.days).sort()).toEqual(['2026-09-07', '2026-09-08']);
+    expect(Object.keys(DAYS)).toHaveLength(3); // input is not mutated
+  });
+
+  test('pruneDays defaults to the newest 180 day buckets', () => {
+    const days = {};
+    for (let i = 0; i < 181; i++) {
+      days[new Date(Date.UTC(2026, 0, i + 1)).toISOString().slice(0, 10)] = [];
+    }
+    const result = priceHistory.pruneDays(days);
+    expect(result.removed).toBe(1);
+    expect(Object.keys(result.days)).toHaveLength(180);
+    expect(result.days['2026-01-01']).toBeUndefined();
+  });
+
+  test('pruneHistory returns a new history object with retention metadata', () => {
+    const result = priceHistory.pruneHistory({ meta: { note: 'keep' }, days: DAYS }, { maxDays: 1 });
+    expect(result.removedDays).toBe(2);
+    expect(result.maxDays).toBe(1);
+    expect(result.history.meta).toEqual({ note: 'keep' });
+    expect(Object.keys(result.history.days)).toEqual(['2026-09-08']);
+  });
+
   test('getHistorySummary returns correct structure', () => {
     const summary = priceHistory.getHistorySummary();
     expect(summary).toHaveProperty('dayCount');
