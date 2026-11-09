@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–73: server feedback). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–74: E2E feedback step). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -324,7 +324,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 73 (server feedback)
 - `POST /api/chat/feedback` — persists thumbs (`up|down`) as `ChatHistory` rows (`intent: feedback_up/down`) for quality measurement; `ChatMessage` 👍/👎 now POSTs (best-effort, offline → local only)
-- This closes the build loop: Phases 0–70 are the complete 10/10 product (agent + RAG 250 + Groq 70B + MobileNetV2 + live weather/commodity + React + React Native + Render + Razorpay test + offline queues + history + share/copy + CI + E2E 8/8 live)
+
+## Phase 74 (E2E feedback)
+- `e2e-http.js` — 8 → 9 steps: `POST /chat/feedback` (up) proves the quality-measurement write path end-to-end
 
 ## Pre-embed (skip cold start)
 ```

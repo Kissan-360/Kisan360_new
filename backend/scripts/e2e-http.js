@@ -82,6 +82,10 @@ async function main() {
   const hist = await http("/api/chat/history", { token });
   check("GET /api/chat/history", hist.status === 200 && Array.isArray(hist.data?.history), `rows=${hist.data?.history?.length || 0}`);
 
+  // 9) Feedback (thumbs persist as ChatHistory rows — best-effort)
+  const fb = await http("/api/chat/feedback", { method: "POST", token, body: { messageId: "e2e", rating: "up" } });
+  check("POST /api/chat/feedback", fb.status === 200 && fb.data?.success, fb.data?.error || "");
+
   console.log(`\n${pass}/${total} passed`);
   process.exit(pass === total ? 0 : 1);
 }
