@@ -12,6 +12,12 @@ const WeatherPage = () => {
   const [coords, setCoords] = useState<{ lat: number; lon: number; name: string } | null>(null);
   const [error, setError] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState(DEFAULT_DISTRICT);
+  const [ndviRed, setNdviRed] = useState('0.10');
+  const [ndviNir, setNdviNir] = useState('0.30');
+  const [ndviCrop, setNdviCrop] = useState('Onion');
+  const [ndviResult, setNdviResult] = useState<any>(null);
+  const [ndviError, setNdviError] = useState('');
+  const [ndviBusy, setNdviBusy] = useState(false);
 
   // Use the selected district's coordinates — never silently use New Delhi.
   useEffect(() => {
@@ -61,6 +67,30 @@ const WeatherPage = () => {
     setSelectedDistrict(district);
     const d = DISTRICT_COORDS[district];
     if (d) setCoords({ lat: d.lat, lon: d.lon, name: district });
+  };
+
+  const computeNdvi = async () => {
+    setNdviBusy(true);
+    setNdviError('');
+    setNdviResult(null);
+    try {
+      const res = await apiFetch(`${API_URL}/market/ndvi`, {
+        method: 'POST',
+        body: JSON.stringify({
+          red: Number(ndviRed),
+          nir: Number(ndviNir),
+          crop: ndviCrop,
+          district: selectedDistrict,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) throw new Error((data as any)?.error || 'NDVI failed');
+      setNdviResult(data);
+    } catch (e: any) {
+      setNdviError(e.message || 'NDVI failed');
+    } finally {
+      setNdviBusy(false);
+    }
   };
 
   const getIcon = (c = '') => {
@@ -196,6 +226,30 @@ const WeatherPage = () => {
           </ul>
         </div>
       )}
+
+      {/* NDVI vegetation check — supplied reflectance only; no satellite fetch in demo */}
+      <div className="card p-6">
+        <h2 className="section-title mb-2">{t('weather.ndviTitle')}</h2>
+        <p className="text-xs text-stone-500 mb-3">{t('weather.ndviHint')}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <input value={ndviRed} onChange={(e) => setNdviRed(e.target.value)} placeholder="Red 0–1" inputMode="decimal" className="input-field !py-2 text-sm" />
+          <input value={ndviNir} onChange={(e) => setNdviNir(e.target.value)} placeholder="NIR 0–1" inputMode="decimal" className="input-field !py-2 text-sm" />
+          <input value={ndviCrop} onChange={(e) => setNdviCrop(e.target.value)} placeholder="Crop" className="input-field !py-2 text-sm" />
+          <button onClick={computeNdvi} disabled={ndviBusy} className="btn-primary text-sm disabled:opacity-60">
+            {ndviBusy ? '…' : t('weather.ndviCompute')}
+          </button>
+        </div>
+        {ndviError && <p className="text-xs text-red-600 mt-2">{ndviError}</p>}
+        {ndviResult && (
+          <div className="mt-3 rounded-xl bg-emerald-50 border border-emerald-100 p-3">
+            <p className="text-sm font-semibold text-emerald-900">
+              {t('weather.ndviResult', { ndvi: ndviResult.ndvi, classification: ndviResult.classification })}
+            </p>
+            <p className="text-xs text-emerald-800 mt-1">{ndviResult.guidance}</p>
+            <p className="text-[11px] text-emerald-700 mt-1">{ndviResult.provenance?.note}</p>
+          </div>
+        )}
+      </div>
 
       {/* Location info */}
       <div className="card p-6">

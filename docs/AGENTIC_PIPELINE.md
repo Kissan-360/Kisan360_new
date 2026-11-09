@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–129: satellite NDVI context). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–130: NDVI web UI). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -546,3 +546,7 @@ cd ml-service && python scripts/embed_corpus.py
 - Added `backend/src/services/ndvi.js` — pure NDVI computation, vegetation classification, validation, and district/crop context with an explicit provider contract
 - Added `GET /api/market/ndvi-context` (honest `available: false` + required env when no satellite provider is configured) and `POST /api/market/ndvi` (reflectance in → NDVI + class + guidance + provenance)
 - Added `backend/tests/unit/ndvi.test.js` and mobile `Endpoints.ndvi` / `Endpoints.ndviContext` parity
+
+## Phase 130 (NDVI web UI)
+- Web `WeatherPage` gained an NDVI vegetation card: red/NIR inputs → `POST /api/market/ndvi` → result card with classification, guidance, and provenance note
+- Added EN/MR/HI labels for the NDVI section
