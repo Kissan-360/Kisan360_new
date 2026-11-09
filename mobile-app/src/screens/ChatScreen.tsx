@@ -31,6 +31,37 @@ export default function ChatScreen() {
     try { await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(next)); } catch {}
   };
 
+  const dequeue = async () => {
+    const next = queued.slice(1);
+    setQueued(next);
+    try { await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(next)); } catch {}
+    return queued[0];
+  };
+
+  const retryQueued = async () => {
+    if (!queued.length) return;
+    const nextQueued = queued[0];
+    await dequeue();
+    // Reuse send path: put text in box and send
+    setMsg(nextQueued);
+    // Avoid setState timing issues: call API directly via the same logic as send()
+    const userMsg: Msg = { id: `${Date.now()}`, role: "user", text: nextQueued };
+    await persist([...messages, userMsg]);
+    setLoading(true);
+    setError("");
+    try {
+      const res = await Endpoints.chat(nextQueued, {}, "en", "action");
+      setReply(res.data);
+      await persist([...messages, userMsg, { id: `${Date.now()}-a`, role: "assistant", text: res.data?.text || "…" }]);
+    } catch (e: any) {
+      // Still offline — re-enqueue at front
+      await enqueue(nextQueued);
+      setError("Still offline — kept in queue");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -85,6 +116,11 @@ export default function ChatScreen() {
         <View>
           <Button title="Clear" onPress={async () => { await AsyncStorage.removeItem(HISTORY_KEY); setMessages([]); setReply(null); }} />
         </View>
+        {queued.length ? (
+          <View style={{ flex: 1 }}>
+            <Button title={`Retry (${queued.length})`} onPress={retryQueued} />
+          </View>
+        ) : null}
       </View>
       {loading ? <ActivityIndicator /> : null}
       {!!error ? <Text style={{ color: "red" }}>{error}</Text> : null}
