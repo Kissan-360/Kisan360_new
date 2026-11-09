@@ -61,7 +61,9 @@ export default function DecisionScreen({ navigation }: any) {
           <Text style={{ color: "#b45309", fontSize: 13 }}>Price comparison works without sign-in. Chat / disease / lots need a demo token.</Text>
           <Button title="Sign in (demo)" onPress={() => navigation?.navigate?.("SignIn")} />
         </View>
-      ) : null}
+      ) : (
+        <Button title="Notifications" onPress={() => navigation?.navigate?.("Notifications")} />
+      )}
       <Text style={{ fontWeight: "600" }}>Crop</Text>
       <Picker selectedValue={crop} onValueChange={(v) => setCrop(v)} style={styles.input}>
         {CROPS.map((c) => (

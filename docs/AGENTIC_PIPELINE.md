@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–124: test-only UPI intent flow). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–125: mobile notifications parity). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -520,3 +520,9 @@ cd ml-service && python scripts/embed_corpus.py
 - Added `GET /api/payments/:id/upi-intent` — returns the encoded intent for owner/buyer-side callers; never settles, releases, transitions, or writes state
 - Web `TradePage` gains a “UPI test” button on HELD/PENDING rows: fetches, copies, and attempts to open the intent with a no-settlement notice
 - Mobile `Endpoints.upiIntent(id)` added for parity; `backend/tests/unit/upiIntent.test.js` covers gating, VPA validation, encoding, and refusal cases
+
+## Phase 125 (mobile notifications parity)
+- Replaced the mobile notification/storage placeholders with real local services: AsyncStorage probe initialization, JSON helpers, seen-at persistence, and backend notification fetching
+- Added `mobile-app/src/services/notificationState.ts` — pure route mapping, seen-at parsing, unread derivation, and newest-first sorting
+- Added `NotificationsScreen`, `Endpoints.notifications()`, navigator route, and Decision entry point for signed-in users
+- Added `mobile-app/src/__tests__/notifications.test.ts` — route mapping, safe seen-at parsing, unread derivation, and non-mutating sort coverage

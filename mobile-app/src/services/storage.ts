@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Storage service placeholder
+const PROBE_KEY = 'kisan360:storage:probe';
+
 export const initializeStorage = async () => {
   try {
-    // Add storage initialization logic here
-    console.log('Storage initialized successfully');
+    await AsyncStorage.setItem(PROBE_KEY, '1');
+    await AsyncStorage.removeItem(PROBE_KEY);
     return true;
   } catch (error) {
     console.error('Storage initialization error:', error);
@@ -12,7 +13,6 @@ export const initializeStorage = async () => {
   }
 };
 
-// Storage helper functions
 export const storage = {
   setItem: async (key: string, value: string) => {
     try {
@@ -38,6 +38,20 @@ export const storage = {
     } catch (error) {
       console.error('Storage removeItem error:', error);
       throw error;
+    }
+  },
+
+  setJson: async <T,>(key: string, value: T) => {
+    await AsyncStorage.setItem(key, JSON.stringify(value));
+  },
+
+  getJson: async <T,>(key: string): Promise<T | null> => {
+    const raw = await AsyncStorage.getItem(key);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw) as T;
+    } catch {
+      return null;
     }
   },
 };

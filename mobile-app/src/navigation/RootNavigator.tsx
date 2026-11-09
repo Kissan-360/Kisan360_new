@@ -7,6 +7,7 @@ import TradeScreen from "../screens/TradeScreen";
 import ChatScreen from "../screens/ChatScreen";
 import SignInScreen from "../screens/SignInScreen";
 import FpoScreen from "../screens/FpoScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const RootNavigator = () => {
   return (
     <Stack.Navigator initialRouteName="Decision">
       <Stack.Screen name="Decision" component={DecisionScreen} options={{ title: "Decision" }} />
+      <Stack.Screen name="Notifications" component={NotificationsScreen} options={{ title: "Notifications" }} />
       <Stack.Screen name="Trade" component={TradeScreen} options={{ title: "Trade" }} />
       <Stack.Screen name="FPO" component={FpoScreen} options={{ title: "FPO Pooling" }} />
       <Stack.Screen name="Chat" component={ChatScreen} options={{ title: "Ask Kisan360" }} />

@@ -44,6 +44,7 @@ export const Endpoints = {
   chatSummarize: () => api.post("/chat/summarize", {}),
   postFeedback: (rating: "up" | "down") => api.post("/chat/feedback", { rating }),
   impact: () => api.get("/metrics/impact"),
+  notifications: () => api.get("/notifications"),
   clearChatHistory: () => api.delete("/chat/history"),
   gradeAssessment: (payload: Record<string, unknown>) =>
     api.post("/grade-assessment", payload),
