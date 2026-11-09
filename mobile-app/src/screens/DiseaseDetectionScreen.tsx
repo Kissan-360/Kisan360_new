@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { ActivityIndicator, Button, Image, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Button, Image, ScrollView, Share, Text, View } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { Endpoints } from "../services/api";
@@ -159,6 +159,13 @@ export default function DiseaseDetectionScreen() {
             </View>
           ) : null}
           {result.treatment ? <Text style={{ marginTop: 4 }}>Treatment: {result.treatment}</Text> : null}
+          <Button
+            title="Share result (WhatsApp)"
+            onPress={() => {
+              const text = `Kisan360: ${result.detectedDisease} — ${result.severity} · ${(result.confidence * 100).toFixed(0)}%. Treatment: ${result.treatment || "see Kisan360 app"}`;
+              Share.share({ message: text }).catch(() => {});
+            }}
+          />
           <Text style={{ color: "#666", fontSize: 11 }}>Model: MobileNetV2 (38 classes) via FastAPI</Text>
         </View>
       ) : null}

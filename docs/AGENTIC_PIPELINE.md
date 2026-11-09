@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–71: history test). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–72: mobile disease share). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -318,6 +318,9 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 71 (history test)
 - `backend/tests/unit/chatHistoryEndpoints.test.js` — ChatHistory model validation (user/assistant accept, empty text rejects) in-CI
+
+## Phase 72 (mobile disease share)
+- `DiseaseDetectionScreen` — **Share result (WhatsApp)** button (`Share.share`) with disease + severity + confidence + treatment summary; parity with web disease card
 - This closes the build loop: Phases 0–70 are the complete 10/10 product (agent + RAG 250 + Groq 70B + MobileNetV2 + live weather/commodity + React + React Native + Render + Razorpay test + offline queues + history + share/copy + CI + E2E 8/8 live)
 
 ## Pre-embed (skip cold start)
