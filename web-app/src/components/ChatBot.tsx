@@ -98,6 +98,29 @@ const ChatBot = () => {
     setSuggestions(modeSuggestions);
   }, [modeSuggestions]);
 
+  // Server history (cross-device) when online; localStorage remains the offline cache.
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await apiFetch(`${API_URL}/chat/history`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const rows = data?.history || [];
+        if (Array.isArray(rows) && rows.length) {
+          setMessages(
+            rows
+              .slice(-HISTORY_LIMIT)
+              .map((r: any, i: number) => ({
+                id: `srv-${r.createdAt}-${i}`,
+                role: r.role === 'user' ? 'user' : 'assistant',
+                text: String(r.text || '').slice(0, 5000),
+              })) as ChatMessageItem[],
+          );
+        }
+      } catch { /* offline — keep localStorage */ }
+    })();
+  }, []);
+
   const languageLabel = useMemo(() => language.toUpperCase(), [language]);
   const cycleLanguage = () => {
     const next: Record<Lang, Lang> = { en: 'mr', mr: 'hi', hi: 'en' };

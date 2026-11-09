@@ -737,6 +737,20 @@ async function executeIntent({ message, language, context = {}, classification, 
   }
 }
 
+// Server-side chat history (per user, last 20) — survives across devices.
+// localStorage stays as offline cache; the DB is the source of truth when up.
+router.get('/history', authenticateUser, async (req, res) => {
+  try {
+    const ChatHistory = require('../models/ChatHistory');
+    const uid = req.user.uid || req.user.id || req.user.sub;
+    const rows = await ChatHistory.find({ userUid: uid }).sort({ createdAt: -1 }).limit(20).lean();
+    res.json({ history: rows.reverse().map((r) => ({ role: r.role, text: r.text, intent: r.intent, createdAt: r.createdAt })) });
+  } catch (e) {
+    // In-memory/offline DB: history is nice-to-have, never a hard failure
+    res.json({ history: [], note: 'db offline — localStorage only' });
+  }
+});
+
 // Requires a verified token: this route spends a metered GROQ_API_KEY on
 // every request, and was previously an open proxy to anyone who could reach it.
 router.post('/', authenticateUser, async (req, res) => {
@@ -748,6 +762,18 @@ router.post('/', authenticateUser, async (req, res) => {
     const allIntents = classifyIntents(rawMessage);
     const classification = allIntents[0];
     const response = await executeIntent({ message: rawMessage, language, context, classification, mode });
+
+    // Persist both turns (best-effort, never blocks the answer)
+    try {
+      const ChatHistory = require('../models/ChatHistory');
+      const uid = req.user.uid || req.user.id || req.user.sub;
+      if (uid && rawMessage) {
+        await ChatHistory.create([
+          { userUid: uid, role: 'user', text: rawMessage, intent: classification.intent },
+          { userUid: uid, role: 'assistant', text: response.text?.slice(0, 5000) || '', intent: classification.intent },
+        ]);
+      }
+    } catch { /* history is best-effort */ }
 
     res.json({
       ...response,
