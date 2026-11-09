@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–120: price-history retention + WhatsApp opt-in). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–121: KVK PDF ingestion). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -497,3 +497,8 @@ cd ml-service && python scripts/embed_corpus.py
 - `backend/src/services/scheduler.js` + `backend/scripts/refresh-prices.js` — prune after each successful append; scheduler health/return surfaces `historyPrunedDays` + `historyRetentionDays`
 - Included the previously uncommitted WhatsApp opt-in work: `PUT /api/auth/phone`, `runWeatherAlerts` export, and web ProfilePage opt-in card
 - `backend/tests/unit/priceHistory.test.js` — pure retention coverage (within window, oldest-bucket pruning, 180-day default, metadata, no input mutation)
+
+## Phase 121 (KVK PDF ingestion)
+- Replaced the `ingest_kvk.py` TODO stub with real text extraction: PyMuPDF (`fitz`) first, `pypdf` fallback, normalized text, paragraph-aware chunking, unique review IDs, recursive PDF discovery, page/char limits, language metadata, per-file skip reporting
+- Added ingestion-only `ml-service/requirements-ingest.txt` to keep the Render ML service lean
+- Added `ml-service/test_ingest_kvk.py` — normalization, chunking, metadata, generated-PDF extraction, and CLI JSON output coverage
