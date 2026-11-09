@@ -1,6 +1,6 @@
 # Kisan360 — Agentic Advisory Pipeline
 
-**Status:** Merged ✅ (Phase 0–56: EAS build config). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
+**Status:** Merged ✅ (Phase 0–57: Razorpay test gateway). **Model:** Groq `llama-3.3-70b-versatile` everywhere.
 
 ## Pipeline (one turn)
 
@@ -265,6 +265,13 @@ doesn't pay torch+LangChain RAM. To adopt LangGraph later, wrap
 
 ## Phase 56 (EAS build config)
 - `mobile-app/eas.json` — EAS Build profiles (`development` / `preview` APK / `production` AAB, autoIncrement) so Play Store builds are one command: `eas build --platform android --profile production`
+
+## Phase 57 (Razorpay test gateway)
+- `backend/src/services/razorpayGateway.js` — test-mode only (`rzp_test_`, live keys blocked unless `RAZORPAY_LIVE_ENABLED=1`); `verifySignature` via HMAC-SHA256 + `timingSafeEqual`
+- `POST /api/payments/create-order` (amount from stored Payment, never client) + `POST /api/payments/verify` (signature check → `HELD → RELEASED`, `gateway: razorpay_test`, `mocked: false`)
+- `Payment` model: `gateway`, `razorpayOrderId/PaymentId/Signature`; demo simulate endpoints untouched
+- Web: Trade → `Pay via Razorpay (TEST)` loads checkout, verifies, releases; graceful fallback to simulate when keys missing
+- Env: `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` in `backend/.env.example` (test keys only)
 
 ## Pre-embed (skip cold start)
 ```

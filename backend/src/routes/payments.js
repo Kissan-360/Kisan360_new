@@ -175,6 +175,71 @@ router.post('/:id/release', async (req, res) => {
   }
 });
 
+// POST /api/payments/create-order — Razorpay TEST order for a simulated payment
+// Body: { paymentId } — amount is taken from the stored Payment, never from the client.
+router.post('/create-order', async (req, res) => {
+  try {
+    const paymentId = req.body && req.body.paymentId;
+    if (!paymentId) return res.status(400).json({ success: false, error: 'paymentId is required' });
+    const payment = await Payment.findById(paymentId);
+    if (!payment) return res.status(404).json({ success: false, error: 'Payment not found' });
+    if (payment.farmerUid !== req.user.uid && !isBuyerSide(req.user.role)) {
+      return res.status(403).json({ success: false, error: 'Not your payment' });
+    }
+    const rp = require('../services/razorpayGateway').getRazorpay();
+    if (!rp) return res.status(503).json({ success: false, error: 'Razorpay test keys not configured', mocked: true });
+    const order = await rp.orders.create({
+      amount: Math.round(payment.amount * 100), // paise
+      currency: 'INR',
+      receipt: `kisan_${payment._id}`,
+      notes: { paymentId: String(payment._id), crop: payment.crop },
+    });
+    payment.razorpayOrderId = order.id;
+    payment.gateway = 'razorpay_test';
+    payment.mocked = false;
+    if (payment.note && payment.note.startsWith('Simulated')) {
+      payment.note = 'TEST MODE — Razorpay test payment (no real money moves).';
+    }
+    await payment.save();
+    res.json({ success: true, keyId: process.env.RAZORPAY_KEY_ID, order });
+  } catch (error) {
+    logger.error('Create order error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to create Razorpay order' });
+  }
+});
+
+// POST /api/payments/verify — verify Razorpay signature, then release (HELD → RELEASED)
+router.post('/verify', async (req, res) => {
+  try {
+    const { razorpayOrderId, razorpayPaymentId, razorpaySignature, paymentId } = req.body || {};
+    if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature || !paymentId) {
+      return res.status(400).json({ success: false, error: 'razorpayOrderId, razorpayPaymentId, razorpaySignature and paymentId are required' });
+    }
+    const okSig = require('../services/razorpayGateway').verifySignature(razorpayOrderId, razorpayPaymentId, razorpaySignature);
+    if (!okSig) return res.status(400).json({ success: false, error: 'Invalid Razorpay signature' });
+    const payment = await Payment.findById(paymentId);
+    if (!payment) return res.status(404).json({ success: false, error: 'Payment not found' });
+    if (payment.farmerUid !== req.user.uid && !isBuyerSide(req.user.role)) {
+      return res.status(403).json({ success: false, error: 'Not your payment' });
+    }
+    payment.razorpayPaymentId = razorpayPaymentId;
+    payment.razorpaySignature = razorpaySignature;
+    payment.razorpayOrderId = razorpayOrderId;
+    payment.gateway = 'razorpay_test';
+    payment.mocked = false;
+    transition('payment', payment, 'RELEASED', {
+      by: req.user.uid,
+      note: 'TEST MODE — Razorpay signature verified, funds released (test gateway, no real money).',
+    });
+    await payment.save();
+    res.json({ success: true, payment, gateway: 'razorpay_test', mocked: false });
+  } catch (error) {
+    if (error.code === 'ILLEGAL_TRANSITION') return res.status(422).json({ success: false, error: error.message });
+    logger.error('Verify payment error:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to verify payment' });
+  }
+});
+
 // POST /api/payments/:id/cancel — abort a PENDING/HELD payment (demo)
 router.post('/:id/cancel', async (req, res) => {
   try {

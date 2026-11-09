@@ -25,8 +25,12 @@ const paymentSchema = new mongoose.Schema({
     default: 'PENDING',
   },
   history: { type: [historyEntry], default: [] },
-  // Explicit honesty flag — no real money moves in this demo.
+  // Explicit honesty flag — demo escrow is simulated; Razorpay test mode is also not real money.
   mocked: { type: Boolean, default: true },
+  gateway: { type: String, default: 'simulated', enum: ['simulated', 'razorpay_test'] },
+  razorpayOrderId: { type: String, default: null, index: true },
+  razorpayPaymentId: { type: String, default: null },
+  razorpaySignature: { type: String, default: null },
   note: {
     type: String,
     default: 'Simulated payment status for the SIH demo — no real money movement. Production would integrate a payment gateway/escrow.',

@@ -1604,13 +1604,51 @@ const TradePage = () => {
                 : t('trade.next.waiting.desc')}
             onAdvance={() => {
               // Single-device demo ladder, scoped to the ACTIVE deal: escrow
-              // held → simulate settlement (HELD → RELEASED = the cash
-              // moment); offer SENT → simulate buyer acceptance (ACCEPTED +
-              // payment HELD). Anything else gets an honest message instead
-              // of a silent no-op.
+              // held → Razorpay test checkout if configured, else simulate.
+              // offer SENT → simulate buyer acceptance (ACCEPTED + payment HELD).
               const held = activePayment?.status === 'HELD' ? activePayment : null;
               if (held) {
-                act(`/payments/${held._id}/simulate-release`, 'Funds released — the farmer has the cash (simulated).');
+                // Razorpay test checkout: create-order → checkout → verify.
+                // Test keys only; simulated fallback when keys are missing.
+                (async () => {
+                  try {
+                    const orderRes = await apiFetch(`${API_URL}/payments/create-order`, {
+                      method: 'POST',
+                      body: JSON.stringify({ paymentId: held._id }),
+                    });
+                    const orderData = await orderRes.json();
+                    if (orderRes.ok && orderData.order?.id && (window as any).Razorpay) {
+                      const rzp = new (window as any).Razorpay({
+                        key: orderData.keyId,
+                        amount: orderData.order.amount,
+                        currency: orderData.order.currency,
+                        order_id: orderData.order.id,
+                        name: 'Kisan360 TEST',
+                        description: `Lot ${held.crop} ${held.quantityQuintals}q`,
+                        handler: async (resp: any) => {
+                          const vRes = await apiFetch(`${API_URL}/payments/verify`, {
+                            method: 'POST',
+                            body: JSON.stringify({
+                              paymentId: held._id,
+                              razorpayOrderId: resp.razorpay_order_id,
+                              razorpayPaymentId: resp.razorpay_payment_id,
+                              razorpaySignature: resp.razorpay_signature,
+                            }),
+                          });
+                          const vData = await vRes.json();
+                          if (vRes.ok) setNotice('Razorpay test payment verified — funds released (test mode).');
+                          else setNotice(vData.error || 'Verify failed');
+                          await reload();
+                        },
+                      });
+                      rzp.open();
+                      return;
+                    }
+                    throw new Error(orderData.error || 'Razorpay not configured');
+                  } catch {
+                    act(`/payments/${held._id}/simulate-release`, 'Funds released — simulated (Razorpay not configured).');
+                  }
+                })();
               } else if (activeOffer?.status === 'SENT') {
                 act('/payments/simulate/accept-latest', 'Buyer accepted your offer — funds held in escrow (simulated).');
               } else {
